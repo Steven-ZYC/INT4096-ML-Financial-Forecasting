@@ -46,3 +46,8 @@ artifacts/experiments/*/error.log
 *.fdb_latexmk
 *.synctex.gz
 reports/latex/generated/*.aux
+
+# Personal data: member names + student IDs are kept local only.
+# Student IDs must never enter a commit (see docs/handoff/github_push.md).
+docs/management/.members.local
+*.local

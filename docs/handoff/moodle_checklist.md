@@ -35,12 +35,13 @@ opened to confirm it renders.
       *before* submission.
 - [ ] **PDF opens and renders** on a machine that is not this one (fonts, figures,
       references).
-- [ ] **Members named in the PDF.** The committed title block reads
-      "INT4096 Group Project" with a footnote; overwrite `\GroupAuthors` for the
-      submitted copy so every member is listed:
-      `pdflatex "\def\GroupAuthors{A \and B \and C \and D \and E}\input{main.tex}"`
-- [ ] **Contribution statement** completed in
-      `docs/management/responsibilities.md` (slots are `Person 1..5`).
+- [x] **Members named in the PDF.** The title block lists all five members:
+      Zhang Yancheng, Dong Yuankun, Zhang Haoyu, Lau Pak Hei, Lui Shing Lam.
+- [ ] **Student IDs entered in Moodle.** IDs are personal data and are *not* in
+      this repository; each member enters their own at submission.
+- [ ] **Contribution statement** confirmed by every member in
+      `docs/management/responsibilities.md` (roster + lane ownership are filled
+      in; each owner should confirm they can defend their lane).
 - [ ] **AI-use acknowledgement** reviewed and kept (it is in the report).
 - [ ] **Topic-confirmation status** checked: the uploaded form in
       `int4096/` is a blank template, not evidence of approval.
@@ -74,7 +75,7 @@ opened to confirm it renders.
 | Item | Status | Where |
 |---|---|---|
 | Slide deck export (PPTX/PDF) | **NOT DONE** | `docs/presentation/storyboard.md` only |
-| Member names / contribution statement | PENDING human input | `docs/management/responsibilities.md` |
+| Contribution statement confirmation | roster filled; owners must confirm | `docs/management/responsibilities.md` |
 | Official course specification archived | PENDING owner | `docs/course/README.md` |
 | GitHub push | BLOCKED on auth | `docs/handoff/github_push.md` |
 | Sealed test-set release | DELIBERATELY NOT DONE | `docs/research/decision_log.md` D7 |
