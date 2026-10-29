@@ -104,16 +104,22 @@ jobs:
           root_file: main.tex
           post_compile: |
             echo "=== texcount (narrative word count) ==="
-            texcount -inc -sum main.tex | grep -E "^Words in text|^Words in headers|^Words outside"
-            echo "=== enforce the instructor allowance (<= 2500 narrative words) ==="
-            text=$(texcount -inc -sum main.tex | awk '/^Words in text/{s+=$4} END{print s}')
-            heads=$(texcount -inc -sum main.tex | awk '/^Words in headers/{s+=$4} END{print s}')
+            # texcount prints one block per file and then the totals, so the
+            # totals are the LAST match of each key. Summing all matches would
+            # double-count (it produced 4798 instead of 2499 on the first try).
+            report=$(texcount -inc -sum main.tex)
+            text=$(printf '%s\n' "$report" | awk '/^Words in text:/{t=$4} END{print t+0}')
+            heads=$(printf '%s\n' "$report" | awk '/^Words in headers:/{h=$4} END{print h+0}')
+            caps=$(printf '%s\n' "$report" | awk '/^Words outside text/{c=$NF} END{print c+0}')
             total=$((text + heads))
-            echo "narrative total: $total (text $text + headings $heads)"
+            echo "words in text:      $text"
+            echo "words in headings:  $heads"
+            echo "narrative total:    $total  (allowance ~2500)"
+            echo "captions (excluded): $caps"
             if [ "$total" -gt 2500 ]; then
               echo "FAIL: narrative exceeds the ~2500-word allowance"; exit 1
             fi
-            echo "OK: within the ~2500-word allowance"
+            echo "OK: narrative within the ~2500-word allowance"
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
