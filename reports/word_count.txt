@@ -1,5 +1,6 @@
 INT4096 report word count
-generated: 2026-10-29T14:56:29Z
+generated_from_commit: b143e84
+SOURCE_DATE_EPOCH: 1793285839
 command:   texcount -inc -sum main.tex
 
 File: main.tex

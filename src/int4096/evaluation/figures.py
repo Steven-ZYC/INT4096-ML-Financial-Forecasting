@@ -27,6 +27,23 @@ DEFAULT_FIGURE_ROOT = REPO_ROOT / "artifacts" / "figures"
 EXTRA_FORMATS: tuple[str, ...] = ()
 
 
+def _pdf_metadata() -> dict:
+    """Fixed PDF metadata so repeated builds are byte-comparable.
+
+    matplotlib otherwise stamps the current time into the PDF, which makes any
+    two builds differ even when the drawing is identical.
+    """
+    import os
+
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if not epoch:
+        return {}
+    import datetime as _dt
+
+    stamp = _dt.datetime.fromtimestamp(int(epoch), _dt.timezone.utc)
+    return {"CreationDate": stamp, "ModDate": stamp}
+
+
 def _mpl():
     import matplotlib
 
@@ -62,7 +79,8 @@ def _save(fig, path: Path, caption: str, run_ids: list[str], caption_dir: Path) 
     fig.tight_layout()
     fig.savefig(path, dpi=150, bbox_inches="tight")
     for extension in EXTRA_FORMATS:
-        fig.savefig(path.with_suffix(extension), bbox_inches="tight")
+        extra = _pdf_metadata() if extension == ".pdf" else {}
+        fig.savefig(path.with_suffix(extension), bbox_inches="tight", metadata=extra)
     fig.clear()
     import matplotlib.pyplot as plt
 

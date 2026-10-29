@@ -20,6 +20,14 @@ fi
 command -v latexmk   >/dev/null || { echo "latexmk not found on PATH"; exit 1; }
 command -v texcount  >/dev/null || { echo "texcount not found on PATH"; exit 1; }
 
+# Deterministic builds: pin TeX and matplotlib timestamps to the commit time so
+# two builds of the same source produce byte-identical PDFs.
+if [[ -z "${SOURCE_DATE_EPOCH:-}" ]]; then
+  SOURCE_DATE_EPOCH="$(git -C "$ROOT" log -1 --format=%ct 2>/dev/null || echo 0)"
+fi
+export SOURCE_DATE_EPOCH
+echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH (deterministic PDF metadata)"
+
 echo "== 1/4 regenerate figures and generated tables from run artifacts =="
 if [[ -x "$ROOT/.venv/bin/python" ]]; then
   PY="$ROOT/.venv/bin/python"
@@ -50,7 +58,8 @@ echo "== 4/4 word count (texcount, narrative only) =="
 mkdir -p ../final
 {
   echo "INT4096 report word count"
-  echo "generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "generated_from_commit: $(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+  echo "SOURCE_DATE_EPOCH: $SOURCE_DATE_EPOCH"
   echo "command:   texcount -inc -sum main.tex"
   echo
   texcount -inc -sum main.tex
