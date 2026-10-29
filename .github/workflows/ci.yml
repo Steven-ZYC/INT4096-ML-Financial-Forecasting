@@ -1,0 +1,109 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: tests (temporal integrity, metrics, manifests, notebook)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Unit and integrity tests
+        run: PYTHONPATH=src python -m pytest -q
+
+      - name: Prove the leakage suite can fail
+        run: python scripts/mutation_check.py
+
+      - name: Verify audit fixes
+        run: python scripts/verify_fixes.py
+
+      - name: Verify dataset snapshot hashes
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          from int4096.data.load import resolve_snapshot_path, read_manifest
+          from int4096.data.snapshot import sha256_file
+          for asset in ("AAPL", "BTC"):
+              path = resolve_snapshot_path(asset)
+              manifest = read_manifest(asset)
+              assert sha256_file(path) == manifest["sha256"], f"{asset} hash drift"
+              print(f"{asset}: {manifest['row_count']} rows, hash OK")
+          PY
+
+      - name: Check no run manifest references a missing commit
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          import glob, json, subprocess
+          dangling = []
+          for path in glob.glob("artifacts/experiments/*/manifest.json"):
+              commit = json.load(open(path))["git_commit"]
+              if subprocess.run(["git", "cat-file", "-e", commit],
+                                capture_output=True).returncode != 0:
+                  dangling.append((path, commit))
+          print(f"dangling commit references: {len(dangling)}")
+          for item in dangling:
+              print("  ", item)
+          # A shallow CI checkout cannot contain historical commits, so this is
+          # informational in CI and strict locally.
+          PY
+
+  report:
+    name: build LaTeX report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Regenerate figures and tables from run artifacts
+        run: PYTHONPATH=src python scripts/build_latex_assets.py
+
+      - name: Compile report
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: reports/latex
+          root_file: main.tex
+          latexmk_use_latex_maker: false
+
+      - name: Word count
+        run: |
+          pip install --quiet texcount 2>/dev/null || true
+          if command -v texcount >/dev/null; then
+            texcount -inc -sum reports/latex/main.tex
+          else
+            echo "texcount not available in this image; see reports/word_count.txt"
+          fi
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: INT4096_Final_Report
+          path: reports/latex/main.pdf
+          if-no-files-found: error
+
+      - name: Confirm the compiled PDF is present
+        run: |
+          test -s reports/latex/main.pdf
+          ls -l reports/latex/main.pdf

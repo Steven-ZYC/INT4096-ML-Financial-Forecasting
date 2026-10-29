@@ -9,6 +9,23 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 > and non-advisory. Forecast error does not imply profitability, and past
 > performance does not predict future returns.
 
+**Deliverables**
+
+| Artifact | Path | Status |
+|---|---|---|
+| Final report (PDF) | [`reports/final/INT4096_Final_Report.pdf`](reports/final/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 narrative words |
+| LaTeX source | [`reports/latex/main.tex`](reports/latex/main.tex) | builds clean (`bash reports/latex/build.sh`) |
+| Word-count log | [`reports/word_count.txt`](reports/word_count.txt) | 2,399 body + 100 headings |
+| Colab notebook | [`notebooks/INT4096_Final_Colab.ipynb`](notebooks/INT4096_Final_Colab.ipynb) | executes end to end in tests |
+| Protocol, runs, audit | [`docs/`](docs/) | frozen protocol, 20 runs, audit trail |
+| Teaching material | [`docs/education/`](docs/education/) | lesson, 5 tasks, teacher notes |
+
+> **Publication status:** the local repository is complete and committed, but it
+> has **not been pushed**: no GitHub credentials exist in this environment. The
+> exact one-step owner action and verification commands are in
+> [`docs/handoff/github_push.md`](docs/handoff/github_push.md). GitHub is a
+> reproducibility archive; the **Moodle** upload remains the submission of record.
+
 ---
 
 ## Headline result (validation only; test block sealed)
@@ -50,7 +67,13 @@ bash scripts/reproduce.sh
 
 # 4. Offline (use the committed snapshots, no network)
 bash scripts/reproduce.sh --offline
+
+# 5. Build the report: regenerate figures/tables, compile, recount, copy PDF
+bash reports/latex/build.sh
 ```
+
+The report build needs a TeX distribution with `latexmk`, `bibtex` and `texcount`
+(TeX Live, or TinyTeX). `scripts/reproduce.sh` needs only Python.
 
 `scripts/reproduce.sh` never overwrites an immutable snapshot and **never releases
 the sealed test block**.
@@ -123,6 +146,10 @@ scripts/                      reproduce.sh, mutation_check.py, verify_fixes.py
 data/raw/                     immutable snapshots + SHA-256 manifests
 artifacts/                    run records, figures (regenerable)
 notebooks/                    submission notebook
+reports/latex/                report source, generated tables, vector figures
+reports/final/                compiled PDF
+reports/word_count.txt        texcount log with its exact configuration
+.github/workflows/ci.yml      tests + report build on push
 ```
 
 ---

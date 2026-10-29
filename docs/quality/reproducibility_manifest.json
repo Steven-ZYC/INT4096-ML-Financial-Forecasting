@@ -1,0 +1,53 @@
+{
+  "project": "INT4096 machine-learning coursework",
+  "generated_utc": "2026-10-29T14:57:19+00:00",
+  "git_commit": "dde00670bc2b2d0351c0dbc901084559714419ab",
+  "git_branch": "main",
+  "git_dirty": true,
+  "protocol_version": "v1.1-delta-target",
+  "run_count": 20,
+  "artifacts": {
+    "data/raw/aapl_daily.json": {
+      "sha256": "03fe7761ce7f612de5bb11482d57ef6706f96b1ed4e02db5ccccd2083a1c1604",
+      "bytes": 151662
+    },
+    "data/raw/btc_daily.json": {
+      "sha256": "dc5b146c46f57ab41687a1486e6c8b583fa59dcf2f1d7ed9beb68451c80f1886",
+      "bytes": 225431
+    },
+    "data/raw/aapl_daily.manifest.json": {
+      "sha256": "735a06d2824761c9a73876d5984280ce17f2fea6ad535cbdccda6c8671dc952b",
+      "bytes": 619
+    },
+    "data/raw/btc_daily.manifest.json": {
+      "sha256": "e395cb0cc2ed4b60ceb604070494d63911067b338f55314ff7a4c8465a5b45ff",
+      "bytes": 585
+    },
+    "artifacts/experiments/registry.jsonl": {
+      "sha256": "68e9b0696e05c6d11161094d8d40150c96f89a7a7de271bd22dea323b780355d",
+      "bytes": 9620
+    },
+    "configs/research_protocol.yaml": {
+      "sha256": "256442b964b505e71aff51f9b2afbff9692298d6443418aaf093fa125d9848a6",
+      "bytes": 7583
+    },
+    "docs/research/protocol.md": {
+      "sha256": "c98869f5f884c30664674048ce8c3265d055ad1f5ce930abcae5facd8fdb76ab",
+      "bytes": 16006
+    },
+    "notebooks/INT4096_Final_Colab.ipynb": {
+      "sha256": "a26f9a819b19138811202146ebedffe85dfa75c3002e91ba7de80dd43365c5c6",
+      "bytes": 24709
+    },
+    "reports/final/INT4096_Final_Report.pdf": {
+      "sha256": "3f79600795df866b6b13b0b2a952e6c81566e2936c1c4556bf65836c61914a22",
+      "bytes": 569331
+    },
+    "reports/word_count.txt": {
+      "sha256": "138fe317340a9d54aea8c5180904ed02d7b35df99773c0f2b11585f01b8ef4f6",
+      "bytes": 7806
+    }
+  },
+  "missing": [],
+  "note": "Hashes cover the exact bytes used. Re-run `bash scripts/reproduce.sh` and `bash reports/latex/build.sh` to regenerate; run manifests record the commit, data digest and protocol version behind every number."
+}
