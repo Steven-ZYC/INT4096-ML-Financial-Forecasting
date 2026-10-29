@@ -161,8 +161,15 @@ jobs:
           root_file: main.tex
           post_compile: |
             echo "=== deck check ==="
-            pdfinfo main.pdf | grep -E "Pages|Page size"
-            echo "overfull/underfull: $(grep -cE 'Overfull|Underfull' main.log || true)"
+            # pdfinfo is not in the TeX image, so page count comes from the log.
+            grep -E "Output written" main.log
+            boxes=$(grep -cE "Overfull|Underfull" main.log || true)
+            echo "overfull/underfull boxes: ${boxes:-0}"
+            test -s main.pdf
+            if [ "${boxes:-0}" -gt 0 ]; then
+              echo "FAIL: layout overflow in the deck"; grep -E "Overfull|Underfull" main.log; exit 1
+            fi
+            echo "OK: deck has no layout overflow"
 
       - name: Upload deck
         uses: actions/upload-artifact@v4
