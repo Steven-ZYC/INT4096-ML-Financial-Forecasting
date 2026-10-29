@@ -28,11 +28,11 @@ The build pins `SOURCE_DATE_EPOCH` to a fixed project constant
 same fixed metadata to matplotlib. Without this, every build differed: pdfTeX
 embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 
-Verified: two consecutive builds, and a build from a **fresh clone**, all produce
-the identical file:
+Verified: two consecutive `--clean` builds, and a build from a **fresh clone of
+the remote**, all produce the identical file (and a clean working tree):
 
 ```
-28475c4646904bfd6e985702e3dc398cfa6415db7cc15ff1290c3272e26bb9f7  INT4096_Final_Report.pdf
+16f53649e38097e648e1ffc38a2b359c72da0995f66b812a598366e31d76d978  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move

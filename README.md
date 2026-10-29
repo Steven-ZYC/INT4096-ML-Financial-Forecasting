@@ -13,10 +13,10 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 
 | Artifact | Path | Status |
 |---|---|---|
-| Final report (PDF) | [`reports/final/INT4096_Final_Report.pdf`](reports/final/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 narrative words |
+| Final report (PDF) | [`reports/final/INT4096_Final_Report.pdf`](reports/final/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 words, sha256 `16f53649e38097e6…` |
 | LaTeX source | [`reports/latex/main.tex`](reports/latex/main.tex) | builds clean (`bash reports/latex/build.sh`) |
 | Word-count log | [`reports/word_count.txt`](reports/word_count.txt) | 2,399 body + 100 headings |
-| Presentation (PDF) | [`slides/final/INT4096_Presentation.pdf`](slides/final/INT4096_Presentation.pdf) | 21 slides, 18:50 content, 5 named speakers |
+| Presentation (PDF) | [`slides/final/INT4096_Presentation.pdf`](slides/final/INT4096_Presentation.pdf) | 21 slides, 18:50 content, sha256 `ce8e32e8b7088fe1…` |
 | Slide source | [`slides/latex/main.tex`](slides/latex/main.tex) | beamer; builds clean, 0 overfull boxes |
 | Timing plan | [`docs/presentation/timing_plan.md`](docs/presentation/timing_plan.md) | per-slide and per-speaker budget |
 | Colab notebook | [`notebooks/INT4096_Final_Colab.ipynb`](notebooks/INT4096_Final_Colab.ipynb) | executes end to end in tests |
