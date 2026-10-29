@@ -14,6 +14,7 @@ Exit code 0 means every injected defect was caught.
 
 from __future__ import annotations
 
+import hashlib
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -39,6 +40,16 @@ MUTATIONS = [
         path=BUILD_FILE,
         old='        out[f"ret_{h}"] = _safe_div(close, close.shift(h)) - 1.0',
         new='        out[f"ret_{h}"] = _safe_div(close.shift(-h), close) - 1.0',
+        expected_test="test_features_match_independent_trailing_formulas",
+    ),
+    Mutation(
+        name="obfuscated one-bar look-ahead (periods=-1)",
+        path=BUILD_FILE,
+        old='        out[f"ret_{h}"] = _safe_div(close, close.shift(h)) - 1.0',
+        new=(
+            '        _lead = close.shift(periods=-h)\n'
+            '        out[f"ret_{h}"] = _safe_div(_lead, close) - 1.0'
+        ),
         expected_test="test_features_match_independent_trailing_formulas",
     ),
     Mutation(
@@ -109,6 +120,10 @@ def run_leakage_tests() -> subprocess.CompletedProcess:
     )
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def main() -> int:
     baseline = run_leakage_tests()
     if baseline.returncode != 0:
@@ -120,6 +135,7 @@ def main() -> int:
     survivors: list[str] = []
     for mutation in MUTATIONS:
         original = mutation.path.read_text(encoding="utf-8")
+        original_hash = _sha256(mutation.path)
         try:
             if mutation.old not in original:
                 print(f"SKIP  {mutation.name}: anchor text not found")
@@ -143,12 +159,18 @@ def main() -> int:
                 print(f"          failing tests: {', '.join(failing[:3])}")
         finally:
             mutation.path.write_text(original, encoding="utf-8")
+            # Verify the restore: a harness that silently leaves a mutation in
+            # place would corrupt the next measurement (audit LEAK-014).
+            if _sha256(mutation.path) != original_hash:
+                print(f"FATAL {mutation.name}: restore failed for {mutation.path}")
+                return 3
 
     print()
     if survivors:
         print(f"FAIL: {len(survivors)} mutation(s) survived: {survivors}")
         return 1
     print(f"PASS: all {len(MUTATIONS)} injected defects were detected.")
+    print("All files verified restored to their pre-mutation SHA256.")
     return 0
 
 

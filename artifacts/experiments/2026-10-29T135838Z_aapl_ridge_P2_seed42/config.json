@@ -1,0 +1,42 @@
+{
+  "model_id": "ridge",
+  "model_config": {
+    "class": "int4096.models.ridge.build_ridge",
+    "family": "linear",
+    "requires_scaling": true,
+    "search_space": {
+      "alpha": [
+        0.01,
+        0.1,
+        1.0,
+        10.0,
+        100.0,
+        1000.0
+      ]
+    }
+  },
+  "variant": "P2",
+  "variant_config": {
+    "description": "StandardScaler fitted on training indices only",
+    "scaler": "standard",
+    "imputer": "median",
+    "features": "full",
+    "missing_indicators": false,
+    "winsorize_quantiles": null
+  },
+  "features_used": [
+    "ret_1",
+    "ret_5",
+    "ret_20",
+    "ma_gap_5",
+    "ma_gap_20",
+    "vol_10",
+    "vol_30",
+    "range_1",
+    "vol_chg",
+    "dow"
+  ],
+  "seed": 42,
+  "max_trials": 2,
+  "max_seconds": 30.0
+}

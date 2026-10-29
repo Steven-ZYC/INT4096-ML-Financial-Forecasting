@@ -156,6 +156,40 @@ class Protocol:
     def tuning(self) -> dict[str, Any]:
         return dict(self.raw["tuning"])
 
+    @property
+    def horizon(self) -> int:
+        """Forecast horizon in bars. The label is ``Close_{t+horizon}``."""
+        return int(self.raw.get("label_horizon", 1))
+
+    # -- invariants ----------------------------------------------------
+    def validate(self) -> list[str]:
+        """Check protocol invariants that must hold for every experiment.
+
+        The important one: a purge smaller than the label horizon silently
+        re-opens the boundary leak that audit finding LEAK-001 closed. Raising
+        the horizon (e.g. to a 2-session-ahead target) without raising the purge
+        would reintroduce it, so this is enforced rather than documented.
+        """
+        problems: list[str] = []
+        horizon = self.horizon
+        if self.purge_gap < horizon:
+            problems.append(
+                f"purge_gap={self.purge_gap} is smaller than label_horizon={horizon}; "
+                "the last row of each block would label a row in the next block"
+            )
+        cv_gap = int(self.cv.get("gap", 0))
+        if cv_gap < horizon:
+            problems.append(
+                f"cv.gap={cv_gap} is smaller than label_horizon={horizon}; "
+                "inner CV folds would overlap across the label horizon"
+            )
+        if self.label_mode not in ("level", "delta"):
+            problems.append(f"label_mode={self.label_mode!r} must be 'level' or 'delta'")
+        total = self.train_fraction + self.validation_fraction + self.test_fraction
+        if abs(total - 1.0) > 1e-6:
+            problems.append(f"split fractions sum to {total}, not 1.0")
+        return problems
+
     # -- provenance ----------------------------------------------------
     def fingerprint(self) -> str:
         """SHA256 of the canonical JSON form of the protocol.
@@ -174,4 +208,11 @@ def load_protocol(path: str | Path | None = None) -> Protocol:
         resolved = (REPO_ROOT / resolved).resolve()
     if not resolved.exists():
         raise FileNotFoundError(f"Protocol file not found: {resolved}")
-    return Protocol(raw=_load_yaml(resolved), source_path=resolved)
+    protocol = Protocol(raw=_load_yaml(resolved), source_path=resolved)
+    problems = protocol.validate()
+    if problems:
+        raise ValueError(
+            "Protocol invariants violated in " + str(resolved) + ":\n  - "
+            + "\n  - ".join(problems)
+        )
+    return protocol

@@ -5,8 +5,13 @@ The auditor (`int-leakage-auditor`) did not write the code it audited and was
 required to produce a reproducible demonstration for each finding.
 
 **Audit #1 verdict: FAIL** (2 HIGH, 4 MEDIUM, 4 LOW; no BLOCKER).
-**Retest status: see §3.** Gate G1/G4 sign-off remains withheld until the
-retest is executed by an independent context.
+**Audit #2 (independent retest) verdict: PASS** on both HIGH findings, with no
+new leak introduced. Five further hardening findings (3 MEDIUM, 2 LOW) were
+raised and have since been fixed — see §6.
+
+The auditor that produced audit #2 was a separate subagent context with no
+knowledge of the coordinator's edits; it re-derived the split boundaries through
+the production `prepare_dataset` path and wrote its own mutations.
 
 ---
 
@@ -176,7 +181,48 @@ rows that survive the 30-row warm-up, but the definition is now accurate.
 
 ---
 
-## 3. Retest checklist (must be executed by an independent context)
+## 3. Audit #2 — independent retest result
+
+**Verdict: PASS.** Reproduced by the auditor, not accepted on the coordinator's word:
+
+- **LEAK-001 FIXED.** `purge_gap: 1` flows `config → Protocol.purge_gap →
+  chronological_split(horizon_gap=1)`. Recomputed through `prepare_dataset` on
+  both assets:
+
+  | Asset | last train label bar | validation starts | last validation label bar | test starts |
+  |---|---|---|---|---|
+  | AAPL | 2024-11-11 | 2024-11-12 | 2025-11-04 | 2025-11-05 |
+  | BTC | 2024-11-08 | 2024-11-09 | 2025-11-02 | 2025-11-03 |
+
+  In both assets the last label bar of a block is strictly before the next block.
+
+- **LEAK-002 FIXED.** The suite is green and `scripts/mutation_check.py` reports
+  6/6 caught. The auditor additionally wrote **two guard-blind mutations** — an
+  obfuscated `shift(periods=-1)` containing no literal `shift(-`, and a
+  matrix-level shift inside a function the static grep never inspects. **Both were
+  caught by the numeric test alone**, proving detection is behavioural rather
+  than pattern-matching. This was the specific weakness of the first fix, and it
+  is now closed.
+
+- **No new leak** at BLOCKER/HIGH. Target alignment verified (y_true equals
+  `Close[t+1]` on 244/244 AAPL and 358/358 BTC rows); the sealed test block is
+  untouched. The auditor confirmed its temporary mutations were reverted
+  byte-for-byte.
+
+## 4. Findings raised by audit #2
+
+| ID | Severity | Issue | Fix | Status |
+|---|---|---|---|---|
+| LEAK-011 | MEDIUM | `purge_gap` and `cv.gap` were hard-coded at 1 with no invariant binding them to `label_horizon`; raising the horizon would silently restore LEAK-001 | `Protocol.validate()` enforces `purge_gap >= horizon` and `cv.gap >= horizon` at load time; `label_horizon` added to the config | FIXED |
+| LEAK-012 | MEDIUM | The purge test used a literal `1`, so `purge_gap: 0` in the YAML would still pass | `test_protocol_purge_is_at_least_the_label_horizon` reads the YAML; `test_protocol_rejects_an_insufficient_purge`; `test_real_split_honours_the_configured_purge` | FIXED |
+| LEAK-013 | MEDIUM | No test covered the runner's slicing, so a leak in `fit`/tuning inputs would survive the suite | `test_runner_fits_and_tunes_on_training_rows_only` instruments `build_estimator` and asserts every fitted row index is before `validation_start` | FIXED |
+| LEAK-014 | LOW | `mutation_check.py` did not verify its restore and had no guard-blind mutation | Restore is verified by SHA-256 and fails closed; an obfuscated `shift(periods=-1)` mutation was added (6 mutations total) | FIXED |
+| LEAK-015 | LOW | Tracked `__pycache__/*.pyc` files dirtied every audit diff | Removed from the index; `__pycache__/` already ignored | FIXED |
+
+Verification that LEAK-013's test is not vacuous: mutating `run_cell` to fit on
+`train + validation` makes it fail; restoring the code makes it pass.
+
+## 5. Retest checklist (originally required; now satisfied for HIGH findings)
 
 | Finding | Retest action | Expected evidence |
 |---|---|---|
@@ -188,22 +234,12 @@ rows that survive the 30-row warm-up, but the definition is now accurate.
 | LEAK-005 | Run variant P1 | Status `NOT_RUN` with reason |
 | LEAK-006 | Compare config and prose versions | Both `v1.1-delta-target` |
 
-**Current status:** the coordinator executed each of these locally (§4 records the
-observed output), but a **coordinator retest is not an independent retest**. The
-gate stays PENDING until an auditor context reproduces them.
+**Current status:** executed by the coordinator (§7) **and** independently
+reproduced by the auditor in audit #2 (§3) for every HIGH finding. G4's audit
+condition is therefore satisfied; the remaining G4 item is the analysis freeze
+and the single test-set release (D7), which is a human decision.
 
-## 4. Coordinator-side verification already observed
-
-```
-$ python -m pytest -q                      -> 75 passed
-$ python scripts/mutation_check.py         -> PASS: all 5 injected defects detected
-$ variant P1 run                           -> status NOT_RUN (no missing inputs)
-$ snapshot hash check                      -> enforced in run_cell
-```
-
-These are recorded as *self-checks*, not as audit sign-off.
-
-## 5. Attacks that did not succeed (from audit #1)
+## 6. Attacks that did not succeed (from audit #1)
 
 Future-append invariance (bit-exact), whole-column contamination, scaler fitted
 on validation/test (identical `mean_`/`scale_`), sealed-block poisoning during
@@ -214,3 +250,16 @@ committed `test_*` metrics null).
 
 A suite that has never been attacked is not evidence. This section is what makes
 the eventual PASS meaningful.
+
+
+## 7. Coordinator-side verification already observed
+
+```
+$ python -m pytest -q                      -> 83 passed
+$ python scripts/mutation_check.py         -> PASS: all 6 injected defects detected
+$ variant P1 run                           -> status NOT_RUN (no missing inputs)
+$ snapshot hash check                      -> enforced in run_cell
+$ python scripts/verify_fixes.py           -> PASS: 8 probes
+```
+
+These are recorded as *self-checks*. Sign-off came separately, from audit #2 (§3).

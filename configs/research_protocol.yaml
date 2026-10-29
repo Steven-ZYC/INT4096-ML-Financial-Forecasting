@@ -29,6 +29,7 @@ label_field: "close"          # raw close; see protocol D1 (adjusted-close sensi
 # the training-set mean, producing a large artificial error that measures the
 # representation, not the model. Both modes answer the same question because
 # Close_t is known at decision time (decision D8).
+label_horizon: 1                # label is Close_{t+1}; purge_gap must be >= this
 label_mode: "delta"
 label_reconstruction: "close_t_plus_predicted_delta"
 

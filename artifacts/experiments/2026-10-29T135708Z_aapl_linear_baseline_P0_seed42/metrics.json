@@ -1,0 +1,149 @@
+{
+  "run_id": "2026-10-29T135708Z_aapl_linear_baseline_P0_seed42",
+  "asset": "AAPL",
+  "model_id": "linear_baseline",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "protocol_version": "v1.1-delta-target",
+  "metrics": {
+    "validation_mae": 2.898631371877658,
+    "validation_rmse": 4.3563930892355325,
+    "validation_r2": 0.9555792221458272,
+    "validation_mape_pct": 1.3115216499877773,
+    "validation_normalized_mae": 0.012776449716813618,
+    "validation_baseline_mae": 2.9056147540983597,
+    "validation_baseline_rmse": 4.361091145987039,
+    "validation_baseline_r2": 0.9554833612534198,
+    "validation_skill_mae": 0.0024034095403913103,
+    "validation_skill_rmse": 0.0010772663524425408,
+    "validation_direction_accuracy": 0.5860655737704918,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": NaN,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 244.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 2.9056147540983597,
+    "validation_rmse": 4.361091145987039,
+    "validation_r2": 0.9554833612534198
+  },
+  "search": {
+    "best_hyperparameters": {
+      "alpha": 10.0
+    },
+    "best_validation_mae": 1.986404812529365,
+    "n_trials": 10,
+    "n_failed": 0,
+    "stopped_reason": "max_trials",
+    "trials": [
+      {
+        "trial": 0,
+        "hyperparameters": {
+          "alpha": 0.1
+        },
+        "validation_mae": 2.002376630714874,
+        "seconds": 0.0284,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 1,
+        "hyperparameters": {
+          "alpha": 10.0
+        },
+        "validation_mae": 1.986404812529365,
+        "seconds": 0.0159,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 2,
+        "hyperparameters": {
+          "alpha": 1.0
+        },
+        "validation_mae": 1.9944630835845198,
+        "seconds": 0.0155,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 3,
+        "hyperparameters": {
+          "alpha": 1.0
+        },
+        "validation_mae": 1.9944630835845198,
+        "seconds": 0.0162,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 4,
+        "hyperparameters": {
+          "alpha": 1.0
+        },
+        "validation_mae": 1.9944630835845198,
+        "seconds": 0.0143,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 5,
+        "hyperparameters": {
+          "alpha": 10.0
+        },
+        "validation_mae": 1.986404812529365,
+        "seconds": 0.019,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 6,
+        "hyperparameters": {
+          "alpha": 0.1
+        },
+        "validation_mae": 2.002376630714874,
+        "seconds": 0.0158,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 7,
+        "hyperparameters": {
+          "alpha": 10.0
+        },
+        "validation_mae": 1.986404812529365,
+        "seconds": 0.0184,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 8,
+        "hyperparameters": {
+          "alpha": 0.1
+        },
+        "validation_mae": 2.002376630714874,
+        "seconds": 0.016,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 9,
+        "hyperparameters": {
+          "alpha": 0.1
+        },
+        "validation_mae": 2.002376630714874,
+        "seconds": 0.0162,
+        "status": "ok",
+        "error": null
+      }
+    ]
+  },
+  "split": {
+    "train_period": "2021-12-10..2024-11-08",
+    "validation_period": "2024-11-12..2025-11-03",
+    "test_period": "2025-11-05..2026-10-27",
+    "train_rows": "733",
+    "validation_rows": "244",
+    "test_rows": "245"
+  }
+}

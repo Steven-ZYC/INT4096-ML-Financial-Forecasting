@@ -483,3 +483,42 @@ def test_pipeline_refits_scaler_per_fold(synthetic_frame):
         pipe = Pipeline([("scale", StandardScaler()), ("model", Ridge(alpha=1.0))])
         pipe.fit(X_train.iloc[train_idx], y_train.iloc[train_idx])
         assert np.isfinite(mae(y_train.iloc[val_idx], pipe.predict(X_train.iloc[val_idx])))
+
+
+# ------------------------------------------------- protocol-driven invariants
+def test_protocol_purge_is_at_least_the_label_horizon():
+    """The purge must scale with the horizon (audit LEAK-011/012).
+
+    Reading the value from the YAML — rather than hard-coding 1 in the test —
+    means setting `purge_gap: 0` in the config now fails the suite.
+    """
+    from int4096.config import load_protocol
+
+    protocol = load_protocol()
+    assert protocol.purge_gap >= protocol.horizon
+    assert int(protocol.cv["gap"]) >= protocol.horizon
+
+
+def test_protocol_rejects_an_insufficient_purge():
+    """A config with purge_gap < horizon must be rejected at load time."""
+    from int4096.config import Protocol, REPO_ROOT, _load_yaml
+
+    raw = _load_yaml(REPO_ROOT / "configs" / "research_protocol.yaml")
+    raw["label_horizon"] = 3
+    raw["splits"]["purge_gap"] = 1
+    problems = Protocol(raw=raw, source_path=REPO_ROOT / "synthetic").validate()
+    assert any("purge_gap" in p for p in problems), problems
+
+
+def test_real_split_honours_the_configured_purge():
+    """The production path must use the YAML value, not a hidden default."""
+    from int4096.config import load_protocol
+    from int4096.experiments.run import prepare_dataset
+
+    protocol = load_protocol()
+    prepared = prepare_dataset("AAPL", protocol)
+    split = prepared["split"]
+
+    # The purged row is the one immediately before the next block's start.
+    assert split.validation_start - split.train_end == protocol.purge_gap
+    assert split.test_start - split.validation_end == protocol.purge_gap

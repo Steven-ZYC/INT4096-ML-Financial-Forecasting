@@ -6,7 +6,7 @@ can continue.
 
 **Last updated:** 2026-10-29 (Asia/Hong_Kong)
 **Protocol:** `v1.1-delta-target`
-**Test status at last run:** 79 passed
+**Test status at last run:** 83 passed
 
 Legend: `PASS` = evidence exists and was executed · `PENDING` = blocked on a
 human decision or an independent retest · `FAIL` = known defect.
@@ -39,7 +39,9 @@ human decision or an independent retest · `FAIL` = known defect.
 | Boundary purge (no label crosses a split) | PASS | `purge_gap: 1`; `test_split_purge_gap_prevents_label_crossing` |
 | Causal features, no future information | PASS | `test_features_match_independent_trailing_formulas` |
 | Leakage suite proven able to fail | PASS | `scripts/mutation_check.py` → 5/5 caught |
-| **Independent leakage audit PASS** | **PENDING** | audit #1 returned FAIL; fixes implemented; **independent retest not yet run** |
+| Independent leakage audit PASS | **PASS** | audit #1 returned FAIL; all findings fixed; audit #2 (separate context) returned PASS — `docs/quality/leakage_audit.md` §3 |
+| Leakage suite proven able to fail | PASS | `scripts/mutation_check.py` → 6/6 caught, restores SHA-256 verified |
+| Runner slicing covered by a test | PASS | `test_runner_fits_and_tunes_on_training_rows_only` (fails when `fit` is given validation rows) |
 
 ## G2 — Executable baseline
 
@@ -71,7 +73,9 @@ human decision or an independent retest · `FAIL` = known defect.
 | Uncertainty caveat stated | PASS | bootstrap implemented; `protocol.md` §7.3 |
 | Preprocessing ablation matched, one factor at a time | PASS | `fig06`; trees as negative control |
 | P1 not published as a duplicate cell | PASS | status `NOT_RUN` with reason (D13) |
-| **Independent leakage retest** | **PENDING** | §G1 |
+| Independent leakage retest | PASS | audit #2, `docs/quality/leakage_audit.md` §3 |
+| Protocol invariants enforced at load time | PASS | `Protocol.validate()`: `purge_gap >= label_horizon`, `cv.gap >= label_horizon` |
+| Hardening findings LEAK-011..015 closed | PASS | `docs/quality/leakage_audit.md` §4 |
 
 ## G5 — Education
 
@@ -116,8 +120,8 @@ human decision or an independent retest · `FAIL` = known defect.
 1. **`docs/course/` is empty.** The requirement matrix is a transcription from
    the project owner's brief, not the official PDF. Everything downstream inherits
    that risk. *Owner action required.*
-2. **Independent leakage retest.** Fixes are implemented and self-verified, but a
-   coordinator retest is not an independent one. Gate G4 stays PENDING.
+2. **Analysis freeze and the single test-set release (D7)** are human decisions.
+   Until they happen, Results cannot report held-out numbers.
 3. **Human decisions D1, D2, D5, D6, D7, D8** are unanswered. D8 (delta target)
    is the most consequential: it changed the modelling representation, though not
    the reported question.

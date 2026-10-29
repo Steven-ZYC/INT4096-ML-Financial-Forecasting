@@ -159,3 +159,64 @@ def test_model_failure_is_visible_not_swallowed(dataset):
     estimator = build_estimator("ridge", {"alpha": -1.0}, 42, P2)
     with pytest.raises(Exception):
         estimator.fit(X_train, y_train)
+
+
+# ------------------------------------------------------- runner-level leakage
+def test_runner_fits_and_tunes_on_training_rows_only():
+    """A leak in the runner's slicing would survive every other test (LEAK-013).
+
+    The runner is instrumented to record exactly which row positions reach
+    `fit`, both during inner-CV tuning and during the final fit. Every one of
+    them must be strictly before the validation block.
+    """
+    import int4096.experiments.run as runner
+    from int4096.config import load_protocol
+
+    protocol = load_protocol()
+    prepared = runner.prepare_dataset("AAPL", protocol)
+    split = prepared["split"]
+
+    fitted_positions: list[np.ndarray] = []
+    original = runner.build_estimator
+
+    class RecordingEstimator:
+        def __init__(self, inner, position_of):
+            self.inner = inner
+            self.position_of = position_of
+
+        def fit(self, X, y=None):  # noqa: N803
+            index = list(X.index)
+            positions = np.array(
+                [self.position_of[ts] for ts in index], dtype=int
+            )
+            fitted_positions.append(positions)
+            self.inner.fit(X, y)
+            return self
+
+        def predict(self, X):  # noqa: N803
+            return self.inner.predict(X)
+
+        def __getattr__(self, name):
+            return getattr(self.inner, name)
+
+    position_of = {ts: i for i, ts in enumerate(prepared["X"].index)}
+
+    def recording_build(model_id, hyperparams, seed, variant, feature_columns=None):
+        inner = original(model_id, hyperparams, seed, variant, feature_columns)
+        return RecordingEstimator(inner, position_of)
+
+    runner.build_estimator = recording_build
+    try:
+        manifest = runner.run_cell(
+            "AAPL", "ridge", "P2", protocol, max_trials=2, max_seconds=30,
+            output_root=None, human_owner="test",
+        )
+    finally:
+        runner.build_estimator = original
+
+    assert manifest.status == "SUCCESS"
+    assert fitted_positions, "no fit call was recorded"
+    for positions in fitted_positions:
+        assert positions.max() < split.validation_start, (
+            "the runner fitted on rows from the validation block"
+        )

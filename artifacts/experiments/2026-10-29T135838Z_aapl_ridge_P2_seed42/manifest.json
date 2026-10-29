@@ -1,0 +1,89 @@
+{
+  "run_id": "2026-10-29T135838Z_aapl_ridge_P2_seed42",
+  "status": "SUCCESS",
+  "protocol_version": "v1.1-delta-target",
+  "asset": "AAPL",
+  "prediction_target": "next_session_close",
+  "source_snapshot_sha256": "03fe7761ce7f612de5bb11482d57ef6706f96b1ed4e02db5ccccd2083a1c1604",
+  "model_id": "ridge",
+  "preprocess_variant": "P2",
+  "seed": 42,
+  "git_commit": "da7ed70fe65fd43a148a12201fdf29bc192d3f4c",
+  "git_dirty": true,
+  "python_version": "3.14.4",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "dependencies_lock_hash": "",
+  "config_path": "configs/research_protocol.yaml#ridge/P2",
+  "config_hash": "dbf3927df3c2b565a24cee60d10db7fadf68009f48aa66a00326691d23f4f122",
+  "source_name": "stockanalysis.com",
+  "source_coverage": "2021-10-28..2026-10-28",
+  "train_period": "2021-12-10..2024-11-08",
+  "validation_period": "2024-11-12..2025-11-03",
+  "test_period": "",
+  "cv_policy": "expanding_window n_splits=5 gap=1",
+  "hyperparameters": {
+    "alpha": 100.0
+  },
+  "metrics": {
+    "validation_mae": 2.9057854565297645,
+    "validation_rmse": 4.359150793203401,
+    "validation_r2": 0.955522965455769,
+    "validation_mape_pct": 1.3154167963901433,
+    "validation_normalized_mae": 0.012807983151424953,
+    "validation_baseline_mae": 2.9056147540983597,
+    "validation_baseline_rmse": 4.361091145987039,
+    "validation_baseline_r2": 0.9554833612534198,
+    "validation_skill_mae": -5.874916183024048e-05,
+    "validation_skill_rmse": 0.000444923694251087,
+    "validation_direction_accuracy": 0.5204918032786885,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": null,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 244.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 2.9056147540983597,
+    "validation_rmse": 4.361091145987039,
+    "validation_r2": 0.9554833612534198
+  },
+  "fold_metrics": [
+    {
+      "trial": 0,
+      "hyperparameters": {
+        "alpha": 0.01
+      },
+      "validation_mae": 2.0195762095048435,
+      "seconds": 0.0213,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 1,
+      "hyperparameters": {
+        "alpha": 100.0
+      },
+      "validation_mae": 1.9966104352271663,
+      "seconds": 0.0215,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    }
+  ],
+  "artifacts": [
+    "artifacts/experiments/2026-10-29T135838Z_aapl_ridge_P2_seed42/metrics.json",
+    "artifacts/experiments/2026-10-29T135838Z_aapl_ridge_P2_seed42/predictions.csv",
+    "artifacts/experiments/2026-10-29T135838Z_aapl_ridge_P2_seed42/config.json",
+    "artifacts/experiments/2026-10-29T135838Z_aapl_ridge_P2_seed42/environment.json"
+  ],
+  "warnings": [
+    "test set sealed: no test metrics produced in this run",
+    "undefined (NaN) diagnostics retained as null: validation_baseline_direction_accuracy"
+  ],
+  "error": null,
+  "execution_seconds": 0.095,
+  "human_owner": "test",
+  "review_state": "UNREVIEWED",
+  "notes": "",
+  "schema_problems": []
+}
