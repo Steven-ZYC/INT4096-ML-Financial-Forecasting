@@ -20,11 +20,12 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 | Protocol, runs, audit | [`docs/`](docs/) | frozen protocol, 20 runs, audit trail |
 | Teaching material | [`docs/education/`](docs/education/) | lesson, 5 tasks, teacher notes |
 
-> **Publication status:** the local repository is complete and committed, but it
-> has **not been pushed**: no GitHub credentials exist in this environment. The
-> exact one-step owner action and verification commands are in
-> [`docs/handoff/github_push.md`](docs/handoff/github_push.md). GitHub is a
-> reproducibility archive; the **Moodle** upload remains the submission of record.
+> **Published:** <https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting>
+> (private, release [`v0.1.0`](https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting/releases/tag/v0.1.0)).
+> CI runs the tests and builds the report on every push; a clone of the remote
+> rebuilds the PDF byte-identically. GitHub is a reproducibility archive — the
+> **Moodle** upload remains the submission of record
+> ([checklist](docs/handoff/moodle_checklist.md)).
 
 ---
 

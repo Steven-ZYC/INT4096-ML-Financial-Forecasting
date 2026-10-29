@@ -1,30 +1,49 @@
-# GitHub Publication — Status and Required Owner Action
+# GitHub Publication — Status and Verified Outcome
 
-**Status: BLOCKED on authentication.** Everything else is complete and committed
-locally.
+**Status: DONE and independently verified on the remote.** The blocker described
+below was resolved when the owner completed `gh auth login`; the record is kept as
+evidence of what was checked and what changed.
 
-Verified on 2026-10-29 (Asia/Hong_Kong) in this environment:
-
-| Check | Result |
+| Check | Verified result |
 |---|---|
-| `git --version` | `2.53.0` — present |
-| `git config --show-origin --get user.name` | unset **globally**; now set **repo-local** |
-| `command -v gh` | **was missing**; official CLI `2.103.3` installed to `~/.local/bin/gh` |
-| `gh auth status` | `You are not logged into any GitHub hosts. To log in, run: gh auth login` |
-| GitHub account `Steven-ZYC` | **exists** (public API; numeric id `60809224`) |
-| Target repository | **existence cannot be determined unauthenticated** — `git ls-remote` falls through to a username prompt, which GitHub also does for a private repo or a nonexistent one |
-| `git push -u origin main` | `fatal: could not read Username for 'https://github.com'` |
-| SSH keys | none (`~/.ssh` contains only an empty `authorized_keys`) |
-| Credential helpers / `GH_TOKEN` | none |
-| `sudo apt-get install` | unavailable — `sudo` requires interactive authentication |
+| `gh auth status` | logged in to github.com as **Steven-ZYC**, token scopes include `repo` |
+| GitHub account id | `60809224` — matches the commit author address |
+| Target repository | **existed already**, `private: true`, default branch `main`, **empty** at the time of the push |
+| Remote | `git@github.com:Steven-ZYC/INT4096-ML-Financial-Forecasting.git` (SSH; gh generated an ed25519 key) |
+| Push | `* [new branch] main -> main`, no force, no history reconciliation needed |
+| Remote `main` SHA | `8c86ca5` — equal to local HEAD at the time; re-check with `git ls-remote` |
+| Files on remote | **235 blobs**, including the compiled PDF, LaTeX source, notebook and data snapshots |
+| CI (`gh run view`) | `tests` and `build LaTeX report` both **success** |
+| Release | [`v0.1.0`](https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting/releases/tag/v0.1.0) |
+| Clean-clone rebuild | PDF rebuilt from a clone **of the remote** is byte-identical: `28475c46…` |
+
+**Blocker that was hit first (kept for the record):** with no `gh` installed and
+no credentials, `git push` failed with `fatal: could not read Username for
+'https://github.com'`. Installing the GitHub CLI to `~/.local/bin` reduced the
+owner's step to a single `gh auth login` device flow. No password, token or key
+was ever requested through this chat.
+
+## What to check if this is ever re-run
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+gh auth status
+git ls-remote origin refs/heads/main          # must equal: git rev-parse HEAD
+gh api repos/Steven-ZYC/INT4096-ML-Financial-Forecasting \
+  --jq '{private: .private, default_branch: .default_branch}'
+gh run list --limit 3
+```
+
+A push is **not** proof of visibility: confirm `private: true` explicitly, because
+publishing coursework publicly is a separate decision.
 
 ## Local state that is ready
 
 ```text
-branch      main (renamed from master)
-remote      origin -> https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting.git
+branch      main (tracks origin/main)
+remote      origin -> git@github.com:Steven-ZYC/INT4096-ML-Financial-Forecasting.git
 identity    ZHANG Yancheng <60809224+Steven-ZYC@users.noreply.github.com>  (repo-local)
-history     clean; no placeholder email remains; nothing has ever been pushed
+history     clean; no placeholder email remains; published at v0.1.0
 working tree clean; all 20 run manifests resolve to an existing commit
 ```
 
