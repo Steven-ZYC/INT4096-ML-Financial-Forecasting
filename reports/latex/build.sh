@@ -20,10 +20,16 @@ fi
 command -v latexmk   >/dev/null || { echo "latexmk not found on PATH"; exit 1; }
 command -v texcount  >/dev/null || { echo "texcount not found on PATH"; exit 1; }
 
-# Deterministic builds: pin TeX and matplotlib timestamps to the commit time so
-# two builds of the same source produce byte-identical PDFs.
+# Deterministic builds: pin TeX and matplotlib timestamps so two builds of the
+# same source produce byte-identical PDFs.
+#
+# The epoch is a FIXED project constant, not the HEAD commit time. Deriving it
+# from HEAD would be circular: committing the rebuilt PDF moves HEAD, which
+# changes the epoch, which changes the PDF. A constant breaks that loop and makes
+# the build reproducible from any clone.
+INT4096_SOURCE_DATE="${INT4096_SOURCE_DATE:-2026-10-29T00:00:00Z}"
 if [[ -z "${SOURCE_DATE_EPOCH:-}" ]]; then
-  SOURCE_DATE_EPOCH="$(git -C "$ROOT" log -1 --format=%ct 2>/dev/null || echo 0)"
+  SOURCE_DATE_EPOCH="$(date -u -d "$INT4096_SOURCE_DATE" +%s)"
 fi
 export SOURCE_DATE_EPOCH
 echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH (deterministic PDF metadata)"
