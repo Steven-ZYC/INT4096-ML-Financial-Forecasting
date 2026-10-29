@@ -51,3 +51,14 @@ reports/latex/generated/*.aux
 # Student IDs must never enter a commit (see docs/handoff/github_push.md).
 docs/management/.members.local
 *.local
+
+# Beamer build artefacts (the compiled deck in slides/final IS tracked)
+slides/latex/*.aux
+slides/latex/*.log
+slides/latex/*.nav
+slides/latex/*.out
+slides/latex/*.snm
+slides/latex/*.toc
+slides/latex/*.vrb
+slides/latex/*.fls
+slides/latex/*.fdb_latexmk

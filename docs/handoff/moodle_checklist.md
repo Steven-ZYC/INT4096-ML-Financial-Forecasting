@@ -16,14 +16,14 @@ final submission **28 Nov 2026 23:59 HKT**, with a **10% per day** late penalty.
 | # | Deliverable | Source file | Format | Owner | Uploaded | Verified |
 |---|---|---|---|---|---|---|
 | 1 | Final report | `reports/final/INT4096_Final_Report.pdf` | PDF | | ☐ | ☐ |
-| 2 | Presentation slides | `docs/presentation/` → exported deck (see note) | PPTX or PDF | | ☐ | ☐ |
+| 2 | Presentation slides | `slides/final/INT4096_Presentation.pdf` | PDF (PPTX optional) | | ☐ | ☐ |
 | 3 | Original dataset | `data/raw/aapl_daily.json`, `data/raw/btc_daily.json` (+ manifests) | JSON/CSV | | ☐ | ☐ |
 | 4 | Colab-compatible notebook | `notebooks/INT4096_Final_Colab.ipynb` | `.ipynb` | | ☐ | ☐ |
 
-**Note on slides:** the storyboard exists (`docs/presentation/storyboard.md`) but
-an exported PPTX/PDF has **not been produced** in this repository. Exporting it
-is outstanding work; do not tick item 2 until a real deck file exists and was
-opened to confirm it renders.
+**Note on slides:** a compiled beamer PDF exists (21 slides, 0 overfull boxes)
+and is built by `bash slides/build.sh`. If the course requires PPTX specifically,
+export from the PDF or rebuild from an editable source — do not submit the
+`.tex` alone. Every slide number comes from the same artifacts as the report.
 
 ---
 
@@ -74,7 +74,7 @@ opened to confirm it renders.
 
 | Item | Status | Where |
 |---|---|---|
-| Slide deck export (PPTX/PDF) | **NOT DONE** | `docs/presentation/storyboard.md` only |
+| Slide deck (PDF) | **DONE** — PPTX export optional | `slides/final/INT4096_Presentation.pdf` |
 | Contribution statement confirmation | roster filled; owners must confirm | `docs/management/responsibilities.md` |
 | Official course specification archived | PENDING owner | `docs/course/README.md` |
 | GitHub push | BLOCKED on auth | `docs/handoff/github_push.md` |

@@ -26,6 +26,7 @@ TRACKED = [
     "notebooks/INT4096_Final_Colab.ipynb",
     "reports/final/INT4096_Final_Report.pdf",
     "reports/word_count.txt",
+    "slides/final/INT4096_Presentation.pdf",
 ]
 
 

@@ -132,3 +132,41 @@ jobs:
         run: |
           test -s reports/latex/main.pdf
           ls -l reports/latex/main.pdf
+
+  slides:
+    name: build presentation deck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Regenerate slide figures and macros from run artifacts
+        run: PYTHONPATH=src python scripts/build_slide_assets.py
+
+      - name: Compile deck
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: slides/latex
+          root_file: main.tex
+          post_compile: |
+            echo "=== deck check ==="
+            pdfinfo main.pdf | grep -E "Pages|Page size"
+            echo "overfull/underfull: $(grep -cE 'Overfull|Underfull' main.log || true)"
+
+      - name: Upload deck
+        uses: actions/upload-artifact@v4
+        with:
+          name: INT4096_Presentation
+          path: slides/latex/main.pdf
+          if-no-files-found: error
