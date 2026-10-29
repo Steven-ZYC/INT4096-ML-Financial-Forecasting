@@ -103,8 +103,17 @@ jobs:
           working_directory: reports/latex
           root_file: main.tex
           post_compile: |
-            echo "=== texcount ==="
-            texcount -inc -sum main.tex | tail -8
+            echo "=== texcount (narrative word count) ==="
+            texcount -inc -sum main.tex | grep -E "^Words in text|^Words in headers|^Words outside"
+            echo "=== enforce the instructor allowance (<= 2500 narrative words) ==="
+            text=$(texcount -inc -sum main.tex | awk '/^Words in text/{s+=$4} END{print s}')
+            heads=$(texcount -inc -sum main.tex | awk '/^Words in headers/{s+=$4} END{print s}')
+            total=$((text + heads))
+            echo "narrative total: $total (text $text + headings $heads)"
+            if [ "$total" -gt 2500 ]; then
+              echo "FAIL: narrative exceeds the ~2500-word allowance"; exit 1
+            fi
+            echo "OK: within the ~2500-word allowance"
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
