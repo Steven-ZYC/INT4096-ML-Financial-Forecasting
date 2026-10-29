@@ -64,8 +64,9 @@ echo "== 4/4 word count (texcount, narrative only) =="
 mkdir -p ../final
 {
   echo "INT4096 report word count"
-  echo "generated_from_commit: $(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)"
   echo "SOURCE_DATE_EPOCH: $SOURCE_DATE_EPOCH"
+  echo "(commit id omitted deliberately: embedding HEAD would change this file on
+every unrelated commit and destroy build reproducibility)"
   echo "command:   texcount -inc -sum main.tex"
   echo
   texcount -inc -sum main.tex

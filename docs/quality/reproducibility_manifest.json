@@ -1,7 +1,7 @@
 {
   "project": "INT4096 machine-learning coursework",
-  "generated_utc": "2026-10-29T16:29:58+00:00",
-  "git_commit": "ab5b0188647dc9f8e07e68aedcab08870f37feac",
+  "generated_utc": "2026-10-29T16:30:59+00:00",
+  "git_commit": "24e0f7ca71398ff8ccc90218935ff62a411bcbb1",
   "git_branch": "main",
   "git_dirty": true,
   "protocol_version": "v1.1-delta-target",
@@ -44,8 +44,8 @@
       "bytes": 566145
     },
     "reports/word_count.txt": {
-      "sha256": "ecef45d85677d7b0f608284205a4950c2e2867418207d2ff0cef594c02752d79",
-      "bytes": 7835
+      "sha256": "5a5ceb4c4308837942b3206f9a068dd659757dfdee5bf21c1cdf085add0f5814",
+      "bytes": 7936
     },
     "slides/final/INT4096_Presentation.pdf": {
       "sha256": "ce8e32e8b7088fe1895c0c52f273dffee9e4e70f9ad65be191a61581ddc6216f",

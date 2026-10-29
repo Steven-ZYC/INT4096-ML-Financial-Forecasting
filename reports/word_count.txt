@@ -1,6 +1,7 @@
 INT4096 report word count
-generated_from_commit: ab5b018
 SOURCE_DATE_EPOCH: 1793232000
+(commit id omitted deliberately: embedding HEAD would change this file on
+every unrelated commit and destroy build reproducibility)
 command:   texcount -inc -sum main.tex
 
 File: main.tex
