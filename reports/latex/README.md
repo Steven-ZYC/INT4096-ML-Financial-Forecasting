@@ -21,6 +21,23 @@ overfull boxes and warnings rather than glossing over them. A clean build prints
 Engine: `pdflatex` via `latexmk`, bibliography via `bibtex` with `plainnat`
 (natbib). No biber/biblatex, to keep the dependency surface small.
 
+### Byte-reproducible builds
+
+The build pins `SOURCE_DATE_EPOCH` to a fixed project constant
+(`2026-10-29T00:00:00Z`, overridable with `INT4096_SOURCE_DATE`) and passes the
+same fixed metadata to matplotlib. Without this, every build differed: pdfTeX
+embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
+
+Verified: two consecutive builds, and a build from a **fresh clone**, all produce
+the identical file:
+
+```
+28475c4646904bfd6e985702e3dc398cfa6415db7cc15ff1290c3272e26bb9f7  INT4096_Final_Report.pdf
+```
+
+The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
+`HEAD`, change the epoch, and change the PDF — a circular dependency.
+
 ## Nothing empirical is typed by hand
 
 Run `python scripts/build_latex_assets.py` (the build script does it) and the
