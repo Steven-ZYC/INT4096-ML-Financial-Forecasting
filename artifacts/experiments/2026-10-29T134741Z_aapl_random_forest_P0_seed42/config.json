@@ -1,0 +1,49 @@
+{
+  "model_id": "random_forest",
+  "model_config": {
+    "class": "int4096.models.random_forest.build_random_forest",
+    "family": "bagging",
+    "requires_scaling": false,
+    "search_space": {
+      "n_estimators": [
+        100,
+        200
+      ],
+      "max_depth": [
+        null,
+        4,
+        8,
+        16
+      ],
+      "min_samples_leaf": [
+        1,
+        5,
+        20
+      ]
+    }
+  },
+  "variant": "P0",
+  "variant_config": {
+    "description": "Minimal causal feature set; no scaling; train-fitted median imputation",
+    "scaler": null,
+    "imputer": "median",
+    "features": "full",
+    "missing_indicators": false,
+    "winsorize_quantiles": null
+  },
+  "features_used": [
+    "ret_1",
+    "ret_5",
+    "ret_20",
+    "ma_gap_5",
+    "ma_gap_20",
+    "vol_10",
+    "vol_30",
+    "range_1",
+    "vol_chg",
+    "dow"
+  ],
+  "seed": 42,
+  "max_trials": 10,
+  "max_seconds": 90.0
+}

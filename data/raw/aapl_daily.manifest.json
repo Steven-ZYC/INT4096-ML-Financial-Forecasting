@@ -1,0 +1,20 @@
+{
+  "asset": "AAPL",
+  "snapshot_file": "data/raw/aapl_daily.json",
+  "sha256": "03fe7761ce7f612de5bb11482d57ef6706f96b1ed4e02db5ccccd2083a1c1604",
+  "bytes": 151662,
+  "downloaded_utc": "2026-10-29T14:48:00Z",
+  "manifest_written_utc": "2026-10-29T07:19:21+00:00",
+  "row_count": 1255,
+  "first_date": "2021-10-28",
+  "last_date": "2026-10-28",
+  "adopted": true,
+  "source": {
+    "provider": "stockanalysis.com",
+    "endpoint": "https://stockanalysis.com/api/symbol/s/aapl/history",
+    "symbol": "aapl",
+    "quote_currency": "USD",
+    "calendar": "us_exchange_sessions"
+  },
+  "protocol_version": "v1.0-draft"
+}

@@ -1,0 +1,171 @@
+{
+  "run_id": "2026-10-29T134818Z_btc_random_forest_P0_seed42",
+  "asset": "BTC",
+  "model_id": "random_forest",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "protocol_version": "v1.1-delta-target",
+  "metrics": {
+    "validation_mae": 1603.3734132204388,
+    "validation_rmse": 2208.0376627661776,
+    "validation_r2": 0.961299784592494,
+    "validation_mape_pct": 1.6063224685976878,
+    "validation_normalized_mae": 0.015655949967658452,
+    "validation_baseline_mae": 1604.3481005586596,
+    "validation_baseline_rmse": 2205.6682749719816,
+    "validation_baseline_r2": 0.9613827964191181,
+    "validation_skill_mae": 0.0006075285892639393,
+    "validation_skill_rmse": -0.001074226718986493,
+    "validation_direction_accuracy": 0.5139664804469274,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": NaN,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 358.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 1604.3481005586596,
+    "validation_rmse": 2205.6682749719816,
+    "validation_r2": 0.9613827964191181
+  },
+  "search": {
+    "best_hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    "best_validation_mae": 770.762133624997,
+    "n_trials": 10,
+    "n_failed": 0,
+    "stopped_reason": "max_trials",
+    "trials": [
+      {
+        "trial": 0,
+        "hyperparameters": {
+          "n_estimators": 100,
+          "max_depth": 16,
+          "min_samples_leaf": 5
+        },
+        "validation_mae": 809.1440609243464,
+        "seconds": 0.958,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 1,
+        "hyperparameters": {
+          "n_estimators": 100,
+          "max_depth": 4,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 770.762133624997,
+        "seconds": 0.5789,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 2,
+        "hyperparameters": {
+          "n_estimators": 100,
+          "max_depth": 8,
+          "min_samples_leaf": 1
+        },
+        "validation_mae": 818.0463950346673,
+        "seconds": 0.8848,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 3,
+        "hyperparameters": {
+          "n_estimators": 100,
+          "max_depth": 8,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 773.298012810108,
+        "seconds": 0.6857,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 4,
+        "hyperparameters": {
+          "n_estimators": 200,
+          "max_depth": 16,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 771.7081749438723,
+        "seconds": 1.4508,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 5,
+        "hyperparameters": {
+          "n_estimators": 200,
+          "max_depth": 8,
+          "min_samples_leaf": 1
+        },
+        "validation_mae": 815.3622724129466,
+        "seconds": 1.9388,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 6,
+        "hyperparameters": {
+          "n_estimators": 200,
+          "max_depth": 4,
+          "min_samples_leaf": 5
+        },
+        "validation_mae": 798.1806478272485,
+        "seconds": 1.2094,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 7,
+        "hyperparameters": {
+          "n_estimators": 100,
+          "max_depth": null,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 773.1721478674606,
+        "seconds": 0.6868,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 8,
+        "hyperparameters": {
+          "n_estimators": 200,
+          "max_depth": 8,
+          "min_samples_leaf": 5
+        },
+        "validation_mae": 812.430020324844,
+        "seconds": 1.6217,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 9,
+        "hyperparameters": {
+          "n_estimators": 200,
+          "max_depth": 8,
+          "min_samples_leaf": 5
+        },
+        "validation_mae": 812.430020324844,
+        "seconds": 1.6431,
+        "status": "ok",
+        "error": null
+      }
+    ]
+  },
+  "split": {
+    "train_period": "2021-11-27..2024-11-07",
+    "validation_period": "2024-11-09..2025-11-01",
+    "test_period": "2025-11-03..2026-10-28",
+    "train_rows": "1077",
+    "validation_rows": "358",
+    "test_rows": "360"
+  }
+}

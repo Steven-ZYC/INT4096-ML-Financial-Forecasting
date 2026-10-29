@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "int4096"
+version = "0.1.0"
+description = "Learning ML through financial time-series forecasting: a reproducible model and preprocessing comparison on AAPL and BTC (INT4096 coursework)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Educational coursework; not for redistribution of market data" }
+authors = [{ name = "INT4096 Group Project" }]
+keywords = ["education", "machine-learning", "time-series", "reproducibility"]
+
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "scipy>=1.11",
+    "scikit-learn>=1.4",
+    "matplotlib>=3.8",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "nbformat>=5.9"]
+
+[project.scripts]
+int4096-snapshot = "int4096.data.snapshot:_main"
+int4096-cards = "int4096.data.cards:_main"
+int4096-run = "int4096.experiments.run:_main"
+int4096-registry = "int4096.experiments.registry_report:_main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+filterwarnings = [
+    "error::FutureWarning",
+    "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

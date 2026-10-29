@@ -1,0 +1,10 @@
+{
+  "python_version": "3.14.4",
+  "implementation": "CPython",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "executable": "/home/steven/int4096-int/.venv/bin/python",
+  "dependencies_lock_hash": "657fb312e6902d2fe55d5e72c2c2b47962deecca81c79d9ff4be2458d5906d5d",
+  "git_commit": "HEAD",
+  "git_dirty": true,
+  "recorded_utc": "2026-10-29T13:47:34+00:00"
+}

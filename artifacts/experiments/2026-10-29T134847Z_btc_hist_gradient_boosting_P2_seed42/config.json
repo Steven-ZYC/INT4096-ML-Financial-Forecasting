@@ -1,0 +1,53 @@
+{
+  "model_id": "hist_gradient_boosting",
+  "model_config": {
+    "class": "int4096.models.hist_gradient_boosting.build_hist_gradient_boosting",
+    "family": "boosting",
+    "requires_scaling": false,
+    "search_space": {
+      "learning_rate": [
+        0.01,
+        0.05,
+        0.1
+      ],
+      "max_iter": [
+        100,
+        300
+      ],
+      "max_depth": [
+        null,
+        3,
+        5
+      ],
+      "min_samples_leaf": [
+        5,
+        20,
+        50
+      ]
+    }
+  },
+  "variant": "P2",
+  "variant_config": {
+    "description": "StandardScaler fitted on training indices only",
+    "scaler": "standard",
+    "imputer": "median",
+    "features": "full",
+    "missing_indicators": false,
+    "winsorize_quantiles": null
+  },
+  "features_used": [
+    "ret_1",
+    "ret_5",
+    "ret_20",
+    "ma_gap_5",
+    "ma_gap_20",
+    "vol_10",
+    "vol_30",
+    "range_1",
+    "vol_chg",
+    "dow"
+  ],
+  "seed": 42,
+  "max_trials": 10,
+  "max_seconds": 90.0
+}

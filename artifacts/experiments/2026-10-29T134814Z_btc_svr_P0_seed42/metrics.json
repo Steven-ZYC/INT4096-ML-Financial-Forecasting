@@ -1,0 +1,171 @@
+{
+  "run_id": "2026-10-29T134814Z_btc_svr_P0_seed42",
+  "asset": "BTC",
+  "model_id": "svr",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "protocol_version": "v1.1-delta-target",
+  "metrics": {
+    "validation_mae": 1604.1857688718908,
+    "validation_rmse": 2206.3694783096917,
+    "validation_r2": 0.9613582389490651,
+    "validation_mape_pct": 1.6073432367170868,
+    "validation_normalized_mae": 0.01566388211829174,
+    "validation_baseline_mae": 1604.3481005586596,
+    "validation_baseline_rmse": 2205.6682749719816,
+    "validation_baseline_r2": 0.9613827964191181,
+    "validation_skill_mae": 0.00010118233487621531,
+    "validation_skill_rmse": -0.00031790969914502476,
+    "validation_direction_accuracy": 0.5083798882681564,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": NaN,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 358.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 1604.3481005586596,
+    "validation_rmse": 2205.6682749719816,
+    "validation_r2": 0.9613827964191181
+  },
+  "search": {
+    "best_hyperparameters": {
+      "C": 100.0,
+      "epsilon": 0.01,
+      "gamma": 0.001
+    },
+    "best_validation_mae": 752.6065335233392,
+    "n_trials": 10,
+    "n_failed": 0,
+    "stopped_reason": "max_trials",
+    "trials": [
+      {
+        "trial": 0,
+        "hyperparameters": {
+          "C": 0.1,
+          "epsilon": 0.1,
+          "gamma": 0.01
+        },
+        "validation_mae": 752.8884735695586,
+        "seconds": 0.0832,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 1,
+        "hyperparameters": {
+          "C": 10.0,
+          "epsilon": 0.01,
+          "gamma": 0.1
+        },
+        "validation_mae": 752.7524323823503,
+        "seconds": 0.0718,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 2,
+        "hyperparameters": {
+          "C": 0.1,
+          "epsilon": 0.1,
+          "gamma": "scale"
+        },
+        "validation_mae": 752.8696511740602,
+        "seconds": 0.0696,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 3,
+        "hyperparameters": {
+          "C": 0.1,
+          "epsilon": 0.01,
+          "gamma": 0.1
+        },
+        "validation_mae": 752.8648391911778,
+        "seconds": 0.0751,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 4,
+        "hyperparameters": {
+          "C": 100.0,
+          "epsilon": 0.1,
+          "gamma": 0.01
+        },
+        "validation_mae": 753.1961598378194,
+        "seconds": 0.0771,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 5,
+        "hyperparameters": {
+          "C": 100.0,
+          "epsilon": 0.01,
+          "gamma": "scale"
+        },
+        "validation_mae": 754.0748832561925,
+        "seconds": 0.0749,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 6,
+        "hyperparameters": {
+          "C": 1000.0,
+          "epsilon": 0.01,
+          "gamma": 0.01
+        },
+        "validation_mae": 754.4569860113055,
+        "seconds": 0.076,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 7,
+        "hyperparameters": {
+          "C": 1.0,
+          "epsilon": 0.001,
+          "gamma": 0.1
+        },
+        "validation_mae": 752.6977097646046,
+        "seconds": 0.0742,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 8,
+        "hyperparameters": {
+          "C": 100.0,
+          "epsilon": 0.01,
+          "gamma": 0.001
+        },
+        "validation_mae": 752.6065335233392,
+        "seconds": 0.066,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 9,
+        "hyperparameters": {
+          "C": 1000.0,
+          "epsilon": 0.01,
+          "gamma": 0.001
+        },
+        "validation_mae": 753.2316142481252,
+        "seconds": 0.0665,
+        "status": "ok",
+        "error": null
+      }
+    ]
+  },
+  "split": {
+    "train_period": "2021-11-27..2024-11-07",
+    "validation_period": "2024-11-09..2025-11-01",
+    "test_period": "2025-11-03..2026-10-28",
+    "train_rows": "1077",
+    "validation_rows": "358",
+    "test_rows": "360"
+  }
+}

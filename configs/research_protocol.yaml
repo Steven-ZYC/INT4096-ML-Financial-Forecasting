@@ -1,0 +1,245 @@
+# INT4096 frozen research protocol configuration.
+# Machine-readable twin of docs/research/protocol.md.
+# Changing any value here requires a protocol_version bump + decision-log entry.
+
+protocol_version: "v1.1-delta-target"
+frozen_on_utc: "2026-10-29"
+timezone: "Asia/Hong_Kong"
+
+project:
+  course: "INT4096 Artificial Intelligence and Machine Learning in Education"
+  institution: "The Education University of Hong Kong"
+  term: "Semester 1, 2026-27"
+  title: >-
+    Learning Machine Learning Through Financial Time-Series Forecasting:
+    A Reproducible Comparison of Models and Data-Preprocessing Strategies
+    on Apple and Bitcoin
+  disclaimer: >-
+    Educational, historical and non-advisory. Not investment advice.
+
+prediction_target: "next_session_close"
+label_field: "close"          # raw close; see protocol D1 (adjusted-close sensitivity)
+
+# The reported estimand is always the error on the NEXT CLOSE PRICE.
+# `label_mode` controls only the target representation the model is trained on:
+#   level : fit Close_{t+1} directly
+#   delta : fit (Close_{t+1} - Close_t) and reconstruct Close_t + predicted delta
+# `delta` is used because every feature is scale-free (returns, gaps, ratios).
+# A linear model trained on `level` cannot recover a price level and collapses to
+# the training-set mean, producing a large artificial error that measures the
+# representation, not the model. Both modes answer the same question because
+# Close_t is known at decision time (decision D8).
+label_mode: "delta"
+label_reconstruction: "close_t_plus_predicted_delta"
+
+# ---------------------------------------------------------------- data
+assets:
+  AAPL:
+    provider: "stockanalysis.com"
+    endpoint: "https://stockanalysis.com/api/symbol/s/aapl/history"
+    symbol: "aapl"
+    range: "10Y"
+    period: "Daily"
+    quote_currency: "USD"
+    calendar: "us_exchange_sessions"
+    bar_close_timezone: "America/New_York"
+    adjusted_close_available: true
+    snapshot_file: "data/raw/aapl_daily.json"
+    columns:
+      t: timestamp
+      o: open
+      h: high
+      l: low
+      c: close
+      v: volume
+      a: adj_close
+  BTC:
+    provider: "binance"
+    endpoint: "https://api.binance.com/api/v3/klines"
+    symbol: "BTCUSDT"
+    interval: "1d"
+    history_start_utc: "2021-10-28T00:00:00Z"
+    quote_currency: "USDT"
+    calendar: "24_7_utc"
+    bar_close_timezone: "UTC"
+    adjusted_close_available: false
+    caveat: >-
+      USDT is not exactly USD and Binance is a single venue. The series is a
+      venue-specific price, not a global index.
+    snapshot_file: "data/raw/btc_daily.json"
+    columns:
+      - open_time
+      - open
+      - high
+      - low
+      - close
+      - volume
+      - close_time
+
+# ---------------------------------------------------------------- features
+features:
+  lookback: 30            # rows dropped for rolling warm-up (no backward fill)
+  # A window statistic requires a full window; partial windows are never used so
+  # that "vol_30" always means 30 observations (audit finding LEAK-010).
+  min_periods: "window"
+  list:
+    - ret_1
+    - ret_5
+    - ret_20
+    - ma_gap_5
+    - ma_gap_20
+    - vol_10
+    - vol_30
+    - range_1
+    - vol_chg
+    - dow
+  # P3 ablation keeps only these:
+  reduced_list:
+    - ret_1
+    - ret_5
+    - range_1
+    - vol_chg
+    - dow
+
+# ---------------------------------------------------------------- splits
+splits:
+  scheme: "chronological_fractional"
+  train_fraction: 0.60
+  validation_fraction: 0.20
+  test_fraction: 0.20
+  # Rows purged at each boundary. With y_t = Close_{t+1}, the last training
+  # label is a validation-block price and the last validation label is a sealed
+  # test price. purge_gap: 1 removes both channels (audit finding LEAK-001).
+  purge_gap: 1
+  test_release: "sealed_single_release"
+
+cv:
+  scheme: "expanding_window"
+  n_splits: 5
+  gap: 1
+  min_train_fraction: 0.30
+
+# ---------------------------------------------------------------- preprocessing
+preprocessing_variants:
+  P0:
+    description: "Minimal causal feature set; no scaling; train-fitted median imputation"
+    scaler: null
+    imputer: "median"
+    features: "full"
+    missing_indicators: false
+    winsorize_quantiles: null
+  P1:
+    description: "Train-fitted imputation + missingness indicators"
+    scaler: null
+    imputer: "median"
+    features: "full"
+    missing_indicators: true
+    winsorize_quantiles: null
+    conditional: "only if missing values exist; never inject synthetic NaNs"
+  P2:
+    description: "StandardScaler fitted on training indices only"
+    scaler: "standard"
+    imputer: "median"
+    features: "full"
+    missing_indicators: false
+    winsorize_quantiles: null
+  P3:
+    description: "Reduced feature set (drop moving-average/volatility lags)"
+    scaler: null
+    imputer: "median"
+    features: "reduced"
+    missing_indicators: false
+    winsorize_quantiles: null
+  P4:
+    description: "Robust scaling + train-quantile winsorization"
+    scaler: "robust"
+    imputer: "median"
+    features: "full"
+    missing_indicators: false
+    winsorize_quantiles: [0.01, 0.99]
+
+# ---------------------------------------------------------------- models
+tuning:
+  max_trials: 24
+  max_seconds: 300
+  search: "random"
+  objective: "validation_mae"
+  seed: 42
+  resume: true
+
+models:
+  naive_persistence:
+    class: "int4096.evaluation.baselines.NaivePersistence"
+    family: "baseline"
+    requires_scaling: false
+    search_space: {}
+  linear_baseline:
+    class: "int4096.models.ridge.LinearBaseline"
+    family: "linear"
+    requires_scaling: true
+    search_space:
+      alpha: [0.1, 1.0, 10.0]
+  ridge:
+    class: "int4096.models.ridge.build_ridge"
+    family: "linear"
+    requires_scaling: true
+    search_space:
+      alpha: [0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]
+  svr:
+    class: "int4096.models.svr.build_svr"
+    family: "kernel"
+    requires_scaling: true
+    search_space:
+      C: [0.1, 1.0, 10.0, 100.0, 1000.0]
+      epsilon: [0.001, 0.01, 0.1]
+      gamma: ["scale", 0.001, 0.01, 0.1]
+  random_forest:
+    class: "int4096.models.random_forest.build_random_forest"
+    family: "bagging"
+    requires_scaling: false
+    search_space:
+      n_estimators: [100, 200]
+      max_depth: [null, 4, 8, 16]
+      min_samples_leaf: [1, 5, 20]
+  hist_gradient_boosting:
+    class: "int4096.models.hist_gradient_boosting.build_hist_gradient_boosting"
+    family: "boosting"
+    requires_scaling: false
+    search_space:
+      learning_rate: [0.01, 0.05, 0.1]
+      max_iter: [100, 300]
+      max_depth: [null, 3, 5]
+      min_samples_leaf: [5, 20, 50]
+  mlp:
+    class: "int4096.models.mlp.build_mlp"
+    family: "neural"
+    requires_scaling: true
+    status: "requires_owner_approval_D2"
+    search_space:
+      hidden_layer_sizes: ["(32,)", "(64,32)"]
+      alpha: [0.0001, 0.001, 0.01]
+
+# ---------------------------------------------------------------- metrics
+metrics:
+  primary: [mae, rmse, r2]
+  comparative: [skill_mae, skill_rmse]
+  secondary_diagnostic: [direction_accuracy]
+  cross_asset: [skill_mae, normalized_mae]
+  bootstrap:
+    method: "moving_block"
+    block_length: 10
+    n_resamples: 1000
+    confidence: 0.95
+
+# ---------------------------------------------------------------- safeguards
+safeguards:
+  forbidden:
+    - shuffled_split
+    - centered_rolling
+    - future_shift_in_features
+    - backfill
+    - whole_dataset_statistics
+    - fit_on_validation_or_test
+    - target_derived_features
+    - per_model_row_filters
+  test_set_policy: "sealed; single human-approved release"

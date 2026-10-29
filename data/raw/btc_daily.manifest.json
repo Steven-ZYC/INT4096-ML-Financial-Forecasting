@@ -1,0 +1,20 @@
+{
+  "asset": "BTC",
+  "snapshot_file": "data/raw/btc_daily.json",
+  "sha256": "dc5b146c46f57ab41687a1486e6c8b583fa59dcf2f1d7ed9beb68451c80f1886",
+  "bytes": 225431,
+  "downloaded_utc": "2026-10-29T14:48:00Z",
+  "manifest_written_utc": "2026-10-29T07:19:21+00:00",
+  "row_count": 1828,
+  "first_date": "2021-10-28",
+  "last_date": "2026-10-29",
+  "adopted": true,
+  "source": {
+    "provider": "binance",
+    "endpoint": "https://api.binance.com/api/v3/klines",
+    "symbol": "BTCUSDT",
+    "quote_currency": "USDT",
+    "calendar": "24_7_utc"
+  },
+  "protocol_version": "v1.0-draft"
+}
