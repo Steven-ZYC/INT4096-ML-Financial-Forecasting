@@ -1,0 +1,40 @@
+\section{Dataset and Data Provenance}
+\label{sec:data}
+
+Both series are committed as immutable snapshots: the exact bytes behind every
+reported number, with a SHA-256 digest, provider, row count and true download
+timestamp. Each experiment recomputes the digest and aborts on mismatch.
+
+\input{generated/dataset_table}
+
+The datasets are deliberately not aligned by row index. AAPL follows the exchange
+calendar, so weekends and holidays appear as gaps and about 251 bars accumulate
+per year; BTC has no gap beyond a single day because it trades continuously. Raw
+dollar errors are therefore not comparable, and cross-asset statements use only
+unitless measures.
+
+We use the \emph{raw} close as the target. Adjusted prices embed dividend and
+split factors a provider revises afterwards, so a model trained on today's
+adjusted history would see values that did not exist at decision time. No split discontinuity falls in the window (the adjusted/raw ratio never jumps by
+more than 2\%); dividends are ignored, which is stated rather than hidden. BTC is a single venue quoted in
+USDT, hence a venue-specific price rather than a global index.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig01_coverage_and_splits.pdf}
+  \caption{Price history per asset with the frozen 60/20/20 chronological split.
+  Blue is training, green validation, red the sealed test block, which no run in
+  this report has read. The panels share no vertical scale and are never
+  combined into one series.}
+  \label{fig:coverage}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig02_asset_characteristics.pdf}
+  \caption{Why the markets are different problems. Left: each series rebased to
+  100 at its own first observation, so no shared price axis is implied. Right:
+  trailing 30-session realised volatility, annualised. BTC's higher and more
+  variable volatility is why a fixed-capacity model faces a harder task.}
+  \label{fig:assets}
+\end{figure}

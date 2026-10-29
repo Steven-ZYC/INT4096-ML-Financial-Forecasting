@@ -1,0 +1,35 @@
+\section{Preprocessing Ablation}
+\label{sec:ablation}
+
+RQ3 asks how much preprocessing matters. We vary one factor at a time, holding
+model, features, split and tuning budget fixed; the contrast is scaling, with P0
+unscaled and P2 standardised on training rows only.
+
+\input{generated/ablation_table}
+
+The measured pattern matches Section~\ref{sec:background}, exactly rather than
+approximately: for both tree ensembles the change in validation MAE is
+\emph{bit-identical} --- $0.000\%$ to printed precision --- on both assets. That is a strong internal control: had scaling moved the forests, the correct
+inference would be a bug, not a discovery.
+
+Scaling-sensitive families move slightly and not uniformly helpfully:
+standardisation mildly improves AAPL Ridge (\SkillAAPLRidge\% skill versus
+\SkillAAPLLinearBaseline\% unscaled) but rescues nothing --- every value stays
+within about one percentage point of the baseline. An ablation ending in no
+substantial effect is a legitimate finding, and a useful teaching one: it
+separates \emph{this transform changes the model} from \emph{this transform
+improves the forecast}.
+
+One variant is reported as not run: with no missing values in either snapshot an
+imputation variant would duplicate the baseline cell, and we did not inject
+synthetic gaps to manufacture a contrast.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig06_ablation_delta.pdf}
+  \caption{Relative change in validation MAE between unscaled (P0) and
+  standardised (P2) variants, holding model and asset fixed. Bars at exactly zero
+  are the tree ensembles, whose predictions are bit-identical under monotone
+  rescaling. Only matched cells are plotted.}
+  \label{fig:ablation}
+\end{figure}

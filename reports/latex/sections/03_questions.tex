@@ -1,0 +1,20 @@
+\section{Research Questions}
+\label{sec:questions}
+
+\begin{description}[leftmargin=1.4em,style=nextline]
+  \item[RQ1.] Under identical, leakage-safe conditions, how do distinct model
+  families perform against naive persistence on AAPL and BTC?
+  \item[RQ2.] How do complexity, tuning and changing market conditions affect
+  generalisation and error patterns?
+  \item[RQ3.] To what extent do preprocessing and feature choices change forecast
+  error, and does the effect depend on model family and market?
+  \item[RQ4.] What do selected examples and counterexamples teach learners about
+  model behaviour, evaluation and responsible interpretation?
+\end{description}
+
+Five hypotheses were fixed before any result was inspected: persistence is
+competitive at this horizon (H1); AAPL is more predictable than BTC (H2); scaling
+moves error more for scaling-sensitive families than for trees (H3); complexity
+widens the train--validation gap (H4); features matter more than the scaler (H5).
+RQ4 is answered by an artefact, not a learner study, and H1 turning out true is an
+acceptable outcome.

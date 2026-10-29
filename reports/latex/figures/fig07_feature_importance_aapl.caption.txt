@@ -1,0 +1,4 @@
+Permutation importance for the fitted Ridge on the AAPL validation block (n=244). Each bar is the increase in validation MAE when that single feature is randomly shuffled, so larger means the model relies on it more. Values near zero or negative mean the feature does not help on unseen data. This describes the fitted model, not a causal mechanism in the market.
+
+run_ids: n/a
+generated_by: int4096.evaluation.figures

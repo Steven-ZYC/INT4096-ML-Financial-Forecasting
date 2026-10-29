@@ -1,0 +1,17 @@
+\section{Challenges and Team Learnings}
+\label{sec:learnings}
+
+The first difficulty was representational. Initial runs reported skill near
+$-1800\%$, which looked like a modelling failure and was not: every feature was
+scale free, so no model could recover a price level and all collapsed towards the
+training mean. The fix was recorded as a decision rather than applied silently.
+
+The second was the boundary purge, which no inspection would have found; it took an
+auditor tracing a label to a specific test-set price. Relatedly, our first leakage
+tests passed while a one-bar forward shift was present: a green suite only means
+something once it has been shown able to fail.
+
+The third was fairness: enforcing one construction path, one budget and identical
+columns cost more than the models and makes the comparison meaningful. Each family also had one accountable
+owner, reviewed by an agent that had not written the code --- which is why two
+high-severity defects were found before submission.

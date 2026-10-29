@@ -34,3 +34,15 @@ data/raw/*_raw_provider.json
 artifacts/figures/*.png
 artifacts/figures/*.caption.txt
 artifacts/experiments/*/error.log
+
+# LaTeX build artefacts (the compiled PDF in reports/final IS tracked)
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+reports/latex/generated/*.aux

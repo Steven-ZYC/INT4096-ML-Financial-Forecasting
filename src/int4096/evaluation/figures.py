@@ -22,6 +22,10 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_ARTIFACT_ROOT = REPO_ROOT / "artifacts" / "experiments"
 DEFAULT_FIGURE_ROOT = REPO_ROOT / "artifacts" / "figures"
 
+# Additional formats written alongside every PNG. The LaTeX report sets this to
+# (".pdf",) so the report embeds vector graphics instead of a 150 dpi raster.
+EXTRA_FORMATS: tuple[str, ...] = ()
+
 
 def _mpl():
     import matplotlib
@@ -57,6 +61,8 @@ def _save(fig, path: Path, caption: str, run_ids: list[str], caption_dir: Path) 
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
     fig.savefig(path, dpi=150, bbox_inches="tight")
+    for extension in EXTRA_FORMATS:
+        fig.savefig(path.with_suffix(extension), bbox_inches="tight")
     fig.clear()
     import matplotlib.pyplot as plt
 
@@ -137,19 +143,25 @@ def plot_model_vs_naive(
     bound = float(np.nanmax(np.abs(values))) if len(values) else 0.01
     bound = max(bound * 1.25, 0.005)
 
+    from matplotlib.ticker import MaxNLocator
+
     for ax, asset in zip(axes[0], assets):
         subset = data[data["asset"] == asset].sort_values("validation_skill_mae")
         colours = ["tab:green" if v > 0 else "tab:red" for v in subset["validation_skill_mae"]]
         ax.barh(subset["model_id"], subset["validation_skill_mae"], color=colours)
         ax.axvline(0, color="black", lw=1)
         ax.set_xlim(-bound, bound)
+        # Three ticks only: the figure is scaled to text width in the report and
+        # five ticks collide at that size.
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=3))
         ax.xaxis.set_major_formatter(lambda v, _pos: f"{v * 100:+.1f}%")
-        ax.set_title(f"{asset} (validation)")
-        ax.set_xlabel("skill vs naive persistence")
+        ax.tick_params(labelsize=8)
+        ax.set_title(f"{asset} (validation)", fontsize=10)
+        ax.set_xlabel("skill vs naive persistence", fontsize=9)
 
     fig.suptitle(
         "Skill relative to naive persistence is near zero on both assets "
-        "(shared axis)", y=1.02
+        "(shared axis)", y=1.02, fontsize=11
     )
     return _save(
         fig,
@@ -303,5 +315,104 @@ def plot_ablation_delta(
         f"{baseline_variant}, holding model and asset fixed. Positive (red) means worse. "
         "Only matched cells are plotted; unmatched cells are absent rather than imputed.",
         frame["run_id"].tolist(),
+        fig_root,
+    )
+
+
+def plot_asset_characteristics(
+    frames: dict[str, pd.DataFrame],
+    figure_root: Path | None = None,
+    run_ids: list[str] | None = None,
+) -> Path:
+    """Figure 2: how the two markets differ, on a shared normalised scale.
+
+    Prices are never plotted on one axis: AAPL and BTC differ by orders of
+    magnitude and follow different calendars. Instead we show (a) each series
+    rebased to 100 at its own start and (b) the trailing 30-session realised
+    volatility, which is the quantity that actually explains why identical
+    models behave differently on the two assets.
+    """
+    plt = _mpl()
+    fig_root = Path(figure_root) if figure_root else DEFAULT_FIGURE_ROOT
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 3.8))
+    colours = {"AAPL": "tab:blue", "BTC": "tab:orange"}
+
+    for asset, frame in frames.items():
+        rebased = frame["close"] / frame["close"].iloc[0] * 100.0
+        axes[0].plot(frame.index, rebased, lw=0.9, color=colours.get(asset), label=asset)
+
+        returns = frame["close"].pct_change(1)
+        volatility = returns.rolling(30, min_periods=30).std(ddof=0) * np.sqrt(252) * 100.0
+        axes[1].plot(frame.index, volatility, lw=0.9, color=colours.get(asset), label=asset)
+
+    axes[0].axhline(100, color="black", lw=0.6, ls=":")
+    axes[0].set_title("Rebased price (start = 100)")
+    axes[0].set_ylabel("Index")
+    axes[0].legend(fontsize=8)
+
+    axes[1].set_title("Trailing 30-session volatility")
+    axes[1].set_ylabel("Annualised volatility (%)")
+    axes[1].legend(fontsize=8)
+
+    fig.suptitle("Two markets, two regimes — the same model sees different problems")
+    return _save(
+        fig,
+        fig_root / "fig02_asset_characteristics.png",
+        "Left: each price series rebased to 100 at its own first observation, so the "
+        "two cannot be confused with a shared price axis. Right: trailing "
+        "30-session realised volatility annualised by sqrt(252). BTC's volatility "
+        "level and its regime shifts are the mechanical reason a fixed-capacity "
+        "model faces a harder problem there. Calendars differ (BTC includes "
+        "weekends), so the x axes are calendar time, not row index.",
+        run_ids or [],
+        fig_root,
+    )
+
+
+def plot_feature_importance(
+    importances: list[dict[str, float]],
+    *,
+    asset: str,
+    model_label: str,
+    n_obs: int,
+    metric: str = "increase in MAE when shuffled",
+    figure_root: Path | None = None,
+    run_ids: list[str] | None = None,
+) -> Path:
+    """Figure 7: learner-facing interpretability.
+
+    Permutation importance on the validation block: each feature is shuffled and
+    the increase in error is recorded. This answers "which inputs does this
+    fitted model actually rely on", which is a question a learner can act on.
+    It is explicitly **not** a causal statement about markets.
+    """
+    plt = _mpl()
+    fig_root = Path(figure_root) if figure_root else DEFAULT_FIGURE_ROOT
+
+    ordered = sorted(importances, key=lambda row: row["importance"])
+    labels = [row["feature"] for row in ordered]
+    values = [row["importance"] for row in ordered]
+
+    fig, ax = plt.subplots(figsize=(7.2, 0.34 * len(ordered) + 1.9))
+    ax.barh(labels, values, color=["tab:red" if v > 0 else "tab:gray" for v in values])
+    ax.axvline(0, color="black", lw=0.9)
+    ax.set_xlabel(metric)
+    ax.set_title(
+        f"{asset}: which inputs does the fitted {model_label} rely on? "
+        f"(validation, n={n_obs})",
+        fontsize=9,
+    )
+    ax.tick_params(axis="y", labelsize=8)
+    return _save(
+        fig,
+        fig_root / f"fig07_feature_importance_{asset.lower()}.png",
+        f"Permutation importance for the fitted {model_label} on the {asset} "
+        f"validation block (n={n_obs}). Each bar is the increase in validation MAE "
+        "when that single feature is randomly shuffled, so larger means the model "
+        "relies on it more. Values near zero or negative mean the feature does not "
+        "help on unseen data. This describes the fitted model, not a causal "
+        "mechanism in the market.",
+        run_ids or [],
         fig_root,
     )

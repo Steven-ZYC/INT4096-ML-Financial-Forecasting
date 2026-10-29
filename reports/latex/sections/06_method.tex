@@ -1,0 +1,55 @@
+\section{Experimental Methodology}
+\label{sec:method}
+
+Each asset is split chronologically into 60\% training, 20\% validation and 20\%
+sealed test on its own session index, with a one-row purge at each boundary
+(Table~\ref{tab:splits}); all models see identical boundaries and dates. Hyperparameters are chosen by random search inside an
+expanding-window time-series cross-validation confined to the training block:
+five folds, a one-fold gap, minimum initial training fraction 0.30. Because
+tuning never sees validation, validation remains a selection holdout rather than
+a second tuning set. The budget is identical for every family (twenty-four trials or 300 seconds per
+cell), and every attempted configuration is logged, including failures.
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[
+      node distance=5mm and 7mm,
+      box/.style={draw, rounded corners=1.2pt, align=center, font=\scriptsize,
+                  inner sep=3pt, minimum height=8.5mm},
+      arr/.style={-{Latex[length=1.6mm]}, semithick},
+      lbl/.style={font=\scriptsize\itshape, text=black!70}]
+    \node[box, fill=blue!6] (raw) {raw snapshot\\{\tiny SHA-256 verified}};
+    \node[box, fill=blue!6, right=of raw] (feat) {trailing features\\{\tiny 10 ratios, bars $\le t$}};
+    \node[box, fill=blue!6, right=of feat] (split) {chronological split\\{\tiny 60/20/20 + purge}};
+    \node[box, fill=orange!10, right=of split] (pre) {variant\\{\tiny P0 \dots\ P4}};
+    \node[box, fill=orange!10, below=9mm of pre] (tune) {inner CV tuning\\{\tiny train block only}};
+    \node[box, fill=green!8, left=of tune] (fit) {fit on train\\{\tiny scaler refit per fold}};
+    \node[box, fill=green!8, left=of fit] (eval) {score on validation\\{\tiny vs persistence}};
+    \node[box, fill=red!7, left=of eval] (test) {sealed test\\{\tiny not used}};
+
+    \draw[arr] (raw) -- (feat);
+    \draw[arr] (feat) -- (split);
+    \draw[arr] (split) -- (pre);
+    \draw[arr] (pre) -- (tune);
+    \draw[arr] (tune) -- (fit);
+    \draw[arr] (fit) -- (eval);
+    \draw[arr, dashed] (eval) -- (test);
+    \node[lbl, below=1mm of eval] {reported};
+    \node[lbl, below=1mm of test] {one human-approved release};
+  \end{tikzpicture}
+  \caption{The experiment pipeline, drawn to match the implementation. The scaler
+  is fitted \emph{inside} the model pipeline, so it is refitted per fold and
+  cannot see validation rows. Dashed arrow: the test block is not evaluated by
+  any run in this report.}
+  \label{fig:pipeline}
+\end{figure}
+
+We report MAE, RMSE and $R^2$, plus \emph{skill} relative to persistence on
+identical forecast dates:
+\begin{equation*}
+  \text{skill}_{\text{MAE}} \;=\; 1 - \frac{\text{MAE}_{\text{model}}}{\text{MAE}_{\text{naive}}}.
+\end{equation*}
+Skill is primary because it has a meaningful zero. $R^2$ is expected of us, but on a trending level it is
+inflated: our naive forecast itself attains $R^2 \approx 0.96$, so a high $R^2$
+here indicates a trending series, not a good model. Absolute errors are never
+compared across assets. Uncertainty uses a moving-block bootstrap over consecutive dates; overlapping blocks retain dependence, so we treat it as indicative only.

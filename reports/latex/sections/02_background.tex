@@ -1,0 +1,30 @@
+\section{Theoretical Background}
+\label{sec:background}
+
+\paragraph{Regression and generalisation.}
+We predict the close of session $t+1$ from features computed at the close of
+session $t$. Training error always falls as capacity grows, so only error on
+unseen data is informative \citep{hastie2009elements}.
+
+\paragraph{Model families.}
+Ridge regression is a regularised linear model and a transparent reference.
+Support vector regression with an RBF kernel \citep{drucker1997support} predicts
+from weighted kernel similarities, so it depends on the geometry of feature
+space. A random forest \citep{breiman2001random} averages bootstrapped trees,
+reducing variance but unable to extrapolate beyond the training range. Histogram
+gradient boosting \citep{friedman2001gradient} fits trees sequentially to
+residuals, capturing finer structure and also noise.
+
+\paragraph{Preprocessing is part of the model.}
+A tree splits on $x_j < \tau$; rescaling $x_j$ by a positive constant preserves
+ordering, so an equivalent threshold exists and the fitted tree is unchanged. A
+kernel method sums squared differences \emph{across} features, so rescaling changes
+which feature dominates. That asymmetry is a testable prediction, measured in
+Section~\ref{sec:ablation}.
+
+\paragraph{Ordered data and leakage.}
+Random cross-validation lets a model interpolate across time and is invalid here
+\citep{bergmeir2018note,roberts2017crossvalidation}, so we use chronological splits
+with a boundary purge. Leakage --- information unavailable at prediction time ---
+is the commonest way such an evaluation becomes optimistic
+\citep{kaufman2012leakage}, so we test for it.

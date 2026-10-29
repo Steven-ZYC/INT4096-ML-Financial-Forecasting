@@ -162,7 +162,7 @@ def test_model_failure_is_visible_not_swallowed(dataset):
 
 
 # ------------------------------------------------------- runner-level leakage
-def test_runner_fits_and_tunes_on_training_rows_only():
+def test_runner_fits_and_tunes_on_training_rows_only(tmp_path):
     """A leak in the runner's slicing would survive every other test (LEAK-013).
 
     The runner is instrumented to record exactly which row positions reach
@@ -209,7 +209,7 @@ def test_runner_fits_and_tunes_on_training_rows_only():
     try:
         manifest = runner.run_cell(
             "AAPL", "ridge", "P2", protocol, max_trials=2, max_seconds=30,
-            output_root=None, human_owner="test",
+            output_root=tmp_path, human_owner="test",
         )
     finally:
         runner.build_estimator = original

@@ -1,0 +1,59 @@
+\section{Evaluation and Results}
+\label{sec:results}
+
+Table~\ref{tab:results} reports validation performance; all \NRunTotal{} runs
+completed successfully and none read the test block.
+
+\input{generated/results_table}
+
+\paragraph{RQ1: nothing meaningfully beats persistence.}
+The best result is \BestAAPLModel{} on AAPL at \BestAAPLSkill\% skill and
+\BestBTCModel{} on BTC at \BestBTCSkill\% --- a fraction of a percentage point
+above doing nothing. Two models are worse: the random forest on AAPL
+(\SkillAAPLRandomForest\%) and the boosted ensemble on BTC
+(\SkillBTCHistGradientBoosting\%).
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig04_model_vs_naive.pdf}
+  \caption{Skill relative to naive persistence, per asset, on a \emph{shared}
+  horizontal axis. Sharing matters: per-panel autoscaling would make BTC's
+  fraction of a percent look as large as AAPL's. Bars left of zero are worse than
+  repeating the current price.}
+  \label{fig:skill}
+\end{figure}
+
+\paragraph{RQ2: capacity and regimes.}
+Figure~\ref{fig:assets} gives the mechanical explanation: BTC's volatility is
+higher and more variable, so a model with capacity fixed by an identical budget
+faces a harder target, and every BTC skill value is closer to zero. On AAPL, where
+capacity has more room to matter, the most flexible ensemble does worst --- the
+signature of fitting noise.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/fig03_observed_vs_predicted_2026-10-29T135715Z_aapl_svr_P2_seed42_validation.pdf}
+  \caption{Observed next close against the fitted SVR and naive forecasts on the
+  AAPL validation block, with signed error below. The naive line tracks the
+  observed series closely, which is why absolute error is a poor way to judge a
+  model and skill is used instead.}
+  \label{fig:forecast}
+\end{figure}
+
+\paragraph{Why they fail.}
+The explanation is statistical, not architectural: daily return autocorrelation is
+close to zero, so the features carry little information about the next session's
+direction and extra parameters fit noise. The forest adds a structural limit ---
+its predictions average leaf values, so it cannot extrapolate. Since all skill values lie within about one percentage point and the middle
+ranking changes between assets, we claim no family is superior: the conclusion is
+a tie against the baseline.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.76\linewidth]{figures/fig07_feature_importance_aapl.pdf}
+  \caption{Learner-facing interpretability: permutation importance for the fitted
+  Ridge model on the AAPL validation block, measured as the increase in MAE when
+  one feature is shuffled \citep{fisher2019allmodels}. The model relies most on short-horizon returns and
+  trailing volatility, and the magnitudes are tiny --- consistent with the skill
+  table. This describes the fitted model, not a causal claim about markets.}
+  \label{fig:importance}
+\end{figure}

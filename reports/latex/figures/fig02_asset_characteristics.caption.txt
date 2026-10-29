@@ -1,0 +1,4 @@
+Left: each price series rebased to 100 at its own first observation, so the two cannot be confused with a shared price axis. Right: trailing 30-session realised volatility annualised by sqrt(252). BTC's volatility level and its regime shifts are the mechanical reason a fixed-capacity model faces a harder problem there. Calendars differ (BTC includes weekends), so the x axes are calendar time, not row index.
+
+run_ids: n/a
+generated_by: int4096.evaluation.figures

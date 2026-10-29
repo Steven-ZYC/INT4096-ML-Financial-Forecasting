@@ -1,0 +1,24 @@
+\section{Limitations and Threats to Validity}
+\label{sec:limitations}
+
+\paragraph{Scope and target.}
+Two assets, one window, one horizon, one convention. BTC is a single venue's USDT
+price, not a global index. The label is the raw close one session ahead, so
+dividends are ignored, and a one-session horizon is where persistence is
+strongest --- a bias against trained models that follows from the question we
+chose, and the reason H1 was pre-registered rather than discovered.
+
+\paragraph{Statistics and evaluation integrity.}
+Skill differences are within about one percentage point and intervals overlap, so
+we report a tie; because errors are serially dependent, even block resampling
+understates uncertainty. Every number here is a validation number, and validation
+influenced model selection, so it is not a clean holdout; the sealed block exists
+to give one unbiased estimate once the analysis is frozen.
+
+\paragraph{Measurement integrity.}
+Two leakage defects were found by independent audit and fixed. Both would have inflated results, and both were invisible to the authors of the
+code: the audit mechanism, not the initial implementation, is what makes these
+numbers trustworthy.
+
+\paragraph{Education.}
+No learner study was run, so claims about the lesson are design claims.

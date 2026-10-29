@@ -1,0 +1,20 @@
+\section{Introduction and Educational Motivation}
+\label{sec:intro}
+
+Machine learning is usually taught through problems where better models visibly
+win: digits get classified, houses get priced, errors fall as capacity grows.
+Such examples hide the two questions that decide whether a model is useful ---
+\emph{what did it learn} and \emph{against what baseline}.
+
+Financial forecasting is a good corrective: recognisable, data-rich, and hard in
+a way that is easy to demonstrate. Short-horizon price prediction is close to a
+random walk \citep{fama1970efficient}, so a sophisticated model can lose to the
+rule \emph{tomorrow's price equals today's}. A learner who can explain that understands more than a leaderboard teaches.
+
+We therefore compare two contrasting markets. Apple (AAPL) trades on exchange
+sessions; Bitcoin (BTC) trades continuously, with a different volatility regime
+and quote unit. The same pipeline behaves systematically differently on the two series, so
+performance is a property of the model--data pair, not of the model alone. Our audience is advanced secondary-school students,
+pre-university learners interested in AI, and university students without a
+machine-learning major; the intended outcomes are conceptual
+(Section~\ref{sec:education}).

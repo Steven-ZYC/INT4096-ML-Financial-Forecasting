@@ -1,0 +1,18 @@
+\section{Model Selection and Baselines}
+\label{sec:models}
+
+The five families differ in mechanism rather than to reach a count: a
+near-unregularised linear model as a learned floor, Ridge as a regularised linear
+reference, RBF support vector regression as a kernel method, a random forest as a
+bagged ensemble, and histogram gradient boosting as a boosted ensemble. A shallow neural network was considered and left gated: the written handout
+discourages deep learning, and the instructor's reported oral guidance is recorded
+as reported guidance, not as a changed rule, so that lane does not appear here.
+
+The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. It is not a straw man: for a near-random-walk series it is strong, free, and
+defines the zero of the skill scale \citep{makridakis2018m4,hyndman2021fpp3}. Forecasting competitions reach the same conclusion
+about simple benchmarks \citep{makridakis2018m4,hyndman2021fpp3}.
+
+Every family is built through one shared code path, so each receives identical
+feature columns in identical order and any scaler sits inside its pipeline where
+it is refitted per fold. Tests assert that column identity and that a fixed seed
+is deterministic.
