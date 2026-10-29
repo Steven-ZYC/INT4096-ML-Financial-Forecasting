@@ -1,0 +1,182 @@
+{
+  "run_id": "2026-10-29T145531Z_aapl_hist_gradient_boosting_P0_seed42",
+  "asset": "AAPL",
+  "model_id": "hist_gradient_boosting",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "protocol_version": "v1.1-delta-target",
+  "metrics": {
+    "validation_mae": 2.8984523433339078,
+    "validation_rmse": 4.3560482030050895,
+    "validation_r2": 0.9555862552614729,
+    "validation_mape_pct": 1.3116004780459438,
+    "validation_normalized_mae": 0.012775660603299809,
+    "validation_baseline_mae": 2.9056147540983597,
+    "validation_baseline_rmse": 4.361091145987039,
+    "validation_baseline_r2": 0.9554833612534198,
+    "validation_skill_mae": 0.002465024227437329,
+    "validation_skill_rmse": 0.0011563489074495337,
+    "validation_direction_accuracy": 0.5491803278688525,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": NaN,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 244.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 2.9056147540983597,
+    "validation_rmse": 4.361091145987039,
+    "validation_r2": 0.9554833612534198
+  },
+  "search": {
+    "best_hyperparameters": {
+      "learning_rate": 0.01,
+      "max_iter": 300,
+      "max_depth": 3,
+      "min_samples_leaf": 20
+    },
+    "best_validation_mae": 1.9919991521132954,
+    "n_trials": 10,
+    "n_failed": 0,
+    "stopped_reason": "max_trials",
+    "trials": [
+      {
+        "trial": 0,
+        "hyperparameters": {
+          "learning_rate": 0.01,
+          "max_iter": 300,
+          "max_depth": 3,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 1.9919991521132954,
+        "seconds": 0.3707,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 1,
+        "hyperparameters": {
+          "learning_rate": 0.05,
+          "max_iter": 300,
+          "max_depth": null,
+          "min_samples_leaf": 50
+        },
+        "validation_mae": 2.038574044084183,
+        "seconds": 0.2356,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 2,
+        "hyperparameters": {
+          "learning_rate": 0.01,
+          "max_iter": 100,
+          "max_depth": 3,
+          "min_samples_leaf": 50
+        },
+        "validation_mae": 2.0007641141557513,
+        "seconds": 0.3401,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 3,
+        "hyperparameters": {
+          "learning_rate": 0.1,
+          "max_iter": 300,
+          "max_depth": 5,
+          "min_samples_leaf": 50
+        },
+        "validation_mae": 2.053225559610869,
+        "seconds": 0.1839,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 4,
+        "hyperparameters": {
+          "learning_rate": 0.05,
+          "max_iter": 100,
+          "max_depth": 5,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 2.0620326483969436,
+        "seconds": 0.2865,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 5,
+        "hyperparameters": {
+          "learning_rate": 0.05,
+          "max_iter": 100,
+          "max_depth": null,
+          "min_samples_leaf": 50
+        },
+        "validation_mae": 2.038574044084183,
+        "seconds": 0.2437,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 6,
+        "hyperparameters": {
+          "learning_rate": 0.1,
+          "max_iter": 300,
+          "max_depth": 3,
+          "min_samples_leaf": 50
+        },
+        "validation_mae": 2.0496029392368587,
+        "seconds": 0.1981,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 7,
+        "hyperparameters": {
+          "learning_rate": 0.05,
+          "max_iter": 100,
+          "max_depth": 3,
+          "min_samples_leaf": 5
+        },
+        "validation_mae": 2.057700312609776,
+        "seconds": 0.2423,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 8,
+        "hyperparameters": {
+          "learning_rate": 0.01,
+          "max_iter": 300,
+          "max_depth": 5,
+          "min_samples_leaf": 5
+        },
+        "validation_mae": 1.9978400831130485,
+        "seconds": 0.4038,
+        "status": "ok",
+        "error": null
+      },
+      {
+        "trial": 9,
+        "hyperparameters": {
+          "learning_rate": 0.1,
+          "max_iter": 300,
+          "max_depth": null,
+          "min_samples_leaf": 20
+        },
+        "validation_mae": 2.1410538937268244,
+        "seconds": 0.3121,
+        "status": "ok",
+        "error": null
+      }
+    ]
+  },
+  "split": {
+    "train_period": "2021-12-10..2024-11-08",
+    "validation_period": "2024-11-12..2025-11-03",
+    "test_period": "2025-11-05..2026-10-27",
+    "train_rows": "733",
+    "validation_rows": "244",
+    "test_rows": "245"
+  }
+}

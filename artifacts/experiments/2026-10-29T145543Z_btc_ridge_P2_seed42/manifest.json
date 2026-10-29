@@ -1,0 +1,177 @@
+{
+  "run_id": "2026-10-29T145543Z_btc_ridge_P2_seed42",
+  "status": "SUCCESS",
+  "protocol_version": "v1.1-delta-target",
+  "asset": "BTC",
+  "prediction_target": "next_session_close",
+  "source_snapshot_sha256": "dc5b146c46f57ab41687a1486e6c8b583fa59dcf2f1d7ed9beb68451c80f1886",
+  "model_id": "ridge",
+  "preprocess_variant": "P2",
+  "seed": 42,
+  "git_commit": "ffa2289f0438fcd22b72cc560520d38b90994217",
+  "git_dirty": true,
+  "python_version": "3.14.4",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "dependencies_lock_hash": "",
+  "config_path": "configs/research_protocol.yaml#ridge/P2",
+  "config_hash": "dbf3927df3c2b565a24cee60d10db7fadf68009f48aa66a00326691d23f4f122",
+  "source_name": "binance",
+  "source_coverage": "2021-10-28..2026-10-29",
+  "train_period": "2021-11-27..2024-11-07",
+  "validation_period": "2024-11-09..2025-11-01",
+  "test_period": "",
+  "cv_policy": "expanding_window n_splits=5 gap=1",
+  "hyperparameters": {
+    "alpha": 1000.0
+  },
+  "metrics": {
+    "validation_mae": 1602.3878739743238,
+    "validation_rmse": 2205.9611572134177,
+    "validation_r2": 0.961372540077132,
+    "validation_mape_pct": 1.605820757712099,
+    "validation_normalized_mae": 0.015646326786307733,
+    "validation_baseline_mae": 1604.3481005586596,
+    "validation_baseline_rmse": 2205.6682749719816,
+    "validation_baseline_r2": 0.9613827964191181,
+    "validation_skill_mae": 0.0012218212392018923,
+    "validation_skill_rmse": -0.0001327861695066268,
+    "validation_direction_accuracy": 0.5111731843575419,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": null,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 358.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 1604.3481005586596,
+    "validation_rmse": 2205.6682749719816,
+    "validation_r2": 0.9613827964191181
+  },
+  "fold_metrics": [
+    {
+      "trial": 0,
+      "hyperparameters": {
+        "alpha": 0.01
+      },
+      "validation_mae": 781.1060080244922,
+      "seconds": 0.0275,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 1,
+      "hyperparameters": {
+        "alpha": 100.0
+      },
+      "validation_mae": 772.045278948913,
+      "seconds": 0.0213,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 2,
+      "hyperparameters": {
+        "alpha": 10.0
+      },
+      "validation_mae": 779.5450391182051,
+      "seconds": 0.0177,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 3,
+      "hyperparameters": {
+        "alpha": 1.0
+      },
+      "validation_mae": 780.9365454411586,
+      "seconds": 0.0176,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 4,
+      "hyperparameters": {
+        "alpha": 1.0
+      },
+      "validation_mae": 780.9365454411586,
+      "seconds": 0.018,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 5,
+      "hyperparameters": {
+        "alpha": 1000.0
+      },
+      "validation_mae": 761.149609395752,
+      "seconds": 0.0199,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 6,
+      "hyperparameters": {
+        "alpha": 0.01
+      },
+      "validation_mae": 781.1060080244922,
+      "seconds": 0.0182,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 7,
+      "hyperparameters": {
+        "alpha": 100.0
+      },
+      "validation_mae": 772.045278948913,
+      "seconds": 0.0177,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 8,
+      "hyperparameters": {
+        "alpha": 0.1
+      },
+      "validation_mae": 781.0904802732226,
+      "seconds": 0.017,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 9,
+      "hyperparameters": {
+        "alpha": 0.01
+      },
+      "validation_mae": 781.1060080244922,
+      "seconds": 0.0183,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    }
+  ],
+  "artifacts": [
+    "artifacts/experiments/2026-10-29T145543Z_btc_ridge_P2_seed42/metrics.json",
+    "artifacts/experiments/2026-10-29T145543Z_btc_ridge_P2_seed42/predictions.csv",
+    "artifacts/experiments/2026-10-29T145543Z_btc_ridge_P2_seed42/config.json",
+    "artifacts/experiments/2026-10-29T145543Z_btc_ridge_P2_seed42/environment.json"
+  ],
+  "warnings": [
+    "test set sealed: no test metrics produced in this run",
+    "undefined (NaN) diagnostics retained as null: validation_baseline_direction_accuracy"
+  ],
+  "error": null,
+  "execution_seconds": 0.246,
+  "human_owner": "team",
+  "review_state": "UNREVIEWED",
+  "notes": "",
+  "schema_problems": []
+}

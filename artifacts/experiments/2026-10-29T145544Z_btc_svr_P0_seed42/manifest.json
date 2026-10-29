@@ -1,0 +1,199 @@
+{
+  "run_id": "2026-10-29T145544Z_btc_svr_P0_seed42",
+  "status": "SUCCESS",
+  "protocol_version": "v1.1-delta-target",
+  "asset": "BTC",
+  "prediction_target": "next_session_close",
+  "source_snapshot_sha256": "dc5b146c46f57ab41687a1486e6c8b583fa59dcf2f1d7ed9beb68451c80f1886",
+  "model_id": "svr",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "git_commit": "ffa2289f0438fcd22b72cc560520d38b90994217",
+  "git_dirty": true,
+  "python_version": "3.14.4",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "dependencies_lock_hash": "",
+  "config_path": "configs/research_protocol.yaml#svr/P0",
+  "config_hash": "c54df861122ad0cb77b83d9ea55bfff9db9a6096d5112186e83728bf2620493a",
+  "source_name": "binance",
+  "source_coverage": "2021-10-28..2026-10-29",
+  "train_period": "2021-11-27..2024-11-07",
+  "validation_period": "2024-11-09..2025-11-01",
+  "test_period": "",
+  "cv_policy": "expanding_window n_splits=5 gap=1",
+  "hyperparameters": {
+    "C": 100.0,
+    "epsilon": 0.01,
+    "gamma": 0.001
+  },
+  "metrics": {
+    "validation_mae": 1604.1857688718908,
+    "validation_rmse": 2206.3694783096917,
+    "validation_r2": 0.9613582389490651,
+    "validation_mape_pct": 1.6073432367170868,
+    "validation_normalized_mae": 0.01566388211829174,
+    "validation_baseline_mae": 1604.3481005586596,
+    "validation_baseline_rmse": 2205.6682749719816,
+    "validation_baseline_r2": 0.9613827964191181,
+    "validation_skill_mae": 0.00010118233487621531,
+    "validation_skill_rmse": -0.00031790969914502476,
+    "validation_direction_accuracy": 0.5083798882681564,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": null,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 358.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 1604.3481005586596,
+    "validation_rmse": 2205.6682749719816,
+    "validation_r2": 0.9613827964191181
+  },
+  "fold_metrics": [
+    {
+      "trial": 0,
+      "hyperparameters": {
+        "C": 0.1,
+        "epsilon": 0.1,
+        "gamma": 0.01
+      },
+      "validation_mae": 752.8884735695586,
+      "seconds": 0.0801,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 1,
+      "hyperparameters": {
+        "C": 10.0,
+        "epsilon": 0.01,
+        "gamma": 0.1
+      },
+      "validation_mae": 752.7524323823503,
+      "seconds": 0.0715,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 2,
+      "hyperparameters": {
+        "C": 0.1,
+        "epsilon": 0.1,
+        "gamma": "scale"
+      },
+      "validation_mae": 752.8696511740602,
+      "seconds": 0.0707,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 3,
+      "hyperparameters": {
+        "C": 0.1,
+        "epsilon": 0.01,
+        "gamma": 0.1
+      },
+      "validation_mae": 752.8648391911778,
+      "seconds": 0.0689,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 4,
+      "hyperparameters": {
+        "C": 100.0,
+        "epsilon": 0.1,
+        "gamma": 0.01
+      },
+      "validation_mae": 753.1961598378194,
+      "seconds": 0.0696,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 5,
+      "hyperparameters": {
+        "C": 100.0,
+        "epsilon": 0.01,
+        "gamma": "scale"
+      },
+      "validation_mae": 754.0748832561925,
+      "seconds": 0.0699,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 6,
+      "hyperparameters": {
+        "C": 1000.0,
+        "epsilon": 0.01,
+        "gamma": 0.01
+      },
+      "validation_mae": 754.4569860113055,
+      "seconds": 0.0748,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 7,
+      "hyperparameters": {
+        "C": 1.0,
+        "epsilon": 0.001,
+        "gamma": 0.1
+      },
+      "validation_mae": 752.6977097646046,
+      "seconds": 0.0759,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 8,
+      "hyperparameters": {
+        "C": 100.0,
+        "epsilon": 0.01,
+        "gamma": 0.001
+      },
+      "validation_mae": 752.6065335233392,
+      "seconds": 0.0748,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 9,
+      "hyperparameters": {
+        "C": 1000.0,
+        "epsilon": 0.01,
+        "gamma": 0.001
+      },
+      "validation_mae": 753.2316142481252,
+      "seconds": 0.0708,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    }
+  ],
+  "artifacts": [
+    "artifacts/experiments/2026-10-29T145544Z_btc_svr_P0_seed42/metrics.json",
+    "artifacts/experiments/2026-10-29T145544Z_btc_svr_P0_seed42/predictions.csv",
+    "artifacts/experiments/2026-10-29T145544Z_btc_svr_P0_seed42/config.json",
+    "artifacts/experiments/2026-10-29T145544Z_btc_svr_P0_seed42/environment.json"
+  ],
+  "warnings": [
+    "test set sealed: no test metrics produced in this run",
+    "undefined (NaN) diagnostics retained as null: validation_baseline_direction_accuracy"
+  ],
+  "error": null,
+  "execution_seconds": 0.811,
+  "human_owner": "team",
+  "review_state": "UNREVIEWED",
+  "notes": "",
+  "schema_problems": []
+}

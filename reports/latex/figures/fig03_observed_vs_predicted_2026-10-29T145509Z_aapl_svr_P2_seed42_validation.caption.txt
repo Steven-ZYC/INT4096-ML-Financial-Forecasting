@@ -1,0 +1,4 @@
+Observed next-close price against the model forecast and the naive persistence forecast, with the signed forecast error below. The naive line overlaps the observed series closely because next-close prediction is close to a random walk.
+
+run_ids: 2026-10-29T145509Z_aapl_svr_P2_seed42
+generated_by: int4096.evaluation.figures
