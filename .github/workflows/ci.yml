@@ -11,7 +11,12 @@ jobs:
     name: tests (temporal integrity, metrics, manifests, notebook)
     runs-on: ubuntu-latest
     steps:
+      # Full history: the integrity check below verifies that every run manifest
+      # points at a commit that still exists. A shallow clone would make that
+      # check vacuous (it previously reported 20 false "dangling" references).
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -57,15 +62,24 @@ jobs:
           print(f"dangling commit references: {len(dangling)}")
           for item in dangling:
               print("  ", item)
-          # A shallow CI checkout cannot contain historical commits, so this is
-          # informational in CI and strict locally.
+          if dangling:
+              raise SystemExit(
+                  "a run manifest references a commit that no longer exists; "
+                  "history was rewritten without re-running the experiments"
+              )
+          print("all manifests reference commits present in this clone")
           PY
 
   report:
     name: build LaTeX report
     runs-on: ubuntu-latest
     steps:
+      # Full history: the integrity check below verifies that every run manifest
+      # points at a commit that still exists. A shallow clone would make that
+      # check vacuous (it previously reported 20 false "dangling" references).
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -80,21 +94,17 @@ jobs:
       - name: Regenerate figures and tables from run artifacts
         run: PYTHONPATH=src python scripts/build_latex_assets.py
 
-      - name: Compile report
+      # texcount must run INSIDE the TeX container: later steps run on the bare
+      # runner, which has no TeX installation (an earlier version silently
+      # printed "texcount not available" and the count was never checked).
+      - name: Compile report and count words
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: reports/latex
           root_file: main.tex
-          latexmk_use_latex_maker: false
-
-      - name: Word count
-        run: |
-          pip install --quiet texcount 2>/dev/null || true
-          if command -v texcount >/dev/null; then
-            texcount -inc -sum reports/latex/main.tex
-          else
-            echo "texcount not available in this image; see reports/word_count.txt"
-          fi
+          post_compile: |
+            echo "=== texcount ==="
+            texcount -inc -sum main.tex | tail -8
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
