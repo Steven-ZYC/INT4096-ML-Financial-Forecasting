@@ -400,9 +400,11 @@ def write_figures(protocol) -> list[Path]:
     produced.append(figures.plot_model_vs_naive(registry, figure_root=FIGURES))
     produced.append(figures.plot_ablation_delta(registry, figure_root=FIGURES))
 
-    run_dirs = [
+    # Sorted: iterdir() order is filesystem-dependent, which made this figure
+    # (and its caption's run-id list) change between otherwise identical builds.
+    run_dirs = sorted(
         d for d in (REPO_ROOT / "artifacts" / "experiments").iterdir() if d.is_dir()
-    ]
+    )
     produced.append(figures.plot_train_vs_validation(run_dirs, figure_root=FIGURES))
 
     target = registry[
