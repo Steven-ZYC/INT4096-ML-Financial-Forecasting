@@ -36,7 +36,7 @@
 \newcommand{\currentspeaker}{}
 \newcommand{\speaker}[1]{\gdef\currentspeaker{#1}}
 
-\setbeamertemplate{footline}{%
+\newcommand{\intfootline}{%
   \leavevmode%
   \hbox{%
     \begin{beamercolorbox}[wd=.70\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=.3cm]{author in head/foot}%
@@ -47,6 +47,7 @@
     \end{beamercolorbox}%
   }\vskip0pt%
 }
+\setbeamertemplate{footline}{\intfootline}
 
 \setbeamerfont{author}{size=\small}
 \setbeamerfont{institute}{size=\scriptsize}
@@ -497,6 +498,8 @@
 % \appendix makes beamer write \translate into the PDF bookmark string, which
 % hyperref strips with a warning. Setting the bookmark text directly avoids it.
 \appendix
+\section{Backup material}
+\setbeamertemplate{footline}{\intfootline}
 
 \begin{frame}{Backup: Every Configuration, Not Just the Ones We Showed}
   \speaker{Zhang Yancheng}
