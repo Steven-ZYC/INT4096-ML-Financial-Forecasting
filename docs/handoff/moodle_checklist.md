@@ -54,7 +54,8 @@ export from the PDF or rebuild from an editable source — do not submit the
 ## Presentation checks (20% of the mark)
 
 - [ ] Assigned session confirmed (19 or 26 November).
-- [ ] Deck rehearsed twice with a timer; content ≤ 18:00, hard limit 20:00.
+- [ ] Deck rehearsed twice with a timer; content is 16:00, hard limit 20:00
+      (per-slide clock in `docs/presentation/timing_plan.md`).
 - [ ] **All five members speak**, each with substantive technical content.
 - [ ] Q&A appendix covers: random-walk baseline, raw vs adjusted prices, model
       fairness, scaling sensitivity, leakage, significance, educational relevance.

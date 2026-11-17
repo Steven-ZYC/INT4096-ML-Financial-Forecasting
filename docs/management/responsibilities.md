@@ -92,31 +92,38 @@ that you did. A review that only reads the summary is not a review.
 
 ## 4. Presentation plan (≤20 minutes, five speakers)
 
-Target **18:00 of content** plus transitions, leaving tolerance inside the
-20-minute limit. Every speaker gets substantive technical content — no "and now
-my teammate will present the data" hand-offs.
+> **These are presentation roles, not research roles.** Who speaks for how long is
+> chosen for narrative quality and confidence, not as a statement about who wrote
+> which code or ran which experiment. Actual research and software ownership is
+> §1–§3 above and does not change because of the speaking plan.
 
-| # | Speaker | Section | Minutes | Must land these points |
-|---|---|---|---|---|
-| 1 | Zhang Haoyu | Problem, education angle, research questions | 3:30 | Why teach ML through forecasting; why two contrasting markets; RQ1–RQ4 |
-| 2 | Dong Yuankun | Data, causal features, chronological splits | 4:00 | Provenance + hash; the 10 features; **why a shuffle would be cheating**; the boundary purge |
-| 3 | Lau Pak Hei | Methods, baseline, honest evaluation | 4:00 | The five families; naive persistence as the real opponent; skill score; why raw dollar errors are not comparable across assets |
-| 4 | Lui Shing Lam | Results and failure analysis | 3:30 | All models within ~1% of persistence; forest has negative skill on AAPL; what that means |
-| 5 | Zhang Yancheng | Preprocessing deep dive + education + conclusion | 3:00 | Trees exactly invariant to scaling vs kernel sensitivity; the learner lesson; limitations |
-| — | all | Q&A | 2:00 | See §5 |
+The deck was restructured into a five-act story so that each section answers a
+question raised by the previous one. Full detail: `docs/presentation/`.
 
-**Total content: 18:00.** Rehearse twice with a timer; cut from §1 and §5 first,
-never from §3 (evaluation rigour carries 20%).
+| Act | Presenter | Content | Time |
+|---|---|---|---:|
+| I — The challenge | Lau Pak Hei | Opening hook: five models versus one line; no results revealed | 1:20 |
+| II — Designing a fair experiment | Zhang Haoyu | Two markets, the prediction target, the four questions | 3:20 |
+| II (cont.) | Dong Yuankun | Leakage, chronological splitting, features | 3:40 |
+| III — The reveal | Zhang Yancheng | Baseline, results, uncertainty | 3:35 |
+| IV — Investigating why | Zhang Yancheng | Preprocessing ablation, why complexity failed | 2:25 |
+| V — The bigger lesson | Lui Shing Lam | Educational significance, limitations, takeaway | 1:40 |
 
-### Evidence each speaker must show
+**Total speech: 16:00**, leaving ~4:00 inside the 20-minute limit for transitions,
+a slower pace and questions.
 
-- Zhang Haoyu: one sentence of the education problem, no data yet.
-- Dong Yuankun: the split figure (`fig01`) and the purge explanation.
-- Lau Pak Hei: the baseline number before any model number.
-- Lui Shing Lam: `fig04` model-vs-naive, with the shared axis explained.
-- Zhang Yancheng: `fig06` ablation, plus one learner task worked live if time allows.
+| Presenter | Speaking time | Technical content |
+|---|---:|---|
+| Lau Pak Hei | 1:20 | none — motivation and framing only |
+| Zhang Haoyu | 3:20 | markets, target definition, research questions |
+| Dong Yuankun | 3:40 | data, features, leakage, splitting |
+| Zhang Yancheng | 6:00 | baselines, results, ablation, interpretation (one continuous segment) |
+| Lui Shing Lam | 1:40 | none — lessons, limitations, conclusion |
 
----
+Pak Hei and Shing Lam each speak for under two minutes on non-technical material.
+Haoyu, Yuankun and Yancheng carry every technical explanation, chart and
+comparison. There are only four handovers, each written as a technical bridge in
+`docs/presentation/speaker_notes.md`.
 
 ## 5. Q&A preparation (each member owns two answers)
 

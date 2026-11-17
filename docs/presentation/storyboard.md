@@ -1,114 +1,110 @@
-# Slide Storyboard — 18:00 content, five speakers, ≤20 minutes
+# Slide Storyboard — Five-Act Research Story
 
-Companion to `docs/management/responsibilities.md` §4. Every number on a slide
-must carry a run ID or point to the figure that regenerates it.
+**Deck:** `slides/latex/main.tex` → `slides/final/INT4096_Presentation.pdf`
+**Slides:** 15 narrative + 5 backup (20 pages) · **Speech:** 16:00 of a 20:00 limit
+**Companion documents:** `timing_plan.md` (per-slide clock) · `speaker_notes.md`
+(words to say, transitions, likely confusion)
 
-**Constraint check:** 3:30 + 4:00 + 4:00 + 3:30 + 3:00 = **18:00** of content,
-leaving 2:00 for Q&A inside a 20-minute limit.
-
----
-
-## Slide 1 — Title (Zhang Haoyu, 0:00)
-
-- Working title, course, group, date.
-- Non-advisory disclaimer already visible on the title slide, not only at the end.
-
-## Slide 2 — The educational problem (Zhang Haoyu, 0:30–2:00)
-
-- Audience: advanced secondary / non-specialist university learners.
-- Why forecasting is a good vehicle: it makes *generalisation*, *leakage* and
-  *baselines* concrete and checkable.
-- One sentence naming the four research questions. Do not read them all.
-
-## Slide 3 — Research questions and the honest goal (Zhang Haoyu, 2:00–3:30)
-
-- RQ1 model comparison, RQ2 capacity, RQ3 preprocessing, RQ4 education.
-- State plainly: "a negative result is an acceptable outcome; we are not
-  optimising for an attractive number."
-
-## Slide 4 — Data: two different datasets (Dong Yuankun, 3:30–5:30)
-
-- `fig01` coverage and splits.
-- AAPL: exchange sessions, USD, raw close. BTC: 24/7 UTC, USDT, single venue.
-- **"We never align them by row number."**
-
-## Slide 5 — Causal features and the split trap (Dong Yuankun, 5:30–7:30)
-
-- The ten features, all trailing ratios; the ratio-vs-price-level reason.
-- Chronological 60/20/20 + the **one-row purge** at each boundary.
-- One-line teaser: "an audit found we had a boundary leak; here is the fix."
-
-## Slide 6 — Measured evidence of no leakage (Dong Yuankun, 7:30)
-
-- Appending absurd future prices leaves historical features unchanged.
-- Mutation testing: 5 injected leakage defects, 5 caught.
-- Say the number: **79 tests**, and the suite is *proven able to fail*.
-
-## Slide 7 — The opponent everyone forgets (Lau Pak Hei, 7:30–9:30)
-
-- Show the naive baseline MAE **first**, before any model.
-- Define `skill_MAE = 1 − MAE_model / MAE_naive`.
-- Explain why dollar errors are not comparable across assets.
-
-## Slide 8 — Five model families, one fair protocol (Lau Pak Hei, 9:30–11:30)
-
-- Table: family, what it learns, needs scaling?, tuning budget.
-- Identical features, split, evaluation dates, `max_trials`, `max_seconds`.
-- Tuning never sees validation or test.
-
-## Slide 9 — Results: nothing meaningfully beats persistence (Lui Shing Lam, 11:30–13:30)
-
-- `fig04` (shared axis — explain why the axis is shared).
-- Every value within ±1%; `random_forest` on AAPL is **−0.78%** (worse).
-- Trained models: 20 runs, all validation only; **test block still sealed**.
-
-## Slide 10 — Why complexity did not help (Lui Shing Lam, 13:30–15:00)
-
-- Near-zero daily-return autocorrelation.
-- Trees cannot extrapolate beyond the training price range.
-- "The limiting factor is information, not capacity."
-
-## Slide 11 — Deep dive: preprocessing is part of the model (Zhang Yancheng, 15:00–16:30)
-
-- `fig06` ablation.
-- Trees: **exactly 0.0000%** change. SVR/ridge: measurable change.
-- Contrast: thresholds within a feature vs distances across features.
-- Honest extra: scaling *increased* error for `linear_baseline` on AAPL.
-
-## Slide 12 — The lesson for learners (Zhang Yancheng, 16:30–17:30)
-
-- One objective (O3): read a skill score, including a negative one.
-- One task shown live: spot the `shift(-1)` leak in six lines of code.
-- State: designed resource, **no learner study**, no learning-gain claim.
-
-## Slide 13 — Limitations and conclusion (Zhang Yancheng, 17:30–18:00)
-
-- Two assets, one window, one horizon, no costs, BTC is one venue.
-- The finding: careful comparison beats impressive complexity.
-- Disclaimer repeated. Close.
+> **Presentation roles only.** The speaker assignments below describe who talks,
+> not who built what. Research and software ownership is recorded in
+> `docs/management/responsibilities.md`.
 
 ---
 
-## Q&A appendix slides (not presented, shown only if asked)
+## The spine
 
-| Slide | Content |
+The talk answers one question and lets each act raise the next:
+
+1. **Which would you trust — five models or one line?** (Act I)
+2. **How can we compare them without accidentally using the future?** (Act II)
+3. **What actually happened?** (Act III)
+4. **Why didn't the complexity help?** (Act IV)
+5. **What does that teach us about machine learning?** (Act V)
+
+Each act ends with a sentence that makes the next act necessary. If a slide does
+not move that chain forward, it belongs in backup.
+
+---
+
+## Act I — The Challenge · Lau Pak Hei · 1:20
+
+| # | Title | Message | Evidence |
+|---|---|---|---|
+| 1 | Can Five Machine-Learning Models Beat a One-Line Rule? | This is the whole talk in one question | Non-advisory note on the title |
+| 2 | Which Would You Trust? | Complexity is not usefulness; only a fair comparison decides | States both options; **results withheld** |
+
+**Deliberate choices:** no results, no numbers, no method. The audience is asked to
+commit to a guess, which makes Act III land.
+
+## Act II — Designing a Fair Experiment · 7:00
+
+| # | Title | Presenter | Message | Evidence |
+|---|---|---|---|---|
+| 3 | Two Markets, One Fair Test | Zhang Haoyu | Two deliberately different markets, one identical pipeline | Bar counts; Binance BTCUSDT caveat |
+| 4 | What We Are Actually Predicting | Zhang Haoyu | Predict the change, add it to the known price | **One real committed prediction**: 228.52 → +0.10 → 228.62 vs 229.87 (error 1.25) |
+| 5 | Four Questions, Fixed Before We Looked | Zhang Haoyu | Questions and the acceptance of a negative result were declared in advance | RQ1–RQ4 |
+| 6 | Only the Past Is Visible | Dong Yuankun | A random split on time-ordered data is cheating; the fix is a purge, not just sorting | Six injected leakage defects, all must be caught |
+| 7 | Splitting Time Without Cheating | Dong Yuankun | The test block is visibly sealed and used nowhere in this talk | `fig01` chronological split |
+| 8 | Ten Signals from the Past | Dong Yuankun | Ten trailing ratios, no price level — hence the change target | Feature list |
+
+**Recurring example:** the single prediction on slide 4 is reused implicitly
+through the results (same units, same target) so the audience can carry one concrete
+case through the whole argument.
+
+## Act III — The Reveal · Zhang Yancheng · 3:35
+
+| # | Title | Message | Evidence |
+|---|---|---|---|
+| 9 | What Must Our Models Beat? | Persistence is a strong opponent; skill has a meaningful zero | Naive MAE 2.91 / 1604.35 over 244 / 358 sessions |
+| 10 | More Complexity, Almost No Improvement | Best is +0.52% on AAPL; 5 of 20 runs are below the rule | P2 table, generated from `metrics.json` |
+| 11 | The Improvements Are Inside the Noise | Spread ≈1.3 pp; bootstrap interval includes zero for 20/20 runs | `fig04` + block-bootstrap analysis |
+
+**Careful wording:** the deck says some configurations are *better*; it never says
+nothing improves, and never claims significance.
+
+## Act IV — Investigating Why · Zhang Yancheng · 2:25
+
+| # | Title | Message | Evidence |
+|---|---|---|---|
+| 12 | Does Changing the Input Change the Answer? | Trees are exactly invariant to scaling; kernels and linear models are not | `fig06`; P0 vs P2 predictions differ by **exactly 0** for both tree ensembles |
+| 13 | Why More Complexity Did Not Help | Thin short-horizon signal; leaf averaging limits tree outputs | lag-1 autocorrelation +0.021 (AAPL), −0.026 (BTC) |
+
+**Key distinction made explicit:** preprocessing *changes behaviour* ≠ preprocessing
+*improves prediction*. The deck also notes scaling made the linear baseline slightly
+worse on AAPL, so it is not presented as a universal good.
+
+## Act V — The Bigger Lesson · Lui Shing Lam · 1:40
+
+| # | Title | Message | Evidence |
+|---|---|---|---|
+| 14 | What This Teaches Us About Machine Learning | Five transferable lessons | Ties each lesson to something shown earlier |
+| 15 | The Value Is in the Comparison | Limitations, then one memorable sentence | Test block still sealed; non-advisory |
+
+**Education framing:** presented as a *designed* lesson with exercises and a
+notebook. No learner study was run, so no learning gain is claimed.
+
+## Backup · not presented
+
+| # | Title | Why it exists |
+|---|---|---|
+| 16 | Every Configuration, Not Just the Ones We Showed | Answers "did you cherry-pick P2?" — full 20-cell skill grid |
+| 17 | Was the Comparison Fair? | Budget actually used (10 trials / 90 s), identical for all lanes |
+| 18 | How We Caught Our Own Leak | Audit story: 0.408 reproduction, 6/6 mutation catches |
+| 19 | What the Fitted Model Relies On | Permutation importance, labelled non-causal |
+| 20 | Questions and Who Answers Them | Routes Q&A without guessing |
+
+---
+
+## What changed from the previous version
+
+| Change | Reason |
 |---|---|
-| A1 | Full 20-cell skill table with run IDs |
-| A2 | Split boundaries in dates, per asset, with the purge row marked |
-| A3 | Audit findings LEAK-001/002 with the before/after reproduction |
-| A4 | Why not deep learning: `[A]` handout + `[B]` oral guidance + gated MLP (D2) |
-| A5 | Bootstrap interval method and its temporal-dependence caveat |
-| A6 | Word-count policy and appendix uncertainty (D5) |
-| A7 | AI-use statement and per-member contributions |
-
----
-
-## Production rules
-
-1. **One idea per slide.** If a slide needs two sentences of setup, split it.
-2. **Every figure gets an axis label and a unit.** No unlabelled axes.
-3. **Never show a number without its run ID** in the speaker notes at minimum.
-4. **Rehearse with a visible timer twice.** Cut from slides 2–3 and 12 first.
-5. **Do not read the slides.** The audience can read; the speaker interprets.
-6. **Handover must be a technical bridge**, e.g. "…and that is *why* the split
-   boundary matters — Dong Yuankun will show the fix." Not "over to you."
+| Deck reframed around one question, in five acts | Previously five disconnected technical sections |
+| Title slide no longer a topic label | Opens with the challenge instead of the subject |
+| Results moved after a deliberately withheld guess | Creates a reveal instead of a data dump |
+| Preprocessing placed *after* the result | It now answers "why", not "also, we did this" |
+| Leakage framework, hashes and software audits moved to backup | They interrupted the narrative |
+| Full configuration grid moved to backup | Kept the main table readable |
+| Learner-facing interpretability moved to backup | Not needed for the argument |
+| Speaker load shifted: 1:20 / 3:20 / 3:40 / 6:00 / 1:40 | Two presenters get short, non-technical segments; three carry the research |
+| Titles state conclusions | "More Complexity, Almost No Improvement" instead of "Results" |

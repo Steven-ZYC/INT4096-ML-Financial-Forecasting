@@ -27,6 +27,7 @@ TRACKED = [
     "reports/final/INT4096_Final_Report.pdf",
     "reports/word_count.txt",
     "slides/final/INT4096_Presentation.pdf",
+    "artifacts/analysis/uncertainty_and_signal.json",
 ]
 
 
