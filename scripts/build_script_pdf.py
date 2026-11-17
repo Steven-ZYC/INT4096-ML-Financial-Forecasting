@@ -102,9 +102,21 @@ def convert(markdown: str) -> str:
     i = 0
     in_quote = False
     in_list = False
+    quote_buffer: list[str] = []
+
+    def flush_quote() -> None:
+        """Join consecutive quoted lines into ONE justified paragraph.
+
+        Emitting a \\par per markdown line produced ragged, indented fragments
+        in the printed script.
+        """
+        if quote_buffer:
+            out.append(inline(esc(" ".join(quote_buffer))) + r"\par")
+            quote_buffer.clear()
 
     def close_blocks() -> None:
         nonlocal in_quote, in_list
+        flush_quote()
         if in_list:
             out.append(r"\end{itemize}")
             in_list = False
@@ -184,9 +196,13 @@ def convert(markdown: str) -> str:
                 in_quote = True
             heading_in_quote = re.match(r"^#{1,4}\s+(.*)$", text)
             if heading_in_quote and level_guard(out):
+                quote_buffer.clear()
                 out.append(r"{\bfseries " + inline(esc(heading_in_quote.group(1))) + r"}\par")
             elif text:
-                out.append(inline(esc(text)) + r"\par")
+                quote_buffer.append(text)
+            else:
+                # A bare ">" ends the current quoted paragraph.
+                flush_quote()
             i += 1
             continue
 

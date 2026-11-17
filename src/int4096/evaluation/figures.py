@@ -265,7 +265,7 @@ def plot_train_vs_validation(
     ax.bar(labels, data["validation_mae"], color="tab:purple")
     ax.set_ylabel("Validation MAE")
     ax.set_title("Validation error by lane")
-    ax.tick_params(axis="x", labelsize=8)
+    ax.tick_params(axis="x", labelsize=10)
     return _save(
         fig,
         fig_root / "fig05_validation_mae_by_lane.png",
@@ -432,5 +432,78 @@ def plot_feature_importance(
         "help on unseen data. This describes the fitted model, not a causal "
         "mechanism in the market.",
         run_ids or [],
+        fig_root,
+    )
+
+
+def plot_skill_intervals(
+    intervals: list[dict],
+    *,
+    block_length: int,
+    n_resamples: int,
+    figure_root: Path | None = None,
+    run_ids: list[str] | None = None,
+) -> Path:
+    """Forest plot: every configuration's skill with its bootstrap interval.
+
+    Each row is one experimental cell. The horizontal bar is the 95% moving-block
+    bootstrap interval; the vertical line marks zero skill (no better than
+    persistence). If every bar crosses zero, no configuration shows a difference
+    distinguishable from sampling noise.
+    """
+    plt = _mpl()
+    fig_root = Path(figure_root) if figure_root else DEFAULT_FIGURE_ROOT
+
+    ordered = sorted(intervals, key=lambda row: row["skill_mae"])
+    labels, points, lows, highs = [], [], [], []
+    for row in ordered:
+        run_id = row["run_id"]
+        parts = run_id.split("_")
+        asset = parts[1].upper() if len(parts) > 1 else "?"
+        model = "_".join(parts[2:-2]) if len(parts) > 2 else "?"
+        variant = parts[-2] if len(parts) >= 2 else "?"
+        short = {
+            "linear_baseline": "linear",
+            "hist_gradient_boosting": "hist-GB",
+        }.get(model, model.replace("_", " "))
+        labels.append(f"{asset} {short} {variant}")
+        points.append(row["skill_mae"] * 100.0)
+        lows.append(row["ci_low"] * 100.0)
+        highs.append(row["ci_high"] * 100.0)
+
+    fig, ax = plt.subplots(figsize=(9.6, 7.0))
+    y = range(len(labels))
+    for i, (p, lo, hi) in enumerate(zip(points, lows, highs)):
+        crosses = lo <= 0.0 <= hi
+        colour = "tab:gray" if crosses else ("tab:green" if p > 0 else "tab:red")
+        ax.plot([lo, hi], [i, i], color=colour, lw=2.2, solid_capstyle="butt", zorder=2)
+        ax.plot([lo, lo], [i - 0.16, i + 0.16], color=colour, lw=1.2)
+        ax.plot([hi, hi], [i - 0.16, i + 0.16], color=colour, lw=1.2)
+        ax.scatter([p], [i], color=colour, s=42, zorder=3)
+
+    ax.axvline(0.0, color="black", lw=1.1, ls="--", zorder=1)
+    ax.set_yticks(list(y))
+    ax.set_yticklabels(labels, fontsize=10)
+    ax.set_xlabel("skill vs naive persistence (%)", fontsize=11)
+    ax.tick_params(axis="x", labelsize=10)
+    ax.set_title(
+        f"Every 95% interval crosses zero ({n_resamples:,} moving-block resamples, "
+        f"block = {block_length} sessions)",
+        fontsize=11,
+    )
+    ax.set_ylim(-0.8, len(labels) - 0.2)
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+
+    return _save(
+        fig,
+        fig_root / "fig08_skill_intervals.png",
+        "Forest plot of validation skill for all 20 configurations, with 95% "
+        "moving-block bootstrap intervals (1,000 resamples of 10 consecutive "
+        "sessions, which preserves some serial dependence). The dashed line is "
+        "zero skill. Every interval crosses it, so no configuration shows an "
+        "advantage distinguishable from sampling noise. Intervals are indicative, "
+        "not confirmatory.",
+        run_ids or [row["run_id"] for row in ordered],
         fig_root,
     )

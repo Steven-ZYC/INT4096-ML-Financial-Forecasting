@@ -1,97 +1,104 @@
 # Presentation Timing Plan
 
-**Deck:** `slides/final/INT4096_Presentation.pdf` — 20 pages = **15 narrative slides + 5 backup**
-**Build:** `bash slides/build.sh`
-**Bilingual script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照) (0 overfull boxes, 0 missing files)
-**Content time:** **16:00** of speech, leaving ~4:00 inside the 20-minute limit for
-transitions, slower delivery and questions.
+**Deck:** `slides/final/INT4096_Presentation.pdf` — **21 pages = 16 narrative + 5 backup**
+**Build:** `bash slides/build.sh` (0 overfull boxes, 0 missing files)
+**Bilingual script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照)
+**Key messages and transitions:** `speaker_notes.md`
 
-> **Scope note.** The roles below are **presentation roles only**. They are not
-> statements about who wrote which code, ran which experiment or owns which
-> research question — that is recorded separately in
+> **Scope note.** These are **presentation roles only**. They describe who speaks,
+> not who wrote the code or owns the research. Actual ownership is in
 > `docs/management/responsibilities.md`.
 
-## Narrative arc
+## Budget
 
-| Act | Question it answers | Presenter | Time |
-|---|---|---|---|
-| I — The challenge | Which would you trust: five models, or one line? | Lau Pak Hei | 1:20 |
-| II — Designing a fair experiment | How do we compare them without cheating? | Zhang Haoyu, Dong Yuankun | 7:00 |
-| III — The reveal | What actually happened? | Zhang Yancheng | 3:35 |
-| IV — Investigating why | Why didn't complexity help? | Zhang Yancheng | 2:25 |
-| V — The bigger lesson | What does this teach us? | Lui Shing Lam | 1:40 |
+| Component | Time |
+|---|---|
+| Formal speech (16 slides) | **17:30** |
+| Slide changes and handovers | 0:30 |
+| Q&A | 2:00 |
+| **Total against the 20-minute limit** | **20:00** |
 
-## Slide-by-slide timing
+## Act structure
+
+| Act | Question it answers | Slides | Presenters | Time |
+|---|---|---|---|---|
+| I — The Challenge | Why use market data to teach ML? | 1–2 | Pak Hei, Haoyu | 1:55 |
+| II — Designing a Fair Experiment | How do we build a zero-leakage, fair benchmark? | 3–9 | Yuankun, Haoyu, Pak Hei | 7:25 |
+| III — The Reveal | What did five classical models actually achieve? | 10–11 | Yancheng | 2:35 |
+| IV — Investigating Why | Why didn't complexity or preprocessing break through? | 12–13 | Yancheng | 2:20 |
+| V — The Bigger Lesson | What is the transferable lesson and teaching product? | 14–16 | Yancheng, Yuankun, Shing Lam | 3:15 |
+
+## Slide-by-slide
 
 | # | Slide | Presenter | Target | Cumulative |
 |---|---|---|---:|---:|
-| 1 | Can Five Machine-Learning Models Beat a One-Line Rule? | Lau Pak Hei | 0:25 | 0:25 |
-| 2 | Which Would You Trust? | Lau Pak Hei | 0:55 | 1:20 |
-| 3 | Two Markets, One Fair Test | Zhang Haoyu | 1:05 | 2:25 |
-| 4 | What We Are Actually Predicting | Zhang Haoyu | 1:20 | 3:45 |
-| 5 | Four Questions, Fixed Before We Looked | Zhang Haoyu | 0:55 | 4:40 |
-| 6 | Only the Past Is Visible | Dong Yuankun | 1:20 | 6:00 |
-| 7 | Splitting Time Without Cheating | Dong Yuankun | 0:55 | 6:55 |
-| 8 | Ten Signals from the Past | Dong Yuankun | 1:25 | 8:20 |
-| 9 | What Must Our Models Beat? | Zhang Yancheng | 1:05 | 9:25 |
-| 10 | More Complexity, Almost No Improvement | Zhang Yancheng | 1:30 | 10:55 |
-| 11 | The Improvements Are Inside the Noise | Zhang Yancheng | 1:00 | 11:55 |
-| 12 | Does Changing the Input Change the Answer? | Zhang Yancheng | 1:30 | 13:25 |
-| 13 | Why More Complexity Did Not Help | Zhang Yancheng | 0:55 | 14:20 |
-| 14 | What This Teaches Us About Machine Learning | Lui Shing Lam | 0:50 | 15:10 |
-| 15 | The Value Is in the Comparison | Lui Shing Lam | 0:50 | 16:00 |
-| 16–20 | Backup: full table, fairness, leak audit, feature importance, Q&A owners | (not presented) | — | 16:00 |
+| 1 | Can Five Machine-Learning Models Beat a One-Line Rule? | Lau Pak Hei | 0:40 | 0:40 |
+| 2 | Why Use Market Data to Teach Machine Learning? | Zhang Haoyu | 1:15 | 1:55 |
+| 3 | Two Markets, One Rigorous Protocol | Dong Yuankun | 1:00 | 2:55 |
+| 4 | Framing the Prediction Target for Fair Learning | Zhang Haoyu | 1:00 | 3:55 |
+| 5 | Pre-Committed Questions, Zero Cherry-Picking | Zhang Haoyu | 1:00 | 4:55 |
+| 6 | Ten Signals from the Past | Dong Yuankun | 1:05 | 6:00 |
+| 7 | Chronological Splitting and Zero-Leakage Discipline | Dong Yuankun | 1:15 | 7:15 |
+| 8 | Five Classical Models Across Three Paradigms | Lau Pak Hei | 1:05 | 8:20 |
+| 9 | The Opponent Everyone Forgets | Lau Pak Hei | 1:00 | 9:20 |
+| 10 | The Verdict: Complexity Yields Almost Zero Gain | Zhang Yancheng | 1:25 | 10:45 |
+| 11 | Statistical Reality Check: Every Gain Sits Inside the Noise | Zhang Yancheng | 1:10 | 11:55 |
+| 12 | Does Preprocessing Save the Models? | Zhang Yancheng | 1:20 | 13:15 |
+| 13 | Why Complexity Hit a Wall: Signal and Structure | Zhang Yancheng | 1:00 | 14:15 |
+| 14 | From Research Finding to a Turnkey Classroom Lab | Zhang Yancheng | 0:50 | 15:05 |
+| 15 | Engineering and Pedagogical Takeaways | Dong Yuankun | 1:10 | 16:15 |
+| 16 | Study Boundaries and the Bigger Lesson | Lui Shing Lam | 1:15 | 17:30 |
+| 17–21 | Backup 1–5 (not presented) | — | — | — |
 
 ## Per-presenter totals
 
-| Presenter | Slides | Time | Share of content |
+| Presenter | Slides | Time | Share |
 |---|---|---:|---:|
-| Lau Pak Hei | 1–2 | **1:20** | 8% |
-| Zhang Haoyu | 3–5 | **3:20** | 21% |
-| Dong Yuankun | 6–8 | **3:40** | 23% |
-| Zhang Yancheng | 9–13 | **6:00** | 37% |
-| Lui Shing Lam | 14–15 | **1:40** | 10% |
-| **Total** | 15 | **16:00** | 100% |
+| Lau Pak Hei | 1, 8, 9 | **2:45** | 16% |
+| Zhang Haoyu | 2, 4, 5 | **3:15** | 19% |
+| Dong Yuankun | 3, 6, 7, 15 | **4:30** | 26% |
+| Zhang Yancheng | 10–14 | **5:45** | 33% |
+| Lui Shing Lam | 16 | **1:15** | 7% |
+| **Total** | 16 | **17:30** | 100% |
 
-Pak Hei and Shing Lam each speak for under two minutes and handle no technical
-explanation, no chart reading and no algorithm internals. Haoyu, Yuankun and
-Yancheng carry all substantive research content.
+**Note on continuity:** Yancheng's five slides are one uninterrupted segment
+(Act III into Act IV). The other presenters appear in two blocks each, which the
+handover plan below accounts for — each block ends on a sentence that hands over
+cleanly.
 
-Zhang Yancheng's five slides are **one continuous segment** (Act III runs straight
-into Act IV), so there is no mid-argument speaker switch.
+## Handovers (six, ~5 s each)
 
-## Handover discipline
-
-There are only four handovers, and each is a technical bridge rather than
-"over to you":
-
-| Transition | Bridge sentence |
-|---|---|
-| Pak Hei → Haoyu (after slide 2) | "…so we need a comparison we can defend. Haoyu will show what we actually set up." |
-| Haoyu → Yuankun (after slide 5) | "None of those questions means anything if the model can see the future — Yuankun explains how we prevented that." |
-| Yuankun → Yancheng (after slide 8) | "So we have honest data and honest features. Yancheng will show what the models did with them." |
-| Yancheng → Shing Lam (after slide 13) | "That is the technical story. Shing Lam will say what it means for learning." |
+| After | From → To | Bridge sentence |
+|---|---|---|
+| 1 | Pak Hei → Haoyu | "That is the question. Haoyu will explain why this dataset is the right place to test it." |
+| 5 | Haoyu → Yuankun | "None of that means anything if the model can see the future — Yuankun." |
+| 7 | Yuankun → Pak Hei | "So the data is clean. Pak Hei will show what we actually put on top of it." |
+| 9 | Pak Hei → Yancheng | "We have the models and the benchmark. Yancheng has the results." |
+| 14 | Yancheng → Yuankun | "That is what the numbers say. Yuankun on what we learned building this." |
+| 15 | Yuankun → Shing Lam | "Shing Lam will close with our boundaries and the bigger lesson." |
 
 ## If you are running long
 
-Check the clock at slide 10 (should be ≈11:00).
+Check the clock at slide 10: it should read **≈10:45**.
 
-- **At 11:30 or later:** cut slide 13 to one sentence ("daily returns barely
-  predict themselves, so extra capacity fits noise") — saves ~0:40.
-- **At 12:00 or later:** also shorten slide 3 to the two-market contrast only —
-  saves ~0:30.
-- **Never cut** slide 9 (the baseline) or slide 10 (the results table). The
-  evaluation argument carries most of the marks.
+- **At 11:15 or later:** cut slide 13 to one sentence — *"returns barely predict
+  themselves, so extra capacity fits noise; a forest also averages leaf values,
+  so it cannot produce large moves."* Saves ~0:40.
+- **At 11:45 or later:** also compress slide 8 by naming the three paradigms in
+  one breath instead of walking the table. Saves ~0:30.
+- **Never cut** slide 9 (the baseline definition) or slide 10 (the results
+  table): the evaluation argument carries most of the marks.
 
 ## If you are running short
 
-Add the mechanism behind the tree-invariance result on slide 12 (thresholds vs
-distances), which is prepared in the speaker notes as an optional expansion.
+Add detail that is already prepared: the boundary-purge mechanism on slide 7, or
+the threshold-versus-distance mechanism on slide 12.
 
 ## Rehearsal checklist
 
-- [ ] Two timed run-throughs with a visible clock.
-- [ ] Each presenter has said their own segment aloud at least twice.
-- [ ] Handover sentences rehearsed — they are the most common place to lose time.
-- [ ] Slide 1 disclaimer stays on screen while the first sentence is spoken.
-- [ ] Test the PDF on the presentation machine (fonts, 16:9, no missing figures).
+- [ ] Two full timed run-throughs with a visible clock.
+- [ ] All six handovers rehearsed — they are where time leaks.
+- [ ] Slide 1 disclaimer stays visible while the first sentence is spoken.
+- [ ] Backup 1 and Backup 3 are open in a second window, ready for "did you
+      cherry-pick?" and "how do you know there's no leakage?".
+- [ ] Deck tested on the presentation machine (16:9, figures embedded).

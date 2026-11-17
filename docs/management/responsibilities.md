@@ -93,37 +93,37 @@ that you did. A review that only reads the summary is not a review.
 ## 4. Presentation plan (≤20 minutes, five speakers)
 
 > **These are presentation roles, not research roles.** Who speaks for how long is
-> chosen for narrative quality and confidence, not as a statement about who wrote
-> which code or ran which experiment. Actual research and software ownership is
-> §1–§3 above and does not change because of the speaking plan.
+> chosen for narrative quality and delivery confidence. It is *not* a statement
+> about who wrote which code, ran which experiment or owns which research
+> question — that is §1–§3 above and does not change because of the speaking plan.
 
-The deck was restructured into a five-act story so that each section answers a
-question raised by the previous one. Full detail: `docs/presentation/`.
+The deck is organised as a five-act story (**16 narrative slides + 5 backup**);
+each act raises the question the next one answers. Full detail in
+`docs/presentation/` (storyboard, timing plan, bilingual script, speaker notes).
 
-| Act | Presenter | Content | Time |
-|---|---|---|---:|
-| I — The challenge | Lau Pak Hei | Opening hook: five models versus one line; no results revealed | 1:20 |
-| II — Designing a fair experiment | Zhang Haoyu | Two markets, the prediction target, the four questions | 3:20 |
-| II (cont.) | Dong Yuankun | Leakage, chronological splitting, features | 3:40 |
-| III — The reveal | Zhang Yancheng | Baseline, results, uncertainty | 3:35 |
-| IV — Investigating why | Zhang Yancheng | Preprocessing ablation, why complexity failed | 2:25 |
-| V — The bigger lesson | Lui Shing Lam | Educational significance, limitations, takeaway | 1:40 |
+| Act | Slides | Presenter | Content | Time |
+|---|---|---|---|---|
+| I — The challenge | 1–2 | Lau Pak Hei (1), Zhang Haoyu (2) | The core question; why market data teaches ML | 1:55 |
+| II — A fair experiment | 3–9 | Dong Yuankun (3, 6, 7), Zhang Haoyu (4, 5), Lau Pak Hei (8, 9) | Two markets, delta target, pre-registered questions, features, leakage control, five paradigms, the baseline | 7:25 |
+| III — The reveal | 10–11 | Zhang Yancheng | Validation skill table; bootstrap interval forest plot | 2:35 |
+| IV — Investigating why | 12–13 | Zhang Yancheng | Preprocessing ablation; signal and structure limits | 2:20 |
+| V — The bigger lesson | 14–16 | Zhang Yancheng (14), Dong Yuankun (15), Lui Shing Lam (16) | Classroom lab, engineering takeaways, boundaries, final line | 3:15 |
 
-**Total speech: 16:00**, leaving ~4:00 inside the 20-minute limit for transitions,
-a slower pace and questions.
+**Formal speech: 17:30**, plus ~0:30 of handovers and 2:00 of Q&A — inside the
+20-minute limit.
 
-| Presenter | Speaking time | Technical content |
-|---|---:|---|
-| Lau Pak Hei | 1:20 | none — motivation and framing only |
-| Zhang Haoyu | 3:20 | markets, target definition, research questions |
-| Dong Yuankun | 3:40 | data, features, leakage, splitting |
-| Zhang Yancheng | 6:00 | baselines, results, ablation, interpretation (one continuous segment) |
-| Lui Shing Lam | 1:40 | none — lessons, limitations, conclusion |
+| Presenter | Slides | Speaking time | Technical content |
+|---|---|---:|---|
+| Lau Pak Hei | 1, 8, 9 | **2:45** | opens the question; explains model mechanisms and the baseline |
+| Zhang Haoyu | 2, 4, 5 | **3:15** | teaching rationale, target definition, pre-registration |
+| Dong Yuankun | 3, 6, 7, 15 | **4:30** | data protocol, features, leakage control, engineering lessons |
+| Zhang Yancheng | 10–14 | **5:45** | results, uncertainty, ablation, classroom lab (one continuous block) |
+| Lui Shing Lam | 16 | **1:15** | scope, next steps, final takeaway |
 
-Pak Hei and Shing Lam each speak for under two minutes on non-technical material.
-Haoyu, Yuankun and Yancheng carry every technical explanation, chart and
-comparison. There are only four handovers, each written as a technical bridge in
-`docs/presentation/speaker_notes.md`.
+Every member has a substantive role. Six handovers are scripted as technical
+bridges in `docs/presentation/speaker_notes.md`; the full spoken text, with a
+Chinese translation for comprehension, is in
+`docs/presentation/speaker_script_bilingual.md`.
 
 ## 5. Q&A preparation (each member owns two answers)
 

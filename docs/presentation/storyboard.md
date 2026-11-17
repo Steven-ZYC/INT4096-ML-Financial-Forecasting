@@ -1,100 +1,91 @@
 # Slide Storyboard — Five-Act Research Story
 
-**Bilingual rehearsal script (English spoken, 中文对照):**
-`speaker_script_bilingual.md` (printable: `speaker_script_bilingual.pdf`)
-
 **Deck:** `slides/latex/main.tex` → `slides/final/INT4096_Presentation.pdf`
-**Slides:** 15 narrative + 5 backup (20 pages) · **Speech:** 16:00 of a 20:00 limit
-**Companion documents:** `timing_plan.md` (per-slide clock) · `speaker_notes.md`
-(words to say, transitions, likely confusion)
+**Slides:** 16 narrative + 5 backup (21 pages) · **Speech:** 17:30 of a 20:00 slot
+**Companions:** `timing_plan.md` (clock) · `speaker_script_bilingual.md` (full
+script, English spoken · 中文对照) · `speaker_notes.md` (key messages, transitions)
 
-> **Presentation roles only.** The speaker assignments below describe who talks,
-> not who built what. Research and software ownership is recorded in
-> `docs/management/responsibilities.md`.
+> **Presentation roles only.** Speaker assignments describe who talks, not who
+> built what. Research ownership: `docs/management/responsibilities.md`.
 
 ---
 
 ## The spine
 
-The talk answers one question and lets each act raise the next:
+One question, five acts, each act creating the need for the next:
 
-1. **Which would you trust — five models or one line?** (Act I)
-2. **How can we compare them without accidentally using the future?** (Act II)
-3. **What actually happened?** (Act III)
-4. **Why didn't the complexity help?** (Act IV)
-5. **What does that teach us about machine learning?** (Act V)
-
-Each act ends with a sentence that makes the next act necessary. If a slide does
-not move that chain forward, it belongs in backup.
+| Act | Question raised | Answered by |
+|---|---|---|
+| **I** | Five models or one line — which would you trust? | Framing the teaching purpose and the three traps |
+| **II** | How do we compare them without cheating? | Two markets, the delta target, pre-registered questions, ten features, chronological splits, five paradigms, the baseline |
+| **III** | What actually happened? | Validation skill table + bootstrap interval forest plot |
+| **IV** | Why didn't complexity or scaling break through? | P0/P2 ablation + near-zero signal / leaf-averaging limits |
+| **V** | What is transferable, and what do we hand to teachers? | Classroom lab, engineering takeaways, boundaries, final line |
 
 ---
 
-## Act I — The Challenge · Lau Pak Hei · 1:20
+## Act I — The Challenge
 
-| # | Title | Message | Evidence |
-|---|---|---|---|
-| 1 | Can Five Machine-Learning Models Beat a One-Line Rule? | This is the whole talk in one question | Non-advisory note on the title |
-| 2 | Which Would You Trust? | Complexity is not usefulness; only a fair comparison decides | States both options; **results withheld** |
-
-**Deliberate choices:** no results, no numbers, no method. The audience is asked to
-commit to a guess, which makes Act III land.
-
-## Act II — Designing a Fair Experiment · 7:00
-
-| # | Title | Presenter | Message | Evidence |
+| # | Title | Presenter | Message | Visual |
 |---|---|---|---|---|
-| 3 | Two Markets, One Fair Test | Zhang Haoyu | Two deliberately different markets, one identical pipeline | Bar counts; Binance BTCUSDT caveat |
-| 4 | What We Are Actually Predicting | Zhang Haoyu | Predict the change, add it to the known price | **One real committed prediction**: 228.52 → +0.10 → 228.62 vs 229.87 (error 1.25) |
-| 5 | Four Questions, Fixed Before We Looked | Zhang Haoyu | Questions and the acceptance of a negative result were declared in advance | RQ1–RQ4 |
-| 6 | Only the Past Is Visible | Dong Yuankun | A random split on time-ordered data is cheating; the fix is a purge, not just sorting | Six injected leakage defects, all must be caught |
-| 7 | Splitting Time Without Cheating | Dong Yuankun | The test block is visibly sealed and used nowhere in this talk | `fig01` chronological split |
-| 8 | Ten Signals from the Past | Dong Yuankun | Ten trailing ratios, no price level — hence the change target | Feature list |
+| 1 | Can Five Machine-Learning Models Beat a One-Line Rule? | Lau Pak Hei | The whole talk in one comparison | Dark hero: five model chips **vs** `P̂(t+1) = P(t)` |
+| 2 | Why Use Market Data to Teach Machine Learning? | Zhang Haoyu | Market data is a deliberate teaching vehicle for three traps | Three questions + five learning objectives |
 
-**Recurring example:** the single prediction on slide 4 is reused implicitly
-through the results (same units, same target) so the audience can carry one concrete
-case through the whole argument.
+**Deliberate choice:** no results, no numbers yet. The audience is asked to hold a
+guess until Act III.
 
-## Act III — The Reveal · Zhang Yancheng · 3:35
+## Act II — Designing a Fair Experiment
 
-| # | Title | Message | Evidence |
-|---|---|---|---|
-| 9 | What Must Our Models Beat? | Persistence is a strong opponent; skill has a meaningful zero | Naive MAE 2.91 / 1604.35 over 244 / 358 sessions |
-| 10 | More Complexity, Almost No Improvement | Best is +0.52% on AAPL; 5 of 20 runs are below the rule | P2 table, generated from `metrics.json` |
-| 11 | The Improvements Are Inside the Noise | Spread ≈1.3 pp; bootstrap interval includes zero for 20/20 runs | `fig04` + block-bootstrap analysis |
+| # | Title | Presenter | Message | Visual |
+|---|---|---|---|---|
+| 3 | Two Markets, One Rigorous Protocol | Dong Yuankun | One protocol stress-tested on two microstructures | Table: source, observations, regime, currency + integrity checks |
+| 4 | Framing the Prediction Target for Fair Learning | Zhang Haoyu | Predict the change, add it back to a known price | Formula + three-step flow + one real committed row |
+| 5 | Pre-Committed Questions, Zero Cherry-Picking | Zhang Haoyu | Rules locked before results; a null result counts | Four RQs + integrity banner |
+| 6 | Ten Signals from the Past | Dong Yuankun | Ten backward-looking ratios, no price level | Feature-category table |
+| 7 | Chronological Splitting and Zero-Leakage Discipline | Dong Yuankun | Purge the boundary, seal the test block | Timeline with two purge gaps + three safeguards |
+| 8 | Five Classical Models Across Three Paradigms | Lau Pak Hei | Mechanism diversity, not model count | Paradigm/model/mechanism table |
+| 9 | The Opponent Everyone Forgets | Lau Pak Hei | A model's own MAE is meaningless without a baseline | Baseline formula, MAE, skill scale |
 
-**Careful wording:** the deck says some configurations are *better*; it never says
-nothing improves, and never claims significance.
+**Recurring artefact:** slide 4's committed row (AAPL, 2024-11-21: 228.52 →
++0.10 → 228.62 vs 229.87) keeps the abstract pipeline concrete.
 
-## Act IV — Investigating Why · Zhang Yancheng · 2:25
+## Act III — The Reveal
 
-| # | Title | Message | Evidence |
-|---|---|---|---|
-| 12 | Does Changing the Input Change the Answer? | Trees are exactly invariant to scaling; kernels and linear models are not | `fig06`; P0 vs P2 predictions differ by **exactly 0** for both tree ensembles |
-| 13 | Why More Complexity Did Not Help | Thin short-horizon signal; leaf averaging limits tree outputs | lag-1 autocorrelation +0.021 (AAPL), −0.026 (BTC) |
+| # | Title | Presenter | Message | Visual |
+|---|---|---|---|---|
+| 10 | The Verdict: Complexity Yields Almost Zero Gain | Zhang Yancheng | Peak gain +0.52%; 3 of 10 standardised runs lose to the rule | P2 table + diverging skill bar chart centred on zero |
+| 11 | Statistical Reality Check: Every Gain Sits Inside the Noise | Zhang Yancheng | 20 of 20 bootstrap intervals span zero | Forest plot, full width, dashed zero line |
 
-**Key distinction made explicit:** preprocessing *changes behaviour* ≠ preprocessing
-*improves prediction*. The deck also notes scaling made the linear baseline slightly
-worse on AAPL, so it is not presented as a universal good.
+**Wording discipline:** the deck says some configurations are *slightly better*;
+it never claims a reliable winner, and never claims nothing ever helps.
 
-## Act V — The Bigger Lesson · Lui Shing Lam · 1:40
+## Act IV — Investigating Why
 
-| # | Title | Message | Evidence |
-|---|---|---|---|
-| 14 | What This Teaches Us About Machine Learning | Five transferable lessons | Ties each lesson to something shown earlier |
-| 15 | The Value Is in the Comparison | Limitations, then one memorable sentence | Test block still sealed; non-advisory |
+| # | Title | Presenter | Message | Visual |
+|---|---|---|---|---|
+| 12 | Does Preprocessing Save the Models? | Zhang Yancheng | Trees are invariant to scaling; kernels and penalties are not | P0 vs P2 table + ablation chart; AAPL linear got *worse* by 0.74% |
+| 13 | Why Complexity Hit a Wall: Signal and Structure | Zhang Yancheng | Near-zero autocorrelation + leaf averaging | Two mechanism blocks + one-line conclusion |
 
-**Education framing:** presented as a *designed* lesson with exercises and a
-notebook. No learner study was run, so no learning gain is claimed.
+**Key distinction made explicit:** preprocessing *changes behaviour* is not the
+same as preprocessing *improves prediction*.
 
-## Backup · not presented
+## Act V — The Bigger Lesson
 
-| # | Title | Why it exists |
+| # | Title | Presenter | Message | Visual |
+|---|---|---|---|---|
+| 14 | From Research Finding to a Turnkey Classroom Lab | Zhang Yancheng | The finding ships as a 60-minute lab and five tasks | Package list + live multiple-choice check (answer B) |
+| 15 | Engineering and Pedagogical Takeaways | Dong Yuankun | Four disciplines of building a trustworthy benchmark | Numbered insights + pull quote |
+| 16 | Study Boundaries and the Bigger Lesson | Lui Shing Lam | Scope, next steps, one memorable sentence | Scope/next-steps + final takeaway + disclaimer |
+
+## Backup — not presented
+
+| # | Title | Use it when |
 |---|---|---|
-| 16 | Every Configuration, Not Just the Ones We Showed | Answers "did you cherry-pick P2?" — full 20-cell skill grid |
-| 17 | Was the Comparison Fair? | Budget actually used (10 trials / 90 s), identical for all lanes |
-| 18 | How We Caught Our Own Leak | Audit story: 0.408 reproduction, 6/6 mutation catches |
-| 19 | What the Fitted Model Relies On | Permutation importance, labelled non-causal |
-| 20 | Questions and Who Answers Them | Routes Q&A without guessing |
+| 17 | Backup 1: Full 20-Run Transparency Matrix | "Did you cherry-pick P2?" → full grid; best BTC overall is linear at P0, +0.26% |
+| 18 | Backup 2: Experimental Fairness and Manifest Audit | "Was the comparison fair?" → identical features/splits/metrics; 10 trials, 90 s per cell |
+| 19 | Backup 3: Catching Data Leakage in Action | "How do you know there's no leakage?" → 0.408 reproduction, 6/6 mutation catches |
+| 20 | Backup 4: What Signals Did the Models Rely On? | "Which features mattered?" → permutation importance, explicitly non-causal |
+| 21 | Backup 5: Q&A Quick-Reference Cards | Five prepared one-line answers, with a named owner for each |
 
 ---
 
@@ -102,12 +93,11 @@ notebook. No learner study was run, so no learning gain is claimed.
 
 | Change | Reason |
 |---|---|
-| Deck reframed around one question, in five acts | Previously five disconnected technical sections |
-| Title slide no longer a topic label | Opens with the challenge instead of the subject |
-| Results moved after a deliberately withheld guess | Creates a reveal instead of a data dump |
-| Preprocessing placed *after* the result | It now answers "why", not "also, we did this" |
-| Leakage framework, hashes and software audits moved to backup | They interrupted the narrative |
-| Full configuration grid moved to backup | Kept the main table readable |
-| Learner-facing interpretability moved to backup | Not needed for the argument |
-| Speaker load shifted: 1:20 / 3:20 / 3:40 / 6:00 / 1:40 | Two presenters get short, non-technical segments; three carry the research |
-| Titles state conclusions | "More Complexity, Almost No Improvement" instead of "Results" |
+| 15 → 16 narrative slides | Act II split into protocol / target / questions / features / leakage / models / baseline so each slide carries one idea |
+| Every title states a conclusion | "The Verdict: Complexity Yields Almost Zero Gain" instead of "Results" |
+| Baseline promoted to its own slide (9) before results | The audience must know the opponent before seeing the score |
+| Bootstrap interval forest plot added (11) | Separates "small positive number" from "reliable advantage" visually |
+| Ablation reframed as an *answer* (12) | Follows the reveal instead of interrupting the setup |
+| Classroom lab and takeaways split (14, 15) | The teaching product and the engineering lessons are different claims |
+| Speaker load redistributed | Pak Hei 2:45, Haoyu 3:15, Yuankun 4:30, Yancheng 5:45, Shing Lam 1:15 |
+| Backup expanded to five specific rebuttal aids | Each answers one predictable examiner question |

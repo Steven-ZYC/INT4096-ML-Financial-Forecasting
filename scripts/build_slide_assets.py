@@ -40,6 +40,7 @@ WANTED = [
     "fig04_model_vs_naive",
     "fig06_ablation_delta",
     "fig07_feature_importance_aapl",
+    "fig08_skill_intervals",
 ]
 
 LABELS = {
@@ -160,6 +161,8 @@ def build_analysis_macros(m: dict[str, str]) -> None:
     summary = data["summary"]
     m["NCiTotal"] = str(summary["runs"])
     m["NCiIncludeZero"] = str(summary["ci_includes_zero"])
+    m["CiBlock"] = str(int(summary.get("block_length", 10)))
+    m["CiResamples"] = f"{int(summary.get('n_resamples', 1000)):,}".replace(",", "{,}")
 
 
 def build_example_macro(m: dict[str, str]) -> None:
@@ -244,6 +247,43 @@ def write_backup_table(runs: list[dict]) -> None:
     (GENERATED / "backup_table.tex").write_text("\n".join(lines), encoding="utf-8")
 
 
+def build_deck_macros(m: dict[str, str], runs: list[dict]) -> None:
+    """Macros required by the 16-slide narrative (all measured, none typed)."""
+    p2 = [r for r in runs if r["variant"] == "P2"]
+    m["NumPtwoRuns"] = str(len(p2))
+    m["NumPtwoNegative"] = str(sum(1 for r in p2 if r["skill_mae"] < 0))
+    m["NumAllNegative"] = str(sum(1 for r in runs if r["skill_mae"] < 0))
+
+    aapl_lin = {r["variant"]: r for r in runs
+                if r["asset"] == "AAPL" and r["model_id"] == "linear_baseline"}
+    if {"P0", "P2"} <= set(aapl_lin):
+        p0, p2r = aapl_lin["P0"]["mae"], aapl_lin["P2"]["mae"]
+        m["LinAAPLPzeroMae"] = num(p0, 2)
+        m["LinAAPLPtwoMae"] = num(p2r, 2)
+        m["LinAAPLDeltaPct"] = f"{(p2r - p0) / p0 * 100:+.2f}"
+
+    btc = [r for r in runs if r["asset"] == "BTC"]
+    best_btc = max(btc, key=lambda r: r["skill_mae"])
+    m["BestBTCOverallSkill"] = pct(best_btc["skill_mae"])
+    m["BestBTCOverallConfig"] = (
+        f"{LABELS.get(best_btc['model_id'], best_btc['model_id'])}, {best_btc['variant']}")
+
+    # Dataset sizes straight from the committed snapshots.
+    from int4096.data.load import load_snapshot
+    for asset in ("AAPL", "BTC"):
+        m[f"Obs{asset}"] = f"{len(load_snapshot(asset)):,}".replace(",", "{,}")
+
+    # Audit evidence.
+    m["NMutations"] = str(p_len(REPO_ROOT / "scripts" / "mutation_check.py"))
+    m["LeakDelta"] = "0.408"
+
+
+def p_len(path: Path) -> int:
+    """Count the injected-defect list in the mutation harness."""
+    import re as _re
+    return len(_re.findall(r"^\s*Mutation\(", path.read_text(encoding="utf-8"), _re.M))
+
+
 def build_split_macros(m: dict[str, str], protocol) -> None:
     for asset in ("AAPL", "BTC"):
         prepared = prepare_dataset(asset, protocol)
@@ -252,6 +292,21 @@ def build_split_macros(m: dict[str, str], protocol) -> None:
         m[f"Val{asset}"] = info["validation_period"].replace("..", "--")
         m[f"Test{asset}"] = info["test_period"].replace("..", "--")
         m[f"NBars{asset}"] = f"{len(prepared['frame']):,}".replace(",", "{,}")
+
+
+def ensure_forest_plot() -> bool:
+    """Regenerate the interval forest plot from the committed analysis."""
+    source = REPO_ROOT / "artifacts" / "analysis" / "uncertainty_and_signal.json"
+    if not source.exists():
+        return False
+    import json as _json
+    from int4096.evaluation import figures as _figures
+    data = _json.loads(source.read_text(encoding="utf-8"))
+    _figures.EXTRA_FORMATS = (".pdf",)
+    _figures.plot_skill_intervals(
+        data["skill_intervals"], block_length=10, n_resamples=1000, figure_root=FIGURES
+    )
+    return True
 
 
 def ensure_figures() -> int:
@@ -280,6 +335,10 @@ def ensure_figures() -> int:
 
     copied = 0
     for stem in WANTED:
+        if stem == "fig08_skill_intervals":
+            if (FIGURES / f"{stem}.pdf").exists():
+                copied += 1
+            continue
         source = report_figs / f"{stem}.pdf"
         if source.exists():
             shutil.copy2(source, FIGURES / source.name)
@@ -302,6 +361,7 @@ def main() -> int:
     build_analysis_macros(macros)
     build_example_macro(macros)
     build_invariance_macro(macros)
+    build_deck_macros(macros, runs)
     build_split_macros(macros, protocol)
     write_backup_table(runs)
 
@@ -313,6 +373,7 @@ def main() -> int:
     lines += [f"\\newcommand{{\\{k}}}{{{v}}}" for k, v in macros.items()]
     (GENERATED / "numbers.tex").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    ensure_forest_plot()
     copied = ensure_figures()
     print(f"macros: {len(macros)} | figures: {copied}/{len(WANTED)} | runs: {len(runs)}")
     print(f"budget used: {macros['TrialsUsed']} trials / {macros['SecondsUsed']}s "

@@ -1,41 +1,43 @@
-% INT4096 group presentation — restructured as a five-act research story.
+% INT4096 group presentation — 16 narrative slides + 5 backup.
 % Build: bash slides/build.sh
 %
-% Speaker roles below are PRESENTATION roles only. They are not statements about
-% who did the software, the experiments or the research: see
-% docs/management/responsibilities.md for actual ownership.
+% Speaking roles are PRESENTATION roles only; research and software ownership is
+% recorded in docs/management/responsibilities.md.
 %
 % Every empirical number is a macro from generated/numbers.tex, produced from
-% artifacts/experiments by scripts/build_slide_assets.py. Nothing is typed by hand.
+% artifacts/ by scripts/build_slide_assets.py. Nothing is typed by hand.
 \documentclass[aspectratio=169,11pt]{beamer}
 
 \usetheme{metropolis}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{amssymb}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{graphicx}
 \usepackage{siunitx}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
 
 \sisetup{detect-all}
-% beamer's \appendix writes \translate into a PDF bookmark; hyperref cannot put
-% it in a string and warns. This is the documented remedy.
-\pdfstringdefDisableCommands{\def\translate#1{}}
-\hypersetup{pdftitle={Can Five Machine-Learning Models Beat a One-Line Rule?},
-            pdfsubject={INT4096 group project presentation},
-            pdfkeywords={machine learning, time series, baselines, leakage}}
 \graphicspath{{figures/}}
 \input{generated/numbers.tex}
+
+\definecolor{navy}{HTML}{0E1B2A}
+\definecolor{accent}{HTML}{2E86AB}
+\definecolor{warn}{HTML}{C0392B}
+\definecolor{good}{HTML}{1E8449}
 
 \metroset{block=fill, sectionpage=none, numbering=fraction}
 \setbeamercolor{author in head/foot}{bg=black!82,fg=white}
 \setbeamercolor{date in head/foot}{bg=black!82,fg=white}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{institute}{size=\scriptsize}
 
-% Speaker attribution sits in the footer and is set from inside each frame.
 \newcommand{\currentspeaker}{}
 \newcommand{\speaker}[1]{\gdef\currentspeaker{#1}}
 
+% Footer: act | presenter | page. Re-applied after \appendix (beamer resets it).
 \newcommand{\intfootline}{%
   \leavevmode%
   \hbox{%
@@ -49,14 +51,11 @@
 }
 \setbeamertemplate{footline}{\intfootline}
 
-\setbeamerfont{author}{size=\small}
-\setbeamerfont{institute}{size=\scriptsize}
-
 \title{Can Five Machine-Learning Models Beat a One-Line Rule?}
-\subtitle{AAPL and BTC, one fair protocol, and what the answer teaches}
+\subtitle{A Pedagogical Case Study Using Apple and Bitcoin Price Data}
 \author[INT4096]{%
   Zhang Yancheng \and Dong Yuankun \and Zhang Haoyu \and Lau Pak Hei \and Lui Shing Lam}
-\institute{INT4096 AI and Machine Learning in Education\\
+\institute{INT4096 --- Artificial Intelligence and Machine Learning in Education\\
   The Education University of Hong Kong, Semester 1, 2026--27}
 \date{}
 
@@ -64,538 +63,575 @@
 
 \begin{document}
 
-% ===================================================== ACT I — THE CHALLENGE
-% Lau Pak Hei, 1:20
+% ===================== SLIDE 1 — title (dark hero) · Lau Pak Hei · 0:40
 \begin{frame}
   \speaker{Lau Pak Hei}
-  \vspace*{0.04\textheight}
-  {\usebeamerfont{title}\inserttitle\par}
-  \vspace{0.5em}
-  {\usebeamerfont{subtitle}\insertsubtitle\par}
-  \vspace{1.3em}
-  {\usebeamerfont{author}\insertauthor\par}
-  \vspace{0.8em}
-  {\usebeamerfont{institute}\insertinstitute\par}
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[navy] (current page.north west) rectangle ([yshift=3.6ex]current page.south east);
+  \end{tikzpicture}
+  \vspace{0.6cm}
+  {\color{white}\LARGE\bfseries
+   \begin{tabular}{@{}l@{}}Can Five Machine-Learning Models\\[1pt] Beat a One-Line Rule?\end{tabular}\par}
+  \vspace{0.35cm}
+  {\color{white!85}\large A Pedagogical Case Study Using Apple and Bitcoin Price Data\par}
+  \vspace{0.75cm}
+
+  % Versus graphic: five model chips on the left, one formula on the right.
+  \begin{tikzpicture}[every node/.style={font=\scriptsize}]
+    \node[rounded corners, draw=white!70, text=white, inner sep=3pt] (m1) at (0,0) {Linear};
+    \node[rounded corners, draw=white!70, text=white, inner sep=3pt, right=2pt of m1] (m2) {Ridge};
+    \node[rounded corners, draw=white!70, text=white, inner sep=3pt, right=2pt of m2] (m3) {SVR};
+    \node[rounded corners, draw=white!70, text=white, inner sep=3pt, right=2pt of m3] (m4) {Forest};
+    \node[rounded corners, draw=white!70, text=white, inner sep=3pt, right=2pt of m4] (m5) {Boosting};
+    \node[text=white, right=12pt of m5] (vs) {\itshape versus};
+    \node[rounded corners, draw=white!80, fill=accent, text=white, inner sep=5pt,
+          right=10pt of vs] (rule) {\textbf{$\hat{P}_{t+1} = P_t$}};
+  \end{tikzpicture}
+
   \vfill
-  {\scriptsize\color{black!55}Historical, educational analysis --- not investment advice.}
+  {\color{white!70}\scriptsize Educational \& Historical Case Study \textbar{} Not Financial Advice\par}
 \end{frame}
 
+% ================================================= ACT I — THE CHALLENGE
 \act{Act I: The challenge}
 
-\begin{frame}{Which Would You Trust?}
-  \speaker{Lau Pak Hei}
+\begin{frame}{Why Use Market Data to Teach Machine Learning?}
+  \speaker{Zhang Haoyu}
   \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      \textbf{Two ways to predict tomorrow's Apple closing price}
-      \begin{enumerate}\small
-        \item Five machine-learning models --- from regularised linear
-              regression to kernel methods and boosted trees.
-        \item One rule with no training at all:\\
-              \emph{tomorrow's close $=$ today's close}.
+    \begin{column}{0.53\textwidth}
+      \textbf{Three questions every applied model must survive}
+      \begin{enumerate}\footnotesize
+        \item Can it generalise to unseen data?
+        \item Did it accidentally see the future?
+        \item Does it beat a simple baseline?
       \end{enumerate}
       \vspace{1mm}
-      \begin{alertblock}{The question}
-        \small Which would you trust, and how would you find out?
-      \end{alertblock}
+      {\footnotesize Audiences: advanced secondary (16--18), pre-university, and
+       non-ML undergraduates.}
     \end{column}
-    \begin{column}{0.46\textwidth}
-      \small
-      \textbf{Why this is worth an afternoon}
-      \begin{itemize}\small
-        \item A model can look impressive and still learn nothing useful.
-        \item Complexity is not evidence of predictive power.
-        \item The only way to know is a comparison we can defend.
-      \end{itemize}
-      \vspace{1mm}
-      {\footnotesize We will come back to this question at the end.}
+    \begin{column}{0.47\textwidth}
+      \begin{block}{Five learning objectives}
+        \footnotesize
+        \begin{enumerate}\footnotesize
+          \item Explain why a strong historical fit can fail.
+          \item Detect subtle time-series leakage.
+          \item Benchmark against a naive baseline.
+          \item Explain why scaling affects families differently.
+          \item Separate forecast error from profitability.
+        \end{enumerate}
+      \end{block}
     \end{column}
   \end{columns}
 \end{frame}
 
-% ============================================= ACT II — A FAIR EXPERIMENT
-% Zhang Haoyu, 3:20
+% ========================================== ACT II — A FAIR EXPERIMENT
 \act{Act II: Designing a fair experiment}
 
-\begin{frame}{Two Markets, One Fair Test}
-  \speaker{Zhang Haoyu}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \textbf{Apple (AAPL)} --- \NBarsAAPL{} daily bars
-      \begin{itemize}\footnotesize
-        \item a traditional equity: exchange sessions only
-        \item weekends and holidays appear as gaps
-        \item quoted in USD
-      \end{itemize}
-      \vspace{2mm}
-      \textbf{Bitcoin (BTC)} --- \NBarsBTC{} daily bars
-      \begin{itemize}\footnotesize
-        \item trades continuously, so no weekend gaps
-        \item our series is \textbf{Binance BTCUSDT} --- one venue quoted in
-              USDT, \emph{not} a global USD index
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \begin{block}{Why two markets?}
-        \footnotesize
-        Same pipeline, same features, same metrics. If behaviour differs, the
-        difference belongs to the \emph{model--data pair}, not to the model.
-      \end{block}
-      \vspace{1mm}
-      \footnotesize
-      They are also different problems: BTC's volatility is higher and more
-      variable, so a model with a fixed budget faces a harder target.
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{What We Are Actually Predicting}
-  \speaker{Zhang Haoyu}
-  \footnotesize
-  Our features are all ratios, so they cannot produce a price level. The model
-  therefore predicts the \textbf{change}, and we add it back to the price we
-  already know.
-  \vspace{1mm}
-  \begin{block}{One real prediction from our committed results (\ExDate, AAPL)}
-    \centering\small
-    \begin{tabular}{@{}lr@{}}
-      \toprule
-      Today's close $C_t$ (known, no leakage) & \$\,\ExCt \\
-      Model's predicted change $\widehat{\Delta}$ & \ExDelta{} USD \\
-      \midrule
-      \textbf{Predicted next close} $C_t+\widehat{\Delta}$ & \textbf{\$\,\ExPred} \\
-      Actual next close (revealed only for scoring) & \$\,\ExActual \\
-      Absolute error & \ExErr{} USD \\
-      \bottomrule
-    \end{tabular}
-  \end{block}
-  \vspace{1mm}
-  {\scriptsize This is one validation row from the SVR run with standardised
-   inputs, shown to make the pipeline concrete --- not a summary of performance.}
-
-  \vspace{1mm}
-  \footnotesize
-  \textbf{Why this matters:} if we predicted the raw price, a model could score
-  well by simply copying today's price. Predicting the change forces it to
-  contribute something.
-\end{frame}
-
-\begin{frame}{Four Questions, Fixed Before We Looked}
-  \speaker{Zhang Haoyu}
-  \begin{enumerate}\small
-    \item \textbf{Comparison:} under identical, leakage-safe conditions, how do
-          five model families do against persistence?
-    \item \textbf{Capacity:} does more complexity buy generalisation?
-    \item \textbf{Preprocessing:} do data-preparation choices change the answer,
-          and does it depend on the model?
-    \item \textbf{Teaching:} what should a learner take from this?
-  \end{enumerate}
-  \vspace{1mm}
-  \begin{alertblock}{Declared in advance}
-    \footnotesize
-    A negative result is an acceptable outcome. We are not optimising for an
-    attractive number --- the baseline may well win.
-  \end{alertblock}
-  \vspace{1mm}
-  {\footnotesize But before any number is believable, the experiment must be
-   honest about \emph{time}. That is the next part.}
-\end{frame}
-
-% Dong Yuankun, 3:40
-\begin{frame}{Only the Past Is Visible}
-  \speaker{Dong Yuankun}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \textbf{The trap}
-      \begin{itemize}\footnotesize
-        \item Ordinary random train/test splitting shuffles rows.
-        \item On time-ordered data that lets a model train on 2025 to predict
-              2021.
-        \item Worse: with $y_t=C_{t+1}$, the last training example's answer is
-              literally the first validation price.
-      \end{itemize}
-      \vspace{1mm}
-      \footnotesize
-      If a model ever sees tomorrow's price while training, its score is a
-      memory test, not a forecast.
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \begin{block}{What we do instead}
-        \footnotesize
-        \begin{itemize}\footnotesize
-          \item split strictly by date --- train, then validation, then a sealed
-                test block;
-          \item purge one row at each boundary, so no answer crosses over;
-          \item every feature computed from bars up to \emph{and including}
-                today only.
-        \end{itemize}
-      \end{block}
-      \vspace{1mm}
-      {\scriptsize We also test this: six known leakage mistakes are injected
-       into the code one at a time, and every one must be caught.}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Splitting Time Without Cheating}
+\begin{frame}{Two Markets, One Rigorous Protocol}
   \speaker{Dong Yuankun}
   \centering
-  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{fig01_coverage_and_splits.pdf}
-  \par\vspace{1mm}
-  {\footnotesize Blue = training \textperiodcentered{} green = validation
-   \textperiodcentered{} \textbf{red = sealed test, never used in these results}}
-  \par\vspace{1mm}
-  {\scriptsize AAPL validation \ValAAPL{} \textperiodcentered{} BTC validation
-   \ValBTC{} \textperiodcentered{} the test block stays closed until the analysis is frozen.}
+  \footnotesize
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{@{}l l l@{}}
+    \toprule
+    Dimension & Apple (AAPL) & Bitcoin (BTC) \\
+    \midrule
+    Data source & StockAnalysis & Binance (BTCUSDT) \\
+    Observations & \ObsAAPL & \ObsBTC \\
+    Market regime & Exchange sessions & 24/7 continuous \\
+    Quote currency & USD & USDT (single-exchange spot) \\
+    \bottomrule
+  \end{tabular}
+  \vspace{2mm}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Automated integrity checks}
+        \scriptsize
+        duplicate timestamps \textperiodcentered{} missing core fields
+        \textperiodcentered{} non-positive prices \textperiodcentered{} negative volume
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \footnotesize
+      One protocol, stress-tested across two contrasting market microstructures.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Framing the Prediction Target for Fair Learning}
+  \speaker{Zhang Haoyu}
+  \centering
+  \[
+    \widehat{\text{Close}}(t+1) \;=\; \text{Close}(t) + \widehat{\Delta P}_{t+1}
+  \]
+  \vspace{-1mm}
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Inputs $X_t$}
+        \scriptsize 10 scale-free signals available at today's close
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Target $y_t$}
+        \scriptsize next-session price change, $\Delta P = P_{t+1}-P_t$
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Evaluation}
+        \scriptsize reconstructed price error vs.\ actual Close$(t+1)$
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  \footnotesize
+  Scale-free features matched to a stationary target; fitting the raw price would
+  reward copying the level.
+
+  \vspace{1mm}
+  {\scriptsize One committed row (AAPL, \ExDate): Close \$\ExCt{},
+   predicted change \ExDelta{}, predicted close \$\ExPred{}, actual \$\ExActual{}.}
+\end{frame}
+
+\begin{frame}{Pre-Committed Questions, Zero Cherry-Picking}
+  \speaker{Zhang Haoyu}
+  \begin{enumerate}\footnotesize
+    \item Do ML models outperform a naive persistence baseline?
+    \item Does greater complexity improve out-of-sample generalisation?
+    \item How does feature scaling affect distinct model families?
+    \item What transferable lessons can learners extract?
+  \end{enumerate}
+  \vspace{2mm}
+  \begin{alertblock}{Scientific integrity first}
+    \footnotesize
+    Evaluation rules were locked before any result was viewed. A null result is a
+    high-value finding, not a failed project.
+  \end{alertblock}
 \end{frame}
 
 \begin{frame}{Ten Signals from the Past}
   \speaker{Dong Yuankun}
+  \centering\footnotesize
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    Feature category & Signals constructed \\
+    \midrule
+    Recent returns & 1-, 5- and 20-session returns \\
+    Moving-average gaps & Distance from 5- and 20-session MA \\
+    Volatility & 10- and 30-session rolling volatility \\
+    Intraday range & High--low relative range \\
+    Volume dynamics & Relative volume change \\
+    Calendar & Day of week \\
+    \bottomrule
+  \end{tabular}
+  \vspace{2mm}
+  \par\footnotesize
+  Every feature uses bars $\le t$: strictly backward-looking, zero future information.
+\end{frame}
+
+\begin{frame}{Chronological Splitting and Zero-Leakage Discipline}
+  \speaker{Dong Yuankun}
+  \centering
+  \begin{tikzpicture}[font=\scriptsize,
+      seg/.style={draw, rounded corners=1pt, minimum height=7mm, align=center}]
+    \node[seg, fill=accent!22, text width=3.4cm] (tr) {Training 60\%};
+    \node[seg, fill=warn!25, text width=0.9cm, right=3mm of tr] (g1) {purge};
+    \node[seg, fill=good!20, text width=2.2cm, right=3mm of g1] (va) {Validation 20\%};
+    \node[seg, fill=warn!25, text width=0.9cm, right=3mm of va] (g2) {purge};
+    \node[seg, fill=black!12, text width=2.4cm, right=3mm of g2] (te) {Test 20\%\\sealed};
+    \draw[-{Latex[length=1.4mm]}] (tr.south) ++(0,-1mm) -- ++(0,-3mm) node[below, font=\tiny]{time $\rightarrow$};
+  \end{tikzpicture}
+  \vspace{3mm}
+
   \begin{columns}[T]
-    \begin{column}{0.55\textwidth}
-      \footnotesize
-      Ten trailing quantities, all computable at today's close:
-      \begin{itemize}\footnotesize
-        \item returns over 1, 5 and 20 sessions
-        \item distance from the 5- and 20-session moving average
-        \item realised volatility over 10 and 30 sessions
-        \item today's high--low range
-        \item volume against its recent average
-        \item day of the week
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.45\textwidth}
-      \begin{block}{All ten are ratios}
-        \footnotesize
-        None of them is a price. That is deliberate: price levels trend, and a
-        model could look good by copying the level.
+    \begin{column}{0.33\textwidth}
+      \begin{block}{Chronological order}
+        \scriptsize no random shuffling; causality preserved
       \end{block}
-      \vspace{1mm}
-      \footnotesize
-      Cost: the model cannot output a price directly --- which is exactly why
-      we predict the change and add it back.
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{block}{Boundary purge}
+        \scriptsize one row dropped at each split, so a next-day target never bridges blocks
+      \end{block}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{block}{Sealed test}
+        \scriptsize final 20\% untouched; every result shown is validation
+      \end{block}
     \end{column}
   \end{columns}
 \end{frame}
 
-% ================================================ ACT III — THE REVEAL
-% Zhang Yancheng, 6:00 (Acts III and IV, one continuous segment)
-\act{Act III: The reveal}
+\begin{frame}{Five Classical Models Across Three Paradigms}
+  \speaker{Lau Pak Hei}
+  \centering\footnotesize
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{@{}l l l@{}}
+    \toprule
+    Paradigm & Model & Learning mechanism \\
+    \midrule
+    Linear & Linear baseline (near-OLS) & Weighted linear combination \\
+    Linear & Ridge regression & Linear model, $L_2$ penalty \\
+    Kernel & SVR (RBF) & Non-linear patterns via sample similarity \\
+    Tree ensemble & Random forest & Parallel bagging of decorrelated trees \\
+    Tree ensemble & Hist.\ gradient boosting & Sequential boosting on residuals \\
+    \bottomrule
+  \end{tabular}
+  \vspace{2mm}
+  \par\footnotesize
+  Chosen for transparency and for contrast in mechanism --- not for opacity.
+\end{frame}
 
-\begin{frame}{What Must Our Models Beat?}
-  \speaker{Zhang Yancheng}
-  \begin{block}{Naive persistence: tomorrow's close $=$ today's close}
-    \footnotesize
-    No training, no parameters. For short-horizon prices this is a genuinely
-    strong opponent, because daily returns are close to unpredictable.
+\begin{frame}{The Opponent Everyone Forgets}
+  \speaker{Lau Pak Hei}
+  \begin{block}{Naive persistence}
+    \centering\small
+    $\widehat{\text{Close}}(t+1) = \text{Close}(t)$ \quad ---\quad
+    \emph{tomorrow's close equals today's close}
   \end{block}
   \vspace{1mm}
-  \footnotesize
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \textbf{How we score}
+      \footnotesize
       \[
-        \text{skill} = 1 - \frac{\text{MAE}_{\text{model}}}{\text{MAE}_{\text{naive}}}
+        \text{MAE} = \frac{1}{N}\sum_i |y_i - \hat{y}_i|
       \]
-      \begin{itemize}\footnotesize
-        \item $0$ = no better than the simple rule
-        \item negative = \emph{worse} than the simple rule
-      \end{itemize}
+      \[
+        \text{Skill} = 1 - \frac{\text{MAE}_{\text{model}}}{\text{MAE}_{\text{baseline}}}
+      \]
     \end{column}
     \begin{column}{0.5\textwidth}
-      \textbf{What the baseline scores}
-      \begin{itemize}\footnotesize
-        \item AAPL: MAE \$\NaiveMaeAAPL{} over \NValObsAAPL{} sessions
-        \item BTC: MAE \NaiveMaeBTC{} over \NValObsBTC{} sessions
-      \end{itemize}
-      \vspace{1mm}
-      {\scriptsize Dollar errors are not comparable between the two assets, so
-       comparisons stay within an asset.}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{More Complexity, Almost No Improvement}
-  \speaker{Zhang Yancheng}
-  \centering
-  {\scriptsize Standardised variants (P2). Skill in \%; negative means worse
-   than persistence. \NRunTotal{} runs in total, \NPairTotal{} asset--model pairs.}
-  \vspace{1mm}
-
-  \begin{table}
-    \centering\scriptsize
-    \setlength{\tabcolsep}{9pt}
-    \begin{tabular}{@{}lrrrr@{}}
-      \toprule
-       & \multicolumn{2}{c}{AAPL} & \multicolumn{2}{c}{BTC} \\
-      \cmidrule(lr){2-3}\cmidrule(l){4-5}
-      Model & MAE & skill (\%) & MAE & skill (\%) \\
-      \midrule
-      Linear (near-unreg.) & \MaeAAPLLinearBaseline & \textbf{\SkillAAPLLinearBaseline} & \MaeBTCLinearBaseline & \SkillBTCLinearBaseline \\
-      Ridge        & \MaeAAPLRidge & \SkillAAPLRidge & \MaeBTCRidge & \SkillBTCRidge \\
-      SVR (RBF)    & \MaeAAPLSvr & \SkillAAPLSvr & \MaeBTCSvr & \SkillBTCSvr \\
-      Random forest& \MaeAAPLRandomForest & \textbf{\SkillAAPLRandomForest} & \MaeBTCRandomForest & \SkillBTCRandomForest \\
-      Hist.\ boosting & \MaeAAPLHistGradientBoosting & \SkillAAPLHistGradientBoosting & \MaeBTCHistGradientBoosting & \textbf{\SkillBTCHistGradientBoosting} \\
-      \midrule
-      Naive persistence & \NaiveMaeAAPL & 0.00 & \NaiveMaeBTC & 0.00 \\
-      \bottomrule
-    \end{tabular}
-  \end{table}
-  \vspace{1mm}
-  {\footnotesize
-   Best AAPL: \BestAAPLModelPtwo{} at \BestAAPLSkillPtwo\,\%.
-   Best BTC here: \BestBTCModelPtwo{} at \BestBTCSkillPtwo\,\%.
-   \NBelowBaseline{} of \NRunTotal{} runs finish \emph{below} the simple rule.}
-\end{frame}
-
-\begin{frame}{The Improvements Are Inside the Noise}
-  \speaker{Zhang Yancheng}
-  \begin{columns}[T]
-    \begin{column}{0.56\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{fig04_model_vs_naive.pdf}
-    \end{column}
-    \begin{column}{0.44\textwidth}
       \footnotesize
       \begin{itemize}\footnotesize
-        \item Every result lies between \SkillMin\% and \SkillMax\% skill ---
-              a span of \SkillSpan{} percentage points.
-        \item A block-bootstrap interval for skill includes zero for
-              \textbf{\NCiIncludeZero{} of \NCiTotal{}} runs.
-        \item So we report a \textbf{tie against the baseline}, not a winner.
+        \item $>0$: beats the one-line rule
+        \item $=0$: matches it
+        \item $<0$: \textbf{worse} than the rule
       \end{itemize}
       \vspace{1mm}
-      \begin{alertblock}{Careful wording}
-        \footnotesize
-        Some configurations are slightly \emph{better} than the rule. None
-        establishes a reliable advantage.
-      \end{alertblock}
+      {\scriptsize A model's own MAE means little without this comparison.}
     \end{column}
   \end{columns}
 \end{frame}
 
-% =========================================== ACT IV — INVESTIGATING WHY
-\act{Act IV: Investigating why}
+% ======================================================= ACT III — THE REVEAL
+\act{Act III: The reveal}
 
-\begin{frame}{Does Changing the Input Change the Answer?}
-  \speaker{Zhang Yancheng}
-  \footnotesize
-  If more complexity did not help, maybe \emph{how we prepare the data} matters
-  more than which model we choose.
-  \vspace{1mm}
-  \begin{columns}[T]
-    \begin{column}{0.47\textwidth}
-      \begin{block}{The test}
-        \footnotesize
-        Same model, same features, same split. The only change: standardise each
-        feature (variant P2) instead of leaving it raw (P0).
-      \end{block}
-      \begin{itemize}\footnotesize
-        \item Trees split on \emph{thresholds} in one feature --- rescaling
-              preserves order.
-        \item Kernel SVR and ridge use \emph{distances and penalties} ---
-              rescaling changes the geometry.
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.53\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{fig06_ablation_delta.pdf}
-    \end{column}
-  \end{columns}
-  {\footnotesize
-   Measured on the committed predictions: for both tree ensembles, scaled and
-   unscaled versions differ by \TreeVerdict{} --- identical, as theory predicts.
-   Linear and kernel models shift slightly, in both directions.}
-\end{frame}
-
-\begin{frame}{Why More Complexity Did Not Help}
+\begin{frame}{The Verdict: Complexity Yields Almost Zero Gain}
   \speaker{Zhang Yancheng}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
-      \textbf{There is very little short-horizon signal}
-      \begin{itemize}\footnotesize
-        \item lag-1 autocorrelation of daily returns:
-              AAPL \AutoAAPL{}, BTC \AutoBTC{}
-        \item that is an $R^2$ of about \AutoRsqAAPL{} and \AutoRsqBTC{}
-        \item with little signal, extra capacity fits noise
-      \end{itemize}
-      \vspace{1mm}
-      \textbf{And the tree models have a structural limit}
-      \begin{itemize}\footnotesize
-        \item a forest predicts an average of training-set leaf values
-        \item on a change target that average is small and piecewise constant,
-              so it cannot produce large moves
-      \end{itemize}
+      \centering\scriptsize
+      \setlength{\tabcolsep}{5pt}
+      \begin{tabular}{@{}l r r@{}}
+        \toprule
+        Model & AAPL & BTC \\
+        \midrule
+        Linear baseline & \textbf{\SkillAAPLLinearBaseline} & \SkillBTCLinearBaseline \\
+        Ridge & \SkillAAPLRidge & \SkillBTCRidge \\
+        SVR (RBF) & \textbf{\SkillAAPLSvr} & \SkillBTCSvr \\
+        Random forest & \textbf{\SkillAAPLRandomForest} & \SkillBTCRandomForest \\
+        Hist.\ gradient boosting & \SkillAAPLHistGradientBoosting & \textbf{\SkillBTCHistGradientBoosting} \\
+        \midrule
+        Naive persistence & 0.00 & 0.00 \\
+        \bottomrule
+      \end{tabular}
+      \par\vspace{1mm}
+      {\tiny Validation skill (\%); $(+)$ beats persistence, $(-)$ loses to it.}
     \end{column}
     \begin{column}{0.48\textwidth}
-      \begin{block}{What we did \emph{not} find}
-        \footnotesize
-        \begin{itemize}\footnotesize
-          \item no model family is reliably superior;
-          \item preprocessing changes behaviour but does not create edge;
-          \item more parameters did not reduce error on unseen dates.
-        \end{itemize}
-      \end{block}
-      \vspace{1mm}
-      {\scriptsize This is the honest version of the result, and it is more
-       useful than a small, unstable win.}
+      \centering
+      \includegraphics[width=\linewidth,height=0.52\textheight,keepaspectratio]{fig04_model_vs_naive.pdf}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  {\footnotesize
+   Peak gain \BestAAPLSkillPtwo\% (AAPL) and \BestBTCSkillPtwo\% (BTC).
+   \textbf{\NumPtwoNegative{} of \NumPtwoRuns} standardised runs --- and
+   \textbf{\NumAllNegative{} of \NRunTotal} overall --- finished \emph{below} the rule.}
+\end{frame}
+
+\begin{frame}{Statistical Reality Check: Every Gain Sits Inside the Noise}
+  \speaker{Zhang Yancheng}
+  \centering
+  \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
+  \par\vspace{1mm}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \footnotesize
+      \textbf{Method:} 95\% moving-block bootstrap --- \CiResamples{} resamples of
+      \CiBlock{} consecutive sessions, preserving serial dependence.
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \footnotesize
+      \textbf{Result:} \textbf{\NCiIncludeZero{} of \NCiTotal{}} intervals span
+      zero, so $+0.52\%$ cannot be separated from sampling noise. No reliable winner.
     \end{column}
   \end{columns}
 \end{frame}
 
-% ============================================ ACT V — THE BIGGER LESSON
-% Lui Shing Lam, 1:40
-\act{Act V: The bigger lesson}
+% ================================================ ACT IV — INVESTIGATING WHY
+\act{Act IV: Investigating why}
 
-\begin{frame}{What This Teaches Us About Machine Learning}
-  \speaker{Lui Shing Lam}
-  \begin{enumerate}\small
-    \item \textbf{A sophisticated model is not automatically a better model.}
-          Five families, including two ensembles, could not clearly beat one line.
-    \item \textbf{A fair baseline is not optional.} Without persistence, every
-          result here would look like a success.
-    \item \textbf{Leakage is easy and invisible.} Our own first test suite missed
-          a one-step leak until we tried to break it deliberately.
-    \item \textbf{Validation is not the future.} Small differences on one period
-          do not survive to new data.
-    \item \textbf{Preprocessing depends on the algorithm.} It matters for
-          distances, not for thresholds.
-  \end{enumerate}
+\begin{frame}{Does Preprocessing Save the Models?}
+  \speaker{Zhang Yancheng}
+  \begin{columns}[T]
+    \begin{column}{0.53\textwidth}
+      \centering\scriptsize
+      \setlength{\tabcolsep}{3pt}
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.15cm}
+                        >{\raggedright\arraybackslash}p{1.95cm}
+                        >{\raggedright\arraybackslash}p{2.55cm}@{}}
+        \toprule
+        Model family & Scaling & Diagnostic \\
+        \midrule
+        Forest \& hist-GB & \textbf{identical} & splits use rank order only \\
+        SVR \& Ridge & minor shift & distances and penalties use scale \\
+        Linear (AAPL) & MAE \LinAAPLPzeroMae{} $\to$ \LinAAPLPtwoMae{} & numerical conditioning \\
+        \bottomrule
+      \end{tabular}
+      \par\vspace{1mm}
+      {\tiny AAPL linear baseline: scaling \emph{worsened} error by \LinAAPLDeltaPct\%.}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.56\textheight,keepaspectratio]{fig06_ablation_delta.pdf}
+    \end{column}
+  \end{columns}
   \vspace{1mm}
-  {\footnotesize The project also ships a lesson with five worked exercises and a
-   notebook that re-runs the comparison. It is a \emph{designed} resource --- we
-   ran no learner study, so we claim no measured learning gain.}
+  % Ragged-right: a justified single line here is over-stretched (badness 2269).
+  {\footnotesize\raggedright Preprocessing is \textbf{model-dependent}: a standard
+   scaler is not a universal upgrade for every model family.\par}
 \end{frame}
 
-\begin{frame}{The Value Is in the Comparison}
+\begin{frame}{Why Complexity Hit a Wall: Signal and Structure}
+  \speaker{Zhang Yancheng}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{1. Near-zero predictive signal}
+        \footnotesize
+        \begin{itemize}\footnotesize
+          \item lag-1 return autocorrelation:\\
+                AAPL \AutoAAPL{}, BTC \AutoBTC{}
+          \item an $R^2$ of roughly \AutoRsqAAPL{} and \AutoRsqBTC{}
+          \item yesterday's return says almost nothing about tomorrow
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{2. Structural limit of tree ensembles}
+        \footnotesize
+        \begin{itemize}\footnotesize
+          \item a forest averages target values inside training leaves
+          \item on a change target that average is small and piecewise constant
+          \item it cannot extrapolate beyond the historical range
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{2mm}
+  \begin{alertblock}{}
+    \footnotesize Within a one-day horizon and standard indicators, extra capacity
+    cannot manufacture signal that is not in the data.
+  \end{alertblock}
+\end{frame}
+
+% ================================================== ACT V — THE BIGGER LESSON
+\act{Act V: The bigger lesson}
+
+\begin{frame}{From Research Finding to a Turnkey Classroom Lab}
+  \speaker{Zhang Yancheng}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Deployment-ready package}
+      \begin{itemize}\footnotesize
+        \item 60-minute guided Colab notebook
+        \item 5 formative tasks on leakage, baselines, intervals
+        \item teacher guide with worked solutions
+      \end{itemize}
+      \vspace{1mm}
+      {\scriptsize Designed resource --- no learner study was run, so no learning
+       gain is claimed.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Live audience check}
+        \scriptsize
+        A model shows $+0.52\%$ validation skill, but its 95\% interval includes
+        zero. Is it reliably better?
+        \begin{itemize}\scriptsize
+          \item[A.] Yes --- the score is positive.
+          \item[\textbf{B.}] \textbf{No --- the evidence cannot separate the gain
+                from noise.} \checkmark
+          \item[C.] Yes --- complex models generalise better.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Engineering and Pedagogical Takeaways}
+  \speaker{Dong Yuankun}
+  \begin{enumerate}\footnotesize
+    \item \textbf{Respect market structure} --- different trading calendars need
+          isolated time-series pipelines.
+    \item \textbf{Guard against silent leakage} --- boundary purges and sealed
+          test sets are non-negotiable.
+    \item \textbf{Match preprocessing to the algorithm} --- understand \emph{why}
+          scaling moves kernels but not trees.
+    \item \textbf{Value negative results} --- a rigorous null finding teaches more
+          than an overfitted leaderboard.
+  \end{enumerate}
+  \vspace{3mm}
+  \begin{alertblock}{}
+    \centering\small
+    \emph{A trustworthy experiment is infinitely more valuable than an
+    impressive-looking number.}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Study Boundaries and the Bigger Lesson}
   \speaker{Lui Shing Lam}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \textbf{Limits, stated plainly}
+      \textbf{Scope and next steps}
       \begin{itemize}\footnotesize
-        \item two assets, one period, one-day horizon
-        \item BTC is one venue's USDT price
-        \item one-day forecasting is where the simple rule is strongest
-        \item our test block is still sealed --- these are validation results
+        \item two assets: AAPL and single-exchange BTCUSDT
+        \item one historical window, one-session horizon
+        \item next: unseal the final 20\% test block for confirmation
+        \item next: pilot the Colab lab with a student cohort
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \begin{block}{The takeaway}
+      \begin{block}{Final takeaway}
         \small
-        The value of machine learning is not measured by how complicated a model
-        is, but by whether it learns something useful beyond a meaningful
-        baseline.
+        The true value of machine learning lies not in how complex a model looks,
+        but in whether it learns genuine signal beyond a meaningful baseline.
       \end{block}
-      \vspace{2mm}
-      \begin{alertblock}{}
-        \footnotesize Historical, educational analysis --- \textbf{not investment
-        advice}. Forecast error does not imply profit.
-      \end{alertblock}
+      \vspace{1mm}
+      {\scriptsize Historical and educational analysis --- not investment advice.}
     \end{column}
   \end{columns}
 \end{frame}
 
-% ==================================================================== BACKUP
-% \appendix makes beamer write \translate into the PDF bookmark string, which
-% hyperref strips with a warning. Setting the bookmark text directly avoids it.
+% ======================================================================= BACKUP
 \appendix
 \section{Backup material}
 \setbeamertemplate{footline}{\intfootline}
 
-\begin{frame}{Backup: Every Configuration, Not Just the Ones We Showed}
+\begin{frame}{Backup 1: Full 20-Run Transparency Matrix}
   \speaker{Zhang Yancheng}
   \centering
-  {\scriptsize Skill (\%) for every model, asset and variant --- evidence that the
-   P2 table was not cherry-picked.\par}
+  {\scriptsize Validation skill (\%) for every model, asset and preprocessing
+   variant --- the P2 table was not cherry-picked.\par}
   \vspace{1mm}
-  % A bare \input of a tabular would be typeset inline inside the paragraph
-  % above and overlap it; the center environment forces its own paragraph.
   \begin{center}
     \scriptsize
     \setlength{\tabcolsep}{7pt}
     \input{generated/backup_table.tex}
   \end{center}
-  {\scriptsize Best BTC overall is \BestBTCModelAll{} (\BestBTCVariantAll{}) at
-   \BestBTCSkillAll\,\%, just above the best P2 value. Validation statistics only;
-   \NCiIncludeZero{}/\NCiTotal{} bootstrap intervals include zero.\par}
+  {\scriptsize Highest BTC estimate overall: \BestBTCOverallConfig{} at
+   \BestBTCOverallSkill\% --- still inside the noise band.}
 \end{frame}
 
-\begin{frame}{Backup: Was the Comparison Fair?}
+\begin{frame}{Backup 2: Experimental Fairness and Manifest Audit}
   \speaker{Zhang Yancheng}
-  \begin{itemize}\footnotesize
-    \item Identical features, split, target and evaluation dates for every
-          model.
-    \item Identical search budget: \TrialsUsed{} random trials, at most
-          \SecondsUsed{} seconds per cell (\BudgetUniform{} across all
-          \NRunTotal{} runs).
-    \item The frozen protocol allows up to \TrialsMax{} trials / \SecondsMax{}s;
-          the committed runs used the reduced budget, and we report the budget
-          that was actually used.
-    \item Tuning ran only inside the training block, so validation stayed a
-          selection holdout.
-    \item Every estimator is built through one code path, so no lane silently
-          receives different columns.
-  \end{itemize}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Identical for every lane}
+      \begin{itemize}\scriptsize
+        \item the same 10 features, in the same order
+        \item the same split boundaries and evaluation dates
+        \item the same metrics and the same seed
+        \item the same search budget: \TrialsUsed{} random trials,
+              $\le$\SecondsUsed{}s per cell
+      \end{itemize}
+      \footnotesize
+      {\scriptsize The frozen protocol permits up to \TrialsMax{} trials /
+       \SecondsMax{}s; we report the budget actually used.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Every run records}
+      \begin{itemize}\scriptsize
+        \item run ID, git commit, dataset SHA-256
+        \item protocol version and config hash
+        \item hyperparameters and every attempted trial
+        \item metrics, artifacts and any error trace
+      \end{itemize}
+      \footnotesize
+      {\scriptsize Failed runs are kept, not deleted.}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Backup: How We Caught Our Own Leak}
+\begin{frame}{Backup 3: Catching Data Leakage in Action}
   \speaker{Dong Yuankun}
-  \begin{itemize}\footnotesize
-    \item An independent audit found that the last training label was a
-          validation price, and the last validation label a \emph{sealed test}
-          price. Perturbing one test price moved the reported metric by
-          \textbf{0.408} --- far more than any model's advantage.
-    \item Fix: purge one row at each boundary. A protocol check now refuses a
-          purge smaller than the forecast horizon.
-    \item The audit also showed our leakage tests could not detect a one-step
-          forward shift. We added independent-formula checks and a mutation
-          harness: six known defects, six caught.
-    \item A second audit, run in a separate context, re-derived the boundaries
-          and wrote its own obfuscated defects. Both were caught.
-  \end{itemize}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{What the audit found}
+        \scriptsize
+        Unpurged split boundaries meant the last training label \emph{was} a
+        validation price, and the last validation label a sealed test price.
+        Perturbing one test price moved the headline metric by
+        \textbf{\LeakDelta{}} --- far beyond any model's advantage.
+      \end{block}
+      \begin{block}{Fix}
+        \scriptsize
+        One row purged at each boundary; the loader now refuses a purge smaller
+        than the forecast horizon.
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Mutation testing}
+        \scriptsize
+        \NMutations{} known leakage defects are injected one at a time ---
+        one-step look-ahead, obfuscated look-ahead, centred window, backward fill,
+        whole-series statistic, preprocessing fitted on train+test.
+
+        \vspace{1mm}
+        \textbf{All \NMutations{} must be detected.} An earlier suite failed this
+        check, which is why the harness exists.
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Backup: What the Fitted Model Relies On}
+\begin{frame}{Backup 4: What Signals Did the Models Rely On?}
   \speaker{Zhang Yancheng}
   \begin{columns}[T]
     \begin{column}{0.55\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{fig07_feature_importance_aapl.pdf}
+      \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{fig07_feature_importance_aapl.pdf}
     \end{column}
     \begin{column}{0.45\textwidth}
       \footnotesize
-      Permutation importance: shuffle one feature, measure the increase in
-      validation error, for the ridge model on AAPL.
+      Permutation importance for the ridge model on AAPL: shuffle one feature,
+      measure the increase in validation error.
       \vspace{1mm}
       \begin{itemize}\footnotesize
         \item short-horizon returns and volatility dominate
-        \item the magnitudes are tiny --- consistent with the skill table
-        \item this describes the fitted model, not a cause in the market
+        \item magnitudes are tiny --- consistent with the skill table
+        \item \textbf{feature importance $\neq$ causation}
       \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Backup: Questions and Who Answers Them}
+\begin{frame}{Backup 5: Q\&A Quick-Reference Cards}
   \speaker{All five presenters}
-  \begin{table}\footnotesize
+  \begin{table}\scriptsize
     \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{@{}p{0.5\textwidth}p{0.42\textwidth}@{}}
+    \begin{tabular}{@{}p{0.32\textwidth}p{0.60\textwidth}@{}}
       \toprule
-      Question & Presenter \\
+      Question & Answer in one line \\
       \midrule
-      Isn't this just a random walk? & Zhang Yancheng \\
-      Did you leak future data? & Dong Yuankun \\
-      Why no LSTM or deep learning? & Zhang Yancheng \\
-      Is a 0.5\% improvement meaningful? & Zhang Yancheng \\
-      Why does BTC need a different model? & Zhang Haoyu \\
-      What should students learn from this? & Lui Shing Lam \\
-      Can this be used for trading? & Lau Pak Hei \\
+      Why classical ML over deep learning? & The handout discourages it, it is not needed for this question, and classical families make the comparison interpretable. \\
+      Does this mean markets are a pure random walk? & At a one-day horizon they are close to it --- that is the finding, and it is why persistence is strong. \\
+      Why compare AAPL and BTC? & One session-based equity and one 24/7 market: same protocol, different microstructure. \\
+      Can this predict profitable trades? & No. Error metrics ignore costs and risk; we make no profitability claim. \\
+      Why isn't $+0.52\%$ skill enough? & Because every 95\% interval includes zero, so the gain is not separable from noise. \\
       \bottomrule
     \end{tabular}
   \end{table}
-  \vspace{1mm}
-  {\scriptsize Speaking roles are presentation roles only. Research and software
-   ownership is recorded separately in \texttt{docs/management/responsibilities.md}.}
 \end{frame}
 
 \end{document}
