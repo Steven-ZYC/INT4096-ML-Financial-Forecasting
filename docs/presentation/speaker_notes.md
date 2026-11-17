@@ -1,5 +1,8 @@
 # Speaker Notes and Rehearsal Script
 
+**Bilingual rehearsal script (English spoken, 中文对照):**
+`docs/presentation/speaker_script_bilingual.md`
+
 **Deck:** `slides/final/INT4096_Presentation.pdf` (20 pages: 15 narrative + 5 backup)
 **Total speech:** 16:00 · **Limit:** 20:00 · **Timing table:** `timing_plan.md`
 
