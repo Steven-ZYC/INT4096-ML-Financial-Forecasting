@@ -1,7 +1,7 @@
 # Slide Storyboard — Five-Act Research Story
 
 **Bilingual rehearsal script (English spoken, 中文对照):**
-`docs/presentation/speaker_script_bilingual.md`
+`speaker_script_bilingual.md` (printable: `speaker_script_bilingual.pdf`)
 
 **Deck:** `slides/latex/main.tex` → `slides/final/INT4096_Presentation.pdf`
 **Slides:** 15 narrative + 5 backup (20 pages) · **Speech:** 16:00 of a 20:00 limit

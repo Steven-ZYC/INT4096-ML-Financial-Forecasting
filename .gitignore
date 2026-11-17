@@ -62,3 +62,9 @@ slides/latex/*.toc
 slides/latex/*.vrb
 slides/latex/*.fls
 slides/latex/*.fdb_latexmk
+
+# Generated from speaker_script_bilingual.md by scripts/build_script_pdf.py
+docs/presentation/speaker_script_bilingual.tex
+docs/presentation/speaker_script_bilingual.aux
+docs/presentation/speaker_script_bilingual.log
+docs/presentation/speaker_script_bilingual.out

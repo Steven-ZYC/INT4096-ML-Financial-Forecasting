@@ -2,7 +2,7 @@
 
 **Deck:** `slides/final/INT4096_Presentation.pdf` — 20 pages = **15 narrative slides + 5 backup**
 **Build:** `bash slides/build.sh`
-**Bilingual script:** `speaker_script_bilingual.md` (English spoken, 中文对照) (0 overfull boxes, 0 missing files)
+**Bilingual script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照) (0 overfull boxes, 0 missing files)
 **Content time:** **16:00** of speech, leaving ~4:00 inside the 20-minute limit for
 transitions, slower delivery and questions.
 
