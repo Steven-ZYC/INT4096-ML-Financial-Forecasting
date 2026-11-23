@@ -105,13 +105,13 @@ detail is in `docs/presentation/` (storyboard, timing plan, bilingual script, sp
 | Act | Slides | Content | Time |
 |---|---|---|---|
 | Opening: the high-score trap | 1–2 | The R² hook; the three questions | 1:50 |
-| I — Data | 3 | Two markets, one protocol; quality gate | 1:10 |
-| II — Processing | 4–7 | Ten features; predict the change; splits; leakage testing | 4:10 |
+| I — Data | 3 | Two markets, one protocol; quality gate | 1:05 |
+| II — Processing | 4–7 | Ten features; predict the change; splits; leakage testing | 4:15 |
 | III — Training | 8–9 | Five models; same budget and rules | 2:00 |
-| IV — Evaluation | 10–14 | Baseline and skill; results; bootstrap; scaling; why gains are small | 5:45 |
+| IV — Evaluation | 10–14 | Baseline and skill; results; uncertainty; scaling; why a simple rule is hard to beat | 5:20 |
 | V — Education | 15–16 | The 60-minute lesson; the skill to take away | 2:20 |
 
-**Formal speech: 17:15**, plus ~0:45 of handovers and slide changes and 2:00 of Q&A,
+**Formal speech: 16:50**, plus ~0:45 of handovers and slide changes and 2:00 of Q&A,
 inside the 20-minute limit.
 
 **Speakers are not yet assigned to people.** The talk is cut into five contiguous
@@ -119,11 +119,11 @@ voice blocks, so the speaking order can change without touching the deck:
 
 | Voice block | Slides | Time | Assigned to |
 |---|---|---:|---|
-| A | 1–3 | 3:00 | _to be decided_ |
-| B | 4–6 | 3:15 | _to be decided_ |
+| A | 1–3 | 2:55 | _to be decided_ |
+| B | 4–6 | 3:20 | _to be decided_ |
 | C | 7–10 | 3:50 | _to be decided_ |
-| D | 11–13 | 3:45 | _to be decided_ |
-| E | 14–16 | 3:25 | _to be decided_ |
+| D | 11–13 | 3:25 | _to be decided_ |
+| E | 14–16 | 3:20 | _to be decided_ |
 
 Every member must speak `[A]`, so all five blocks need a different person. Four handovers
 are scripted as bridge sentences in `docs/presentation/timing_plan.md`; the full spoken

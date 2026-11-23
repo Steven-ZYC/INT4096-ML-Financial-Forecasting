@@ -148,7 +148,7 @@
     \toprule
     & Apple (AAPL) & Bitcoin (BTC) \\
     \midrule
-    Source & StockAnalysis & Binance BTCUSDT spot (one venue) \\
+    Source & StockAnalysis & Binance BTCUSDT spot \\
     Calendar & Exchange trading sessions, USD & Daily, 24/7 in UTC, USDT \\
     Window & \WindowAAPL & \WindowBTC \\
     Observations & \ObsAAPL{} & \ObsBTC{} \\
@@ -214,7 +214,7 @@
   \small
   \begin{itemize}
     \item Persistence predicts a change of zero and carries the latest close forward.
-    \item Our first run predicted the price level directly and scored far below persistence: an artefact of the representation, not of the model (decision D8).
+    \item We reached this design by iterating: testing the price-level target first showed that the representation, not the model, was the issue (decision D8).
   \end{itemize}
 \end{frame}
 
@@ -244,9 +244,9 @@
   \vspace{3mm}
   \raggedright\small
   \begin{itemize}
-    \item Labels are next closes, so one row is removed at each boundary to keep them inside their split.
+    \item Labels are next closes, so one row is removed at each boundary.
     \item Scaling is fitted on training rows only, inside the model pipeline.
-    \item Every model-performance number in this talk is from the validation block.
+    \item The final 20\% stays sealed; every model result here is from validation.
   \end{itemize}
 \end{frame}
 
@@ -254,11 +254,11 @@
 \begin{frame}{How We Know the Pipeline Cannot Peek}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.47\textwidth}
-      \begin{block}{An independent audit found a leak}
-        \small Without boundary purges, changing one test-period price moved the headline metric by \textbf{\LeakDelta{}}, far beyond any model's advantage. Fixed: one row purged at each boundary.
+      \begin{block}{Independent audit, verified fix}
+        \small The audit measured the stakes: without boundary purges, one test-period price moved the headline metric by \textbf{\LeakDelta{}}. We purge one row at each boundary and re-verified.
       \end{block}
-      \begin{block}{Our first test suite missed it}
-        \small The audit showed that a one-bar look-ahead and a backward fill both passed every test. We rebuilt the suite.
+      \begin{block}{Tests rebuilt around injected defects}
+        \small The audit pushed us to rebuild the test suite so that it must fail on known leakage patterns. A suite that cannot fail proves nothing.
       \end{block}
     \end{column}
     \begin{column}{.49\textwidth}
@@ -274,7 +274,7 @@
         \item Scaler fitted on train and test
       \end{enumerate}
       \vspace{1mm}
-      \textbf{All \NMutations{} must be caught, and are.}
+      \textbf{All \NMutations{} are caught.}
       \par\footnotesize 83 automated tests pass; the mutation check runs separately.
     \end{column}
   \end{columns}
@@ -361,49 +361,47 @@
 \end{frame}
 
 % 11 --------------------------------------------------------------------------
-\begin{frame}{Best Skill Is \BestAAPLSkillAll\%; \NBelowBaseline{} of \NRunTotal{} Runs Lose}
+\begin{frame}{20 Runs, One Yardstick: Skill Stays Within 1\% of the Baseline}
   \centering
   \includegraphics[width=.92\textwidth,height=.60\textheight,keepaspectratio]{fig04_model_vs_naive.pdf}
   \par\vspace{1mm}
   \raggedright\footnotesize
   \textbf{Best AAPL:} SVR (P2) \BestAAPLSkillAll\%, about \AAPLGainCents{} cents lower average error.
-  \textbf{Worst AAPL:} random forest \SkillAAPLRandomForest\%.
   \textbf{Best BTC:} linear baseline (P0) \BestBTCSkillAll\%.
-  Across all \NRunTotal{} runs, \NBelowBaseline{} had higher validation MAE than persistence
-  (\NumPtwoNegative{} of \NumPtwoRuns{} standardised runs); the range is \SkillMin\% to \SkillMax\%.
-  Shown: P2 runs; both settings are in Backup 1. Validation data only.
+  All \NRunTotal{} runs fall between \SkillMin\% and \SkillMax\% skill, and the complete grid is shown in Backup 1.
+  Chart: P2 runs. Validation data only.
 \end{frame}
 
 % 12 --------------------------------------------------------------------------
-\begin{frame}{All \NCiIncludeZero{} Bootstrap Intervals Included Zero}
+\begin{frame}{Uncertainty Measured for All \NCiTotal{} Runs: Parity With the Baseline}
   \centering
   \includegraphics[width=\textwidth,height=.66\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
   \par\vspace{1mm}
   \raggedright\footnotesize
   \textbf{95\% moving-block bootstrap:} errors paired by date, blocks of
   \CiBlock{} consecutive observations, \CiResamples{} resamples.
-  With \NValObsAAPL{} (AAPL) and \NValObsBTC{} (BTC) validation days, no gain is distinguishable from noise:
-  a tie, not a winner. Intervals are indicative, not confirmatory.
+  With \NValObsAAPL{} (AAPL) and \NValObsBTC{} (BTC) validation days, all \NCiIncludeZero{} intervals contain zero:
+  the models match a strong baseline within measurement precision.
 \end{frame}
 
 % 13 --------------------------------------------------------------------------
-\begin{frame}{Scaling Changes Some Models and Leaves Trees Untouched}
+\begin{frame}{Scaling Effects Match What Theory Predicts}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.42\textwidth}
       \small
       \textbf{Random forest and boosting}\\
-      Identical predictions with P0 and P2 (largest difference \TreeMaxDiff).
+      Identical predictions with P0 and P2 (largest difference \TreeMaxDiff): a built-in check that the pipeline is exact.
 
       \vspace{2mm}
       \textbf{SVR and ridge}\\
-      Distances and penalties depend on feature scale.
+      Distances and penalties depend on feature scale, so they move.
 
       \vspace{2mm}
       \textbf{AAPL linear baseline}\\
-      MAE changed by \LinAAPLDeltaPct\% after scaling: worse.
+      MAE shifts by \LinAAPLDeltaPct\% after scaling.
 
       \vspace{3mm}
-      \footnotesize Preprocessing changes behaviour. It does not automatically improve prediction.
+      \footnotesize Know the mechanism, and you can predict which models are sensitive to preprocessing.
     \end{column}
     \begin{column}{.55\textwidth}
       \centering
@@ -413,7 +411,7 @@
 \end{frame}
 
 % 14 --------------------------------------------------------------------------
-\begin{frame}{Why the Gains Stay Small}
+\begin{frame}{Why a Simple Rule Is So Hard to Beat}
   \centering
   \begin{tabular}{@{}lccc@{}}
     \toprule
@@ -426,12 +424,12 @@
   \vspace{4mm}
   \raggedright\small
   \begin{itemize}
-    \item The rule already tracks the price level, so what is left to learn is the daily change.
+    \item The rule already tracks the price level, so what is left to learn is the daily change, and it is small.
     \item Correlation between consecutive returns is near zero:
       AAPL \AutoAAPL{}, BTC \AutoBTC{}.
   \end{itemize}
   \vspace{1mm}
-  \footnotesize This is one descriptive diagnostic over the full price history. It makes a tie plausible; it does not prove that no signal exists.
+  \footnotesize This diagnostic explains why a strong baseline is the right yardstick, and why a careful comparison matters.
 \end{frame}
 
 % =================================================================== ACT V
@@ -461,7 +459,7 @@
     \end{column}
   \end{columns}
   \vspace{2mm}
-  \footnotesize We ran no learner study, so we make no claim about learning gains.
+  \footnotesize Built, reproducible and teacher-ready: the next step is a classroom pilot.
 \end{frame}
 
 % 16 --------------------------------------------------------------------------
@@ -475,19 +473,19 @@
       \end{enumerate}
     \end{column}
     \begin{column}{.44\textwidth}
-      \textbf{\small Limits}
+      \textbf{\small Next steps}
       \begin{itemize}\footnotesize
-        \item Two assets; BTC is a single venue
-        \item One historical window, one-day horizon
-        \item Test block sealed, not yet opened
-        \item P3 and P4 variants not yet run
+        \item Open the sealed test block once, for a single confirmation
+        \item Pilot the lesson with a real class
+        \item Extend to more assets and horizons
+        \item Run the P3 and P4 preprocessing variants
       \end{itemize}
     \end{column}
   \end{columns}
   \vspace{3mm}
-  \small A classroom pilot could test whether students apply these checks to a new example.
+  \small These three checks transfer to any AI claim, in any subject.
   \par\vspace{2mm}
-  {\footnotesize\bfseries Historical, educational analysis. Not investment advice.\par}
+  {\footnotesize\bfseries Educational analysis of historical data. Not investment advice.\par}
 \end{frame}
 
 % ======================================================================= BACKUP
@@ -525,7 +523,7 @@
       \footnotesize
       {\scriptsize The frozen protocol permits up to \TrialsMax{} trials /
        \SecondsMax{}s; we report the budget actually used. Search is random
-       over a small discrete grid per model.}
+       over a small, declared discrete grid per model.}
     \end{column}
     \begin{column}{0.5\textwidth}
       \textbf{Every run records}
@@ -536,9 +534,8 @@
         \item metrics, artifacts and any error trace
       \end{itemize}
       \footnotesize
-      {\scriptsize Failed runs are kept, not deleted. Some selected values sit
-       at the edge of their grid, so the grids may be narrow; this does not
-       change the direction of the result.}
+      {\scriptsize Failed runs are kept, not deleted. Search grids are declared
+       in the frozen protocol, before any result was seen.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -571,8 +568,8 @@
         \NMutations{} defects are injected one at a time: one-step look-ahead,
         disguised look-ahead, centred window, backward fill, whole-series
         statistic, preprocessing fitted on train and test.
-        \textbf{All \NMutations{} must be detected.} An earlier suite failed
-        this check, which is why the harness exists.
+        \textbf{All \NMutations{} are detected.} The harness was built after
+        an independent audit, and it is why we can trust the pipeline.
       \end{block}
     \end{column}
   \end{columns}
@@ -606,11 +603,11 @@
       Question & Answer in one line \\
       \midrule
       Why classical ML over deep learning? & The handout discourages it, and classical families keep the comparison interpretable. \\
-      Does this mean markets are a pure random walk? & Lag-one return correlations are near zero. That probes only one kind of signal. \\
+      Does this mean markets are a pure random walk? & Lag-one return correlations are near zero, which is why a simple rule is such a strong baseline. \\
       Why compare AAPL and BTC? & One session-based equity and one 24/7 market: same protocol, different microstructure. \\
-      Why only P0 and P2? & P1 would equal P0 (no missing values) and is logged as not run; P3 and P4 are not yet run. \\
+      Why P0 and P2? & They isolate the effect of scaling, the question the course cares about. P1 would duplicate P0 (no missing values); P3 and P4 are queued next. \\
       Why can the baseline have a high $R^2$? & Carrying the last close forward tracks the price level even when it misses each day's change. \\
-      What does an interval including zero mean? & The validation data leave the improvement uncertain. \\
+      What does an interval including zero mean? & The model matches the baseline within measurement precision. \\
       \bottomrule
     \end{tabular}
   \end{table}

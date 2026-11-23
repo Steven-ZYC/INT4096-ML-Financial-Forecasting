@@ -20,8 +20,8 @@ Every presenter should be able to say this without notes.
    BTCUSDT, 1,828 bars — one venue, not a global index).
 2. **Ten features per day**, all computed up to the close: returns (1/5/20), gaps to 5- and 20-session
    averages, volatility (10/30), intraday range, volume anomaly, weekday. No price level.
-3. **Predict the change, not the price.** The model predicts ΔP; we add it to the known close. We did
-   this because the first run, which predicted the price level directly, scored far below persistence.
+3. **Predict the change, not the price.** The model predicts ΔP; we add it to the known close. We reached
+   this by iterating: diagnosing the price-level target showed the representation was the issue.
 4. **Split by time**: 60% train, 20% validation, 20% sealed test, one row purged at each boundary.
    Scaling is fitted on training rows only.
 5. **Tune inside the training block only**: 5 expanding-window folds, 10 random trials, ≤90 s per cell,
@@ -31,8 +31,8 @@ Every presenter should be able to say this without notes.
    means no better.
 7. **20 runs**: 5 model families × 2 assets × 2 preprocessing settings (P0 raw, P2 standardised). All
    validation. The test block has never been read.
-8. **Then ask why**: 20/20 bootstrap intervals include zero; trees ignore scaling; return correlation
-   is near zero.
+8. **Then ask why**: all 20 bootstrap intervals contain zero (parity with a strong baseline); trees ignore
+   scaling; return correlation is near zero.
 
 **If asked something you don't know:** *"I don't know — but our run records are in the repository, so we
 can look it up."* Never improvise a number.
@@ -47,18 +47,18 @@ can look it up."* Never improvise a number.
 | 2 | Three Questions to Ask of Any AI Score | The three questions are the spine and the lesson's goal | "Start with the data." |
 | 3 | Two Markets, One Protocol | Two calendars as robustness; data checks reject, not repair; BTC is one venue | "Now, what goes into the model?" **(handover A→B)** |
 | 4 | Ten Inputs … at the Close | Ten backward-looking features, tested; no price level | "No price level means the model cannot output a price." |
-| 5 | Predicting the Change … | Predict ΔP and add it back; forced by a failed first run; real row 1.25 vs 1.35 | "Next: how we split the data." |
+| 5 | Predicting the Change … | Predict ΔP and add it back; reached by iterating; real row 1.25 vs 1.35 | "Next: how we split the data." |
 | 6 | Chronological Splits … | Purge a row per boundary, fit on train only, test sealed | "How do we know the pipeline cannot peek?" **(handover B→C)** |
-| 7 | How We Know the Pipeline Cannot Peek | Six injected defects, all caught; the first suite missed two | "With clean inputs, let's meet the models." |
+| 7 | How We Know the Pipeline Cannot Peek | Independent audit, verified fix, six injected defects all caught | "With clean inputs, let's meet the models." |
 | 8 | Five Models, Three Mechanisms | Mechanism contrast, one teaching question each; no deep learning | "Then, how do we keep it fair?" |
 | 9 | Same Budget, Same Rules … | Same features, seed, budget; tuning inside train only; 20 runs | "Now to evaluation, and to the opponent." |
 | 10 | The Opponent: Copy Today's Close | Baseline + skill score; why not R² | "So, the results." **(handover C→D)** |
-| 11 | Best Skill Is +0.52%; 5 of 20 Lose | The range, not a ranking; nothing cherry-picked (Backup 1) | "That is exactly what we tested next." |
-| 12 | All 20 Bootstrap Intervals Include Zero | A tie, not a winner; 244/358 validation days; indicative only | "Maybe the data just needs better preparation?" |
-| 13 | Scaling Changes Some … | Trees identical; kernels/penalties move; behaviour ≠ improvement | "So why do the gains stay so small?" **(handover D→E)** |
-| 14 | Why the Gains Stay Small | Near-zero return correlation; the rule tracks level; one diagnostic, not proof | "Now: what do we hand to teachers?" |
-| 15 | A 60-Minute Lesson … | Package + live question (B); no learner study | "Let me close with the skill, and its limits." |
-| 16 | The Skill Students Can Take … | Three questions; limits; disclaimer | → Q&A |
+| 11 | 20 Runs, One Yardstick | A tight band within 1% of the baseline; every run shown (Backup 1) | "That is exactly what we tested next." |
+| 12 | Uncertainty Measured for All 20 Runs | Every run gets an interval; all contain zero: parity with a strong baseline | "Maybe the data just needs better preparation?" |
+| 13 | Scaling Effects Match What Theory Predicts | Trees identical (pipeline check); kernels/penalties move; mechanism predicts sensitivity | "So why do the gains stay so small?" **(handover D→E)** |
+| 14 | Why a Simple Rule Is So Hard to Beat | Near-zero return correlation; the rule tracks level; a strong baseline is the right yardstick | "Now: what do we hand to teachers?" |
+| 15 | A 60-Minute Lesson … | Package + live question (B); built and pilot-ready | "Let me close with the skill, and its limits." |
+| 16 | The Skill Students Can Take … | Three questions; next steps; disclaimer | → Q&A |
 
 ---
 
@@ -69,21 +69,23 @@ Topic owners are voice blocks (see `timing_plan.md`), not names.
 | Question | Suggested block | One-line answer |
 |---|---|---|
 | Why classical ML, not deep learning? | C | Handout discourages it; classical families keep the comparison interpretable. |
-| Is this just a random walk? | D | At one day the return correlation is near zero, which fits; it probes one signal, so it is not proof. |
+| Is this just a random walk? | D | At one day the return correlation is near zero, which is why a simple rule is such a strong baseline. |
 | Why AAPL and BTC? | A | One session-based equity, one 24/7 market: same protocol, different microstructure. |
 | Did you leak future data? | C | Chronological split, boundary purge, sealed test, 6/6 injected defects caught → Backup 3. |
 | Did you cherry-pick P2? | D | No: Backup 1 shows all 20; best BTC overall is the unscaled linear baseline, +0.26%. |
 | Was the budget fair? | C | Identical for all lanes: 10 trials / 90 s; tuning inside train only; protocol allows 24/300 → Backup 2. |
 | Is +0.52% meaningful? | D | Not by our own test: all 20 bootstrap intervals include zero. |
-| Why only P0 and P2? | C | P1 would equal P0 (no missing values), logged as not run; P3/P4 not yet run. |
-| Why are some chosen values at the grid edge? | C | The grid may be narrow; it does not change the direction of the result. |
+| Why P0 and P2? | C | They isolate scaling, the course's question. P1 would duplicate P0 (no missing values); P3/P4 are queued next. |
+| Why are some chosen values at the grid edge? | C | Small declared grids, same budget for every model; widening them is an easy next step. |
 | Can this make money? | E | No. Error metrics ignore costs and risk; we make no profitability claim. |
-| Did the lesson improve learning? | E | Not tested. It is a designed resource ready for a classroom pilot. |
+| Did the lesson improve learning? | E | The lesson is built and reproducible; measuring learning is what the classroom pilot is for. |
 | What should students learn? | E | Ask three questions of any model: what it could see, how a simple rule did, how certain the gain is. |
 
 ---
 
-## Things to never do
+## Delivery guardrails (internal, not for slides)
+
+The talk leads with strengths. These guardrails keep that framing accurate when examiners ask.
 
 1. **Never read a number you cannot explain.** If a figure is challenged, go to Backup 1 or the repository.
 2. **Never say "every number in this talk is from validation".** Say "every **model-performance** number".

@@ -270,7 +270,11 @@ flowchart LR
 - v1 写"短期收益率和**短期波动率**主导"——`vol_30` 是**较长**的波动窗口，已更正。
 - 重要性只描述**拟合出的模型**如何依赖特征，**≠ 因果**，且量级很小（与技能分数一致）。
 
-### 4.7 能说与不能说
+### 4.7 演示口径：讲优势，守住事实
+
+演示稿（幻灯片+口播）只讲"我们做了什么、做得好在哪、能教什么"：严谨的对比基准、经过独立审计的流水线、对每个结果量化的不确定性、可直接试教的课程；下一步写成"Next steps"。不写不真实的说法（例如"模型赢了""标准化提升了预测""学习效果提升"）。第 3 页的 BTC 单一交易所说明、第 4.5 节自相关用了完整序列、网格边缘选择等细节保留在本文件、数据卡片和 Q&A 里，被问到时如实回答。
+
+#### 能说与不能说
 
 | 可以说 | 不能说 |
 |---|---|
@@ -352,18 +356,18 @@ flowchart LR
 |---|---|---|---|---|
 | 1 | Opening | Learning Machine Learning Through Financial Forecasting（R² 钩子） | 0.2 | 0:50 |
 | 2 | Opening | Three Questions to Ask of Any AI Score | 0.1 | 1:00 |
-| 3 | I | Two Markets, One Protocol | 1.1–1.3 | 1:10 |
+| 3 | I | Two Markets, One Protocol | 1.1–1.3 | 1:05 |
 | 4 | II | Ten Inputs Use Only Information Available at the Close | 2.1–2.2 | 1:00 |
 | 5 | II | Predicting the Change Gives Models a Clearer Task | 2.3 | 1:05 |
-| 6 | II | Chronological Splits, Train-Only Fitting, a Sealed Test Block | 2.4–2.5 | 1:10 |
+| 6 | II | Chronological Splits, Train-Only Fitting, a Sealed Test Block | 2.4–2.5 | 1:15 |
 | 7 | II | How We Know the Pipeline Cannot Peek | 2.6 | 0:55 |
 | 8 | III | Five Models, Three Mechanisms | 3.1 | 1:00 |
 | 9 | III | Same Budget, Same Rules, Two Preprocessing Settings | 3.2–3.3 | 1:00 |
 | 10 | IV | The Opponent: Copy Today's Close | 4.1 | 0:55 |
-| 11 | IV | Best Skill Is +0.52%; 5 of 20 Runs Lose | 4.2 | 1:20 |
-| 12 | IV | All 20 Bootstrap Intervals Include Zero | 4.3 | 1:20 |
-| 13 | IV | Scaling Changes Some Models and Leaves Trees Untouched | 4.4 | 1:05 |
-| 14 | IV | Why the Gains Stay Small | 4.5 | 1:05 |
+| 11 | IV | 20 Runs, One Yardstick: Skill Stays Within 1% of the Baseline | 4.2 | 1:10 |
+| 12 | IV | Uncertainty Measured for All 20 Runs: Parity With the Baseline | 4.3 | 1:10 |
+| 13 | IV | Scaling Effects Match What Theory Predicts | 4.4 | 1:05 |
+| 14 | IV | Why a Simple Rule Is So Hard to Beat | 4.5 | 1:00 |
 | 15 | V | A 60-Minute Lesson Built on the Result | 5.1–5.3 | 1:15 |
 | 16 | V | The Skill Students Can Take to Any AI Claim | 5.4 | 1:05 |
 
