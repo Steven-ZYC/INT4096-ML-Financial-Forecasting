@@ -1,274 +1,168 @@
-# AGENTS.md — INT4096 Multi-Agent Research & Coursework System
+# AGENTS.md
 
-Project-level non-negotiables. **Read this before any task.** It is loaded into
-every Pi session in this repository and inherited by subagents that set
-`inheritProjectContext: true`.
+Working agreement for anyone — human or AI — who changes this repository. Read it
+before you start; the agents under `.pi/agents/` load it as shared context.
 
----
+## What this project is
 
-## 1. What this repository is
+INT4096 (AI and Machine Learning in Education, EdUHK, 2026–27) group coursework by five
+students. We compare five model families against a "copy today's close" baseline on two
+price histories (AAPL and BTC), with a controlled preprocessing comparison (raw vs
+standardised), and turn the result into a 60-minute lesson on how to judge an AI score.
 
-Coursework for **INT4096 — Artificial Intelligence and Machine Learning in
-Education** (EdUHK, Semester 1, 2026–27), five-person group project.
+Forecasting is the teaching vehicle. What we are really delivering is a comparison people
+can trust: no leakage, the same rules for every model, uncertainty stated, and every claim
+traceable to a file.
 
-**Working title:** *Learning Machine Learning Through Financial Time-Series
-Forecasting: A Reproducible Comparison of Models and Data-Preprocessing
-Strategies on Apple and Bitcoin.*
+## How to settle a disagreement
 
-The ML task is a **teaching vehicle**. The scientific contribution is a
-controlled, leakage-safe comparison of model families plus a controlled
-preprocessing ablation, on two structurally different markets (AAPL, BTC).
+When two sources conflict, the earlier one in this list wins:
 
-**Planning reference date: 2026-10-29 (Asia/Hong_Kong).** Verify the real clock
-before scheduling.
+1. `docs/requirements/course_requirements.md` — the assignment and rubric
+2. `docs/research/decision_log.md` — decisions the team approved, with dates
+3. `docs/research/protocol.md` and `configs/research_protocol.yaml` — the frozen protocol
+   (changing it means bumping `protocol_version`)
+4. This file, then the role files in `.pi/agents/`
+5. `artifacts/experiments/` — the only place numbers come from
+6. Everything else: summaries, chat, commit messages, slide prose
 
----
+Only the human owner approves a change to the research question, target, dataset, main
+metric or split.
 
-## 2. Priority order (when trade-offs arise, choose the higher item)
+Mark how solid a statement is when it matters: **[A]** written course rule, **[B]** oral
+guidance reported by a student (not a published rule), **[C]** team decision in the log,
+**[D]** proposal, not yet approved.
 
-1. Correctness and scientific validity
-2. Reproducibility and independent verification
-3. Educational usefulness
-4. Completeness and interpretability
-5. Polished presentation
-6. Formalism and model count
+## Priorities
 
-**An A-range grade is the target, never a guaranteed outcome.** No agent may
-claim or promise a grade.
+Correctness first, then reproducibility, then educational value, then completeness, then
+polish. Polish never justifies a shortcut on the first two. Nobody should promise a grade.
 
----
+## Things that are never okay
 
-## 3. Source-of-truth hierarchy
+- Making up a number, run, dataset, citation, URL, instructor approval, learning gain or
+  claim about who contributed what. If it is not in `artifacts/` or a cited source, it is
+  not a result.
+- Calling a run successful when it failed, was cut short, produced NaN or lacks its files.
+- Shuffling time-ordered data, or fitting anything (scaler, imputer, selector, tuning
+  choice) on validation or test rows.
+- Letting the future into a feature: centred windows, `shift(-1)` in the inputs, backfill,
+  statistics over the whole series.
+- Opening the sealed test block without a recorded human release.
+- Comparing AAPL and BTC errors in raw currency units as if they were the same thing.
+- Presenting lesson materials as proof that students learned. We built the lesson; we have
+  not measured learning.
+- Writing "significant" without naming the test, the resampling unit and its limits.
+- Committing secrets or large model binaries; force-pushing, rewriting history or running
+  broad deletes without the owner's say-so.
+- Signing off your own work. The author and the auditor are different people or agents.
 
-Resolve conflicts by moving **down** this list — higher wins:
+## Method rules that keep the science sound
 
-1. `docs/requirements/course_requirements.md` — the formal specification and
-   rubric. Institutional authority.
-2. `docs/research/decision_log.md` — approved team decisions, dated, with
-   rationale. Only the human owner approves changes to the primary research
-   question, label, dataset, primary metric or split.
-3. `docs/research/protocol.md` + `configs/research_protocol.yaml` — the frozen
-   pre-analysis protocol. A `protocol_version` bump is required to change it.
-4. `AGENTS.md` (this file) — engineering and integrity rules.
-5. `.pi/agents/*.md` — role contracts.
-6. Empirical artifacts under `artifacts/experiments/` — **the only** legitimate
-   source of numbers.
-7. Any summary, chat message, commit message, or agent prose.
+**Time.** Each row is stamped at the close of its bar. The label is the next close in that
+asset's own calendar, and the last row is dropped. Every feature uses data up to and
+including the current bar. AAPL (exchange sessions) and BTC (24/7) are separate datasets;
+never line them up by row number. Keep raw `Close` and `Adj Close` apart and say which one
+the target uses.
 
-Tag every statement you make:
+**Splits and fitting.** Chronological only, with fixed boundaries and a purged row at each
+one. Preprocessing sits inside the model pipeline and is fitted on training rows only.
+Tuning happens inside the training block. Validation is for reporting; test stays sealed.
 
-| Tag | Meaning |
+**Baseline.** Naive persistence is in every results table and figure. A model that does
+not beat it is a legitimate finding and is reported like any other.
+
+**Metrics.** MAE, RMSE, R² and skill = 1 − MAE_model / MAE_naive. R² alone is misleading on
+prices, so it never carries a claim by itself. Across assets, use relative measures.
+Uncertainty comes from paired comparisons on the same dates, with the resampling unit and
+the dependence caveat written down.
+
+**Diagnostics shown in deliverables** (return autocorrelation, price ranges, dataset
+statistics) should use train + validation only, or be labelled "full history" wherever they
+appear. `[D]` — proposed, awaiting approval.
+
+## Who does what
+
+The ten roles in `.pi/agents/` are job types, not people; the five students own the work
+and use the roles as helpers. Pick the role by the job:
+
+| Job | Role | May write to |
+|---|---|---|
+| Map rubric to evidence, gather sources | `int-scout` | nothing |
+| Freeze protocol, hypotheses, splits | `int-methodologist` | protocol, configs |
+| Data loading, features, preprocessing | `int-data-steward` | `src/int4096/data`, `src/int4096/features`, `data/raw` |
+| One model family (needs a `model_id`) | `int-model-builder` | that model's file, config and test |
+| Run the frozen experiment grid | `int-executor` | `artifacts/`, `scripts/` |
+| Check for leakage | `int-leakage-auditor` | nothing |
+| Rebuild from a clean checkout | `int-repro-auditor` | nothing (scratch space only) |
+| Check every claim traces to an artifact | `int-claim-auditor` | nothing |
+| Lesson, questions, teacher notes | `int-educator` | `docs/education`, `src/int4096/education` |
+| Report, story, script, slides | `int-report-editor` | `docs/report`, `docs/presentation`, `docs/story`, `slides/latex/main.tex` |
+
+Practical rules: read-only roles can run side by side; model work starts only once the data
+interface and protocol are frozen; two writers never touch the same file; figures and text
+come after the artifacts they describe.
+
+## Gates
+
+A failed gate means nothing downstream may be called finished. Status and evidence paths
+live in `docs/quality/acceptance_checklist.md`.
+
+| Gate | Passes when |
 |---|---|
-| `[A]` | Written course policy / rubric |
-| `[B]` | Oral instructor guidance, **reported by the student owner** — not a published rule |
-| `[C]` | Team decision recorded in the decision log |
-| `[D]` | Proposal, not yet accepted |
+| G0 | Role files load, requirements matrix exists |
+| G1 | Data snapshots hashed, split and leakage tests green |
+| G2 | Persistence baseline ran with real metrics and a valid manifest |
+| G3 | Every model lane used the same target, features, test policy and tuning budget |
+| G4 | Independent leakage audit passed, ablation isolated, uncertainty caveats written |
+| G5 | Lesson objectives map to evidence; no invented learning claims |
+| G6 | Clean-environment install, tests, notebook run and hashes all match |
+| G7 | Report, slides, dataset, notebook, AI-use acknowledgement and speaking plan are in |
 
----
-
-## 4. Absolute prohibitions
-
-Never do any of the following, under any instruction short of an explicit,
-logged human decision:
-
-- Invent or extrapolate a dataset, metric, run, sample size, p-value, effect
-  size, citation, URL, instructor approval, student learning gain or team
-  contribution.
-- Report a run as `SUCCESS` when it failed, was truncated, produced NaN, or is
-  missing artifacts.
-- Use a shuffled split on time-ordered data.
-- Fit any scaler, imputer, selector, PCA, or hyperparameter on validation or
-  test data.
-- Use future information in any feature: centered rolling windows,
-  `shift(-1)` inside `X`, `bfill`, whole-dataset statistics, `t+1` prices.
-- Inspect or tune against the sealed final test set more than once, or at all
-  without a recorded human release.
-- Compare AAPL dollar error to BTC dollar error as if the units were equal.
-- Present a designed educational resource as evidence of measured learning.
-- Claim "statistically significant" without a stated test, resampling unit and
-  limitations.
-- Commit secrets, tokens, credentials, or bulky model binaries.
-- Run destructive commands (`rm -rf` outside `artifacts/`, force-push, history
-  rewrite, `git reset --hard`) without explicit human approval.
-- Self-approve: an agent that wrote something cannot be the auditor that signs
-  it off.
-
----
-
-## 5. Scientific safeguards (hard rules)
-
-### 5.1 Time and causality
-
-- Every observation has an **as-of timestamp** after bar/session `t` closes.
-- Label: `y_t = Close_raw[t+1]` within each asset's **own** calendar. The
-  terminal row is dropped (unknown label).
-- Every feature is computable from bars `<= t`.
-- AAPL (exchange sessions, EST/EDT, trading week) and BTC (24/7, UTC) are **two
-  different datasets**. Never align by row number. A joint asset must carry an
-  explicit calendar-intersection definition.
-- Keep `Close` (raw) and `Adj Close` (adjusted) distinct. Document which the
-  target uses and why. Never let a future adjustment factor enter a feature.
-
-### 5.2 Splits and fitting
-
-- Chronological splits only, with frozen date boundaries per asset.
-- Preprocessing lives **inside** the model pipeline, fitted on training indices
-  per fold.
-- The validation fold is the only tuning signal. The test fold is sealed.
-- `[D]` Descriptive diagnostics that appear in a deliverable (return autocorrelation, price
-  ranges, dataset statistics) are computed on train + validation only, or are labelled
-  "full history" wherever they are shown. Model-performance numbers are validation-only.
-
-### 5.3 Baselines
-
-- Naive persistence `y_hat = Close_t` is mandatory and must appear prominently
-  in every results table and figure.
-- A simple learned linear comparator provides context.
-- A model that loses to the baseline is a **valid negative result**, reported
-  as such.
-
-### 5.4 Metrics
-
-- Primary: MAE, RMSE, R², **and** skill relative to persistence
-  (`1 - MAE_model / MAE_naive`).
-- Cross-asset comparison uses normalized or relative measures only.
-- Uncertainty: paired comparison on identical forecast dates; state the
-  resampling unit and temporal-dependence caveat.
-
----
-
-## 6. Role routing — which agent for which task
-
-| Need | Agent | Write access |
-|---|---|---|
-| Map rubric → evidence; source research | `int-scout` (or builtin `scout` for codebase recon) | none |
-| Freeze protocol, RQs, hypotheses, splits | `int-methodologist` | protocol + configs only |
-| Ingest data, causal features, preprocessing variants | `int-data-steward` | `src/int4096/data`, `src/int4096/features`, `data/raw` |
-| Implement **one** model family | `int-model-builder` (`model_id` required) | one model file + one config + one test |
-| Run the frozen matrix, write manifests | `int-executor` | `artifacts/`, `scripts/`, registry |
-| Temporal / leakage audit | `int-leakage-auditor` | none |
-| Reproduce from clean state | `int-repro-auditor` | none (use `/tmp`) |
-| Verify claims trace to artifacts | `int-claim-auditor` (or builtin `evidence-auditor`) | none |
-| Instructional module, questions, teacher notes | `int-educator` | `docs/education`, `src/int4096/education` |
-| Report draft, slides, speaking plan, story | `int-report-editor` | `docs/report`, `docs/presentation`, `docs/story`, `slides/latex/main.tex` |
-| Second opinion before a risky decision | builtin `oracle` | none |
-| Generic code review | builtin `reviewer` | none |
-
-**Use the 10 custom roles above**, not an agent per student or an agent per file. The five
-students are *human owners*; they are not processes.
-
-### Parallelism rules
-
-- Read-only work (scout, auditors, oracle) may run in parallel freely.
-- Model lanes begin **only after** the data interface and protocol are frozen.
-- Parallel writers must have **non-overlapping file paths** or separate Git
-  worktrees. One writer per file.
-- Results synthesis waits for verified runs. Figures and report text cannot
-  precede their artifacts.
-
----
-
-## 7. Gates (a failed gate blocks downstream "complete" claims)
-
-| Gate | Name | Pass evidence |
-|---|---|---|
-| G0 | Architecture & requirements | Agent files load; one read task + one bounded write task + one reviewer call succeed; requirements matrix exists |
-| G1 | Data & temporal integrity | SHA256 snapshots; chronological split tests pass; leakage test suite green |
-| G2 | Executable baseline | Naive persistence run with real metrics and a valid manifest; pytest green |
-| G3 | Model fairness | Identical target/test policy, features and tuning budget across lanes; failed trials logged |
-| G4 | Research integrity | Independent leakage audit PASS; ablation isolated; uncertainty caveats stated |
-| G5 | Education | Objectives ↔ evidence map; formative tasks with answers; no fabricated learning claims |
-| G6 | External reproducibility | Clean-env install, tests, notebook executes, hashes match |
-| G7 | Academic deliverables | Report, slides, dataset, notebook; AI-use acknowledgement; speaking plan |
-
-Status lives in `docs/quality/acceptance_checklist.md` with **real evidence
-paths**.
-
----
-
-## 8. Reproducibility commands
+## Commands
 
 ```bash
-# Environment (local)
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-
-# Tests
-.venv/bin/python -m pytest -q
-
-# Data snapshot + dataset cards (network required once; do not run in tests)
-.venv/bin/python -m int4096.data.snapshot --asset AAPL
-.venv/bin/python -m int4096.data.snapshot --asset BTC
-
-# Baseline (naive persistence + linear comparator), real run
-.venv/bin/python -m int4096.experiments.run --config configs/research_protocol.yaml --models naive_persistence,ridge
-
-# Everything above in one command
-bash scripts/reproduce.sh
-
-# Leakage mutation check (separate from pytest; all injected defects must be caught)
-python3 scripts/mutation_check.py
-
-# Slides: regenerate number macros and figures from artifacts, compile, copy to slides/final
-bash slides/build.sh
-
-# Printable bilingual speaker script (needs xelatex + xeCJK + a CJK font)
-python3 scripts/build_script_pdf.py
+python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pytest -q          # unit and leakage tests (83)
+bash scripts/reproduce.sh              # data -> experiments -> artifacts
+python3 scripts/mutation_check.py      # injected leakage defects must all be caught
+bash slides/build.sh                   # numbers + figures from artifacts, compile, copy to slides/final
+python3 scripts/build_script_pdf.py    # printable bilingual script (xelatex, xeCJK, a CJK font)
 ```
 
-The slide build needs `latexmk`, `beamer` with the `metropolis` theme, and `biblatex`
-(plus `logreq`). Beamer does not report vertical overflow, so render the pages and look
-at them before calling the deck done.
+Downloading data needs network and is never done inside tests. The slide build needs
+`latexmk`, beamer with metropolis, and `biblatex` with `logreq`; beamer will not warn about
+content running off the bottom of a page, so look at the rendered pages. The Colab notebook
+(`notebooks/INT4096_Final_Colab.ipynb`) must rebuild its outputs, not show saved ones.
 
-Colab: open `notebooks/INT4096_Final_Colab.ipynb` and run all cells in order.
-The notebook must rebuild outputs, not display cached ones.
+## The talk
 
----
+The order of work is story → script → slides. `docs/story/feature_extraction_story.md` holds
+the structure and the claims; `docs/presentation/speaker_script_bilingual.md` holds the
+words; `slides/latex/main.tex` is the deck. Change the story first and bring the others
+into line.
 
-## 9. Definition of done for any agent task
+- Slide numbers come from macros in `slides/latex/generated/numbers.tex`, which
+  `scripts/build_slide_assets.py` writes from `artifacts/`. Never type a result by hand.
+- Slides and script name no one. The talk is split into voice blocks
+  (`docs/presentation/timing_plan.md`) and each of the five members must speak `[A]`.
+- Lead with what the team built and found: a fair benchmark, an audited pipeline,
+  intervals for all 20 runs, a lesson ready to teach. A null result is a precise finding
+  ("parity with a strong baseline"), and open items are next steps. Keep it accurate: no
+  "model X won", no "standardising improved prediction", no use of the test block, no
+  learning-gain claim. Caveats that are not on a slide stay in the story and Q&A notes and
+  are answered plainly if someone asks.
+- The speech is planned at about 105 spoken words a minute and must fit well inside the
+  20-minute limit `[A]`.
 
-1. Commands were **actually run**; the transcript is in the handoff.
-2. Artifacts exist at the stated paths.
-3. Relevant tests were run and their result is reported (pass **or** fail).
-4. The handoff uses the role's schema and declares `Status: COMPLETE | BLOCKED`.
-5. Failures and blockers are listed, not hidden.
-6. The recommended next gate is named.
+## Before you say "done"
 
-**Do not claim completion from intention. Only from evidence.**
+Run the commands and keep the output; confirm the files exist where you say they do; run
+the relevant tests and report the result whether it passed or failed; list anything
+blocked; name the next gate. Completion is something you show, not something you intend.
 
----
+## Not financial advice
 
-## 10. Presentation and narrative conventions
-
-**Order of work:** `docs/story/feature_extraction_story.md` (structure and claims) →
-`docs/presentation/speaker_script_bilingual.md` (words) → `slides/latex/main.tex` (deck).
-Change the story first; the script, storyboard, timing plan, speaker notes and deck must
-then agree with it. A drifted deck is a defect.
-
-- **Numbers:** every empirical number in slides comes from a macro in
-  `slides/latex/generated/numbers.tex`, produced by `scripts/build_slide_assets.py` from
-  `artifacts/`. Numbers spoken in the script are checked against those macros. Do not type
-  a result by hand.
-- **Speakers:** the deck and script do not name people. The talk is cut into contiguous
-  voice blocks (`docs/presentation/timing_plan.md`); every one of the five members must
-  speak `[A]`. Speaking roles are not research ownership.
-- **Tone: lead with strengths, stay accurate.** Present what the team built and what the
-  evidence shows: a fair benchmark, an audited pipeline, measured uncertainty, a reusable
-  lesson. A null result is stated as a precise finding (for example, "parity with a strong
-  baseline, with a 95% interval for every run"), and open items appear as next steps, not
-  apologies. The limits in section 4 still apply: never claim a model won, that
-  preprocessing improved prediction, that the sealed test block was used, or that the
-  lesson improved learning. Caveats that are not on a slide stay in the story, the data
-  cards and the Q&A notes, and are answered honestly if asked.
-- **Timing:** the formal speech is planned from the measured English word count at about
-  105 words per minute and must leave slack inside the 20-minute limit `[A]`.
-
----
-
-## 11. Finance and ethics disclaimer
-
-All analysis in this repository is historical, educational and non-advisory.
-Nothing here is investment advice or a recommendation to buy, sell or hold any
-asset. No claim of profitability may be derived from forecasting error metrics.
-AI-assisted material is critically reviewed by named human owners and
-acknowledged in the report per course policy.
+Everything here is historical and educational. Nothing is a recommendation to buy, sell or
+hold anything, and error metrics say nothing about profit. AI-assisted material is reviewed
+by the named human owners and acknowledged in the report as the course requires.
