@@ -44,7 +44,7 @@ WANTED = [
 ]
 
 LABELS = {
-    "linear_baseline": "Linear (near-unregularised)",
+    "linear_baseline": "Linear baseline",
     "ridge": "Ridge",
     "svr": "SVR (RBF)",
     "random_forest": "Random forest",
@@ -86,6 +86,8 @@ def load_runs() -> list[dict]:
                 "skill_mae": metrics.get("validation_skill_mae"),
                 "mae": metrics.get("validation_mae"),
                 "baseline_mae": metrics.get("validation_baseline_mae"),
+                "r2": metrics.get("validation_r2"),
+                "baseline_r2": metrics.get("validation_baseline_r2"),
                 "n_obs": metrics.get("validation_n_obs"),
                 "trials": budget[0],
                 "seconds": budget[1],
@@ -183,6 +185,7 @@ def build_example_macro(m: dict[str, str]) -> None:
     m["ExPred"] = num(predicted)
     m["ExActual"] = num(actual)
     m["ExErr"] = num(abs(predicted - actual))
+    m["ExNaiveErr"] = num(abs(c_t - actual))  # persistence error on the same day
 
 
 def build_invariance_macro(m: dict[str, str]) -> None:
@@ -278,6 +281,37 @@ def build_deck_macros(m: dict[str, str], runs: list[dict]) -> None:
     m["LeakDelta"] = "0.408"
 
 
+def build_hook_macros(m: dict[str, str], runs: list[dict]) -> None:
+    """Opening hook and the 'cents' headline, measured from the committed runs.
+
+    These three macros were present in the committed numbers.tex but missing
+    from this generator, so a clean rebuild dropped them. They are derived here
+    from metrics.json so the deck never depends on a hand-patched file.
+    """
+    aapl = [r for r in runs if r["asset"] == "AAPL" and r["skill_mae"] is not None]
+    best = max(aapl, key=lambda r: r["skill_mae"])
+    m["HookAAPLRsq"] = f"{best['r2']:.4f}"
+    m["HookAAPLPersistenceRsq"] = f"{best['baseline_r2']:.4f}"
+    # Average absolute error saved per forecast, in US cents.
+    m["AAPLGainCents"] = f"{(best['baseline_mae'] - best['mae']) * 100:.1f}"
+
+
+def build_data_macros(m: dict[str, str]) -> None:
+    """Coverage, price range and quality-gate status from the immutable snapshots."""
+    from int4096.data.load import load_snapshot
+    from int4096.data.validate import validate_frame
+
+    for asset in ("AAPL", "BTC"):
+        frame = load_snapshot(asset)
+        first, last = frame.index.min(), frame.index.max()
+        m[f"Window{asset}"] = f"{first:%Y-%m-%d}--{last:%Y-%m-%d}"
+        lo, hi = float(frame["close"].min()), float(frame["close"].max())
+        m[f"CloseRange{asset}"] = (
+            f"{lo:,.0f}--{hi:,.0f}".replace(",", "{,}")
+        )
+        m[f"Quality{asset}"] = "PASS" if validate_frame(frame, asset).passed else "ISSUES"
+
+
 def p_len(path: Path) -> int:
     """Count the injected-defect list in the mutation harness."""
     import re as _re
@@ -362,6 +396,8 @@ def main() -> int:
     build_example_macro(macros)
     build_invariance_macro(macros)
     build_deck_macros(macros, runs)
+    build_hook_macros(macros, runs)
+    build_data_macros(macros)
     build_split_macros(macros, protocol)
     write_backup_table(runs)
 

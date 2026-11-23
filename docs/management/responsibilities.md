@@ -97,32 +97,37 @@ that you did. A review that only reads the summary is not a review.
 > about who wrote which code, ran which experiment or owns which research
 > question — that is §1–§3 above and does not change because of the speaking plan.
 
-The deck is organised as a five-act story (**16 narrative slides + 5 backup**);
-each act raises the question the next one answers. Full detail in
-`docs/presentation/` (storyboard, timing plan, bilingual script, speaker notes).
+The deck follows the project pipeline as an opening plus five acts (**16 narrative
+slides + 5 backup + 2 reference pages**), built around three questions the audience is
+given up front. The structure source is `docs/story/feature_extraction_story.md`; full
+detail is in `docs/presentation/` (storyboard, timing plan, bilingual script, speaker notes).
 
-| Act | Slides | Presenter | Content | Time |
-|---|---|---|---|---|
-| I — The challenge | 1–2 | Lau Pak Hei (1), Zhang Haoyu (2) | The core question; why market data teaches ML | 1:55 |
-| II — A fair experiment | 3–9 | Dong Yuankun (3, 6, 7), Zhang Haoyu (4, 5), Lau Pak Hei (8, 9) | Two markets, delta target, pre-registered questions, features, leakage control, five paradigms, the baseline | 7:25 |
-| III — The reveal | 10–11 | Zhang Yancheng | Validation skill table; bootstrap interval forest plot | 2:35 |
-| IV — Investigating why | 12–13 | Zhang Yancheng | Preprocessing ablation; signal and structure limits | 2:20 |
-| V — The bigger lesson | 14–16 | Zhang Yancheng (14), Dong Yuankun (15), Lui Shing Lam (16) | Classroom lab, engineering takeaways, boundaries, final line | 3:15 |
+| Act | Slides | Content | Time |
+|---|---|---|---|
+| Opening: the high-score trap | 1–2 | The R² hook; the three questions | 1:50 |
+| I — Data | 3 | Two markets, one protocol; quality gate | 1:10 |
+| II — Processing | 4–7 | Ten features; predict the change; splits; leakage testing | 4:10 |
+| III — Training | 8–9 | Five models; same budget and rules | 2:00 |
+| IV — Evaluation | 10–14 | Baseline and skill; results; bootstrap; scaling; why gains are small | 5:45 |
+| V — Education | 15–16 | The 60-minute lesson; the skill to take away | 2:20 |
 
-**Formal speech: 17:30**, plus ~0:30 of handovers and 2:00 of Q&A — inside the
-20-minute limit.
+**Formal speech: 17:15**, plus ~0:45 of handovers and slide changes and 2:00 of Q&A,
+inside the 20-minute limit.
 
-| Presenter | Slides | Speaking time | Technical content |
+**Speakers are not yet assigned to people.** The talk is cut into five contiguous
+voice blocks, so the speaking order can change without touching the deck:
+
+| Voice block | Slides | Time | Assigned to |
 |---|---|---:|---|
-| Lau Pak Hei | 1, 8, 9 | **2:45** | opens the question; explains model mechanisms and the baseline |
-| Zhang Haoyu | 2, 4, 5 | **3:15** | teaching rationale, target definition, pre-registration |
-| Dong Yuankun | 3, 6, 7, 15 | **4:30** | data protocol, features, leakage control, engineering lessons |
-| Zhang Yancheng | 10–14 | **5:45** | results, uncertainty, ablation, classroom lab (one continuous block) |
-| Lui Shing Lam | 16 | **1:15** | scope, next steps, final takeaway |
+| A | 1–3 | 3:00 | _to be decided_ |
+| B | 4–6 | 3:15 | _to be decided_ |
+| C | 7–10 | 3:50 | _to be decided_ |
+| D | 11–13 | 3:45 | _to be decided_ |
+| E | 14–16 | 3:25 | _to be decided_ |
 
-Every member has a substantive role. Six handovers are scripted as technical
-bridges in `docs/presentation/speaker_notes.md`; the full spoken text, with a
-Chinese translation for comprehension, is in
+Every member must speak `[A]`, so all five blocks need a different person. Four handovers
+are scripted as bridge sentences in `docs/presentation/timing_plan.md`; the full spoken
+text, with a Chinese translation for comprehension, is in
 `docs/presentation/speaker_script_bilingual.md`.
 
 ## 5. Q&A preparation (each member owns two answers)
