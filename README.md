@@ -130,9 +130,7 @@ data.
 ## What is in this repository
 
 ```text
-AGENTS.md                     project non-negotiables, source-of-truth hierarchy
-.pi/agents/*.md               10 project agent definitions (YAML + system prompt)
-.pi/prompts/dispatch.md       task-dispatch contract
+AGENTS.md                     working notes: layout, method, commands, talk workflow
 configs/research_protocol.yaml frozen protocol (machine-readable)
 docs/
   requirements/               rubric, deadlines, requirement-to-evidence matrix
