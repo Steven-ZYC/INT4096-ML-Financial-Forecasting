@@ -1,7 +1,7 @@
 # Slide Storyboard — One Pipeline, Five Stages
 
 **Deck:** `slides/latex/main.tex` → `slides/final/INT4096_Presentation.pdf`
-**Slides:** 17 narrative + 5 backup + 2 reference pages (24 pages) · **Speech:** 16:10 of a 20:00 slot
+**Slides:** 17 narrative + 5 backup + 2 reference pages (24 pages) · **Speech:** 16:25 of a 20:00 slot
 **Structure source:** `docs/story/feature_extraction_story.md`. Change the story first, then the script, then the deck.
 **Companions:** `timing_plan.md` (clock, voice blocks) · `speaker_script_bilingual.md` (words to say) · `speaker_notes.md` (key messages, Q&A routing)
 
@@ -33,7 +33,7 @@ Every empirical number on a slide is a macro generated from `artifacts/` and `da
 
 | # | Title | Must land | Visual |
 |---|---|---|---|
-| 1 | Learning Machine Learning Through Financial Forecasting | The research question in one sentence | Title, question, names |
+| 1 | Learning Machine Learning Through Financial Forecasting | R² hook: SVR 0.9556 vs copy-the-close 0.9555, so a score alone proves little; then the research question | Title, the two R² values, names, small starred disclaimer |
 | 2 | Roadmap: One Pipeline, Five Stages | Five stages, one question each; task, yardstick and one-line result | Five-box pipeline diagram |
 
 ## Part 1 — Data Selection

@@ -45,7 +45,7 @@ can look it up."* Never improvise a number.
 
 | # | Slide | The one thing it must land | Handover / next |
 |---|---|---|---|
-| 1 | Learning ML Through Financial Forecasting | The research question in one sentence | "Here is the pipeline." |
+| 1 | Learning ML Through Financial Forecasting | R² 0.9556 vs 0.9555: a score alone proves little; then the question | "Here is the pipeline." |
 | 2 | Roadmap: One Pipeline, Five Stages | Five stages, one question each; task, yardstick, one-line result | "Part one: the data." **(handover E→A)** |
 | 3 | What We Used, and Where It Came From | Two public sources, exact URLs, fingerprinted files | "Why these two?" |
 | 4 | Why These Two | Calendar, volatility, scale, dividends all differ: robustness; only unit-free scores cross assets | "Not every row is usable." |

@@ -3,7 +3,7 @@
 **Deck:** `slides/final/INT4096_Presentation.pdf` — 24 pages (17 narrative + 5 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `docs/story/feature_extraction_story.md`
-**Speech:** 16:10 planned (+0:50 for five handovers and slide changes, +2:00 Q&A = 19:00 inside the 20:00 slot)
+**Speech:** 16:25 planned (+0:50 for five handovers and slide changes, +2:00 Q&A = 19:15 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English blocks.**
@@ -21,8 +21,9 @@
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,692 words, i.e. about 16 minutes 10 seconds. | 约每分钟 105 词；英文共 1,692 词，约 16 分 10 秒。 |
+| Pace | ~105 words per minute. The English below is 1,728 words, i.e. about 16 minutes 25 seconds. | 约每分钟 105 词；英文共 1,728 词，约 16 分 25 秒。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
+| Slide 1 | The R² hook: read both numbers slowly, then pause one beat before the question. | 第 1 页 R² 钩子：两个数字慢慢读，提问前停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
 | Backup slides | 18–22 stay in the file. **Backup 1** for "did you cherry-pick?", **Backup 3** for "why drop a row?". | 备用页 18–22；被问"是否挑选结果"开 Backup 1，问"为什么删一行"开 Backup 3。 |
 | Numbers | Never invent one. If unsure: "it is in our run records". | 绝不编数字；不确定就说"记录在仓库里"。 |
@@ -38,16 +39,16 @@
 
 # INTRODUCTION · 开场 （Voice block E）
 
-## Slide 1 — Learning Machine Learning Through Financial Forecasting · 0:25
+## Slide 1 — Learning Machine Learning Through Financial Forecasting · 0:40
 **Page / 页码:** 1/24
 
-**【中文要点】** 一句话提出研究问题：同样条件下，五个经典模型能否打败"明天等于今天"。
+**【中文要点】** 用 R² 钩子开场：SVR 0.9556 对"照抄今天收盘价"0.9555，只差小数点后第四位；引出研究问题。
 
 **English — say this:**
-> Good morning. Our question: can five classical machine-learning models beat the rule "tomorrow's close equals today's" on Apple and Bitcoin, when every model gets the same data, the same rules, and no look at the future?
+> Good morning. Here is a number. On Apple's validation data, a support vector regression model scores an R-squared of 0.9556. Impressive? Now take a rule that simply copies today's closing price. It scores 0.9555. The difference is in the fourth decimal place. So our question is: can five classical models really beat that simple rule on Apple and Bitcoin, with the same data, the same rules, and no look at the future?
 
 **中文对照：**
-> 大家早上好。我们的问题是：在每个模型拿到相同数据、相同规则、并且看不到未来的条件下，五种经典机器学习模型能否在苹果和比特币上打败"明天收盘价等于今天"这条规则？
+> 大家早上好。先看一个数字：在苹果验证集上，支持向量回归模型的 R² 是 0.9556。很厉害吗？再看一条规则：直接照抄今天的收盘价，R² 是 0.9555。差别在小数点后第四位。所以我们的问题是：在相同数据、相同规则、看不到未来的条件下，五种经典模型真的能在苹果和比特币上打败这条简单规则吗？
 
 **→ Transition:** "Here is the pipeline." · **过渡：** "这就是整条流水线。"
 
@@ -402,12 +403,12 @@
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 9**: it should read **≈8:10** (see `timing_plan.md`).
+Check the clock at the **end of slide 9**: it should read **≈8:25** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
-| 8:40 or later after slide 9 | Slide 12: skip the grid-edge sentence and say only "trees unchanged, SVR and ridge move". (~20 s) | 第 12 页去掉网格边缘那句，只说"树不变，SVR 和岭回归会变"，省约 20 秒。 |
-| 9:10 or later | Slide 10: name the five models and their roles in one breath, without the strengths. (~25 s) | 再把第 10 页压成"模型名 + 角色"，省约 25 秒。 |
+| 8:55 or later after slide 9 | Slide 12: skip the grid-edge sentence and say only "trees unchanged, SVR and ridge move". (~20 s) | 第 12 页去掉网格边缘那句，只说"树不变，SVR 和岭回归会变"，省约 20 秒。 |
+| 9:25 or later | Slide 10: name the five models and their roles in one breath, without the strengths. (~25 s) | 再把第 10 页压成"模型名 + 角色"，省约 25 秒。 |
 | **Never cut** | Slide 13 (metrics), slide 14 (results), slide 15 (intervals). | **绝不能砍**第 13、14、15 页。 |
 
 # Rehearsal checklist · 排练清单

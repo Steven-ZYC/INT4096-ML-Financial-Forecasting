@@ -356,7 +356,7 @@ flowchart LR
 
 | # | 部分 | 标题 | 对应本文 | 目标时长 |
 |---|---|---|---|---|
-| 1 | 开场 | Learning Machine Learning Through Financial Forecasting（研究问题） | 0.1 | 0:25 |
+| 1 | 开场 | Learning Machine Learning Through Financial Forecasting（R² 钩子 + 研究问题） | 0.2 | 0:40 |
 | 2 | 开场 | Roadmap: One Pipeline, Five Stages | 0.1–0.2 | 0:50 |
 | 3 | 1 | What We Used, and Exactly Where It Came From（含两个下载链接） | 1.1、参考文献·数据来源 | 0:50 |
 | 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 1:05 |
