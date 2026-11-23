@@ -16,8 +16,8 @@
 >
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
-> | 1–9 | Opening, Part 1 Data Selection, Part 2 Processing & Features | **Dong Yuankun** | 8:25 |
-> | 10–12 | Part 3 Models & Tuning | **Zhang Yancheng** | 3:10 |
+> | 1–5 | Opening, Part 1 Data Selection | **Dong Yuankun** | 4:35 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:00 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16 | Part 5 Teaching Design | **Lau Pak Hei** | 1:00 |
 > | 17 | Part 5 Summary and close | **Lui Shing Lam** | 0:50 |
@@ -144,14 +144,14 @@
 >
 > 最后得到苹果 1,224 行、比特币 1,797 行，按时间 60/20/20 切分。
 
-**→ Transition:** "With clean rows, part two turns them into model inputs." · **过渡：** "行数据干净了，第二部分把它们变成模型输入。"
+**→ Transition (handover Dong Yuankun → Zhang Yancheng):** "With clean rows, part two turns them into model inputs." · **过渡：** "行数据干净了，第二部分把它们变成模型输入。"
 
 ---
 
-# PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Dong Yuankun）
+# PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Zhang Yancheng）
 
 ## Slide 6 — Problems in the Raw Data, and How We Handled Each · 1:05
-**Page / 页码:** 6/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 6/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 原始数据的六个问题，每个都对应一个处理方法：价格水平漂移→比率特征；复权会修订→原始收盘价；两种日历→各用自己的"下一根"；窗口要历史→删前 30 行；尺度不同→P2 只在训练行上标准化；时间顺序→按时间切分并删边界行。
 
@@ -166,7 +166,7 @@
 ---
 
 ## Slide 7 — Ten Features, Built Only From Information Available at the Close · 0:50
-**Page / 页码:** 7/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 7/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 十个特征、六组，全部是只看过去的比率，没有价格水平；"不看未来"用测试保证；五个模型用完全相同的十个输入。
 
@@ -185,7 +185,7 @@
 ---
 
 ## Slide 8 — Engineering the Target: Predict the Change, Then Add It Back · 0:55
-**Page / 页码:** 8/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 8/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 比率特征没有价格水平，所以让模型预测变化量，再加回今天的收盘价；误差仍按价格衡量；持续性就是"变化为 0"；这是迭代出来的设计。
 
@@ -208,7 +208,7 @@
 ---
 
 ## Slide 9 — Chronological Split, and Proof That the Pipeline Cannot Peek · 1:00
-**Page / 页码:** 9/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 9/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 按时间 60/20/20 切分，每个边界删一行（标签是下一天收盘价，否则训练的答案落进验证块；审计量化为 0.408）；故意注入 6 种泄漏错误，全部被抓到；83 项测试通过。
 
@@ -222,7 +222,7 @@
 >
 > 然后我们主动攻击流水线：脚本逐个注入六种已知的泄漏错误，测试每次都必须失败。六种全部被抓到，83 项自动测试全部通过。接下来每一个模型表现数字都来自验证块。
 
-**→ Transition (handover Dong Yuankun → Zhang Yancheng):** "Clean inputs, so part three: the models." · **过渡：** "输入干净了，第三部分：模型。"
+**→ Transition:** "Clean inputs, so part three: the models." · **过渡：** "输入干净了，第三部分：模型。"
 
 ---
 
@@ -400,7 +400,7 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 | Is Binance BTC a global price? | Dong Yuankun | No. It is one exchange, quoted in USDT, which is not exactly USD. We say "BTC/USDT on Binance". | 不是。它是单一交易所、以 USDT 计价，USDT 不完全等于美元。 |
 | Why not adjusted close? | Dong Yuankun | Adjustments are revised after the fact, so they carry future information into the past. Our window has no split, so raw close is continuous. | 复权会事后修订，会把未来信息带进过去；窗口内没有拆股，原始收盘价是连续的。 |
 | Why classical ML, not deep learning? | Zhang Yancheng | The handout discourages it, and classical families keep the comparison interpretable. | 讲义不鼓励；经典模型让比较更可解释。 |
-| Did you leak future data? | Dong Yuankun | Chronological split, a purged boundary row, a sealed test block, and 6 of 6 injected defects caught → Backup 3. | 按时间切分、边界删行、封存测试集、6/6 注入缺陷被抓到 → Backup 3。 |
+| Did you leak future data? | Zhang Yancheng | Chronological split, a purged boundary row, a sealed test block, and 6 of 6 injected defects caught → Backup 3. | 按时间切分、边界删行、封存测试集、6/6 注入缺陷被抓到 → Backup 3。 |
 | Did you cherry-pick P2? | Zhang Haoyu | No. Backup 1 shows all 20 runs. The best Bitcoin result overall is the unscaled linear baseline at +0.26%. | 没有。Backup 1 有全部 20 次；比特币整体最好的是未缩放线性基线 +0.26%。 |
 | Was tuning fair? | Zhang Yancheng | Same folds, same 10 trials, same 90 s, same seed, grids frozen beforehand → Backup 2. | 同样的折、10 次试验、90 秒、同一种子、网格事先冻结 → Backup 2。 |
 | Why do chosen values sit at grid edges? | Zhang Yancheng | The tuner prefers the most cautious settings because there is little signal to fit. Widening the grids is a next step. | 信号太少，调参器偏好最保守的设置；放宽网格是下一步。 |
@@ -421,7 +421,7 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 9**: it should read **≈8:25** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:35) and the **end of slide 9**: it should read **≈8:25** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
@@ -434,7 +434,7 @@ Check the clock at the **end of slide 9**: it should read **≈8:25** (see `timi
 - [ ] Every speaker has read their **English** blocks aloud twice. 每位讲者把英文大声读两遍。
 - [ ] Every speaker can say their **【中文要点】** from memory. 不看稿能说出中文要点。
 - [ ] Each part starts by naming the part ("Part three: models…"). 每部分开口先报部分名称。
-- [ ] The four handovers (after slides 9, 12, 15, 16) are rehearsed. 四次交接要练。
+- [ ] The four handovers (after slides 5, 12, 15, 16) are rehearsed. 四次交接要练。
 - [ ] **Lau Pak Hei and Lui Shing Lam** each read their slide aloud to Zhang Yancheng at least three times before the talk, timed, with no ad-libbing. Lau Pak Hei 和 Lui Shing Lam 正式前至少各对 Zhang Yancheng 计时朗读三遍，不加词。
 - [ ] Zhang Yancheng can deliver slides 16 and 17 from the 【中文要点】 as the fallback. Zhang Yancheng 能按【中文要点】讲完第 16、17 页作为后备。
 - [ ] Two full timed run-throughs with a visible clock. 全流程计时彩排两次。

@@ -6,7 +6,7 @@
 **Companions:** `timing_plan.md` (clock, voice blocks) · `speaker_script_bilingual.md` (words to say) · `speaker_notes.md` (key messages, Q&A routing)
 
 > **Speakers.** The footer shows the part, the speaker's name, the page and a five-stage progress bar.
-> Dong Yuankun 1–9 · Zhang Yancheng 10–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 · Lui Shing Lam 17
+> Dong Yuankun 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 · Lui Shing Lam 17
 > (`timing_plan.md`). All five members speak `[A]`.
 
 ---

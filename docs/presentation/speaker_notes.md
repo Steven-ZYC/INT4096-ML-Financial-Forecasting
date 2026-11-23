@@ -7,7 +7,7 @@
 This file is the **one-page briefing**: what each slide must land, how to hand over, and who answers
 what. For the words to say, use the bilingual script — kept in one place so the two cannot drift apart.
 
-> Speakers: Dong Yuankun slides 1–9 · Zhang Yancheng 10–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 ·
+> Speakers: Dong Yuankun slides 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 ·
 > Lui Shing Lam 17 (see `timing_plan.md`).
 
 ---
@@ -49,11 +49,11 @@ can look it up."* Never improvise a number.
 | 2 | Roadmap: One Pipeline, Five Stages | Five stages, one question each; task, yardstick, one-line result | "Part one: the data." |
 | 3 | What We Used, and Where It Came From | Two public sources, exact URLs, fingerprinted files | "Why these two?" |
 | 4 | Why These Two | Calendar, volatility, scale, dividends all differ: robustness; only unit-free scores cross assets | "Not every row is usable." |
-| 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "With clean rows, part two…" |
+| 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "With clean rows, part two…" **(handover Dong Yuankun → Zhang Yancheng)** |
 | 6 | Problems in the Raw Data | Six problems, six decisions | "Here are the features that come out." |
 | 7 | Ten Features | Trailing, scale-free, tested; identical inputs for every model | "No price level means one more design step." |
 | 8 | Engineering the Target | Predict the change, add it back; real row 1.25 vs 1.35; found by iteration | "The last processing step is the split." |
-| 9 | Chronological Split and Leakage Checks | Purge per boundary (0.408); 6/6 defects caught | "Clean inputs, so part three…" **(handover Dong Yuankun → Zhang Yancheng)** |
+| 9 | Chronological Split and Leakage Checks | Purge per boundary (0.408); 6/6 defects caught | "Clean inputs, so part three…"  |
 | 10 | Five Models Plus a Baseline | How each predicts, its strength, its role; three mechanisms | "Comparing them is only fair if…" |
 | 11 | Fine-Tuning | Same inner CV, trials, time, seed; frozen grids; cautious choices | "We also explored more than hyperparameters." |
 | 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2, trees identical, grid edges | "So how well did they do? Part four." **(handover Zhang Yancheng → Zhang Haoyu)** |
@@ -75,7 +75,7 @@ Questions go to Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak Hei and Lui
 | Why classical ML, not deep learning? | Zhang Yancheng | Handout discourages it; classical families keep the comparison interpretable. |
 | Is this just a random walk? | Zhang Haoyu | At one day the return correlation is near zero, which is why a simple rule is such a strong baseline. |
 | Why AAPL and BTC? | Dong Yuankun | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. |
-| Did you leak future data? | Dong Yuankun | Chronological split, boundary purge, sealed test, 6/6 injected defects caught → Backup 3. |
+| Did you leak future data? | Zhang Yancheng | Chronological split, boundary purge, sealed test, 6/6 injected defects caught → Backup 3. |
 | Did you cherry-pick P2? | Zhang Haoyu | No: Backup 1 shows all 20; best BTC overall is the unscaled linear baseline, +0.26%. |
 | Was the budget fair? | Zhang Yancheng | Identical for all lanes: 10 trials / 90 s; tuning inside train only; protocol allows 24/300 → Backup 2. |
 | Is +0.52% meaningful? | Zhang Haoyu | Not by our own test: all 20 bootstrap intervals include zero. |

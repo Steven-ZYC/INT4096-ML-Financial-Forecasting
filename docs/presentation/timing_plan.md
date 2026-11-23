@@ -5,7 +5,7 @@
 **Script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照) · **Notes:** `speaker_notes.md`
 **Structure:** `storyboard.md`, from `docs/story/feature_extraction_story.md`
 
-> **Speakers.** Dong Yuankun: slides 1–9 · Zhang Yancheng: 10–12 · Zhang Haoyu: 13–15 ·
+> **Speakers.** Dong Yuankun: slides 1–5 · Zhang Yancheng: 6–12 · Zhang Haoyu: 13–15 ·
 > Lau Pak Hei: 16 · Lui Shing Lam: 17. All five members speak `[A]`. Names also appear in each slide's footer.
 
 ## Budget
@@ -56,14 +56,18 @@
 
 | Speaker | Slides | Content | Time | Share |
 |---|---|---|---:|---:|
-| Dong Yuankun | 1–9 | Opening (R² hook, roadmap); Part 1 data selection; Part 2 processing and features | **8:25** | 52% |
-| Zhang Yancheng | 10–12 | Part 3: models, tuning protocol, what else we explored | **3:10** | 19% |
+| Dong Yuankun | 1–5 | Opening (R² hook, roadmap); Part 1 data selection | **4:35** | 28% |
+| Zhang Yancheng | 6–12 | Part 2 processing and features; Part 3 models, tuning, what else we explored | **7:00** | 43% |
 | Zhang Haoyu | 13–15 | Part 4: metrics, results, uncertainty | **2:50** | 17% |
 | Lau Pak Hei | 16 | Part 5: teaching design | **1:00** | 6% |
 | Lui Shing Lam | 17 | Part 5: summary and close | **0:50** | 5% |
 | **Total** | 17 | | **16:15** | 100% |
 
-Every speaker opens by naming their part ("Part three: models and fine-tuning").
+Every speaker names each part as it starts ("Part two: processing and feature engineering").
+
+**Why Part 2 sits with Part 3.** Processing, features and the chronological split lead straight into the
+models and the inner cross-validation, so one speaker carries the whole technical line from raw data to
+tuned models.
 
 **Evaluation stays with one speaker.** Slides 13–15 carry the evaluation argument and most of the
 numbers, so they are not split.
@@ -76,14 +80,15 @@ its 【中文要点】. Lau Pak Hei and Lui Shing Lam do not take Q&A questions.
 
 | After slide | From → to | Bridge sentence |
 |---|---|---|
-| 9 | Dong Yuankun → Zhang Yancheng | "Clean inputs, so part three: the models." |
+| 5 | Dong Yuankun → Zhang Yancheng | "With clean rows, part two turns them into model inputs." |
 | 12 | Zhang Yancheng → Zhang Haoyu | "So how well did they do? Part four." |
 | 15 | Zhang Haoyu → Lau Pak Hei | "That result is exactly what we teach. Part five." |
 | 16 | Lau Pak Hei → Lui Shing Lam | "Now the summary." |
 
 ## If you are running long
 
-Check the clock at the **end of slide 9**: it should read **≈8:25**.
+Check the clock at the **end of slide 5** (Dong Yuankun hands over): it should read **≈4:35**. Check again at the
+**end of slide 9**: it should read **≈8:25**. Zhang Yancheng is speaking at that point and makes the cuts below himself.
 
 - **8:55 or later:** on slide 12, drop the grid-edge sentence and say only "trees unchanged, SVR and
   ridge move". Saves ~0:20.
