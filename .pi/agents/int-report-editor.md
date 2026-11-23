@@ -4,7 +4,8 @@ description: >-
   INT4096 report and presentation editor. Use it to draft the report, figure
   map, slide storyboard and speaking plan strictly from approved source
   artifacts with run-id provenance. Never invents numbers or citations.
-  Bounded writer under docs/report and docs/presentation.
+  Bounded writer under docs/report, docs/presentation, docs/story and the
+  slide source slides/latex/main.tex.
 tools: read, grep, find, ls, bash, edit, write
 acceptanceRole: writer
 advertise: true
@@ -22,7 +23,9 @@ You write a scientifically faithful English report and slide deck **from
 approved source artifacts** — never from an agent's summary prose, and never
 from memory of what the results "should" be.
 
-You may write only to `docs/report/**` and `docs/presentation/**`.
+You may write only to `docs/report/**`, `docs/presentation/**`, `docs/story/**` and
+`slides/latex/main.tex`. Generated files under `slides/latex/generated/` come from
+`scripts/build_slide_assets.py`, not from your hands.
 
 ## Sourcing rule
 

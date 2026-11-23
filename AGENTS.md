@@ -115,6 +115,9 @@ logged human decision:
 - Preprocessing lives **inside** the model pipeline, fitted on training indices
   per fold.
 - The validation fold is the only tuning signal. The test fold is sealed.
+- `[D]` Descriptive diagnostics that appear in a deliverable (return autocorrelation, price
+  ranges, dataset statistics) are computed on train + validation only, or are labelled
+  "full history" wherever they are shown. Model-performance numbers are validation-only.
 
 ### 5.3 Baselines
 
@@ -147,11 +150,11 @@ logged human decision:
 | Reproduce from clean state | `int-repro-auditor` | none (use `/tmp`) |
 | Verify claims trace to artifacts | `int-claim-auditor` (or builtin `evidence-auditor`) | none |
 | Instructional module, questions, teacher notes | `int-educator` | `docs/education`, `src/int4096/education` |
-| Report draft, slides, speaking plan | `int-report-editor` | `docs/report`, `docs/presentation` |
+| Report draft, slides, speaking plan, story | `int-report-editor` | `docs/report`, `docs/presentation`, `docs/story`, `slides/latex/main.tex` |
 | Second opinion before a risky decision | builtin `oracle` | none |
 | Generic code review | builtin `reviewer` | none |
 
-**Use 8 custom roles**, not an agent per student or an agent per file. The five
+**Use the 10 custom roles above**, not an agent per student or an agent per file. The five
 students are *human owners*; they are not processes.
 
 ### Parallelism rules
@@ -202,7 +205,20 @@ python3 -m venv .venv
 
 # Everything above in one command
 bash scripts/reproduce.sh
+
+# Leakage mutation check (separate from pytest; all injected defects must be caught)
+python3 scripts/mutation_check.py
+
+# Slides: regenerate number macros and figures from artifacts, compile, copy to slides/final
+bash slides/build.sh
+
+# Printable bilingual speaker script (needs xelatex + xeCJK + a CJK font)
+python3 scripts/build_script_pdf.py
 ```
+
+The slide build needs `latexmk`, `beamer` with the `metropolis` theme, and `biblatex`
+(plus `logreq`). Beamer does not report vertical overflow, so render the pages and look
+at them before calling the deck done.
 
 Colab: open `notebooks/INT4096_Final_Colab.ipynb` and run all cells in order.
 The notebook must rebuild outputs, not display cached ones.
@@ -222,7 +238,34 @@ The notebook must rebuild outputs, not display cached ones.
 
 ---
 
-## 10. Finance and ethics disclaimer
+## 10. Presentation and narrative conventions
+
+**Order of work:** `docs/story/feature_extraction_story.md` (structure and claims) →
+`docs/presentation/speaker_script_bilingual.md` (words) → `slides/latex/main.tex` (deck).
+Change the story first; the script, storyboard, timing plan, speaker notes and deck must
+then agree with it. A drifted deck is a defect.
+
+- **Numbers:** every empirical number in slides comes from a macro in
+  `slides/latex/generated/numbers.tex`, produced by `scripts/build_slide_assets.py` from
+  `artifacts/`. Numbers spoken in the script are checked against those macros. Do not type
+  a result by hand.
+- **Speakers:** the deck and script do not name people. The talk is cut into contiguous
+  voice blocks (`docs/presentation/timing_plan.md`); every one of the five members must
+  speak `[A]`. Speaking roles are not research ownership.
+- **Tone: lead with strengths, stay accurate.** Present what the team built and what the
+  evidence shows: a fair benchmark, an audited pipeline, measured uncertainty, a reusable
+  lesson. A null result is stated as a precise finding (for example, "parity with a strong
+  baseline, with a 95% interval for every run"), and open items appear as next steps, not
+  apologies. The limits in section 4 still apply: never claim a model won, that
+  preprocessing improved prediction, that the sealed test block was used, or that the
+  lesson improved learning. Caveats that are not on a slide stay in the story, the data
+  cards and the Q&A notes, and are answered honestly if asked.
+- **Timing:** the formal speech is planned from the measured English word count at about
+  105 words per minute and must leave slack inside the 20-minute limit `[A]`.
+
+---
+
+## 11. Finance and ethics disclaimer
 
 All analysis in this repository is historical, educational and non-advisory.
 Nothing here is investment advice or a recommendation to buy, sell or hold any
