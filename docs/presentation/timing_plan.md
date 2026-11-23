@@ -1,103 +1,104 @@
 # Presentation Timing Plan
 
-**Deck:** `slides/final/INT4096_Presentation.pdf` — **23 pages = 16 narrative + 5 backup + 2 references**
-**Build:** `bash slides/build.sh` (0 overfull boxes, 0 missing files)
+**Deck:** `slides/final/INT4096_Presentation.pdf` — **24 pages = 17 narrative + 5 backup + 2 references**
+**Build:** `bash slides/build.sh` (0 overfull vertical boxes, 0 missing files)
 **Script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照) · **Notes:** `speaker_notes.md`
-**Structure:** `storyboard.md`, from `docs/story/feature_extraction_story.md` (v2)
+**Structure:** `storyboard.md`, from `docs/story/feature_extraction_story.md`
 
-> **Speakers are not assigned to people here.** The talk is cut into five contiguous **voice blocks**.
-> Give each member a block; the order of blocks is fixed by the story, but which person takes
-> which block is free. All five members must speak `[A]`.
+> **Speakers are not assigned to people here.** The talk is cut into five **voice blocks**, one per
+> pipeline stage. Block E opens and closes the talk. Give each member a block; all five members must
+> speak `[A]`.
 
 ## Budget
 
 | Component | Time |
 |---|---|
-| Formal speech (16 slides, 1,766 English words at ~105 wpm, one deliberate pause on slide 15) | **16:50** |
-| Slide changes and four handovers | 0:45 |
+| Formal speech (17 slides, 1,692 English words at ~105 wpm) | **16:10** |
+| Slide changes and five handovers | 0:50 |
 | Q&A | 2:00 |
-| **Planned total** (25 s of slack inside the 20-minute limit `[A]`) | **19:35** |
+| **Planned total** (1:00 of slack inside the 20-minute limit `[A]`) | **19:00** |
 
-## Act structure
+## Part structure
 
-| Act | Question it serves | Slides | Time |
+| Part | Question it answers | Slides | Time |
 |---|---|---|---:|
-| Opening — the high-score trap | Why does a high score prove little? | 1–2 | 1:50 |
-| I — Data | What did we choose, and why? | 3 | 1:05 |
-| II — Processing | What can the model see? | 4–7 | 4:15 |
-| III — Training | Is the comparison fair? | 8–9 | 2:00 |
-| IV — Evaluation | How did a simple rule do; how certain is the gain? | 10–14 | 5:20 |
-| V — Education | What do we hand to teachers? | 15–16 | 2:20 |
-| **Total** | | 16 | **16:50** |
+| Introduction | What is the question, and what is the route? | 1–2 | 1:15 |
+| 1 — Data Selection | Which data, from where, why, and which rows qualify? | 3–5 | 3:05 |
+| 2 — Processing & Features | What problems did raw data have, and what can the model see? | 6–9 | 3:50 |
+| 3 — Models & Tuning | Which models, why, and tuned how fairly? | 10–12 | 3:10 |
+| 4 — Evaluation | Which metrics, what results, how certain? | 13–15 | 2:50 |
+| 5 — Teaching Design | How does the project become a lesson, and what did each stage deliver? | 16–17 | 2:00 |
+| **Total** | | 17 | **16:10** |
 
 ## Slide-by-slide
 
 | # | Slide | Words | Target | Cumulative |
 |---|---|---:|---:|---:|
-| 1 | Learning Machine Learning Through Financial Forecasting | 91 | 0:50 | 0:50 |
-| 2 | Three Questions to Ask of Any AI Score | 106 | 1:00 | 1:50 |
-| 3 | Two Markets, One Protocol | 113 | 1:05 | 2:55 |
-| 4 | Ten Inputs Use Only Information Available at the Close | 108 | 1:00 | 3:55 |
-| 5 | Predicting the Change Gives Models a Clearer Task | 114 | 1:05 | 5:00 |
-| 6 | Chronological Splits, Train-Only Fitting, a Sealed Test Block | 133 | 1:15 | 6:15 |
-| 7 | How We Know the Pipeline Cannot Peek | 99 | 0:55 | 7:10 |
-| 8 | Five Models, Three Mechanisms | 103 | 1:00 | 8:10 |
-| 9 | Same Budget, Same Rules, Two Preprocessing Settings | 108 | 1:00 | 9:10 |
-| 10 | The Opponent: Copy Today's Close | 100 | 0:55 | 10:05 |
-| 11 | 20 Runs, One Yardstick: Skill Stays Within 1% of the Baseline | 123 | 1:10 | 11:15 |
-| 12 | Uncertainty Measured for All 20 Runs: Parity With the Baseline | 124 | 1:10 | 12:25 |
-| 13 | Scaling Effects Match What Theory Predicts | 112 | 1:05 | 13:30 |
-| 14 | Why a Simple Rule Is So Hard to Beat | 104 | 1:00 | 14:30 |
-| 15 | A 60-Minute Lesson Built on the Result (includes a 10 s pause for the question) | 118 | 1:15 | 15:45 |
-| 16 | The Skill Students Can Take to Any AI Claim | 110 | 1:05 | 16:50 |
-| 17–23 | Backup 1–5 and References (not presented) | — | — | — |
+| 1 | Learning Machine Learning Through Financial Forecasting | 36 | 0:25 | 0:25 |
+| 2 | Roadmap: One Pipeline, Five Stages | 85 | 0:50 | 1:15 |
+| 3 | What We Used, and Exactly Where It Came From | 89 | 0:50 | 2:05 |
+| 4 | Why These Two: Two Markets With Different Characteristics | 117 | 1:05 | 3:10 |
+| 5 | Selection Conditions: From Raw Bars to Modelling Rows | 120 | 1:10 | 4:20 |
+| 6 | Problems in the Raw Data, and How We Handled Each | 113 | 1:05 | 5:25 |
+| 7 | Ten Features, Built Only From Information Available at the Close | 89 | 0:50 | 6:15 |
+| 8 | Engineering the Target: Predict the Change, Then Add It Back | 92 | 0:55 | 7:10 |
+| 9 | Chronological Split, and Proof That the Pipeline Cannot Peek | 101 | 1:00 | 8:10 |
+| 10 | Five Models Plus a Baseline: Why Each One Is There | 123 | 1:10 | 9:20 |
+| 11 | Fine-Tuning: The Same Search and Budget for Every Model | 115 | 1:05 | 10:25 |
+| 12 | What We Explored Beyond Hyperparameters | 99 | 0:55 | 11:20 |
+| 13 | Four Metrics, Each With a Job | 108 | 1:00 | 12:20 |
+| 14 | Results: All 20 Runs Land Within 1% of the Baseline | 95 | 0:55 | 13:15 |
+| 15 | How Certain? Every Interval Includes Zero | 100 | 0:55 | 14:10 |
+| 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 122 | 1:10 | 15:20 |
+| 17 | Summary: What Each Stage Delivered | 88 | 0:50 | 16:10 |
+| 18–24 | Backup 1–5 and References (not presented) | — | — | — |
 
 ## Voice blocks
 
 | Block | Slides | Content | Time | Share |
 |---|---|---|---:|---:|
-| A | 1–3 | Hook, three questions, data | **2:55** | 17% |
-| B | 4–6 | Features, predict-the-change, splits | **3:20** | 20% |
-| C | 7–10 | Leakage testing, models, fair budget, baseline | **3:50** | 23% |
-| D | 11–13 | Results, uncertainty, scaling | **3:25** | 20% |
-| E | 14–16 | Why a simple rule is hard to beat, lesson, close | **3:20** | 20% |
-| **Total** | 16 | | **16:50** | 100% |
+| E | 1–2, 16–17 | Question and roadmap; teaching design and summary | **3:15** | 20% |
+| A | 3–5 | Part 1: data, sources, why two markets, selection conditions | **3:05** | 19% |
+| B | 6–9 | Part 2: raw-data problems, features, change target, split and leakage checks | **3:50** | 24% |
+| C | 10–12 | Part 3: models, tuning protocol, what else we explored | **3:10** | 20% |
+| D | 13–15 | Part 4: metrics, results, uncertainty | **2:50** | 18% |
+| **Total** | 17 | | **16:10** | 100% |
 
-Blocks are contiguous so each person speaks once, then hands over. Swap block order only if the story order
-is preserved. Block C is the only one that crosses an act boundary (II → III → IV); its first sentence on
-slide 8 and slide 10 should name the act aloud.
+Each block is one part of the pipeline, so every speaker opens by naming their part ("Part two:
+processing and feature engineering").
 
-## Handovers (four, ~5 s each)
+## Handovers (five, ~5 s each)
 
-| After slide | Bridge sentence |
-|---|---|
-| 3 (A → B) | "Now, what goes into the model?" |
-| 6 (B → C) | "But how do we know the pipeline cannot peek?" |
-| 10 (C → D) | "So, the results." |
-| 13 (D → E) | "So why do the gains stay so small?" |
+| After slide | From → to | Bridge sentence |
+|---|---|---|
+| 2 | E → A | "Part one: the data." |
+| 5 | A → B | "With clean rows, part two turns them into model inputs." |
+| 9 | B → C | "Clean inputs, so part three: the models." |
+| 12 | C → D | "So how well did they do? Part four." |
+| 15 | D → E | "That result is exactly what we teach. Part five." |
 
 ## If you are running long
 
-Check the clock at the **end of slide 9**: it should read **≈9:10**.
+Check the clock at the **end of slide 9**: it should read **≈8:10**.
 
-- **9:40 or later:** cut slide 14 to two sentences — *"Returns barely predict themselves, and the rule
-  already tracks the price level. That is why a strong baseline is the right yardstick."* Saves ~0:30.
-- **10:10 or later:** also name the five models on slide 8 in one breath, without the teaching
-  questions. Saves ~0:25.
-- **Never cut** slide 10 (the baseline) or slide 11 (the results figure): the evaluation argument
-  carries most of the marks.
+- **8:40 or later:** on slide 12, drop the grid-edge sentence and say only "trees unchanged, SVR and
+  ridge move". Saves ~0:20.
+- **9:10 or later:** also name the five models on slide 10 with their roles only, without the classic
+  strengths. Saves ~0:25.
+- **Never cut** slides 13–15 (metrics, results, intervals): the evaluation argument carries most of the
+  marks.
 
 ## If you are running short
 
-Add detail that is already prepared: the grid-edge caveat from Backup 2 on slide 9, or the Friday/Monday
-walkthrough from Backup 3 on slide 6.
+Add detail that is already prepared: the Friday/Monday purge walkthrough from Backup 3 on slide 9, or
+the permutation-importance reading from Backup 4 after slide 7.
 
 ## Rehearsal checklist
 
 - [ ] Two full timed run-throughs with a visible clock.
-- [ ] All four handovers rehearsed, they are where time leaks.
-- [ ] Slide 1 and slide 16 disclaimer stays visible while the sentence is spoken.
+- [ ] All five handovers rehearsed; they are where time leaks.
+- [ ] Each speaker names their part when they start.
 - [ ] Backup 1 and Backup 3 are open in a second window, ready for "did you cherry-pick?" and
       "how do you know there's no leakage?".
 - [ ] Say "every **model-performance** number is from validation", not "every number".
-- [ ] Deck tested on the presentation machine (16:9, figures embedded).
+- [ ] Deck tested on the presentation machine (16:9, figures embedded, links on slide 3 readable).

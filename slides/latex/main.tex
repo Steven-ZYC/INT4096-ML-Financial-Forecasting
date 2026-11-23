@@ -1,20 +1,20 @@
-% INT4096 group presentation --- 16 narrative slides, 5 backup, 2 references.
+% INT4096 group presentation --- 17 narrative slides, 5 backup, 2 references.
 % Build: bash slides/build.sh
 %
-% Structure source: docs/story/feature_extraction_story.md (v2).
-%   Opening -> Act I Data -> Act II Processing -> Act III Training
-%           -> Act IV Evaluation -> Act V Education
-% The talk answers three questions: what could the model see, how did a simple
-% rule do, how certain is the improvement.
+% Structure follows the project pipeline, one part per stage:
+%   Introduction -> Part 1 Data Selection -> Part 2 Processing and Feature
+%   Engineering -> Part 3 Models and Fine-Tuning -> Part 4 Evaluation
+%   -> Part 5 Teaching Design
+% Story source: docs/story/feature_extraction_story.md.
 %
 % Presenters are deliberately NOT named in the deck: the speaking order is set
-% in docs/presentation/timing_plan.md (five voice blocks). Research and software
-% ownership is recorded in docs/management/responsibilities.md.
+% in docs/presentation/timing_plan.md (five voice blocks, one per part).
 %
-% Every empirical number is a macro from generated/numbers.tex, produced from
-% artifacts/ by scripts/build_slide_assets.py. Nothing empirical is typed by
-% hand, with two documented exceptions: the 83-test count and the 0.408 audit
-% delta, both taken from recorded verification (docs/quality/leakage_audit.md).
+% Every empirical number is a macro from generated/numbers.tex (and the tables
+% in generated/), produced from artifacts/ and data/raw/ by
+% scripts/build_slide_assets.py. Nothing empirical is typed by hand, with two
+% documented exceptions: the 83-test count and the 0.408 audit delta, both
+% taken from recorded verification (docs/quality/leakage_audit.md).
 \documentclass[aspectratio=169,11pt]{beamer}
 
 \usetheme{metropolis}
@@ -88,10 +88,10 @@
   }\par
   \hbox{%
     \progresssegment{1}{01}{Data Selection}%
-    \progresssegment{2}{02}{Data Processing}%
-    \progresssegment{3}{03}{Model Training}%
-    \progresssegment{4}{04}{Model Evaluation}%
-    \progresssegment{5}{05}{Education Proposal}%
+    \progresssegment{2}{02}{Processing \& Features}%
+    \progresssegment{3}{03}{Models \& Tuning}%
+    \progresssegment{4}{04}{Evaluation}%
+    \progresssegment{5}{05}{Teaching Design}%
   }\vskip0pt%
 }
 \setbeamertemplate{footline}{\intfootline}
@@ -109,7 +109,7 @@
 \begin{document}
 
 % ====================================================================== OPENING
-\act{Opening: the high-score trap}
+\act{Introduction}
 
 % 1 ---------------------------------------------------------------------------
 \begin{frame}
@@ -123,18 +123,12 @@
   {\large Why More Complex Does Not Necessarily Mean Better\par}
   \vspace{7mm}
   \hrule height .7pt
-  \vspace{3mm}
-  {\small\bfseries $R^2$ on the same AAPL validation dates\par}
-  \vspace{2mm}
-  \noindent\begin{minipage}[t]{.48\linewidth}
-    {\bfseries\fontsize{34}{37}\selectfont \HookAAPLRsq\par}
-    {\small Support vector regression\par}
-  \end{minipage}\hfill
-  \begin{minipage}[t]{.48\linewidth}
-    {\bfseries\fontsize{34}{37}\selectfont \HookAAPLPersistenceRsq\par}
-    {\small Copy the latest close ($\widehat{P}_{t+1} = P_t$)\par}
-  \end{minipage}\par
-  \vspace{6mm}
+  \vspace{4mm}
+  \color{black}
+  {\small Can five classical models beat the rule ``tomorrow's close equals today's''
+   on Apple and Bitcoin, under identical, leakage-safe conditions?\par}
+  \vspace{8mm}
+  \usebeamercolor{frametitle}\color{frametitle.bg}
   {\footnotesize\bfseries INT4096. Artificial Intelligence and Machine Learning in Education\par}
   \vspace{1mm}
   {\footnotesize Zhang Yancheng, Dong Yuankun, Zhang Haoyu, Lau Pak Hei, Lui Shing Lam\par}
@@ -143,94 +137,181 @@
 \end{frame}
 
 % 2 ---------------------------------------------------------------------------
-\begin{frame}{Three Questions to Ask of Any AI Score}
-  \begin{enumerate}
-    \item What information could the model see?
-    \item How well did a simple rule do on the same examples?
-    \item How certain is the improvement?
-  \end{enumerate}
-  \vspace{3mm}
-  \centering\small
-  \begin{tabular}{@{}ll@{}}
-    \toprule
-    \textbf{Question} & \textbf{Where this talk answers it} \\
-    \midrule
-    1 & Act I: data \quad Act II: processing \\
-    2 & Act III: training \quad Act IV: evaluation \\
-    3 & Act IV: bootstrap intervals and scaling ablation \\
-    Teaching it & Act V: a 60-minute lesson \\
-    \bottomrule
-  \end{tabular}
-  \par\vspace{3mm}
-  \raggedright
-  \begin{block}{Who the lesson is for}
-    \small Senior secondary students and first-year university students new to machine learning.
-  \end{block}
-\end{frame}
-
-% ===================================================================== ACT I
-\act{Act I: Data}
-\progresssection{1}
-
-% 3 ---------------------------------------------------------------------------
-\begin{frame}{Two Markets, One Protocol}
-  \centering\footnotesize
-  \setlength{\tabcolsep}{6pt}
-  \begin{tabular}{@{}lll@{}}
-    \toprule
-    & Apple (AAPL) & Bitcoin (BTC) \\
-    \midrule
-    Source & StockAnalysis & Binance BTCUSDT spot \\
-    Calendar & Exchange trading sessions, USD & Daily, 24/7 in UTC, USDT \\
-    Window & \WindowAAPL & \WindowBTC \\
-    Observations & \ObsAAPL{} & \ObsBTC{} \\
-    Close range & \CloseRangeAAPL{} USD & \CloseRangeBTC{} USDT \\
-    Quality checks & \QualityAAPL & \QualityBTC \\
-    \bottomrule
-  \end{tabular}
-  \par\vspace{4mm}
+\begin{frame}{Roadmap: One Pipeline, Five Stages}
+  \centering
+  \begin{tikzpicture}[font=\scriptsize,
+      stage/.style={draw=frametitle.bg, fill=frametitle.bg, text=white, rounded corners=2pt,
+                    minimum height=9mm, text width=2.05cm, align=center, font=\scriptsize\bfseries},
+      note/.style={text width=2.05cm, align=center, font=\scriptsize},
+      arr/.style={-{Latex[length=1.6mm]}, black!55, thick}]
+    \usebeamercolor{frametitle}
+    \node[stage] (s1) {01\\Data Selection};
+    \node[stage, right=3.5mm of s1] (s2) {02\\Processing \& Features};
+    \node[stage, right=3.5mm of s2] (s3) {03\\Models \& Tuning};
+    \node[stage, right=3.5mm of s3] (s4) {04\\Evaluation};
+    \node[stage, right=3.5mm of s4] (s5) {05\\Teaching Design};
+    \foreach \a/\b in {s1/s2,s2/s3,s3/s4,s4/s5} \draw[arr] (\a) -- (\b);
+    \node[note, below=2mm of s1] {Which data, from where, and why?};
+    \node[note, below=2mm of s2] {What can the model legally see?};
+    \node[note, below=2mm of s3] {Which models, tuned how fairly?};
+    \node[note, below=2mm of s4] {Measured how, and how certain?};
+    \node[note, below=2mm of s5] {How does it become a lesson?};
+  \end{tikzpicture}
+  \par\vspace{7mm}
   \raggedright\small
   \begin{itemize}
-    \item Each forecast uses the next observation on its \emph{own} calendar.
-    \item Prices differ by orders of magnitude, so models are compared with unit-free scores only.
-    \item Checks flag duplicates, missing fields and invalid prices or volumes. The loader rejects bad data rather than repairing it.
-    \item Every file is fingerprinted with SHA-256.
+    \item \textbf{Task:} forecast the next daily close of AAPL and BTC.
+    \item \textbf{Yardstick:} naive persistence, $\widehat{P}_{t+1} = P_t$.
+    \item \textbf{Result in one line:} all \NRunTotal{} model runs land within 1\% of the
+      yardstick, and none is reliably better.
   \end{itemize}
 \end{frame}
 
-% ==================================================================== ACT II
-\act{Act II: Processing}
-\progresssection{2}
+% ===================================================================== PART 1
+\act{Part 1: Data Selection}
+\progresssection{1}
+
+% 3 ---------------------------------------------------------------------------
+\begin{frame}{What We Used, and Exactly Where It Came From}
+  \centering\footnotesize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.39\linewidth}>{\raggedright\arraybackslash}p{.39\linewidth}@{}}
+    \toprule
+    & \textbf{Apple (AAPL)} & \textbf{Bitcoin (BTC/USDT)} \\
+    \midrule
+    Provider & StockAnalysis public history API & Binance public REST API, spot market \\
+    Fields & Date, open, high, low, close, volume, adjusted close & Open time, open, high, low, close, volume \\
+    Window & \WindowAAPL & \WindowBTC \\
+    Daily bars & \ObsAAPL{} & \ObsBTC{} \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{3mm}
+  \raggedright\footnotesize
+  \textbf{Download links (as called by our code):}\\[.5mm]
+  {\scriptsize
+  AAPL\enspace\url{https://stockanalysis.com/api/symbol/s/aapl/history?range=10Y&period=Daily}\\[.5mm]
+  BTC\enspace\phantom{L}\url{https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d}\par}
+  \vspace{3mm}
+  \small
+  \begin{itemize}
+    \item Downloaded once, saved unchanged in \texttt{data/raw/}, and fingerprinted with SHA-256.
+    \item Every run re-checks the fingerprint, so every number traces to the same bytes.
+  \end{itemize}
+\end{frame}
 
 % 4 ---------------------------------------------------------------------------
-\begin{frame}{Ten Inputs Use Only Information Available at the Close}
-  \small
-  All five models use these same ten features in both P0 and P2.
-  \vspace{3mm}
-
-  \centering
-  \renewcommand{\arraystretch}{1.17}
-  \begin{tabular}{@{}l >{\raggedright\arraybackslash}p{.64\linewidth} r@{}}
+\begin{frame}{Why These Two: Two Markets With Different Characteristics}
+  \centering\scriptsize
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.42\linewidth}>{\raggedright\arraybackslash}p{.30\linewidth}@{}}
     \toprule
-    \textbf{Feature group} & \textbf{How each feature is built} & \textbf{Count} \\
+    & \textbf{AAPL} & \textbf{BTC} \\
     \midrule
-    Returns & Percentage change in close over 1, 5 and 20 periods & 3 \\
-    Moving-average gaps & Percentage gap from 5- and 20-period average closes & 2 \\
-    Volatility & 10- and 30-period standard deviations of 1-period returns & 2 \\
-    Price range & Current high minus low, divided by the current close & 1 \\
-    Relative volume & Percentage gap from the 5-period average volume & 1 \\
-    Calendar & Day of the week, with Monday coded as 0 & 1 \\
+    Market & Listed equity, US dollars & Crypto, one exchange, USDT \\
+    Calendar & Exchange sessions; \GapsAAPL{} weekend or holiday gaps & Every day; no gaps \\
+    Daily return volatility & \RetSdAAPL\% & \RetSdBTC\% \\
+    Price scale (close) & \CloseRangeAAPL{} USD & \CloseRangeBTC{} USDT \\
+    Corporate actions & Dividends; adjusted close differs on \AdjDiffPctAAPL\% of days & None \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{2mm}
+  \includegraphics[width=.80\textwidth,height=.27\textheight,keepaspectratio]{fig02_asset_characteristics.pdf}
+  \par
+  \raggedright\scriptsize
+  Full five-year history. Scales differ by over 100 times: assets are compared only with unit-free scores.
+\end{frame}
+
+% 5 ---------------------------------------------------------------------------
+\begin{frame}{Selection Conditions: From Raw Bars to Modelling Rows}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{.47\textwidth}
+      \small\textbf{Conditions every row must meet}
+      \begin{enumerate}\scriptsize\setlength{\itemsep}{2pt}
+        \item \textbf{Window:} five years from 2021-10-28, after Apple's 2020 split, so raw
+          prices have no split jumps.
+        \item \textbf{Price field:} raw close; adjusted prices are revised later.
+        \item \textbf{Quality gate:} no duplicate dates, missing values, non-positive prices,
+          high below low, close outside [low, high] or negative volume. Any failure stops the
+          pipeline: reject, never repair.
+        \item \textbf{Complete history:} drop the first \Warmup{} rows (windows not yet full) and
+          the last row (no next close).
+      \end{enumerate}
+    \end{column}
+    \begin{column}{.49\textwidth}
+      \centering\footnotesize
+      \renewcommand{\arraystretch}{1.2}
+      \begin{tabular}{@{}lrr@{}}
+        \toprule
+        & \textbf{AAPL} & \textbf{BTC} \\
+        \midrule
+        Raw daily bars & \ObsAAPL & \ObsBTC \\
+        Quality gate & \QualityAAPL & \QualityBTC \\
+        Warm-up rows & $-$\Warmup & $-$\Warmup \\
+        Last row & $-1$ & $-1$ \\
+        \midrule
+        \textbf{Modelling rows} & \textbf{\RowsAAPL} & \textbf{\RowsBTC} \\
+        \quad Train (60\%) & \TrainRowsAAPL & \TrainRowsBTC \\
+        \quad Validation (20\%) & \ValidationRowsAAPL & \ValidationRowsBTC \\
+        \quad Test (20\%, sealed) & \TestRowsAAPL & \TestRowsBTC \\
+        \bottomrule
+      \end{tabular}
+      \par\vspace{1mm}
+      {\scriptsize PASS: no row flagged. One row is also\\ purged at each split boundary.\par}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ===================================================================== PART 2
+\act{Part 2: Processing and Feature Engineering}
+\progresssection{2}
+
+% 6 ---------------------------------------------------------------------------
+\begin{frame}{Problems in the Raw Data, and How We Handled Each}
+  \centering\footnotesize
+  \renewcommand{\arraystretch}{1.22}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{.27\linewidth}>{\raggedright\arraybackslash}p{.31\linewidth}>{\raggedright\arraybackslash}p{.36\linewidth}@{}}
+    \toprule
+    \textbf{Problem} & \textbf{Why it matters} & \textbf{What we did} \\
+    \midrule
+    Price levels drift and differ by asset & A model fitted on old levels cannot extrapolate to new ones & Turn prices into returns and ratios (scale-free) \\
+    Adjusted prices are revised later & They carry information from the future & Use the raw close as the target \\
+    Two calendars (weekends vs 24/7) & ``Next day'' means different things & Next bar on each asset's own calendar; never align rows \\
+    Rolling windows need history & Partial windows or back-filling distort or leak & Drop the first \Warmup{} rows \\
+    Features on different scales & Distances and penalties favour large-scale inputs & P2: standardise, fitted on training rows only \\
+    Time order & A shuffled split trains on the future & Chronological split, one row purged per boundary \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+% 7 ---------------------------------------------------------------------------
+\begin{frame}{Ten Features, Built Only From Information Available at the Close}
+  \centering\footnotesize
+  \renewcommand{\arraystretch}{1.17}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}l l >{\raggedright\arraybackslash}p{.42\linewidth} r@{}}
+    \toprule
+    \textbf{Group} & \textbf{Name} & \textbf{Definition (at close $t$)} & \textbf{Count} \\
+    \midrule
+    Returns & \texttt{ret\_1, ret\_5, ret\_20} & $P_t / P_{t-k} - 1$, \ $k = 1, 5, 20$ & 3 \\
+    Moving-average gaps & \texttt{ma\_gap\_5, ma\_gap\_20} & $P_t / \text{SMA}_k - 1$, \ $k = 5, 20$ & 2 \\
+    Volatility & \texttt{vol\_10, vol\_30} & Std.\ dev.\ of 1-period returns over 10 and 30 bars & 2 \\
+    Price range & \texttt{range\_1} & $(\text{High}_t - \text{Low}_t) / P_t$ & 1 \\
+    Relative volume & \texttt{vol\_chg} & $\text{Vol}_t / \text{SMA}_5(\text{Vol}) - 1$ & 1 \\
+    Calendar & \texttt{dow} & Day of week, Monday $= 0$ & 1 \\
     \bottomrule
   \end{tabular}\par
   \vspace{3mm}
   \raggedright\footnotesize
-  Windows end at the current close. Adding future rows must leave earlier features unchanged.
-  \textbf{No feature is a price level.}
+  \begin{itemize}
+    \item Every window is trailing and ends at today's close. No feature is a price level.
+    \item Tested: append absurd future prices, rebuild, and earlier rows must not change.
+    \item All five models get exactly these ten inputs, on both assets, in P0 and P2.
+  \end{itemize}
 \end{frame}
 
-% 5 ---------------------------------------------------------------------------
-\begin{frame}{Predicting the Change Gives Models a Clearer Task}
-  \small Relative features describe movement. Today's close supplies the price level.
+% 8 ---------------------------------------------------------------------------
+\begin{frame}{Engineering the Target: Predict the Change, Then Add It Back}
+  \small Ratios carry no price level, so the model learns the change; today's close supplies the level.
   \[
     \underbrace{\widehat{P}_{t+1}}_{\text{forecast close}}
     =
@@ -246,280 +327,240 @@
   \vspace{1mm}
   \small
   \begin{itemize}
-    \item Persistence predicts a change of zero and carries the latest close forward.
-    \item We reached this design by iterating: testing the price-level target first showed that the representation, not the model, was the issue (decision D8).
+    \item Errors are still measured on the price, so the question is unchanged.
+    \item Persistence is the special case: predicted change $= 0$.
+    \item Found by iteration: predicting the level directly made every model collapse toward
+      the training-period average.
   \end{itemize}
 \end{frame}
 
-% 6 ---------------------------------------------------------------------------
-\begin{frame}{Chronological Splits, Train-Only Fitting, a Sealed Test Block}
+% 9 ---------------------------------------------------------------------------
+\begin{frame}{Chronological Split, and Proof That the Pipeline Cannot Peek}
   \centering
   \begin{tikzpicture}[font=\scriptsize,
-      seg/.style={draw, rounded corners=1pt, minimum height=8mm, align=center}]
+      seg/.style={draw, rounded corners=1pt, minimum height=7mm, align=center}]
     \node[seg, fill=accent!22, text width=3.1cm] (tr) {Train 60\%};
     \node[seg, fill=warn!18, text width=1.2cm, right=2mm of tr] (g1) {Drop 1 row};
     \node[seg, fill=good!16, text width=2.2cm, right=2mm of g1] (va) {Validate 20\%};
     \node[seg, fill=warn!18, text width=1.2cm, right=2mm of va] (g2) {Drop 1 row};
     \node[seg, fill=black!12, text width=2.0cm, right=2mm of g2] (te) {Test 20\% (sealed)};
-    \draw[-{Latex[length=1.4mm]},black!65] ([yshift=-4mm]tr.south west) -- node[below]{Time} ([yshift=-4mm]te.south east);
+    \draw[-{Latex[length=1.4mm]},black!65] ([yshift=-3mm]tr.south west) -- node[below]{Time} ([yshift=-3mm]te.south east);
   \end{tikzpicture}
-  \par\vspace{4mm}
-  {\footnotesize
-  \setlength{\tabcolsep}{5pt}
-  \begin{tabular}{@{}llll@{}}
-    \toprule
-    & Train & Validate & Test (sealed) \\
-    \midrule
-    AAPL & \TrainAAPL & \ValAAPL & \TestAAPL \\
-    BTC & \TrainBTC & \ValBTC & \TestBTC \\
-    \bottomrule
-  \end{tabular}\par}
-  \vspace{3mm}
-  \raggedright\small
-  \begin{itemize}
-    \item Labels are next closes, so one row is removed at each boundary.
-    \item Scaling is fitted on training rows only, inside the model pipeline.
-    \item The final 20\% stays sealed; every model result here is from validation.
-  \end{itemize}
-\end{frame}
-
-% 7 ---------------------------------------------------------------------------
-\begin{frame}{How We Know the Pipeline Cannot Peek}
+  \par\vspace{2mm}
   \begin{columns}[T,onlytextwidth]
-    \begin{column}{.47\textwidth}
-      \begin{block}{Independent audit, verified fix}
-        \small The audit measured the stakes: without boundary purges, one test-period price moved the headline metric by \textbf{\LeakDelta{}}. We purge one row at each boundary and re-verified.
-      \end{block}
-      \begin{block}{Tests rebuilt around injected defects}
-        \small The audit pushed us to rebuild the test suite so that it must fail on known leakage patterns. A suite that cannot fail proves nothing.
-      \end{block}
+    \begin{column}{.50\textwidth}
+      \small\textbf{Why drop a row?}\\
+      \footnotesize The label is the next close, so the last training row's answer is the first
+      validation price. An independent audit showed that, without the purge, changing one
+      test-period price moved the headline metric by \textbf{\LeakDelta{}}.
     \end{column}
-    \begin{column}{.49\textwidth}
-      \textbf{\small \NMutations{} injected defects, one at a time}
-      \vspace{1mm}
-      \small
-      \begin{enumerate}\setlength{\itemsep}{0pt}
-        \item Features read the next bar
-        \item A disguised look-ahead
-        \item A centred rolling window
-        \item Backward fill of missing inputs
-        \item A whole-series statistic
-        \item Scaler fitted on train and test
-      \end{enumerate}
-      \vspace{1mm}
-      \textbf{All \NMutations{} are caught.}
-      \par\footnotesize 83 automated tests pass; the mutation check runs separately.
+    \begin{column}{.46\textwidth}
+      \small\textbf{Leakage is attacked on purpose}\\
+      \footnotesize \NMutations{} known mistakes are injected one at a time (next-bar read,
+      centred window, backward fill, whole-series statistic, scaler fitted on test, and a disguised
+      look-ahead). \textbf{All \NMutations{} are caught}; 83 automated tests pass.
     \end{column}
   \end{columns}
+  \par\vspace{2mm}
+  \raggedright\footnotesize Every model-performance number in this talk comes from the validation block.
 \end{frame}
 
-% =================================================================== ACT III
-\act{Act III: Training}
+% ===================================================================== PART 3
+\act{Part 3: Models and Fine-Tuning}
 \progresssection{3}
 
-% 8 ---------------------------------------------------------------------------
-\begin{frame}{Five Models, Three Mechanisms}
-  \centering\footnotesize
-  \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{@{}l >{\raggedright\arraybackslash}p{.30\linewidth} >{\raggedright\arraybackslash}p{.36\linewidth}@{}}
+% 10 --------------------------------------------------------------------------
+\begin{frame}{Five Models Plus a Baseline: Why Each One Is There}
+  \centering\scriptsize
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.23\linewidth}>{\raggedright\arraybackslash}p{.25\linewidth}>{\raggedright\arraybackslash}p{.22\linewidth}@{}}
     \toprule
-    \textbf{Model} & \textbf{How it predicts} & \textbf{Question it teaches} \\
+    \textbf{Model} & \textbf{How it predicts} & \textbf{Classic strength} & \textbf{Its role here} \\
     \midrule
-    Linear baseline & Linear fit with an L2 penalty & Is the simplest learner enough? \\
-    Ridge & Linear fit, wider penalty range & Does a penalty tame overfitting? \\
-    SVR (RBF) & Similarity to training examples & Do distances make a model scale-sensitive? \\
-    Random forest & Average of many decorrelated trees & Do thresholds make trees immune to scale? \\
-    Hist.\ gradient boosting & Trees fitted one after another to the remaining error & How does boosting differ from bagging? \\
+    Naive persistence & Copies today's close & No training; hard to beat on daily prices & The yardstick \\
+    Linear baseline & Weighted sum of features, small L2 penalty & Fast, transparent weights & Simplest learned model \\
+    Ridge & Weighted sum, L2 penalty over a wide range & Stable with correlated inputs & Does regularisation help? \\
+    SVR (RBF kernel) & Similarity to training examples & Non-linear; tolerant of small noise & Scale-sensitive case \\
+    Random forest & Average of many independent trees & Non-linear, robust, little tuning & Scale-invariant control \\
+    Hist.\ gradient boosting & Trees added one by one to fix remaining error & Often strongest on tabular data & Boosting vs bagging \\
     \bottomrule
   \end{tabular}
-  \par\vspace{4mm}
-  \raggedright\small
-  Classical models, no deep learning: the course handout discourages it, and these keep the comparison interpretable.
-\end{frame}
-
-% 9 ---------------------------------------------------------------------------
-\begin{frame}{Same Budget, Same Rules, Two Preprocessing Settings}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{.52\textwidth}
-      \textbf{\small Identical for every model}
-      \begin{itemize}\small
-        \item The same ten features and the same seed
-        \item \TrialsUsed{} random trials, $\le$\SecondsUsed{} s per cell (the protocol allows \TrialsMax{} and \SecondsMax{} s)
-        \item Scored by 5 expanding-window folds \emph{inside the training block}
-        \item The validation block never touches tuning
-      \end{itemize}
-    \end{column}
-    \begin{column}{.44\textwidth}
-      \begin{block}{P0}
-        \small Original feature values
-      \end{block}
-      \begin{block}{P2}
-        \small Standardised using training data only
-      \end{block}
-    \end{column}
-  \end{columns}
-  \vspace{2mm}
-  \centering\small
-  5 models $\times$ 2 assets $\times$ 2 settings $=$ \textbf{\NRunTotal{} runs}
-  \par\vspace{1mm}
+  \par\vspace{3mm}
   \raggedright\footnotesize
-  Every run records its git commit, data hash and configuration. Failed runs would be kept, not deleted.
-\end{frame}
-
-% ================================================================== ACT IV
-\act{Act IV: Evaluation}
-\progresssection{4}
-
-% 10 --------------------------------------------------------------------------
-\begin{frame}{The Opponent: Copy Today's Close}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{.52\textwidth}
-      \small
-      \textbf{Naive persistence}: tomorrow equals today. No training, no parameters.
-      \[
-        \text{Skill} = 1 - \frac{\text{model MAE}}{\text{persistence MAE}}
-      \]
-      \footnotesize Zero means no better than the rule. Negative means worse. MAE is the average size of the forecast error.
-    \end{column}
-    \begin{column}{.44\textwidth}
-      \begin{block}{Persistence MAE}
-        \small AAPL \NaiveMaeAAPL{} USD\\
-        BTC \NaiveMaeBTC{} USDT\\
-        {\footnotesize Not comparable: the scales differ.}
-      \end{block}
-    \end{column}
-  \end{columns}
-  \vspace{2mm}
-  \begin{alertblock}{Why not rank by $R^2$?}
-    \small On AAPL validation, persistence scores $R^2=\HookAAPLPersistenceRsq$ and SVR scores \HookAAPLRsq. Prices track yesterday's level, so $R^2$ is high for any forecast near it.
-  \end{alertblock}
+  Three mechanisms: linear weights, kernel similarity, tree splits. No deep learning: the course
+  handout discourages it, and classical models keep the comparison interpretable.
 \end{frame}
 
 % 11 --------------------------------------------------------------------------
-\begin{frame}{20 Runs, One Yardstick: Skill Stays Within 1\% of the Baseline}
+\begin{frame}{Fine-Tuning: The Same Search and Budget for Every Model}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{.36\textwidth}
+      \centering
+      \begin{tikzpicture}[font=\tiny, x=3.4cm, y=2.2mm]
+        \foreach \k/\e in {1/.52,2/.62,3/.72,4/.82,5/.92} {
+          \fill[accent!35] (0,-\k) rectangle (\e-.1,-\k+.7);
+          \fill[good!45] (\e-.1+.012,-\k) rectangle (\e,-\k+.7);
+          \node[left] at (0,-\k+.35) {Fold \k};
+        }
+        \draw[black!60] (0,0.3) rectangle (1,-5.3);
+        \node[above] at (.5,0.3) {Training block only};
+        \node[right, text=accent!80!black] at (1.02,-2) {fit};
+        \node[right, text=good!70!black] at (1.02,-3.2) {score};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{.60\textwidth}
+      \scriptsize
+      \begin{itemize}\setlength{\itemsep}{0pt}
+        \item 5 expanding-window folds inside the training block, 1-row gap
+        \item Random search: \TrialsUsed{} trials, $\le$\SecondsUsed{} s per cell, seed 42, for every model
+        \item Objective: mean MAE across folds; the validation block is never used
+        \item Grids frozen in the protocol before any result (protocol cap: \TrialsMax{} trials, \SecondsMax{} s)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \par\vspace{2mm}
+  \centering\tiny
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.1}
+  \input{generated/tuning_table.tex}
+\end{frame}
+
+% 12 --------------------------------------------------------------------------
+\begin{frame}{What We Explored Beyond Hyperparameters}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{.45\textwidth}
+      \small
+      \textbf{1. Target representation}\\
+      \footnotesize Price level first, then the change; all runs use the change.
+
+      \vspace{1.5mm}
+      \small\textbf{2. Preprocessing: P0 vs P2}\\
+      \footnotesize Raw vs standardised features: 5 models $\times$ 2 assets $\times$ 2 $=$
+      \NRunTotal{} runs. P1 skipped: no missing values.
+
+      \vspace{1.5mm}
+      \small\textbf{3. What scaling changed}\\
+      \footnotesize Trees: identical predictions, as split thresholds predict. SVR and ridge move,
+      because distances and penalties depend on scale (AAPL linear baseline MAE \LinAAPLDeltaPct\%).
+
+      \vspace{1.5mm}
+      \small\textbf{4. Grid edges}\\
+      \footnotesize Ridge chose $\alpha = 1000$, the grid's edge: widening grids is a next step.
+    \end{column}
+    \begin{column}{.52\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=.66\textheight,keepaspectratio]{fig06_ablation_delta.pdf}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ===================================================================== PART 4
+\act{Part 4: Evaluation}
+\progresssection{4}
+
+% 13 --------------------------------------------------------------------------
+\begin{frame}{Four Metrics, Each With a Job}
+  \centering\footnotesize
+  \renewcommand{\arraystretch}{1.18}
+  \begin{tabular}{@{}l l >{\raggedright\arraybackslash}p{.30\linewidth} c c@{}}
+    \toprule
+    & & & \multicolumn{2}{c}{\textbf{AAPL validation}} \\
+    \cmidrule(l){4-5}
+    \textbf{Metric} & \textbf{Formula} & \textbf{What it tells us} & \textbf{Best (SVR)} & \textbf{Persistence} \\
+    \midrule
+    MAE & $\frac{1}{n}\sum |y - \hat{y}|$ & Typical error in dollars & \BestMaeAAPL & \NaiveMaeAAPL \\
+    RMSE & $\sqrt{\frac{1}{n}\sum (y - \hat{y})^2}$ & Punishes large misses & \BestRmseAAPL & \NaiveRmseAAPL \\
+    $R^2$ & $1 - \frac{SS_\text{res}}{SS_\text{tot}}$ & Share of price variance explained & \BestRsqAAPL & \NaiveRsqAAPL \\
+    \textbf{Skill} & $1 - \frac{\text{MAE}_\text{model}}{\text{MAE}_\text{persistence}}$ & Gain over the yardstick; unit-free & \textbf{\BestAAPLSkillAll\%} & 0 \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{2mm}
+  \raggedright\footnotesize
+  \begin{itemize}
+    \item $R^2$ is high for any forecast that tracks yesterday's price, so it never ranks models.
+    \item MAE and RMSE are in each asset's currency; only skill compares AAPL with BTC.
+    \item Uncertainty: paired moving-block bootstrap intervals (slide 15).
+  \end{itemize}
+\end{frame}
+
+% 14 --------------------------------------------------------------------------
+\begin{frame}{Results: All \NRunTotal{} Runs Land Within 1\% of the Baseline}
   \centering
   \includegraphics[width=.92\textwidth,height=.60\textheight,keepaspectratio]{fig04_model_vs_naive.pdf}
   \par\vspace{1mm}
   \raggedright\footnotesize
   \textbf{Best AAPL:} SVR (P2) \BestAAPLSkillAll\%, about \AAPLGainCents{} cents lower average error.
   \textbf{Best BTC:} linear baseline (P0) \BestBTCSkillAll\%.
-  All \NRunTotal{} runs fall between \SkillMin\% and \SkillMax\% skill, and the complete grid is shown in Backup 1.
-  Chart: P2 runs. Validation data only.
+  All \NRunTotal{} runs fall between \SkillMin\% and \SkillMax\% skill; \NBelowBaseline{} are below zero.
+  Chart: P2 runs; the full grid is in Backup 1.
 \end{frame}
 
-% 12 --------------------------------------------------------------------------
-\begin{frame}{Uncertainty Measured for All \NCiTotal{} Runs: Parity With the Baseline}
+% 15 --------------------------------------------------------------------------
+\begin{frame}{How Certain? Every Interval Includes Zero}
   \centering
-  \includegraphics[width=\textwidth,height=.62\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
+  \includegraphics[width=\textwidth,height=.56\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
   \par\vspace{1mm}
   \raggedright\footnotesize
-  \textbf{95\% moving-block bootstrap:} errors paired by date, blocks of
-  \CiBlock{} consecutive observations, \CiResamples{} resamples.
-  With \NValObsAAPL{} (AAPL) and \NValObsBTC{} (BTC) validation days, all \NCiIncludeZero{} intervals contain zero:
-  the models match a strong baseline within measurement precision.
+  \textbf{95\% moving-block bootstrap:} errors paired by date, blocks of \CiBlock{} days,
+  \CiResamples{} resamples, on \NValObsAAPL{} (AAPL) and \NValObsBTC{} (BTC) validation days.
+  All \NCiIncludeZero{} intervals contain zero: parity with a strong baseline.
+  \textbf{Why so hard to beat?} Consecutive daily returns are almost uncorrelated
+  (AAPL \AutoAAPL, BTC \AutoBTC), so little is left to learn.
 \end{frame}
 
-% 13 --------------------------------------------------------------------------
-\begin{frame}{Scaling Effects Match What Theory Predicts}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{.42\textwidth}
-      \small
-      \textbf{Random forest and boosting}\\
-      Identical predictions with P0 and P2 (largest difference \TreeMaxDiff): a built-in check that the pipeline is exact.
+% ===================================================================== PART 5
+\act{Part 5: Teaching Design}
+\progresssection{5}
 
-      \vspace{2mm}
-      \textbf{SVR and ridge}\\
-      Distances and penalties depend on feature scale, so they move.
-
-      \vspace{2mm}
-      \textbf{AAPL linear baseline}\\
-      MAE shifts by \LinAAPLDeltaPct\% after scaling.
-
-      \vspace{3mm}
-      \footnotesize Know the mechanism, and you can predict which models are sensitive to preprocessing.
-    \end{column}
-    \begin{column}{.55\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=.63\textheight,keepaspectratio]{fig06_ablation_delta.pdf}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% 14 --------------------------------------------------------------------------
-\begin{frame}{Why a Simple Rule Is So Hard to Beat}
-  \centering
-  \begin{tabular}{@{}lccc@{}}
+% 16 --------------------------------------------------------------------------
+\begin{frame}{Teaching Design: The Pipeline Becomes a 60-Minute Lesson}
+  \centering\scriptsize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.27\linewidth}>{\raggedright\arraybackslash}p{.22\linewidth}>{\raggedright\arraybackslash}p{.24\linewidth}@{}}
     \toprule
-    \textbf{Observed close} & 100 & 101 & 100 \\
-    \textbf{Persistence forecast} & & 100 & 101 \\
+    \textbf{Task} & \textbf{Learners\ldots} & \textbf{From our stage} & \textbf{Course concept} \\
+    \midrule
+    1 & Compare training error with unseen-data error & Split (Part 2) & Fitting vs generalisation \\
+    2 & Find the leak in a feature snippet & Features (Part 2) & Leakage prevention \\
+    3 & Read a skill table, explain a negative value & Evaluation (Part 4) & Metrics and baselines \\
+    4 & Predict which models care about scaling & Ablation (Part 3) & Train-only preprocessing, model complexity \\
+    5 & Explain why low error is not profit & Limits (Part 4) & Teacher judgement \\
     \bottomrule
   \end{tabular}
   \par\vspace{3mm}
-  {\footnotesize Illustrative example: the forecast stays close to the price level and misses both moves.\par}
-  \vspace{4mm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{.48\textwidth}
+      \footnotesize
+      \textbf{Audience:} senior secondary and first-year university students new to ML.\\
+      \textbf{Sequence:} hook, baseline first, then models, then discussion.
+    \end{column}
+    \begin{column}{.48\textwidth}
+      \footnotesize
+      \textbf{Materials:} Colab workbook, teacher guide with worked answers, and a notebook that
+      rebuilds our results from the hashed data.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 17 --------------------------------------------------------------------------
+\begin{frame}{Summary: What Each Stage Delivered}
+  \centering\footnotesize
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.70\linewidth}@{}}
+    \toprule
+    \textbf{Stage} & \textbf{Outcome} \\
+    \midrule
+    Data selection & Two contrasting markets, traceable sources, fingerprinted files \\
+    Processing & Ten trailing features and a change target; leakage tested by \NMutations{} injected defects \\
+    Models and tuning & Five mechanisms with one shared search budget and frozen grids \\
+    Evaluation & All \NRunTotal{} runs within 1\% of persistence; all \NCiIncludeZero{} intervals include zero \\
+    Teaching design & A 60-minute lesson with five tasks and worked answers \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{3mm}
   \raggedright\small
-  \begin{itemize}
-    \item The rule already tracks the price level, so what is left to learn is the daily change, and it is small.
-    \item Correlation between consecutive returns is near zero:
-      AAPL \AutoAAPL{}, BTC \AutoBTC{}.
-  \end{itemize}
-  \vspace{1mm}
-  \footnotesize This diagnostic explains why a strong baseline is the right yardstick, and why a careful comparison matters.
-\end{frame}
-
-% =================================================================== ACT V
-\act{Act V: Education}
-\progresssection{5}
-
-% 15 --------------------------------------------------------------------------
-\begin{frame}{A 60-Minute Lesson Built on the Result}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{.47\textwidth}
-      \textbf{\small Lesson package}
-      \begin{itemize}\small
-        \item A guided Colab workbook with five tasks
-        \item A teacher guide with worked answers
-        \item A separate notebook rebuilds our results from hashed data
-        \item 83 automated tests pass in the recorded verification
-      \end{itemize}
-    \end{column}
-    \begin{column}{.49\textwidth}
-      \begin{block}{Try one of the questions}
-        \small A model reaches \BestAAPLSkillAll\% validation skill. Its 95\% interval includes zero. Is it reliably better?
-        \begin{enumerate}\setlength{\itemsep}{0pt}
-          \item[A.] Yes, the score is positive.
-          \item[B.] No, the evidence cannot separate it from noise.
-          \item[C.] Yes, complex models generalise better.
-        \end{enumerate}
-      \end{block}
-    \end{column}
-  \end{columns}
-  \vspace{2mm}
-  \footnotesize Built, reproducible and teacher-ready: the next step is a classroom pilot.
-\end{frame}
-
-% 16 --------------------------------------------------------------------------
-\begin{frame}{The Skill Students Can Take to Any AI Claim}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{.52\textwidth}
-      \begin{enumerate}\small
-        \item What could the model see at prediction time?
-        \item How did a simple rule do on the same examples?
-        \item How certain is the improvement?
-      \end{enumerate}
-    \end{column}
-    \begin{column}{.44\textwidth}
-      \textbf{\small Next steps}
-      \begin{itemize}\footnotesize
-        \item Open the sealed test block once, for a single confirmation
-        \item Pilot the lesson with a real class
-        \item Extend to more assets and horizons
-        \item Run the P3 and P4 preprocessing variants
-      \end{itemize}
-    \end{column}
-  \end{columns}
-  \vspace{3mm}
-  \small These three checks transfer to any AI claim, in any subject.
+  \textbf{Next steps:} open the sealed test block once; pilot the lesson with a class; widen the
+  search grids; run the P3 and P4 variants.
   \par\vspace{2mm}
   {\footnotesize\bfseries Educational analysis of historical data. Not investment advice.\par}
 \end{frame}

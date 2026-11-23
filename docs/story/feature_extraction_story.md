@@ -1,8 +1,9 @@
-# Feature Extraction Story（v2，已对照仓库逐条核实）
+# Feature Extraction Story（v3：按流水线五部分组织；事实部分沿用 v2 的逐条核实）
 ## INT4096 — Learning Machine Learning Through Financial Forecasting
 
 > [!NOTE]
 > 本文档是**演示材料的单一叙事来源**：`slides/latex/main.tex`、`docs/presentation/*` 的结构、顺序和措辞都以此为准。
+> **v3（2026-11-24）结构调整：** 按老师偏好"有逻辑、有体系、用最少时间讲透技术实现"，演示改为**一个部分对应流水线的一个阶段**：Part 1 数据选择 → Part 2 数据处理与特征工程 → Part 3 模型与调参 → Part 4 评估 → Part 5 教学设计（17 页正文，见附录 C）。下文各节的事实与证据不变；"Act I–V"即 Part 1–5。
 > v2 相对 v1 做了三件事：① 按「三个问题」重新组织主线；② 逐条对照 `artifacts/`、`configs/`、`src/`、`tests/` 核实，修正了 v1 中的事实错误（见附录 A）；③ 每一节都标明证据路径和"演示时该怎么说 / 不能怎么说"。
 > 所有实验数字来自 `artifacts/experiments/`（由 `scripts/build_slide_assets.py` 生成宏），不手填。
 > 证据标签沿用 AGENTS.md：`[A]` 课程书面要求 · `[B]` 口头指引（学生转述）· `[C]` 团队决策（decision_log）· `[D]` 提案/未批准。
@@ -11,20 +12,21 @@
 
 ## 0. 一页总览
 
-### 0.1 主线：三个问题贯穿五幕
+### 0.1 主线：一条流水线，五个部分，每部分回答一个问题
 
-整个项目教的是：看到 "模型得了 95.56 分" 时，追问三件事。
-
-| # | 学习者要问的问题 | 在哪一幕回答 |
+| Part | 要回答的问题 | 子问题（各一页） |
 |---|---|---|
-| Q1 | 模型预测时**能看到什么信息**？ | Act I 数据选择 + Act II 数据处理 |
-| Q2 | **最简单的规则**在同样样本上能做到多少？ | Act III 训练（公平对手）+ Act IV 评估（基线与技能分数） |
-| Q3 | 这点提升**有多确定**？ | Act IV 评估（Bootstrap 区间、缩放消融） |
-| — | 怎样把它**教给学生**？ | Act V 教育 |
+| 1 数据选择 | 用了什么数据、从哪来、为什么、哪些行合格？ | (a) 用了什么 + (b) 来源链接 → 第 3 页；(c) 为什么选这两个 → 第 4 页；(d) 筛选条件 → 第 5 页 |
+| 2 数据处理与特征工程 | 原始数据有什么问题？模型能合法地看到什么？ | 问题→处理（第 6 页）；十个特征（第 7 页）；目标变量（第 8 页）；切分与泄漏检验（第 9 页） |
+| 3 模型与调参 | 用哪些模型、为什么、怎样公平地调参？ | 模型与理由（第 10 页）；调参流程与选中值（第 11 页）；超参数之外的探索（第 12 页） |
+| 4 评估 | 用什么指标、结果如何、有多确定？ | 四个指标（第 13 页）；20 次结果（第 14 页）；Bootstrap 与原因（第 15 页） |
+| 5 教学设计 | 项目怎样变成一节课？ | 任务↔阶段↔课程概念（第 16 页）；分阶段总结（第 17 页） |
 
-### 0.2 五幕结论速查
+原先的"三个问题"（能看到什么 / 简单规则多好 / 有多确定）仍然是教学目标，体现在 Part 2、Part 4 和第 16 页的任务里，不再作为演示的骨架。
 
-| 幕 | 一句话结论 | 核心证据 |
+### 0.2 五部分结论速查
+
+| 部分 | 一句话结论 | 核心证据 |
 |---|---|---|
 | Opening | 验证集 R²：SVR **0.9556** vs 复制昨日收盘 **0.9555**——高分不说明学到东西 | `artifacts/experiments/*_aapl_svr_P2_*/metrics.json` |
 | I 数据 | 两个结构不同的市场（AAPL 交易时段 / BTC 24×7），同一套协议 | `data/raw/*.manifest.json`、`docs/research/data_cards/` |
@@ -350,28 +352,31 @@ flowchart LR
 | B-7 | 网格边缘选择 | 见 3.3，可作为 Q&A |
 | B-8 | 报告 `reports/latex/sections/07_models.tex` 第 5 行也写"near-unregularised linear model" | 与幻灯片保持一致，改为"a linear baseline with a tuned L2 penalty"，并重新编译报告（我没有改报告，因为它是单独的评分交付物） |
 
-## 附录 C · v2 幻灯片对照（16 + 5 备份 + 2 参考文献）
+## 附录 C · v3 幻灯片对照（17 + 5 备份 + 2 参考文献）
 
-| # | 幕 | 标题 | 对应本文 | 目标时长 |
+| # | 部分 | 标题 | 对应本文 | 目标时长 |
 |---|---|---|---|---|
-| 1 | Opening | Learning Machine Learning Through Financial Forecasting（R² 钩子） | 0.2 | 0:50 |
-| 2 | Opening | Three Questions to Ask of Any AI Score | 0.1 | 1:00 |
-| 3 | I | Two Markets, One Protocol | 1.1–1.3 | 1:05 |
-| 4 | II | Ten Inputs Use Only Information Available at the Close | 2.1–2.2 | 1:00 |
-| 5 | II | Predicting the Change Gives Models a Clearer Task | 2.3 | 1:05 |
-| 6 | II | Chronological Splits, Train-Only Fitting, a Sealed Test Block | 2.4–2.5 | 1:15 |
-| 7 | II | How We Know the Pipeline Cannot Peek | 2.6 | 0:55 |
-| 8 | III | Five Models, Three Mechanisms | 3.1 | 1:00 |
-| 9 | III | Same Budget, Same Rules, Two Preprocessing Settings | 3.2–3.3 | 1:00 |
-| 10 | IV | The Opponent: Copy Today's Close | 4.1 | 0:55 |
-| 11 | IV | 20 Runs, One Yardstick: Skill Stays Within 1% of the Baseline | 4.2 | 1:10 |
-| 12 | IV | Uncertainty Measured for All 20 Runs: Parity With the Baseline | 4.3 | 1:10 |
-| 13 | IV | Scaling Effects Match What Theory Predicts | 4.4 | 1:05 |
-| 14 | IV | Why a Simple Rule Is So Hard to Beat | 4.5 | 1:00 |
-| 15 | V | A 60-Minute Lesson Built on the Result | 5.1–5.3 | 1:15 |
-| 16 | V | The Skill Students Can Take to Any AI Claim | 5.4 | 1:05 |
+| 1 | 开场 | Learning Machine Learning Through Financial Forecasting（研究问题） | 0.1 | 0:25 |
+| 2 | 开场 | Roadmap: One Pipeline, Five Stages | 0.1–0.2 | 0:50 |
+| 3 | 1 | What We Used, and Exactly Where It Came From（含两个下载链接） | 1.1、参考文献·数据来源 | 0:50 |
+| 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 1:05 |
+| 5 | 1 | Selection Conditions: From Raw Bars to Modelling Rows | 1.2–1.3 | 1:10 |
+| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:05 |
+| 7 | 2 | Ten Features, Built Only From Information Available at the Close | 2.1–2.2 | 0:50 |
+| 8 | 2 | Engineering the Target: Predict the Change, Then Add It Back | 2.3 | 0:55 |
+| 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 1:00 |
+| 10 | 3 | Five Models Plus a Baseline: Why Each One Is There | 3.1 | 1:10 |
+| 11 | 3 | Fine-Tuning: The Same Search and Budget for Every Model（网格与选中值由脚本生成） | 3.2–3.3 | 1:05 |
+| 12 | 3 | What We Explored Beyond Hyperparameters | 2.3、2.5、3.3、4.4 | 0:55 |
+| 13 | 4 | Four Metrics, Each With a Job | 4.1 | 1:00 |
+| 14 | 4 | Results: All 20 Runs Land Within 1% of the Baseline | 4.2 | 0:55 |
+| 15 | 4 | How Certain? Every Interval Includes Zero | 4.3、4.5 | 0:55 |
+| 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 1:10 |
+| 17 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:50 |
 
 备份：B1 完整 20 格矩阵 · B2 公平性与 manifest 审计 · B3 为什么删一行（周五例子）· B4 特征重要性 · B5 Q&A 卡片。
+
+**v3 的两个取舍：** ① 第 16 页的五个任务采用 `docs/education/formative_tasks.md`（教师指南有逐题参考答案），解决了 5.2 中"两套任务名对不上"的问题；Colab Template 仍可作为练习本。② 第 11 页新增的"调参器几乎总选最保守设置"（岭回归 α 最大、HGB 学习率最小、AAPL 上 SVR 的 C 最小、RF 叶子最大）来自 `metrics.json` 的 `best_hyperparameters`，与"信号很少"的结论一致。
 
 ---
 
