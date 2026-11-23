@@ -46,21 +46,52 @@
 \definecolor{good}{HTML}{1E8449}
 
 \metroset{block=fill, sectionpage=none, numbering=fraction}
-\setbeamercolor{author in head/foot}{bg=black!82,fg=white}
-\setbeamercolor{date in head/foot}{bg=black!82,fg=white}
+\definecolor{progressinactive}{HTML}{DDE1E3}
+\definecolor{progresslabel}{HTML}{50585E}
+\setbeamercolor{progress active}{use=frametitle,bg=frametitle.bg,fg=frametitle.fg}
+\setbeamercolor{progress inactive}{bg=progressinactive,fg=progresslabel}
+\setbeamercolor{progress presenter}{bg=black!4,fg=black!75}
 \setbeamerfont{author}{size=\small}
 \setbeamerfont{institute}{size=\scriptsize}
 
-% Footer: act | page. Re-applied after \appendix (beamer resets it).
+% Footer: act | page on a thin strip, then a five-stage progress bar.
+% \progresssection{0} leaves every stage inactive (opening, backup, references).
+% Re-applied after \appendix because beamer resets the footline there.
+\newcounter{progresssection}
+\setcounter{progresssection}{0}
+\newcommand{\progresssection}[1]{\setcounter{progresssection}{#1}}
+
+\newcommand{\progresssegment}[3]{%
+  \ifnum\value{progresssection}=#1\relax
+    \begin{beamercolorbox}[wd=\dimexpr.20\paperwidth-.5pt\relax,
+        ht=2.4ex,dp=0.7ex,center]{progress active}%
+      {\fontsize{5.2}{6.0}\selectfont\bfseries #2\enspace #3}%
+    \end{beamercolorbox}%
+  \else
+    \begin{beamercolorbox}[wd=\dimexpr.20\paperwidth-.5pt\relax,
+        ht=2.4ex,dp=0.7ex,center]{progress inactive}%
+      {\fontsize{5.2}{6.0}\selectfont #2\enspace #3}%
+    \end{beamercolorbox}%
+  \fi
+  \hskip.5pt%
+}
+
 \newcommand{\intfootline}{%
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=.70\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=.3cm]{author in head/foot}%
-      \usebeamerfont{author in head/foot}\insertsectionhead
+    \begin{beamercolorbox}[wd=.65\paperwidth,ht=1.2ex,dp=0.2ex,leftskip=.3cm]{progress presenter}%
+      {\fontsize{5.6}{6.4}\selectfont\insertsectionhead}%
     \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.30\paperwidth,ht=2.4ex,dp=1.1ex,right,rightskip=.3cm]{date in head/foot}%
-      \usebeamerfont{date in head/foot}\insertframenumber\,/\,\inserttotalframenumber
+    \begin{beamercolorbox}[wd=.35\paperwidth,ht=1.2ex,dp=0.2ex,right,rightskip=.3cm]{progress presenter}%
+      {\fontsize{5.6}{6.4}\selectfont\bfseries\insertframenumber\,/\,\inserttotalframenumber}%
     \end{beamercolorbox}%
+  }\par
+  \hbox{%
+    \progresssegment{1}{01}{Data Selection}%
+    \progresssegment{2}{02}{Data Processing}%
+    \progresssegment{3}{03}{Model Training}%
+    \progresssegment{4}{04}{Model Evaluation}%
+    \progresssegment{5}{05}{Education Proposal}%
   }\vskip0pt%
 }
 \setbeamertemplate{footline}{\intfootline}
@@ -139,6 +170,7 @@
 
 % ===================================================================== ACT I
 \act{Act I: Data}
+\progresssection{1}
 
 % 3 ---------------------------------------------------------------------------
 \begin{frame}{Two Markets, One Protocol}
@@ -168,6 +200,7 @@
 
 % ==================================================================== ACT II
 \act{Act II: Processing}
+\progresssection{2}
 
 % 4 ---------------------------------------------------------------------------
 \begin{frame}{Ten Inputs Use Only Information Available at the Close}
@@ -282,6 +315,7 @@
 
 % =================================================================== ACT III
 \act{Act III: Training}
+\progresssection{3}
 
 % 8 ---------------------------------------------------------------------------
 \begin{frame}{Five Models, Three Mechanisms}
@@ -334,6 +368,7 @@
 
 % ================================================================== ACT IV
 \act{Act IV: Evaluation}
+\progresssection{4}
 
 % 10 --------------------------------------------------------------------------
 \begin{frame}{The Opponent: Copy Today's Close}
@@ -375,7 +410,7 @@
 % 12 --------------------------------------------------------------------------
 \begin{frame}{Uncertainty Measured for All \NCiTotal{} Runs: Parity With the Baseline}
   \centering
-  \includegraphics[width=\textwidth,height=.66\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
+  \includegraphics[width=\textwidth,height=.62\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
   \par\vspace{1mm}
   \raggedright\footnotesize
   \textbf{95\% moving-block bootstrap:} errors paired by date, blocks of
@@ -434,6 +469,7 @@
 
 % =================================================================== ACT V
 \act{Act V: Education}
+\progresssection{5}
 
 % 15 --------------------------------------------------------------------------
 \begin{frame}{A 60-Minute Lesson Built on the Result}
@@ -489,6 +525,7 @@
 \end{frame}
 
 % ======================================================================= BACKUP
+\progresssection{0}
 \appendix
 \section{Backup material}
 \setbeamertemplate{footline}{\intfootline}
