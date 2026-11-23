@@ -35,25 +35,51 @@
 \definecolor{accent}{HTML}{2E86AB}
 \definecolor{warn}{HTML}{C0392B}
 \definecolor{good}{HTML}{1E8449}
+\definecolor{progressinactive}{HTML}{DDE1E3}
+\definecolor{progresslabel}{HTML}{50585E}
 
 \metroset{block=fill, sectionpage=none, numbering=fraction}
-\setbeamercolor{author in head/foot}{bg=black!82,fg=white}
-\setbeamercolor{date in head/foot}{bg=black!82,fg=white}
+\setbeamercolor{progress active}{use=frametitle,bg=frametitle.bg,fg=frametitle.fg}
+\setbeamercolor{progress inactive}{bg=progressinactive,fg=progresslabel}
+\setbeamercolor{progress page}{bg=black!12,fg=black!70}
 \setbeamerfont{author}{size=\small}
 \setbeamerfont{institute}{size=\scriptsize}
 
 \newcommand{\currentspeaker}{}
 \newcommand{\speaker}[1]{\gdef\currentspeaker{#1}}
 
-% Footer: act | presenter | page. Re-applied after \appendix (beamer resets it).
+% Five-stage footer. A value of 0 leaves every stage inactive (title,
+% introduction, backup and references). Re-applied after \appendix because
+% beamer resets the footline there.
+\newcounter{progresssection}
+\setcounter{progresssection}{0}
+\newcommand{\progresssection}[1]{\setcounter{progresssection}{#1}}
+
+\newcommand{\progresssegment}[3]{%
+  \ifnum\value{progresssection}=#1\relax
+    \begin{beamercolorbox}[wd=\dimexpr.18\paperwidth-.5pt\relax,
+        ht=2.7ex,dp=1.0ex,center]{progress active}%
+      {\fontsize{5.2}{6.0}\selectfont\bfseries #2\enspace #3}%
+    \end{beamercolorbox}%
+  \else
+    \begin{beamercolorbox}[wd=\dimexpr.18\paperwidth-.5pt\relax,
+        ht=2.7ex,dp=1.0ex,center]{progress inactive}%
+      {\fontsize{5.2}{6.0}\selectfont #2\enspace #3}%
+    \end{beamercolorbox}%
+  \fi
+  \hskip.5pt%
+}
+
 \newcommand{\intfootline}{%
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=.70\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=.3cm]{author in head/foot}%
-      \usebeamerfont{author in head/foot}\insertsectionhead\ ---\ \currentspeaker
-    \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.30\paperwidth,ht=2.4ex,dp=1.1ex,right,rightskip=.3cm]{date in head/foot}%
-      \usebeamerfont{date in head/foot}\insertframenumber\,/\,\inserttotalframenumber
+    \progresssegment{1}{01}{Data Selection}%
+    \progresssegment{2}{02}{Data Preprocessing}%
+    \progresssegment{3}{03}{Model Training}%
+    \progresssegment{4}{04}{Model Comparison}%
+    \progresssegment{5}{05}{Conclusion}%
+    \begin{beamercolorbox}[wd=.10\paperwidth,ht=2.7ex,dp=1.0ex,center]{progress page}%
+      \usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber
     \end{beamercolorbox}%
   }\vskip0pt%
 }
@@ -118,6 +144,7 @@
 
 \act{Act II: A fair experiment}
 
+\progresssection{1}
 \begin{frame}{Two Datasets Test the Same Protocol}
   \speaker{Dong Yuankun}
   \centering\small
@@ -138,6 +165,7 @@
   {\footnotesize Automated checks flag duplicates, missing fields and invalid prices or volumes.}
 \end{frame}
 
+\progresssection{2}
 \begin{frame}{Every Forecast Starts at the Same Time}
   \speaker{Zhang Haoyu}
   \begin{columns}[T,onlytextwidth]
@@ -213,6 +241,7 @@
 
 \act{Act III: Engineering choices}
 
+\progresssection{3}
 \begin{frame}{Predicting the Change Gives Models a Clearer Task}
   \speaker{Lau Pak Hei}
   \small Relative features describe movement. Today's close supplies the price level.
@@ -254,6 +283,7 @@
 
 \act{Act IV: What the evidence shows}
 
+\progresssection{4}
 \begin{frame}{AAPL's Best Run Saved \AAPLGainCents{} Cents per Forecast}
   \speaker{Zhang Yancheng}
   \begin{columns}[T,onlytextwidth]
@@ -330,6 +360,7 @@
 
 \act{Act V: The AI literacy lesson}
 
+\progresssection{5}
 \begin{frame}{Why Smart Models Still Lose to a Simple Rule}
   \speaker{Zhang Yancheng}
   \small A 60-minute guided Colab lesson with five formative tasks and a teacher guide with worked answers.
@@ -374,6 +405,7 @@
 \end{frame}
 
 % ======================================================================= BACKUP
+\progresssection{0}
 \appendix
 \section{Backup material}
 \setbeamertemplate{footline}{\intfootline}

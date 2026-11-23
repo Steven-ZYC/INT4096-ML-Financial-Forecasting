@@ -86,6 +86,8 @@ def load_runs() -> list[dict]:
                 "skill_mae": metrics.get("validation_skill_mae"),
                 "mae": metrics.get("validation_mae"),
                 "baseline_mae": metrics.get("validation_baseline_mae"),
+                "r2": metrics.get("validation_r2"),
+                "baseline_r2": metrics.get("validation_baseline_r2"),
                 "n_obs": metrics.get("validation_n_obs"),
                 "trials": budget[0],
                 "seconds": budget[1],
@@ -249,6 +251,14 @@ def write_backup_table(runs: list[dict]) -> None:
 
 def build_deck_macros(m: dict[str, str], runs: list[dict]) -> None:
     """Macros required by the 16-slide narrative (all measured, none typed)."""
+    aapl_svr_p2 = next(
+        r for r in runs
+        if r["asset"] == "AAPL" and r["model_id"] == "svr" and r["variant"] == "P2"
+    )
+    m["HookAAPLRsq"] = f"{aapl_svr_p2['r2']:.4f}"
+    m["HookAAPLPersistenceRsq"] = f"{aapl_svr_p2['baseline_r2']:.4f}"
+    m["AAPLGainCents"] = f"{(aapl_svr_p2['baseline_mae'] - aapl_svr_p2['mae']) * 100:.1f}"
+
     p2 = [r for r in runs if r["variant"] == "P2"]
     m["NumPtwoRuns"] = str(len(p2))
     m["NumPtwoNegative"] = str(sum(1 for r in p2 if r["skill_mae"] < 0))
