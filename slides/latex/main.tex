@@ -7,8 +7,8 @@
 %   -> Part 5 Teaching Design
 % Story source: docs/story/feature_extraction_story.md.
 %
-% Presenters are deliberately NOT named in the deck: the speaking order is set
-% in docs/presentation/timing_plan.md (five voice blocks, one per part).
+% The presenter of each slide is shown in the footer (\speaker{...}); the
+% speaking plan is docs/presentation/timing_plan.md.
 %
 % Every empirical number is a macro from generated/numbers.tex (and the tables
 % in generated/), produced from artifacts/ and data/raw/ by
@@ -54,7 +54,10 @@
 \setbeamerfont{author}{size=\small}
 \setbeamerfont{institute}{size=\scriptsize}
 
-% Footer: act | page on a thin strip, then a five-stage progress bar.
+\newcommand{\currentspeaker}{}
+\newcommand{\speaker}[1]{\gdef\currentspeaker{#1}}
+
+% Footer: part | speaker and page on a thin strip, then a five-stage progress bar.
 % \progresssection{0} leaves every stage inactive (opening, backup, references).
 % Re-applied after \appendix because beamer resets the footline there.
 \newcounter{progresssection}
@@ -83,7 +86,7 @@
       {\fontsize{5.6}{6.4}\selectfont\insertsectionhead}%
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=.35\paperwidth,ht=1.2ex,dp=0.2ex,right,rightskip=.3cm]{progress presenter}%
-      {\fontsize{5.6}{6.4}\selectfont\bfseries\insertframenumber\,/\,\inserttotalframenumber}%
+      {\fontsize{5.6}{6.4}\selectfont\bfseries\currentspeaker\hspace{2mm}\insertframenumber\,/\,\inserttotalframenumber}%
     \end{beamercolorbox}%
   }\par
   \hbox{%
@@ -113,6 +116,7 @@
 
 % 1 ---------------------------------------------------------------------------
 \begin{frame}
+  \speaker{Dong Yuankun}
   \usebeamercolor{frametitle}
   \color{frametitle.bg}
   \setlength{\parskip}{0pt}
@@ -144,6 +148,7 @@
 
 % 2 ---------------------------------------------------------------------------
 \begin{frame}{Roadmap: One Pipeline, Five Stages}
+  \speaker{Dong Yuankun}
   \centering
   \begin{tikzpicture}[font=\scriptsize,
       stage/.style={draw=frametitle.bg, fill=frametitle.bg, text=white, rounded corners=2pt,
@@ -179,6 +184,7 @@
 
 % 3 ---------------------------------------------------------------------------
 \begin{frame}{What We Used, and Exactly Where It Came From}
+  \speaker{Dong Yuankun}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.25}
   \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.39\linewidth}>{\raggedright\arraybackslash}p{.39\linewidth}@{}}
@@ -207,6 +213,7 @@
 
 % 4 ---------------------------------------------------------------------------
 \begin{frame}{Why These Two: Two Markets With Different Characteristics}
+  \speaker{Dong Yuankun}
   \centering\scriptsize
   \renewcommand{\arraystretch}{1.12}
   \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.42\linewidth}>{\raggedright\arraybackslash}p{.30\linewidth}@{}}
@@ -229,6 +236,7 @@
 
 % 5 ---------------------------------------------------------------------------
 \begin{frame}{Selection Conditions: From Raw Bars to Modelling Rows}
+  \speaker{Dong Yuankun}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.47\textwidth}
       \small\textbf{Conditions every row must meet}
@@ -273,6 +281,7 @@
 
 % 6 ---------------------------------------------------------------------------
 \begin{frame}{Problems in the Raw Data, and How We Handled Each}
+  \speaker{Dong Yuankun}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.22}
   \begin{tabular}{@{}>{\raggedright\arraybackslash}p{.27\linewidth}>{\raggedright\arraybackslash}p{.31\linewidth}>{\raggedright\arraybackslash}p{.36\linewidth}@{}}
@@ -291,6 +300,7 @@
 
 % 7 ---------------------------------------------------------------------------
 \begin{frame}{Ten Features, Built Only From Information Available at the Close}
+  \speaker{Dong Yuankun}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.17}
   \setlength{\tabcolsep}{4pt}
@@ -317,6 +327,7 @@
 
 % 8 ---------------------------------------------------------------------------
 \begin{frame}{Engineering the Target: Predict the Change, Then Add It Back}
+  \speaker{Dong Yuankun}
   \small Ratios carry no price level, so the model learns the change; today's close supplies the level.
   \[
     \underbrace{\widehat{P}_{t+1}}_{\text{forecast close}}
@@ -342,6 +353,7 @@
 
 % 9 ---------------------------------------------------------------------------
 \begin{frame}{Chronological Split, and Proof That the Pipeline Cannot Peek}
+  \speaker{Dong Yuankun}
   \centering
   \begin{tikzpicture}[font=\scriptsize,
       seg/.style={draw, rounded corners=1pt, minimum height=7mm, align=center}]
@@ -377,6 +389,7 @@
 
 % 10 --------------------------------------------------------------------------
 \begin{frame}{Five Models Plus a Baseline: Why Each One Is There}
+  \speaker{Zhang Yancheng}
   \centering\scriptsize
   \renewcommand{\arraystretch}{1.12}
   \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.23\linewidth}>{\raggedright\arraybackslash}p{.25\linewidth}>{\raggedright\arraybackslash}p{.22\linewidth}@{}}
@@ -399,6 +412,7 @@
 
 % 11 --------------------------------------------------------------------------
 \begin{frame}{Fine-Tuning: The Same Search and Budget for Every Model}
+  \speaker{Zhang Yancheng}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.36\textwidth}
       \centering
@@ -433,6 +447,7 @@
 
 % 12 --------------------------------------------------------------------------
 \begin{frame}{What We Explored Beyond Hyperparameters}
+  \speaker{Zhang Yancheng}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.45\textwidth}
       \small
@@ -466,6 +481,7 @@
 
 % 13 --------------------------------------------------------------------------
 \begin{frame}{Four Metrics, Each With a Job}
+  \speaker{Zhang Haoyu}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.18}
   \begin{tabular}{@{}l l >{\raggedright\arraybackslash}p{.30\linewidth} c c@{}}
@@ -491,6 +507,7 @@
 
 % 14 --------------------------------------------------------------------------
 \begin{frame}{Results: All \NRunTotal{} Runs Land Within 1\% of the Baseline}
+  \speaker{Zhang Haoyu}
   \centering
   \includegraphics[width=.92\textwidth,height=.60\textheight,keepaspectratio]{fig04_model_vs_naive.pdf}
   \par\vspace{1mm}
@@ -503,6 +520,7 @@
 
 % 15 --------------------------------------------------------------------------
 \begin{frame}{How Certain? Every Interval Includes Zero}
+  \speaker{Zhang Haoyu}
   \centering
   \includegraphics[width=\textwidth,height=.56\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
   \par\vspace{1mm}
@@ -520,6 +538,7 @@
 
 % 16 --------------------------------------------------------------------------
 \begin{frame}{Teaching Design: The Pipeline Becomes a 60-Minute Lesson}
+  \speaker{Lau Pak Hei}
   \centering\scriptsize
   \renewcommand{\arraystretch}{1.25}
   \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.27\linewidth}>{\raggedright\arraybackslash}p{.22\linewidth}>{\raggedright\arraybackslash}p{.24\linewidth}@{}}
@@ -550,6 +569,7 @@
 
 % 17 --------------------------------------------------------------------------
 \begin{frame}{Summary: What Each Stage Delivered}
+  \speaker{Lui Shing Lam}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.3}
   \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.70\linewidth}@{}}
@@ -573,6 +593,7 @@
 
 % ======================================================================= BACKUP
 \progresssection{0}
+\speaker{}
 \appendix
 \section{Backup material}
 \setbeamertemplate{footline}{\intfootline}

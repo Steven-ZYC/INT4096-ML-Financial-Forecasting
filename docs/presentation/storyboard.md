@@ -1,12 +1,13 @@
 # Slide Storyboard — One Pipeline, Five Stages
 
 **Deck:** `slides/latex/main.tex` → `slides/final/INT4096_Presentation.pdf`
-**Slides:** 17 narrative + 5 backup + 2 reference pages (24 pages) · **Speech:** 16:25 of a 20:00 slot
+**Slides:** 17 narrative + 5 backup + 2 reference pages (24 pages) · **Speech:** 16:15 of a 20:00 slot
 **Structure source:** `docs/story/feature_extraction_story.md`. Change the story first, then the script, then the deck.
 **Companions:** `timing_plan.md` (clock, voice blocks) · `speaker_script_bilingual.md` (words to say) · `speaker_notes.md` (key messages, Q&A routing)
 
-> **Speakers are not named.** The deck footer shows the part, the page and a five-stage progress bar.
-> Who speaks which block is decided in `timing_plan.md`; every one of the five members must speak `[A]`.
+> **Speakers.** The footer shows the part, the speaker's name, the page and a five-stage progress bar.
+> Dong Yuankun 1–9 · Zhang Yancheng 10–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 · Lui Shing Lam 17
+> (`timing_plan.md`). All five members speak `[A]`.
 
 ---
 

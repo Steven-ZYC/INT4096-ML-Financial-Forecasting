@@ -5,18 +5,17 @@
 **Script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照) · **Notes:** `speaker_notes.md`
 **Structure:** `storyboard.md`, from `docs/story/feature_extraction_story.md`
 
-> **Speakers are not assigned to people here.** The talk is cut into five **voice blocks**, one per
-> pipeline stage. Block E opens and closes the talk. Give each member a block; all five members must
-> speak `[A]`.
+> **Speakers.** Dong Yuankun: slides 1–9 · Zhang Yancheng: 10–12 · Zhang Haoyu: 13–15 ·
+> Lau Pak Hei: 16 · Lui Shing Lam: 17. All five members speak `[A]`. Names also appear in each slide's footer.
 
 ## Budget
 
 | Component | Time |
 |---|---|
-| Formal speech (17 slides, 1,728 English words at ~105 wpm) | **16:25** |
-| Slide changes and five handovers | 0:50 |
+| Formal speech (17 slides, 1,695 English words at ~105 wpm) | **16:15** |
+| Slide changes and four handovers | 0:40 |
 | Q&A | 2:00 |
-| **Planned total** (0:45 of slack inside the 20-minute limit `[A]`) | **19:15** |
+| **Planned total** (1:05 of slack inside the 20-minute limit `[A]`) | **18:55** |
 
 ## Part structure
 
@@ -27,8 +26,8 @@
 | 2 — Processing & Features | What problems did raw data have, and what can the model see? | 6–9 | 3:50 |
 | 3 — Models & Tuning | Which models, why, and tuned how fairly? | 10–12 | 3:10 |
 | 4 — Evaluation | Which metrics, what results, how certain? | 13–15 | 2:50 |
-| 5 — Teaching Design | How does the project become a lesson, and what did each stage deliver? | 16–17 | 2:00 |
-| **Total** | | 17 | **16:25** |
+| 5 — Teaching Design | How does the project become a lesson, and what did each stage deliver? | 16–17 | 1:50 |
+| **Total** | | 17 | **16:15** |
 
 ## Slide-by-slide
 
@@ -49,33 +48,38 @@
 | 13 | Four Metrics, Each With a Job | 108 | 1:00 | 12:35 |
 | 14 | Results: All 20 Runs Land Within 1% of the Baseline | 95 | 0:55 | 13:30 |
 | 15 | How Certain? Every Interval Includes Zero | 100 | 0:55 | 14:25 |
-| 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 122 | 1:10 | 15:35 |
-| 17 | Summary: What Each Stage Delivered | 88 | 0:50 | 16:25 |
+| 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 100 | 1:00 | 15:25 |
+| 17 | Summary: What Each Stage Delivered | 77 | 0:50 | 16:15 |
 | 18–24 | Backup 1–5 and References (not presented) | — | — | — |
 
-## Voice blocks
+## Speakers
 
-| Block | Slides | Content | Time | Share |
+| Speaker | Slides | Content | Time | Share |
 |---|---|---|---:|---:|
-| E | 1–2, 16–17 | R² hook and roadmap; teaching design and summary | **3:30** | 21% |
-| A | 3–5 | Part 1: data, sources, why two markets, selection conditions | **3:05** | 19% |
-| B | 6–9 | Part 2: raw-data problems, features, change target, split and leakage checks | **3:50** | 23% |
-| C | 10–12 | Part 3: models, tuning protocol, what else we explored | **3:10** | 19% |
-| D | 13–15 | Part 4: metrics, results, uncertainty | **2:50** | 17% |
-| **Total** | 17 | | **16:25** | 100% |
+| Dong Yuankun | 1–9 | Opening (R² hook, roadmap); Part 1 data selection; Part 2 processing and features | **8:25** | 52% |
+| Zhang Yancheng | 10–12 | Part 3: models, tuning protocol, what else we explored | **3:10** | 19% |
+| Zhang Haoyu | 13–15 | Part 4: metrics, results, uncertainty | **2:50** | 17% |
+| Lau Pak Hei | 16 | Part 5: teaching design | **1:00** | 6% |
+| Lui Shing Lam | 17 | Part 5: summary and close | **0:50** | 5% |
+| **Total** | 17 | | **16:15** | 100% |
 
-Each block is one part of the pipeline, so every speaker opens by naming their part ("Part two:
-processing and feature engineering").
+Every speaker opens by naming their part ("Part three: models and fine-tuning").
 
-## Handovers (five, ~5 s each)
+**Evaluation stays with one speaker.** Slides 13–15 carry the evaluation argument and most of the
+numbers, so they are not split.
+
+**Slides 16 and 17** are written in short, plain sentences. Read them exactly as written. If either
+speaker stops for more than about five seconds, **Zhang Yancheng** steps in and finishes the slide from
+its 【中文要点】. Lau Pak Hei and Lui Shing Lam do not take Q&A questions.
+
+## Handovers (four, ~5 s each)
 
 | After slide | From → to | Bridge sentence |
 |---|---|---|
-| 2 | E → A | "Part one: the data." |
-| 5 | A → B | "With clean rows, part two turns them into model inputs." |
-| 9 | B → C | "Clean inputs, so part three: the models." |
-| 12 | C → D | "So how well did they do? Part four." |
-| 15 | D → E | "That result is exactly what we teach. Part five." |
+| 9 | Dong Yuankun → Zhang Yancheng | "Clean inputs, so part three: the models." |
+| 12 | Zhang Yancheng → Zhang Haoyu | "So how well did they do? Part four." |
+| 15 | Zhang Haoyu → Lau Pak Hei | "That result is exactly what we teach. Part five." |
+| 16 | Lau Pak Hei → Lui Shing Lam | "Now the summary." |
 
 ## If you are running long
 
@@ -96,8 +100,9 @@ the permutation-importance reading from Backup 4 after slide 7.
 ## Rehearsal checklist
 
 - [ ] Two full timed run-throughs with a visible clock.
-- [ ] All five handovers rehearsed; they are where time leaks.
-- [ ] Each speaker names their part when they start.
+- [ ] All four handovers rehearsed; they are where time leaks.
+- [ ] Lau Pak Hei and Lui Shing Lam each read their slide aloud to Zhang Yancheng at least three times, timed.
+- [ ] Zhang Yancheng can deliver slides 16 and 17 from the 【中文要点】 as the fallback.
 - [ ] Backup 1 and Backup 3 are open in a second window, ready for "did you cherry-pick?" and
       "how do you know there's no leakage?".
 - [ ] Say "every **model-performance** number is from validation", not "every number".

@@ -371,7 +371,7 @@ flowchart LR
 | 13 | 4 | Four Metrics, Each With a Job | 4.1 | 1:00 |
 | 14 | 4 | Results: All 20 Runs Land Within 1% of the Baseline | 4.2 | 0:55 |
 | 15 | 4 | How Certain? Every Interval Includes Zero | 4.3、4.5 | 0:55 |
-| 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 1:10 |
+| 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 1:00 |
 | 17 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:50 |
 
 备份：B1 完整 20 格矩阵 · B2 公平性与 manifest 审计 · B3 为什么删一行（周五例子）· B4 特征重要性 · B5 Q&A 卡片。

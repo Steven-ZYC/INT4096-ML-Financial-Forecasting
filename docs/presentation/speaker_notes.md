@@ -7,8 +7,8 @@
 This file is the **one-page briefing**: what each slide must land, how to hand over, and who answers
 what. For the words to say, use the bilingual script — kept in one place so the two cannot drift apart.
 
-> Speakers are not named: use the voice blocks in `timing_plan.md`. Research and software ownership is in
-> `docs/management/responsibilities.md`.
+> Speakers: Dong Yuankun slides 1–9 · Zhang Yancheng 10–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 ·
+> Lui Shing Lam 17 (see `timing_plan.md`).
 
 ---
 
@@ -46,44 +46,44 @@ can look it up."* Never improvise a number.
 | # | Slide | The one thing it must land | Handover / next |
 |---|---|---|---|
 | 1 | Learning ML Through Financial Forecasting | R² 0.9556 vs 0.9555: a score alone proves little; then the question | "Here is the pipeline." |
-| 2 | Roadmap: One Pipeline, Five Stages | Five stages, one question each; task, yardstick, one-line result | "Part one: the data." **(handover E→A)** |
+| 2 | Roadmap: One Pipeline, Five Stages | Five stages, one question each; task, yardstick, one-line result | "Part one: the data." |
 | 3 | What We Used, and Where It Came From | Two public sources, exact URLs, fingerprinted files | "Why these two?" |
 | 4 | Why These Two | Calendar, volatility, scale, dividends all differ: robustness; only unit-free scores cross assets | "Not every row is usable." |
-| 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "With clean rows, part two…" **(handover A→B)** |
+| 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "With clean rows, part two…" |
 | 6 | Problems in the Raw Data | Six problems, six decisions | "Here are the features that come out." |
 | 7 | Ten Features | Trailing, scale-free, tested; identical inputs for every model | "No price level means one more design step." |
 | 8 | Engineering the Target | Predict the change, add it back; real row 1.25 vs 1.35; found by iteration | "The last processing step is the split." |
-| 9 | Chronological Split and Leakage Checks | Purge per boundary (0.408); 6/6 defects caught | "Clean inputs, so part three…" **(handover B→C)** |
+| 9 | Chronological Split and Leakage Checks | Purge per boundary (0.408); 6/6 defects caught | "Clean inputs, so part three…" **(handover Dong Yuankun → Zhang Yancheng)** |
 | 10 | Five Models Plus a Baseline | How each predicts, its strength, its role; three mechanisms | "Comparing them is only fair if…" |
 | 11 | Fine-Tuning | Same inner CV, trials, time, seed; frozen grids; cautious choices | "We also explored more than hyperparameters." |
-| 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2, trees identical, grid edges | "So how well did they do? Part four." **(handover C→D)** |
+| 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2, trees identical, grid edges | "So how well did they do? Part four." **(handover Zhang Yancheng → Zhang Haoyu)** |
 | 13 | Four Metrics | Each metric's job; R² trap; skill crosses assets | "Here is skill for every run." |
 | 14 | Results | Within 1% of the baseline; best +0.52% / +0.26%; every run shown | "But are those small leads real?" |
-| 15 | How Certain? | 20/20 intervals include zero; near-zero return correlation | "That result is exactly what we teach." **(handover D→E)** |
-| 16 | Teaching Design | Five tasks ↔ stages ↔ course concepts; baseline first | "To close, what each stage delivered." |
+| 15 | How Certain? | 20/20 intervals include zero; near-zero return correlation | "That result is exactly what we teach." **(handover Zhang Haoyu → Lau Pak Hei)** |
+| 16 | Teaching Design | Five tasks ↔ stages ↔ course concepts; baseline first | "Now the summary." **(handover Lau Pak Hei → Lui Shing Lam)** |
 | 17 | Summary | One outcome per stage; next steps; disclaimer | → Q&A |
 
 ---
 
 ## Q&A routing
 
-Topic owners are voice blocks (see `timing_plan.md`), not names.
+Questions go to Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak Hei and Lui Shing Lam do not take Q&A; Zhang Yancheng answers anything aimed at them.
 
-| Question | Suggested block | One-line answer |
+| Question | Answers | One-line answer |
 |---|---|---|
-| Where exactly is the data from? | A | The two URLs on slide 3 are the exact calls in our code; files and hashes are in `data/raw/`. |
-| Why classical ML, not deep learning? | C | Handout discourages it; classical families keep the comparison interpretable. |
-| Is this just a random walk? | D | At one day the return correlation is near zero, which is why a simple rule is such a strong baseline. |
-| Why AAPL and BTC? | A | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. |
-| Did you leak future data? | B | Chronological split, boundary purge, sealed test, 6/6 injected defects caught → Backup 3. |
-| Did you cherry-pick P2? | D | No: Backup 1 shows all 20; best BTC overall is the unscaled linear baseline, +0.26%. |
-| Was the budget fair? | C | Identical for all lanes: 10 trials / 90 s; tuning inside train only; protocol allows 24/300 → Backup 2. |
-| Is +0.52% meaningful? | D | Not by our own test: all 20 bootstrap intervals include zero. |
-| Why P0 and P2? | C | They isolate scaling, the course's question. P1 would duplicate P0 (no missing values); P3/P4 are queued next. |
-| Why are some chosen values at the grid edge? | C | Small declared grids, same budget for every model; widening them is an easy next step. |
-| Can this make money? | E | No. Error metrics ignore costs and risk; we make no profitability claim. |
-| Did the lesson improve learning? | E | The lesson is built and reproducible; measuring learning is what the classroom pilot is for. |
-| What should students learn? | E | Compare every model with a simple baseline, check what it could see, and ask how certain the gain is. |
+| Where exactly is the data from? | Dong Yuankun | The two URLs on slide 3 are the exact calls in our code; files and hashes are in `data/raw/`. |
+| Why classical ML, not deep learning? | Zhang Yancheng | Handout discourages it; classical families keep the comparison interpretable. |
+| Is this just a random walk? | Zhang Haoyu | At one day the return correlation is near zero, which is why a simple rule is such a strong baseline. |
+| Why AAPL and BTC? | Dong Yuankun | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. |
+| Did you leak future data? | Dong Yuankun | Chronological split, boundary purge, sealed test, 6/6 injected defects caught → Backup 3. |
+| Did you cherry-pick P2? | Zhang Haoyu | No: Backup 1 shows all 20; best BTC overall is the unscaled linear baseline, +0.26%. |
+| Was the budget fair? | Zhang Yancheng | Identical for all lanes: 10 trials / 90 s; tuning inside train only; protocol allows 24/300 → Backup 2. |
+| Is +0.52% meaningful? | Zhang Haoyu | Not by our own test: all 20 bootstrap intervals include zero. |
+| Why P0 and P2? | Zhang Yancheng | They isolate scaling, the course's question. P1 would duplicate P0 (no missing values); P3/P4 are queued next. |
+| Why are some chosen values at the grid edge? | Zhang Yancheng | Small declared grids, same budget for every model; widening them is an easy next step. |
+| Can this make money? | Zhang Haoyu | No. Error metrics ignore costs and risk; we make no profitability claim. |
+| Did the lesson improve learning? | Zhang Yancheng | The lesson is built and reproducible; measuring learning is what the classroom pilot is for. |
+| What should students learn? | Zhang Yancheng | Compare every model with a simple baseline, check what it could see, and ask how certain the gain is. |
 
 ---
 

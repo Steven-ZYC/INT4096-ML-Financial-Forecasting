@@ -3,7 +3,7 @@
 **Deck:** `slides/final/INT4096_Presentation.pdf` — 24 pages (17 narrative + 5 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `docs/story/feature_extraction_story.md`
-**Speech:** 16:25 planned (+0:50 for five handovers and slide changes, +2:00 Q&A = 19:15 inside the 20:00 slot)
+**Speech:** 16:15 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 18:55 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English blocks.**
@@ -12,7 +12,19 @@
 > **本演示用英文进行。上台只念英文部分。** 中文是逐段翻译，帮助你先理解、再自然地讲出来。中文不要念出来。
 > 忘词时看 **【中文要点】**——那是这一页唯一必须传达的内容。
 
-> **Speakers are not named here on purpose.** The talk is split into five *voice blocks*, one per pipeline stage (see `timing_plan.md`). Block E opens and closes the talk. Assign people to blocks; every one of the five must speak. 本稿故意不写讲者姓名；五个"语音分段"各对应一个阶段，E 段负责开场和结尾。五个人都必须开口。
+> ### Who speaks · 分工
+>
+> | Slides | Part | Speaker | Time |
+> |---|---|---|---:|
+> | 1–9 | Opening, Part 1 Data Selection, Part 2 Processing & Features | **Dong Yuankun** | 8:25 |
+> | 10–12 | Part 3 Models & Tuning | **Zhang Yancheng** | 3:10 |
+> | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
+> | 16 | Part 5 Teaching Design | **Lau Pak Hei** | 1:00 |
+> | 17 | Part 5 Summary and close | **Lui Shing Lam** | 0:50 |
+>
+> The speaker's name is also in each slide's footer. 每页幻灯片的页脚也写着讲者姓名。
+>
+> **Slides 16 and 17 are written in short, plain sentences on purpose: read them exactly as written, slowly, without adding anything.** If either speaker stops for more than about five seconds, **Zhang Yancheng** steps in and finishes the slide from its 【中文要点】. 第 16、17 页刻意写成短句：照稿慢慢读，不要自由发挥。若讲者停顿超过约 5 秒，由 Zhang Yancheng 接上，按【中文要点】讲完该页。
 
 ---
 
@@ -21,7 +33,7 @@
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,728 words, i.e. about 16 minutes 25 seconds. | 约每分钟 105 词；英文共 1,728 词，约 16 分 25 秒。 |
+| Pace | ~105 words per minute. The English below is 1,695 words, i.e. about 16 minutes 15 seconds. | 约每分钟 105 词；英文共 1,695 词，约 16 分 15 秒。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat before the question. | 第 1 页 R² 钩子：两个数字慢慢读，提问前停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -37,10 +49,10 @@
 
 ---
 
-# INTRODUCTION · 开场 （Voice block E）
+# INTRODUCTION · 开场 （Dong Yuankun）
 
 ## Slide 1 — Learning Machine Learning Through Financial Forecasting · 0:40
-**Page / 页码:** 1/24
+**Page / 页码:** 1/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 用 R² 钩子开场：SVR 0.9556 对"照抄今天收盘价"0.9555，只差小数点后第四位；引出研究问题。
 
@@ -55,28 +67,28 @@
 ---
 
 ## Slide 2 — Roadmap: One Pipeline, Five Stages · 0:50
-**Page / 页码:** 2/24
+**Page / 页码:** 2/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 五个阶段各回答一个问题；任务、对照基准、结论先说清；每人讲一个阶段。
 
 **English — say this:**
 > We answer it as one pipeline with five stages, and each stage answers one question. Which data, and why? What may the model see? Which models, tuned how fairly? Measured how, and how certain? And how does it become a lesson?
 >
-> The task is to forecast the next daily close; the yardstick is naive persistence, tomorrow equals today. The result in one line: all twenty model runs land within one percent of that yardstick, and none is reliably better. Each of us presents one stage.
+> The task is to forecast the next daily close; the yardstick is naive persistence, tomorrow equals today. The result in one line: all twenty model runs land within one percent of that yardstick, and none is reliably better. All five of us will present.
 
 **中文对照：**
 > 我们把它当作一条五个阶段的流水线来回答，每个阶段回答一个问题：用什么数据、为什么？模型可以看到什么？用哪些模型、调参是否公平？怎么衡量、有多确定？怎样变成一节课？
 >
-> 任务是预测下一个交易日的收盘价；对照基准是朴素持续性：明天等于今天。一句话结论：全部 20 次模型运行都落在这条基准的 1% 以内，没有一个可靠地更好。我们每人讲一个阶段。
+> 任务是预测下一个交易日的收盘价；对照基准是朴素持续性：明天等于今天。一句话结论：全部 20 次模型运行都落在这条基准的 1% 以内，没有一个可靠地更好。我们五个人都会上台讲。
 
-**→ Transition (handover E → A):** "Part one: the data." · **过渡：** "第一部分：数据。"
+**→ Transition:** "Part one: the data." · **过渡：** "第一部分：数据。"
 
 ---
 
-# PART 1 — DATA SELECTION · 第一部分：数据选择 （Voice block A）
+# PART 1 — DATA SELECTION · 第一部分：数据选择 （Dong Yuankun）
 
 ## Slide 3 — What We Used, and Exactly Where It Came From · 0:50
-**Page / 页码:** 3/24
+**Page / 页码:** 3/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 两个数据集、两个公开来源，链接就是代码实际调用的地址；下载一次、原样保存、SHA-256 指纹每次运行都校验。
 
@@ -99,7 +111,7 @@
 ---
 
 ## Slide 4 — Why These Two: Two Markets With Different Characteristics · 1:05
-**Page / 页码:** 4/24
+**Page / 页码:** 4/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 两个市场结构不同：交易日历、波动率、价格量级、公司行为都不一样；同一协议在两种结构上都成立，才是关于方法的结论；量级不同，所以只比较无单位指标。
 
@@ -118,7 +130,7 @@
 ---
 
 ## Slide 5 — Selection Conditions: From Raw Bars to Modelling Rows · 1:10
-**Page / 页码:** 5/24
+**Page / 页码:** 5/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 四个筛选条件：窗口在 2020 年拆股之后；用原始收盘价；六项质量检查，失败就停而不修补（两份数据都 PASS）；去掉前 30 行和最后 1 行。得到 1,224 / 1,797 行，再按时间 60/20/20 切分。
 
@@ -132,14 +144,14 @@
 >
 > 最后得到苹果 1,224 行、比特币 1,797 行，按时间 60/20/20 切分。
 
-**→ Transition (handover A → B):** "With clean rows, part two turns them into model inputs." · **过渡：** "行数据干净了，第二部分把它们变成模型输入。"
+**→ Transition:** "With clean rows, part two turns them into model inputs." · **过渡：** "行数据干净了，第二部分把它们变成模型输入。"
 
 ---
 
-# PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Voice block B）
+# PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Dong Yuankun）
 
 ## Slide 6 — Problems in the Raw Data, and How We Handled Each · 1:05
-**Page / 页码:** 6/24
+**Page / 页码:** 6/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 原始数据的六个问题，每个都对应一个处理方法：价格水平漂移→比率特征；复权会修订→原始收盘价；两种日历→各用自己的"下一根"；窗口要历史→删前 30 行；尺度不同→P2 只在训练行上标准化；时间顺序→按时间切分并删边界行。
 
@@ -154,7 +166,7 @@
 ---
 
 ## Slide 7 — Ten Features, Built Only From Information Available at the Close · 0:50
-**Page / 页码:** 7/24
+**Page / 页码:** 7/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 十个特征、六组，全部是只看过去的比率，没有价格水平；"不看未来"用测试保证；五个模型用完全相同的十个输入。
 
@@ -173,7 +185,7 @@
 ---
 
 ## Slide 8 — Engineering the Target: Predict the Change, Then Add It Back · 0:55
-**Page / 页码:** 8/24
+**Page / 页码:** 8/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 比率特征没有价格水平，所以让模型预测变化量，再加回今天的收盘价；误差仍按价格衡量；持续性就是"变化为 0"；这是迭代出来的设计。
 
@@ -196,7 +208,7 @@
 ---
 
 ## Slide 9 — Chronological Split, and Proof That the Pipeline Cannot Peek · 1:00
-**Page / 页码:** 9/24
+**Page / 页码:** 9/24 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 按时间 60/20/20 切分，每个边界删一行（标签是下一天收盘价，否则训练的答案落进验证块；审计量化为 0.408）；故意注入 6 种泄漏错误，全部被抓到；83 项测试通过。
 
@@ -210,14 +222,14 @@
 >
 > 然后我们主动攻击流水线：脚本逐个注入六种已知的泄漏错误，测试每次都必须失败。六种全部被抓到，83 项自动测试全部通过。接下来每一个模型表现数字都来自验证块。
 
-**→ Transition (handover B → C):** "Clean inputs, so part three: the models." · **过渡：** "输入干净了，第三部分：模型。"
+**→ Transition (handover Dong Yuankun → Zhang Yancheng):** "Clean inputs, so part three: the models." · **过渡：** "输入干净了，第三部分：模型。"
 
 ---
 
-# PART 3 — MODELS AND FINE-TUNING · 第三部分：模型与调参 （Voice block C）
+# PART 3 — MODELS AND FINE-TUNING · 第三部分：模型与调参 （Zhang Yancheng）
 
 ## Slide 10 — Five Models Plus a Baseline: Why Each One Is There · 1:10
-**Page / 页码:** 10/24
+**Page / 页码:** 10/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 一个基线加五个模型，代表三种机制（线性权重、核相似度、树切分）；每个模型说清"怎么预测、传统优势、在本研究里的角色"；不用深度学习。
 
@@ -236,7 +248,7 @@
 ---
 
 ## Slide 11 — Fine-Tuning: The Same Search and Budget for Every Model · 1:05
-**Page / 页码:** 11/24
+**Page / 页码:** 11/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 训练块内部五折扩展窗口交叉验证；随机搜索 10 次、每格 ≤90 秒、同一随机种子；目标是 MAE；验证块不参与调参；网格事先冻结。调参器几乎总是选最保守的设置。
 
@@ -255,7 +267,7 @@
 ---
 
 ## Slide 12 — What We Explored Beyond Hyperparameters · 0:55
-**Page / 页码:** 12/24
+**Page / 页码:** 12/24 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 另外三个探索方向：目标表示（价格水平→变化量）、预处理 P0 vs P2（20 次运行）、缩放的影响（树完全不变，SVR 和岭回归会变）；以及网格边缘的观察。
 
@@ -269,14 +281,14 @@
 >
 > 第三，缩放改变了什么，见右图。两种树集成的预测完全相同，正如阈值切分所预期。SVR 和岭回归有变化，因为距离和惩罚依赖尺度；苹果线性基线的误差上升了 0.74%。另外，岭回归选中了网格边缘，所以放宽网格是明确的下一步。
 
-**→ Transition (handover C → D):** "So how well did they do? Part four." · **过渡：** "那它们表现如何？第四部分。"
+**→ Transition (handover Zhang Yancheng → Zhang Haoyu):** "So how well did they do? Part four." · **过渡：** "那它们表现如何？第四部分。"
 
 ---
 
-# PART 4 — EVALUATION · 第四部分：评估 （Voice block D）
+# PART 4 — EVALUATION · 第四部分：评估 （Zhang Haoyu）
 
 ## Slide 13 — Four Metrics, Each With a Job · 1:00
-**Page / 页码:** 13/24
+**Page / 页码:** 13/24 · **Speaker / 讲者:** Zhang Haoyu
 
 **【中文要点】** 四个指标各有分工：MAE 典型误差、RMSE 惩罚大错、R² 解释的方差占比、skill 相对基准的提升；R² 对任何贴着昨天价格的预测都很高，所以不用它排名；跨资产只用 skill。
 
@@ -295,7 +307,7 @@
 ---
 
 ## Slide 14 — Results: All 20 Runs Land Within 1% of the Baseline · 0:55
-**Page / 页码:** 14/24
+**Page / 页码:** 14/24 · **Speaker / 讲者:** Zhang Haoyu
 
 **【中文要点】** 最好：苹果 SVR(P2) +0.52%（约少 1.5 美分误差），比特币线性基线(P0) +0.26%；20 次全部在 −0.78% 到 +0.52% 之间，5 次低于 0；完整 20 格见 Backup 1。
 
@@ -314,7 +326,7 @@
 ---
 
 ## Slide 15 — How Certain? Every Interval Includes Zero · 0:55
-**Page / 页码:** 15/24
+**Page / 页码:** 15/24 · **Speaker / 讲者:** Zhang Haoyu
 
 **【中文要点】** 配对移动区块 Bootstrap（块长 10 天、1,000 次、95%）；20 个区间全部包含 0：与强基线持平；原因：相邻日收益率几乎不相关（苹果 +0.021，比特币 −0.026）。
 
@@ -332,64 +344,70 @@
 >
 > 为什么这么难打败？今天和明天收益率的相关性，苹果 +0.021，比特币 −0.026，基本为零。昨天的涨跌几乎说明不了今天。
 
-**→ Transition (handover D → E):** "That result is exactly what we teach. Part five." · **过渡：** "这个结果正是我们要教的。第五部分。"
+**→ Transition (handover Zhang Haoyu → Lau Pak Hei):** "That result is exactly what we teach. Part five." · **过渡：** "这个结果正是我们要教的。第五部分。"
 
 ---
 
-# PART 5 — TEACHING DESIGN · 第五部分：教学设计 （Voice block E）
+# PART 5 — TEACHING DESIGN · 第五部分：教学设计 （Lau Pak Hei: slide 16 · Lui Shing Lam: slide 17）
 
-## Slide 16 — Teaching Design: The Pipeline Becomes a 60-Minute Lesson · 1:10
-**Page / 页码:** 16/24
+## Slide 16 — Teaching Design: The Pipeline Becomes a 60-Minute Lesson · 1:00
+**Page / 页码:** 16/24 · **Speaker / 讲者:** Lau Pak Hei
 
-**【中文要点】** 60 分钟课，五个任务，每个任务都来自项目的一个阶段，并对应一个课程概念；对象是机器学习新手；顺序：先看基准再看模型；材料齐全（Colab、带答案的教师指南、可重建结果的 notebook）。
+**【中文要点】** 项目变成 60 分钟的课；五个任务各来自项目的一个部分；先看简单规则再看模型；有练习本和带答案的教师指南。
 
 **English — say this:**
-> Part five: teaching design. We turned the project into a sixty-minute lesson for senior secondary and first-year university students new to machine learning. Each of five tasks comes from one stage of our pipeline and practises one course concept. Task one compares training and unseen-data error: generalisation. Task two finds the leak in a feature snippet: leakage prevention. Task three reads our skill table: metrics and baselines. Task four predicts which models care about scaling: train-only preprocessing. Task five explains why low error is not profit: teacher judgement.
+> Part five: teaching design. We turned our project into a sixty-minute lesson. It is for students who are new to machine learning.
 >
-> Learners see the baseline before any model, so they do not anchor on impressive numbers. The package has a Colab workbook, a teacher guide with worked answers, and a notebook that rebuilds our results.
+> The lesson has five tasks. Each task comes from one part of our project. Task one: compare training error with error on new data. Task two: find the leak in a short piece of code. Task three: read our skill table. Task four: say which models care about scaling. Task five: explain why low error is not profit.
+>
+> Students see the simple rule first, and the models after. Teachers get a Colab workbook and a guide with answers.
 
 **中文对照：**
-> 第五部分：教学设计。我们把项目做成一节 60 分钟的课，对象是刚接触机器学习的高中高年级和大一学生。五个任务各来自流水线的一个阶段，各练习一个课程概念。任务一比较训练误差和未见数据误差：泛化。任务二在一段特征代码里找泄漏：泄漏预防。任务三读我们的 skill 表：指标与基准。任务四预测哪些模型在意缩放：只在训练集上预处理。任务五解释为什么误差低不等于赚钱：教师判断。
+> 第五部分：教学设计。我们把项目做成了一节 60 分钟的课，对象是刚接触机器学习的学生。
 >
-> 学生先看基准、再看模型，这样不会被漂亮的数字先入为主。材料包括 Colab 练习本、带参考答案的教师指南，以及能重建我们结果的 notebook。
+> 这节课有五个任务，每个任务来自项目的一个部分。任务一：比较训练误差和新数据上的误差。任务二：在一小段代码里找出泄漏。任务三：读我们的 skill 表。任务四：说出哪些模型在意缩放。任务五：解释为什么误差低不等于赚钱。
+>
+> 学生先看简单规则，再看模型。老师拿到一个 Colab 练习本和一份带答案的指南。
 
-**→ Transition:** "To close, what each stage delivered." · **过渡：** "最后，每个阶段交付了什么。"
+**→ Transition (handover Lau Pak Hei → Lui Shing Lam):** "Now the summary." · **过渡：** "下面是总结。"
 
 ---
 
 ## Slide 17 — Summary: What Each Stage Delivered · 0:50
-**Page / 页码:** 17/24
+**Page / 页码:** 17/24 · **Speaker / 讲者:** Lui Shing Lam
 
-**【中文要点】** 按五个阶段各说一句成果；下一步具体可行；重申非投资建议；致谢。
+**【中文要点】** 按五个部分各说一句成果；下一步；不是投资建议；谢谢、请提问。
 
 **English — say this:**
-> To sum up, stage by stage. Data: two contrasting markets from traceable, fingerprinted sources. Processing: ten backward-looking features and a change target, with leakage tested. Models: five mechanisms under one tuning budget. Evaluation: all twenty runs within one percent of persistence, every interval including zero. Teaching: a sixty-minute lesson with five tasks.
+> To sum up. Data: two different markets, from public sources we can trace. Processing: ten features that only look backwards. Models: five models, tuned in the same way. Evaluation: all twenty runs are within one percent of the simple rule. Teaching: a sixty-minute lesson with five tasks.
 >
-> Next, we open the sealed test block once, pilot the lesson with a class, and widen the grids. This is educational analysis of historical data, not investment advice. Thank you; we are happy to take questions.
+> Next, we will test on the sealed data once, and try the lesson with a real class. This is not investment advice. Thank you. We are happy to take questions.
 
 **中文对照：**
-> 按阶段总结。数据：两个对比鲜明的市场，来源可追溯、文件有指纹。处理：十个只看过去的特征和变化量目标，泄漏经过检验。模型：五种机制，同一个调参预算。评估：20 次运行都在持续性的 1% 以内，所有区间都包含 0。教学：一节 60 分钟、五个任务的课。
+> 总结一下。数据：两个不同的市场，来源公开、可追溯。处理：十个只往回看的特征。模型：五个模型，用同样的方式调参。评估：20 次运行都在简单规则的 1% 以内。教学：一节 60 分钟、五个任务的课。
 >
-> 下一步：一次性打开封存的测试块，用真实班级试教，并放宽网格。这是对历史数据的教育性分析，不构成投资建议。谢谢大家，欢迎提问。
+> 下一步：在封存的数据上测试一次，并在真实班级里试这节课。这不构成投资建议。谢谢大家，欢迎提问。
 ---
 
 # Q&A — bilingual cheat sheet · 问答中英对照
 
-| Question | English answer | 中文 |
-|---|---|---|
-| Where exactly is the data from? | The two URLs on slide 3 are the exact calls in `src/int4096/data/providers.py`; the saved files and their SHA-256 hashes are in `data/raw/`. | 第 3 页两个链接就是代码实际调用的地址；保存的文件和哈希在 `data/raw/`。 |
-| Why AAPL and BTC? | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. | 日历、波动率、量级、公司行为都不同：同一协议跑两种结构，是稳健性检验。 |
-| Is Binance BTC a global price? | No. It is one exchange, quoted in USDT, which is not exactly USD. We say "BTC/USDT on Binance". | 不是。它是单一交易所、以 USDT 计价，USDT 不完全等于美元。 |
-| Why not adjusted close? | Adjustments are revised after the fact, so they carry future information into the past. Our window has no split, so raw close is continuous. | 复权会事后修订，会把未来信息带进过去；窗口内没有拆股，原始收盘价是连续的。 |
-| Why classical ML, not deep learning? | The handout discourages it, and classical families keep the comparison interpretable. | 讲义不鼓励；经典模型让比较更可解释。 |
-| Did you leak future data? | Chronological split, a purged boundary row, a sealed test block, and 6 of 6 injected defects caught → Backup 3. | 按时间切分、边界删行、封存测试集、6/6 注入缺陷被抓到 → Backup 3。 |
-| Did you cherry-pick P2? | No. Backup 1 shows all 20 runs. The best Bitcoin result overall is the unscaled linear baseline at +0.26%. | 没有。Backup 1 有全部 20 次；比特币整体最好的是未缩放线性基线 +0.26%。 |
-| Was tuning fair? | Same folds, same 10 trials, same 90 s, same seed, grids frozen beforehand → Backup 2. | 同样的折、10 次试验、90 秒、同一种子、网格事先冻结 → Backup 2。 |
-| Why do chosen values sit at grid edges? | The tuner prefers the most cautious settings because there is little signal to fit. Widening the grids is a next step. | 信号太少，调参器偏好最保守的设置；放宽网格是下一步。 |
-| Is +0.52% meaningful? | Not by our own test: all 20 bootstrap intervals include zero. | 按我们自己的检验不是：20 个区间全包含 0。 |
-| Why only P0 and P2? | They isolate the effect of scaling. P1 would duplicate P0 because there are no missing values; P3 and P4 are next. | 它们隔离出缩放的影响；P1 因无缺失值会与 P0 重复；P3、P4 是下一步。 |
-| Can this make money? | No. Error metrics ignore costs and risk; we make no profitability claim. | 不能。误差指标不含成本和风险；我们不声称盈利。 |
-| Did the lesson improve learning? | The lesson is built and ready; measuring learning is what the classroom pilot is for. | 课程已完成；衡量学习效果正是课堂试点要做的。 |
+Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak Hei and Lui Shing Lam do not take Q&A; if a question is aimed at them, Zhang Yancheng answers. 问答由 Dong Yuankun、Zhang Yancheng、Zhang Haoyu 回答；Lau Pak Hei 和 Lui Shing Lam 不接问答，若有人点名问他们，由 Zhang Yancheng 回答。
+
+| Question | Answers | English answer | 中文 |
+|---|---|---|---|
+| Where exactly is the data from? | Dong Yuankun | The two URLs on slide 3 are the exact calls in `src/int4096/data/providers.py`; the saved files and their SHA-256 hashes are in `data/raw/`. | 第 3 页两个链接就是代码实际调用的地址；保存的文件和哈希在 `data/raw/`。 |
+| Why AAPL and BTC? | Dong Yuankun | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. | 日历、波动率、量级、公司行为都不同：同一协议跑两种结构，是稳健性检验。 |
+| Is Binance BTC a global price? | Dong Yuankun | No. It is one exchange, quoted in USDT, which is not exactly USD. We say "BTC/USDT on Binance". | 不是。它是单一交易所、以 USDT 计价，USDT 不完全等于美元。 |
+| Why not adjusted close? | Dong Yuankun | Adjustments are revised after the fact, so they carry future information into the past. Our window has no split, so raw close is continuous. | 复权会事后修订，会把未来信息带进过去；窗口内没有拆股，原始收盘价是连续的。 |
+| Why classical ML, not deep learning? | Zhang Yancheng | The handout discourages it, and classical families keep the comparison interpretable. | 讲义不鼓励；经典模型让比较更可解释。 |
+| Did you leak future data? | Dong Yuankun | Chronological split, a purged boundary row, a sealed test block, and 6 of 6 injected defects caught → Backup 3. | 按时间切分、边界删行、封存测试集、6/6 注入缺陷被抓到 → Backup 3。 |
+| Did you cherry-pick P2? | Zhang Haoyu | No. Backup 1 shows all 20 runs. The best Bitcoin result overall is the unscaled linear baseline at +0.26%. | 没有。Backup 1 有全部 20 次；比特币整体最好的是未缩放线性基线 +0.26%。 |
+| Was tuning fair? | Zhang Yancheng | Same folds, same 10 trials, same 90 s, same seed, grids frozen beforehand → Backup 2. | 同样的折、10 次试验、90 秒、同一种子、网格事先冻结 → Backup 2。 |
+| Why do chosen values sit at grid edges? | Zhang Yancheng | The tuner prefers the most cautious settings because there is little signal to fit. Widening the grids is a next step. | 信号太少，调参器偏好最保守的设置；放宽网格是下一步。 |
+| Is +0.52% meaningful? | Zhang Haoyu | Not by our own test: all 20 bootstrap intervals include zero. | 按我们自己的检验不是：20 个区间全包含 0。 |
+| Why only P0 and P2? | Zhang Yancheng | They isolate the effect of scaling. P1 would duplicate P0 because there are no missing values; P3 and P4 are next. | 它们隔离出缩放的影响；P1 因无缺失值会与 P0 重复；P3、P4 是下一步。 |
+| Can this make money? | Zhang Haoyu | No. Error metrics ignore costs and risk; we make no profitability claim. | 不能。误差指标不含成本和风险；我们不声称盈利。 |
+| Did the lesson improve learning? | Zhang Yancheng | The lesson is built and ready; measuring learning is what the classroom pilot is for. | 课程已完成；衡量学习效果正是课堂试点要做的。 |
 
 # Backup slides · 备用页
 
@@ -415,8 +433,10 @@ Check the clock at the **end of slide 9**: it should read **≈8:25** (see `timi
 
 - [ ] Every speaker has read their **English** blocks aloud twice. 每位讲者把英文大声读两遍。
 - [ ] Every speaker can say their **【中文要点】** from memory. 不看稿能说出中文要点。
-- [ ] Each part starts by naming the part ("Part two: processing…"). 每部分开口先报部分名称。
-- [ ] The five handovers (after slides 2, 5, 9, 12, 15) are rehearsed. 五次交接要练。
+- [ ] Each part starts by naming the part ("Part three: models…"). 每部分开口先报部分名称。
+- [ ] The four handovers (after slides 9, 12, 15, 16) are rehearsed. 四次交接要练。
+- [ ] **Lau Pak Hei and Lui Shing Lam** each read their slide aloud to Zhang Yancheng at least three times before the talk, timed, with no ad-libbing. Lau Pak Hei 和 Lui Shing Lam 正式前至少各对 Zhang Yancheng 计时朗读三遍，不加词。
+- [ ] Zhang Yancheng can deliver slides 16 and 17 from the 【中文要点】 as the fallback. Zhang Yancheng 能按【中文要点】讲完第 16、17 页作为后备。
 - [ ] Two full timed run-throughs with a visible clock. 全流程计时彩排两次。
 - [ ] Backup 1 and Backup 3 are ready in a second window. 准备好 Backup 1 和 3。
 - [ ] Say "every **model-performance** number is from validation", not "every number". 说"每个模型表现数字"，不说"每个数字"。
