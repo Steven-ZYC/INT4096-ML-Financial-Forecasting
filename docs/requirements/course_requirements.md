@@ -128,7 +128,7 @@ learning-outcome achievement.
 
 ---
 
-## 7. Written vs oral discrepancies (must be reported honestly)
+## 7. Written vs oral discrepancies
 
 | Topic | Written `[A]` | Oral `[B]` | How the project handles it |
 |---|---|---|---|
