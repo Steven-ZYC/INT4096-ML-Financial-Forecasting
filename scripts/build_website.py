@@ -32,6 +32,17 @@ ASSETS = ("AAPL", "BTC")
 MODELS = ["linear_baseline", "ridge", "svr", "random_forest", "hist_gradient_boosting"]
 EXAMPLE_DATE = "2024-11-21"
 
+# Document shell for the standalone page. The template is written as a page body
+# (title, styles, markup, scripts); this adds the doctype, charset, viewport and the
+# small reset the artifact viewer would otherwise provide.
+STANDALONE_HEAD = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+"""
+
 
 def sig(x: float, digits: int = 6) -> float:
     return float(f"{x:.{digits}g}") if np.isfinite(x) else None
@@ -159,9 +170,20 @@ def main() -> int:
     template = (SITE / "template.html").read_text(encoding="utf-8")
     if "__SITE_DATA__" not in template:
         raise SystemExit("template.html has no __SITE_DATA__ placeholder")
+    body = template.replace("__SITE_DATA__", blob)
+
+    # 1) Full HTML document: GitHub Pages and opening the file straight from disk.
     out = SITE / "index.html"
-    out.write_text(template.replace("__SITE_DATA__", blob), encoding="utf-8")
+    cut = body.index("</style>") + len("</style>")   # title, meta, fonts, styles -> <head>
+    out.write_text(STANDALONE_HEAD + body[:cut] + "\n</head>\n<body>" + body[cut:] + "\n</body>\n</html>\n",
+                   encoding="utf-8")
     print(f"wrote {out.relative_to(REPO_ROOT)} ({out.stat().st_size / 1024:.0f} KB, data {len(blob) / 1024:.0f} KB)")
+
+    # 2) Fragment for the claude.ai artifact, which supplies its own document shell.
+    frag = REPO_ROOT / "build" / "website" / "artifact.html"
+    frag.parent.mkdir(parents=True, exist_ok=True)
+    frag.write_text(body, encoding="utf-8")
+    print(f"wrote {frag.relative_to(REPO_ROOT)} (artifact fragment, not tracked)")
     return 0
 
 

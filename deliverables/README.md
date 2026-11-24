@@ -11,6 +11,6 @@ Everything the group presents or submits, in one place.
 | `report/` | **`INT4096_Final_Report.pdf`**, `word_count.txt`, `report_draft.md`; LaTeX source in `latex/` | `bash deliverables/report/latex/build.sh` |
 | `notebook/` | **`INT4096_Final_Colab.ipynb`** (rebuilds the results), `INT4096_Colab_Teaching_Template.ipynb` (student workbook) | `python scripts/build_notebook.py` |
 | `lesson/` | Lesson plan, five formative tasks with worked answers, teacher notes | — |
-| `website/` | **`index.html`**: interactive step-by-step explainer of the whole pipeline (data, split, features, tuning, evaluation, experimental neural nets, verdict). Opens straight from disk; `template.html` is the hand-written source | `python scripts/build_website.py` |
+| `website/` | **`index.html`**: interactive step-by-step explainer of the whole pipeline (data, split, features, tuning, evaluation, experimental neural nets, verdict). Opens straight from disk and is published at https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/ by `.github/workflows/pages.yml`; `template.html` is the hand-written source | `python scripts/build_website.py` |
 
 Speakers: Dong Yuankun slides 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 · Lui Shing Lam 17.
