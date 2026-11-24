@@ -6,8 +6,8 @@ command:   texcount -inc -sum main.tex
 
 File: main.tex
 Encoding: ascii
-Sum count: 222
-Words in text: 201
+Sum count: 238
+Words in text: 217
 Words in headers: 21
 Words outside text (captions, etc.): 0
 Number of headers: 3
@@ -16,8 +16,8 @@ Number of math inlines: 0
 Number of math displayed: 0
 Subcounts:
   text+headers+captions (#headers/#floats/#inlines/#displayed)
-  121+20+0 (2/0/0/0) Subsection
-  80+1+0 (1/0/0/0) Section: Acknowledgements
+  133+20+0 (2/0/0/0) Subsection
+  84+1+0 (1/0/0/0) Section: Acknowledgements
 
 Included file: ./generated/numbers.tex
 Encoding: ascii
@@ -32,8 +32,8 @@ Number of math displayed: 0
 
 Included file: ./sections/01_introduction.tex
 Encoding: ascii
-Sum count: 173
-Words in text: 169
+Sum count: 163
+Words in text: 159
 Words in headers: 4
 Words outside text (captions, etc.): 0
 Number of headers: 1
@@ -54,8 +54,8 @@ Number of math displayed: 0
 
 Included file: ./sections/03_questions.tex
 Encoding: ascii
-Sum count: 139
-Words in text: 137
+Sum count: 128
+Words in text: 126
 Words in headers: 2
 Words outside text (captions, etc.): 0
 Number of headers: 1
@@ -65,8 +65,8 @@ Number of math displayed: 0
 
 Included file: ./sections/04_data.tex
 Encoding: ascii
-Sum count: 260
-Words in text: 168
+Sum count: 253
+Words in text: 161
 Words in headers: 4
 Words outside text (captions, etc.): 88
 Number of headers: 1
@@ -76,8 +76,8 @@ Number of math displayed: 0
 
 Included file: ./sections/05_features.tex
 Encoding: ascii
-Sum count: 237
-Words in text: 226
+Sum count: 226
+Words in text: 215
 Words in headers: 7
 Words outside text (captions, etc.): 0
 Number of headers: 3
@@ -87,8 +87,8 @@ Number of math displayed: 0
 
 Included file: ./sections/06_method.tex
 Encoding: ascii
-Sum count: 224
-Words in text: 176
+Sum count: 220
+Words in text: 172
 Words in headers: 2
 Words outside text (captions, etc.): 41
 Number of headers: 1
@@ -98,8 +98,8 @@ Number of math displayed: 1
 
 Included file: ./sections/07_models.tex
 Encoding: ascii
-Sum count: 172
-Words in text: 167
+Sum count: 151
+Words in text: 146
 Words in headers: 4
 Words outside text (captions, etc.): 0
 Number of headers: 1
@@ -109,8 +109,8 @@ Number of math displayed: 0
 
 Included file: ./sections/08_ablation.tex
 Encoding: ascii
-Sum count: 214
-Words in text: 174
+Sum count: 217
+Words in text: 177
 Words in headers: 2
 Words outside text (captions, etc.): 37
 Number of headers: 1
@@ -120,8 +120,8 @@ Number of math displayed: 0
 
 Included file: ./sections/09_results.tex
 Encoding: ascii
-Sum count: 335
-Words in text: 180
+Sum count: 343
+Words in text: 188
 Words in headers: 15
 Words outside text (captions, etc.): 140
 Number of headers: 4
@@ -129,10 +129,21 @@ Number of floats/tables/figures: 3
 Number of math inlines: 0
 Number of math displayed: 0
 
+Included file: ./sections/09b_experimental_dl.tex
+Encoding: ascii
+Sum count: 79
+Words in text: 75
+Words in headers: 3
+Words outside text (captions, etc.): 0
+Number of headers: 1
+Number of floats/tables/figures: 0
+Number of math inlines: 1
+Number of math displayed: 0
+
 Included file: ./sections/10_education.tex
 Encoding: ascii
-Sum count: 169
-Words in text: 167
+Sum count: 159
+Words in text: 157
 Words in headers: 2
 Words outside text (captions, etc.): 0
 Number of headers: 1
@@ -142,8 +153,8 @@ Number of math displayed: 0
 
 Included file: ./sections/11_limitations.tex
 Encoding: ascii
-Sum count: 187
-Words in text: 172
+Sum count: 179
+Words in text: 164
 Words in headers: 15
 Words outside text (captions, etc.): 0
 Number of headers: 5
@@ -164,12 +175,23 @@ Number of math displayed: 0
 
 Included file: ./sections/13_conclusion.tex
 Encoding: ascii
-Sum count: 135
-Words in text: 134
+Sum count: 103
+Words in text: 102
 Words in headers: 1
 Words outside text (captions, etc.): 0
 Number of headers: 1
 Number of floats/tables/figures: 0
+Number of math inlines: 0
+Number of math displayed: 0
+
+Included file: ./sections/14_contributions.tex
+Encoding: ascii
+Sum count: 1
+Words in text: 0
+Words in headers: 1
+Words outside text (captions, etc.): 0
+Number of headers: 1
+Number of floats/tables/figures: 1
 Number of math inlines: 0
 Number of math displayed: 0
 
@@ -217,37 +239,51 @@ Number of floats/tables/figures: 1
 Number of math inlines: 0
 Number of math displayed: 0
 
+Included file: ./generated/dl_table.tex
+Encoding: ascii
+Sum count: 48
+Words in text: 0
+Words in headers: 0
+Words outside text (captions, etc.): 48
+Number of headers: 0
+Number of floats/tables/figures: 1
+Number of math inlines: 0
+Number of math displayed: 0
+
 Sum of files: main.tex
 File(s) total: main.tex
-Sum count: 3010
-Words in text: 2399
-Words in headers: 100
-Words outside text (captions, etc.): 493
-Number of headers: 29
-Number of floats/tables/figures: 11
-Number of math inlines: 17
+Sum count: 3051
+Words in text: 2387
+Words in headers: 104
+Words outside text (captions, etc.): 541
+Number of headers: 31
+Number of floats/tables/figures: 13
+Number of math inlines: 18
 Number of math displayed: 1
-Files: 19
+Files: 22
 Subcounts:
   text+headers+captions (#headers/#floats/#inlines/#displayed)
-  201+21+0 (3/0/0/0) File: main.tex
-  169+4+0 (1/0/0/0) Included file: ./sections/01_introduction.tex
+  217+21+0 (3/0/0/0) File: main.tex
+  159+4+0 (1/0/0/0) Included file: ./sections/01_introduction.tex
   177+17+0 (5/0/4/0) Included file: ./sections/02_background.tex
-  137+2+0 (1/0/0/0) Included file: ./sections/03_questions.tex
-  168+4+88 (1/2/0/0) Included file: ./sections/04_data.tex
-  226+7+0 (3/0/4/0) Included file: ./sections/05_features.tex
-  176+2+41 (1/1/4/1) Included file: ./sections/06_method.tex
-  167+4+0 (1/0/1/0) Included file: ./sections/07_models.tex
-  174+2+37 (1/1/1/0) Included file: ./sections/08_ablation.tex
-  180+15+140 (4/3/0/0) Included file: ./sections/09_results.tex
-  167+2+0 (1/0/0/0) Included file: ./sections/10_education.tex
-  172+15+0 (5/0/0/0) Included file: ./sections/11_limitations.tex
+  126+2+0 (1/0/0/0) Included file: ./sections/03_questions.tex
+  161+4+88 (1/2/0/0) Included file: ./sections/04_data.tex
+  215+7+0 (3/0/4/0) Included file: ./sections/05_features.tex
+  172+2+41 (1/1/4/1) Included file: ./sections/06_method.tex
+  146+4+0 (1/0/1/0) Included file: ./sections/07_models.tex
+  177+2+37 (1/1/1/0) Included file: ./sections/08_ablation.tex
+  188+15+140 (4/3/0/0) Included file: ./sections/09_results.tex
+  75+3+0 (1/0/1/0) Included file: ./sections/09b_experimental_dl.tex
+  157+2+0 (1/0/0/0) Included file: ./sections/10_education.tex
+  164+15+0 (5/0/0/0) Included file: ./sections/11_limitations.tex
   151+4+0 (1/0/1/0) Included file: ./sections/12_learnings.tex
-  134+1+0 (1/0/0/0) Included file: ./sections/13_conclusion.tex
+  102+1+0 (1/0/0/0) Included file: ./sections/13_conclusion.tex
+  0+1+0 (1/1/0/0) Included file: ./sections/14_contributions.tex
   0+0+41 (0/1/0/0) Included file: ./generated/dataset_table.tex
   0+0+47 (0/1/1/0) Included file: ./generated/splits_table.tex
   0+0+47 (0/1/1/0) Included file: ./generated/ablation_table.tex
   0+0+52 (0/1/0/0) Included file: ./generated/results_table.tex
+  0+0+48 (0/1/0/0) Included file: ./generated/dl_table.tex
 
 
 --- interpretation ---

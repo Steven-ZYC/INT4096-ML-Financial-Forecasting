@@ -13,7 +13,7 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 
 | Artifact | Path | Status |
 |---|---|---|
-| Final report (PDF) | [`deliverables/report/INT4096_Final_Report.pdf`](deliverables/report/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 words, sha256 `7b492de83b29eebe…` |
+| Final report (PDF) | [`deliverables/report/INT4096_Final_Report.pdf`](deliverables/report/INT4096_Final_Report.pdf) | compiled, 11 pages, 2,491 words, sha256 `d283206966079eda…` |
 | LaTeX source | [`deliverables/report/latex/main.tex`](deliverables/report/latex/main.tex) | builds clean (`bash deliverables/report/latex/build.sh`) |
 | Word-count log | [`deliverables/report/word_count.txt`](deliverables/report/word_count.txt) | 2,399 body + 100 headings |
 | Presentation (PDF) | [`deliverables/presentation/INT4096_Presentation.pdf`](deliverables/presentation/INT4096_Presentation.pdf) | 25 pages (17 + 6 backup + 2 references), sha256 `d9886c266160263b…` |

@@ -1,0 +1,12 @@
+\section{Neural Networks (Experimental)}
+\label{sec:dl}
+
+As an add-on outside the frozen protocol, an MLP on today's ten features and an
+LSTM on the last 20 days of them predicted next-day direction, tuned on the end of
+the training block and averaged over \SupSeeds{} seeds (Table~\ref{tab:dl}; test
+block unused). Neither beat the majority rule: on AAPL both trailed
+``always up'', all \SupNCi{} intervals include zero, and hold-out log-loss
+(\SupLossLo--\SupLossHi) is close to the coin-flip value $\ln 2 \approx 0.693$. More
+capacity found no signal the classical models missed.
+
+\input{generated/dl_table}

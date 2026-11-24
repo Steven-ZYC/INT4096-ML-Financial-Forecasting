@@ -9,15 +9,15 @@ strongest --- a bias against trained models that follows from the question we
 chose, and the reason H1 was pre-registered rather than discovered.
 
 \paragraph{Statistics and evaluation integrity.}
-Skill differences are within about one percentage point and intervals overlap, so
-we report a tie; because errors are serially dependent, even block resampling
+Skill differences are within about one percentage point and every bootstrap interval
+includes zero, so we report a tie; because errors are serially dependent, even block resampling
 understates uncertainty. Every number here is a validation number, and validation
 influenced model selection, so it is not a clean holdout; the sealed block exists
 to give one unbiased estimate once the analysis is frozen.
 
 \paragraph{Measurement integrity.}
-Two leakage defects were found by independent audit and fixed. Both would have inflated results, and both were invisible to the authors of the
-code: the audit mechanism, not the initial implementation, is what makes these
+Two leakage defects, invisible to the code's authors, were found by independent
+audit and fixed; the audit, not the first implementation, is what makes these
 numbers trustworthy.
 
 \paragraph{Education.}

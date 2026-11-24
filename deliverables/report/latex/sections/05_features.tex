@@ -14,11 +14,10 @@ $\hat{C}_{t+1} = C_t + \widehat{\Delta}_t$. The two are information-equivalent
 because $C_t$ is known at decision time.
 
 \paragraph{Boundary purge.}
-With $y_t = C_{t+1}$, the last training label is a validation-block price and the
-last validation label would be a \emph{sealed test} price, so we drop one row at
-each boundary. An independent audit found this, showing that perturbing one sealed
-test price moved the headline validation metric by 0.408 --- roughly forty-six
-times the model-versus-baseline margin reported (Table~\ref{tab:splits}).
+With $y_t = C_{t+1}$, the last training label is a validation price and the last
+validation label a sealed test price, so one row is dropped at each boundary. An
+independent audit showed that, without it, perturbing one test price moved the
+headline metric by 0.408 (Table~\ref{tab:splits}).
 
 \input{generated/splits_table}
 
@@ -28,4 +27,4 @@ separately in the test, so a forward peek mismatches; another appends absurd fut
 prices and asserts earlier values are unchanged. Six canonical defects --- a
 one-bar forward shift, an obfuscated equivalent, a centred window, a backward
 fill, a whole-series statistic, and preprocessing fitted on train-plus-test ---
-are then injected one at a time, and each must be detected..
+are then injected one at a time, and each must be detected.

@@ -42,7 +42,8 @@ elif command -v python3 >/dev/null; then
 else
   echo "python3 not found"; exit 1
 fi
-( cd "$ROOT" && PYTHONPATH=src "$PY" scripts/build_latex_assets.py )
+# INT4096_SKIP_FIGURES=1 regenerates tables and numbers only (figures unchanged).
+( cd "$ROOT" && PYTHONPATH=src "$PY" scripts/build_latex_assets.py ${INT4096_SKIP_FIGURES:+--no-figures} )
 
 echo
 echo "== 2/4 compile (latexmk -pdf, bibtex) =="

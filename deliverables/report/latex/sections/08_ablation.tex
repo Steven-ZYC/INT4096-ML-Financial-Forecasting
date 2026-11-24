@@ -13,9 +13,9 @@ approximately: for both tree ensembles the change in validation MAE is
 inference would be a bug, not a discovery.
 
 Scaling-sensitive families move slightly and not uniformly helpfully:
-standardisation mildly improves AAPL Ridge (\SkillAAPLRidge\% skill versus
-\SkillAAPLLinearBaseline\% unscaled) but rescues nothing --- every value stays
-within about one percentage point of the baseline. An ablation ending in no
+standardisation barely changes AAPL Ridge, worsens the AAPL linear baseline
+(Table~\ref{tab:ablation}) and rescues nothing --- every value stays within about
+one percentage point of the baseline. An ablation ending in no
 substantial effect is a legitimate finding, and a useful teaching one: it
 separates \emph{this transform changes the model} from \emph{this transform
 improves the forecast}.

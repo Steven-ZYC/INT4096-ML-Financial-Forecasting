@@ -75,7 +75,8 @@ difference between an impressive number and a real improvement. We compare five
 model families and a preprocessing ablation on next-session close prediction for
 Apple (AAPL) and Bitcoin (BTC) under one frozen, leakage-audited protocol. Across
 \NRunTotal{} runs no model beat a trivial persistence rule by more than
-\BestAAPLSkill\% (AAPL) or \BestBTCSkill\% (BTC), and two were worse. We report
+\BestAAPLSkill\% (AAPL) or \BestBTCAllSkill\% (BTC), \NBelowAll{} were worse, and
+every bootstrap interval includes zero; an experimental MLP and LSTM fared no better. We report
 this negative result as the finding and derive a five-objective lesson from it, in
 which learners read a skill score, find leakage in code, and explain why
 standardisation changes a kernel method but leaves a random forest numerically
@@ -93,6 +94,7 @@ resource, not evidence of learning gains.
 \input{sections/07_models}
 \input{sections/08_ablation}
 \input{sections/09_results}
+\input{sections/09b_experimental_dl}
 \input{sections/10_education}
 \input{sections/11_limitations}
 \input{sections/12_learnings}
@@ -100,17 +102,18 @@ resource, not evidence of learning gains.
 
 
 
+\input{sections/14_contributions}
+
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
-\noindent
 \noindent The repository holds immutable snapshots with SHA-256 manifests, the frozen
 protocol, every run manifest, the tests and the notebook that regenerates the
-analysis (\texttt{scripts/reproduce.sh}). An AI coding agent (Pi with
-\texttt{pi-subagents}) drafted code, tests and this document's structure under a
-protocol frozen before the experiments ran; each model lane is presented by its
-named owner, who is accountable for its content. An independent audit found two
-high-severity defects, both fixed and re-tested. This work is educational, not
-investment advice.
+analysis (\texttt{scripts/reproduce.sh}). AI coding assistants (Pi with
+\texttt{pi-subagents}, and Claude Code) drafted code, tests and text under a
+protocol frozen before the experiments ran; every change was reviewed and approved
+by the team, and each model lane is presented by its named owner. An independent
+audit found two high-severity defects, both fixed and re-tested. This work is
+educational, not investment advice.
 
 \bibliographystyle{plainnat}
 \bibliography{references}

@@ -1,8 +1,7 @@
 \section{Dataset and Data Provenance}
 \label{sec:data}
 
-Both series are committed as immutable snapshots: the exact bytes behind every
-reported number, with a SHA-256 digest, provider, row count and true download
+Both series are committed as immutable snapshots with a SHA-256 digest, provider, row count and true download
 timestamp. Each experiment recomputes the digest and aborts on mismatch.
 
 \input{generated/dataset_table}
