@@ -6,8 +6,8 @@ command:   texcount -inc -sum main.tex
 
 File: main.tex
 Encoding: ascii
-Sum count: 238
-Words in text: 217
+Sum count: 240
+Words in text: 219
 Words in headers: 21
 Words outside text (captions, etc.): 0
 Number of headers: 3
@@ -17,7 +17,7 @@ Number of math displayed: 0
 Subcounts:
   text+headers+captions (#headers/#floats/#inlines/#displayed)
   133+20+0 (2/0/0/0) Subsection
-  84+1+0 (1/0/0/0) Section: Acknowledgements
+  86+1+0 (1/0/0/0) Section: Acknowledgements
 
 Included file: ./generated/numbers.tex
 Encoding: ascii
@@ -184,17 +184,6 @@ Number of floats/tables/figures: 0
 Number of math inlines: 0
 Number of math displayed: 0
 
-Included file: ./sections/14_contributions.tex
-Encoding: ascii
-Sum count: 1
-Words in text: 0
-Words in headers: 1
-Words outside text (captions, etc.): 0
-Number of headers: 1
-Number of floats/tables/figures: 1
-Number of math inlines: 0
-Number of math displayed: 0
-
 Included file: ./generated/dataset_table.tex
 Encoding: ascii
 Sum count: 41
@@ -252,18 +241,18 @@ Number of math displayed: 0
 
 Sum of files: main.tex
 File(s) total: main.tex
-Sum count: 3051
-Words in text: 2387
-Words in headers: 104
+Sum count: 3052
+Words in text: 2389
+Words in headers: 103
 Words outside text (captions, etc.): 541
-Number of headers: 31
-Number of floats/tables/figures: 13
+Number of headers: 30
+Number of floats/tables/figures: 12
 Number of math inlines: 18
 Number of math displayed: 1
-Files: 22
+Files: 21
 Subcounts:
   text+headers+captions (#headers/#floats/#inlines/#displayed)
-  217+21+0 (3/0/0/0) File: main.tex
+  219+21+0 (3/0/0/0) File: main.tex
   159+4+0 (1/0/0/0) Included file: ./sections/01_introduction.tex
   177+17+0 (5/0/4/0) Included file: ./sections/02_background.tex
   126+2+0 (1/0/0/0) Included file: ./sections/03_questions.tex
@@ -278,7 +267,6 @@ Subcounts:
   164+15+0 (5/0/0/0) Included file: ./sections/11_limitations.tex
   151+4+0 (1/0/1/0) Included file: ./sections/12_learnings.tex
   102+1+0 (1/0/0/0) Included file: ./sections/13_conclusion.tex
-  0+1+0 (1/1/0/0) Included file: ./sections/14_contributions.tex
   0+0+41 (0/1/0/0) Included file: ./generated/dataset_table.tex
   0+0+47 (0/1/1/0) Included file: ./generated/splits_table.tex
   0+0+47 (0/1/1/0) Included file: ./generated/ablation_table.tex
