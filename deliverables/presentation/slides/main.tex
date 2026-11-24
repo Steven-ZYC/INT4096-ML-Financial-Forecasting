@@ -1,4 +1,4 @@
-% INT4096 group presentation --- 17 narrative slides, 5 backup, 2 references.
+% INT4096 group presentation --- 18 narrative slides, 6 backup, 2 references.
 % Build: bash deliverables/presentation/slides/build.sh
 %
 % Structure follows the project pipeline, one part per stage:
@@ -26,6 +26,7 @@
 \usepackage{graphicx}
 \usepackage{siunitx}
 \usepackage{tikz}
+\usepackage{qrcode}
 \usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
 \usepackage[backend=bibtex,style=authoryear,giveninits,maxbibnames=2]{biblatex}
 \addbibresource{../../report/latex/references.bib}
@@ -606,13 +607,40 @@
     \end{column}
     \begin{column}{.48\textwidth}
       \footnotesize
-      \textbf{Materials:} Colab workbook, teacher guide with worked answers, and a notebook that
-      rebuilds our results from the hashed data.
+      \textbf{Materials:} Colab workbook, teacher guide with worked answers, a notebook that
+      rebuilds our results, and an interactive website (next slide).
     \end{column}
   \end{columns}
 \end{frame}
 
 % 17 --------------------------------------------------------------------------
+\begin{frame}{Try It Yourself: The Whole Pipeline, Interactive}
+  \speaker{Lau Pak Hei}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{.60\textwidth}
+      \centering
+      \fcolorbox{black!25}{white}{\includegraphics[width=.96\linewidth]{website_preview.png}}
+      \par\vspace{1mm}
+      {\scriptsize The opening view: the $R^2$ trap, then seven steps.\par}
+    \end{column}
+    \begin{column}{.36\textwidth}
+      \centering
+      \qrcode[height=2.7cm]{https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/}
+      \par\vspace{2mm}
+      {\tiny\url{https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/}\par}
+      \vspace{3mm}
+      \raggedright
+      \begin{itemize}\scriptsize\setlength{\itemsep}{2pt}
+        \item Every step of this talk, with live charts from our real data
+        \item Pick a day: see its ten features
+        \item Pick a run: recompute its MAE, RMSE, $R^2$ and skill
+        \item Opens in any browser; nothing to install
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 18 --------------------------------------------------------------------------
 \begin{frame}{Summary: What Each Stage Delivered}
   \speaker{Lui Shing Lam}
   \centering\footnotesize

@@ -14,10 +14,10 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 | Artifact | Path | Status |
 |---|---|---|
 | Interactive website | [https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/](https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/) | step-by-step explainer, deployed from `deliverables/website/index.html` by `.github/workflows/pages.yml` |
-| Final report (PDF) | [`deliverables/report/INT4096_Final_Report.pdf`](deliverables/report/INT4096_Final_Report.pdf) | compiled, 11 pages, 2,492 words, sha256 `f85d5985a5ec90da…` |
+| Final report (PDF) | [`deliverables/report/INT4096_Final_Report.pdf`](deliverables/report/INT4096_Final_Report.pdf) | compiled, 11 pages, 2,478 words, sha256 `b8a0bb719c735b26…` |
 | LaTeX source | [`deliverables/report/latex/main.tex`](deliverables/report/latex/main.tex) | builds clean (`bash deliverables/report/latex/build.sh`) |
 | Word-count log | [`deliverables/report/word_count.txt`](deliverables/report/word_count.txt) | 2,399 body + 100 headings |
-| Presentation (PDF) | [`deliverables/presentation/INT4096_Presentation.pdf`](deliverables/presentation/INT4096_Presentation.pdf) | 25 pages (17 + 6 backup + 2 references), sha256 `d9886c266160263b…` |
+| Presentation (PDF) | [`deliverables/presentation/INT4096_Presentation.pdf`](deliverables/presentation/INT4096_Presentation.pdf) | 26 pages (18 + 6 backup + 2 references), sha256 `160dd968301a8d50…` |
 | Slide source | [`deliverables/presentation/slides/main.tex`](deliverables/presentation/slides/main.tex) | beamer; builds clean, 0 overfull boxes |
 | Slide planning docs | [`deliverables/presentation/planning/`](deliverables/presentation/planning/) | storyboard, timing plan, speaker notes, bilingual script |
 | Colab notebook | [`deliverables/notebook/INT4096_Final_Colab.ipynb`](deliverables/notebook/INT4096_Final_Colab.ipynb) | executes end to end in tests |

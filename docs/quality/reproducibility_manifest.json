@@ -1,8 +1,8 @@
 {
   "project": "INT4096 machine-learning coursework",
-  "generated_utc": "2026-11-24T01:44:42+00:00",
-  "git_commit": "c44fd4aa21b50a8b7bb077f7706b3dc49fe1574b",
-  "git_branch": "presentation-restructure-v2",
+  "generated_utc": "2026-11-24T02:29:09+00:00",
+  "git_commit": "c50fe0f75d0f4020964538beeda57ae55a78bd80",
+  "git_branch": "main",
   "git_dirty": true,
   "protocol_version": "v1.1-delta-target",
   "run_count": 20,
@@ -40,16 +40,16 @@
       "bytes": 24769
     },
     "deliverables/report/INT4096_Final_Report.pdf": {
-      "sha256": "f85d5985a5ec90dad028d3d144d0cd6e35d67712ab97db0b9093e2a53eb4aca5",
-      "bytes": 569136
+      "sha256": "b8a0bb719c735b265aa006ed4191bc6def197c1328102f215016cbfcdd246dd9",
+      "bytes": 571562
     },
     "deliverables/report/word_count.txt": {
-      "sha256": "9a3c26b2889ce12cf5eb10f33272feab5e0060d67662fa223ddd1dd30c06faae",
+      "sha256": "67cc7f4184ce30e5ba265e6fd98501b25f6bb8debb39f02ae92ea3b35fd6865b",
       "bytes": 8590
     },
     "deliverables/presentation/INT4096_Presentation.pdf": {
-      "sha256": "d9886c266160263bc586ad516b62e2fc8b0904b9739d4f267265abe7383da088",
-      "bytes": 471005
+      "sha256": "160dd968301a8d50cabbefb087e5af898c216013c9600691c051fe24560f8b71",
+      "bytes": 619255
     },
     "experiments/analysis/uncertainty_and_signal.json": {
       "sha256": "4e3eee814eef039e39d30a14c717ec21c0292ab891914cbe78be7f8cf1e022d6",

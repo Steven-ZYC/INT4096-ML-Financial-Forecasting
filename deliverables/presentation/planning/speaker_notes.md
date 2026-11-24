@@ -1,14 +1,14 @@
 # Speaker Notes — Key Messages, Transitions, Q&A Routing
 
-**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` (25 pages: 17 narrative + 6 backup + 2 references)
+**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` (26 pages: 18 narrative + 6 backup + 2 references)
 **Full spoken script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照)
 **Clock and voice blocks:** `timing_plan.md` · **Structure:** `storyboard.md`
 
 This file is the **one-page briefing**: what each slide must land, how to hand over, and who answers
 what. For the words to say, use the bilingual script — kept in one place so the two cannot drift apart.
 
-> Speakers: Dong Yuankun slides 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 ·
-> Lui Shing Lam 17 (see `timing_plan.md`).
+> Speakers: Dong Yuankun slides 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16–17 ·
+> Lui Shing Lam 18 (see `timing_plan.md`).
 
 ---
 
@@ -60,8 +60,9 @@ can look it up."* Never improvise a number.
 | 13 | Four Metrics | Each metric's job; R² trap; skill crosses assets | "Here is skill for every run." |
 | 14 | Results | Within 1% of the baseline; best +0.52% / +0.26%; every run shown | "But are those small leads real?" |
 | 15 | How Certain? | 20/20 intervals include zero; near-zero return correlation | "That result is exactly what we teach." **(handover Zhang Haoyu → Lau Pak Hei)** |
-| 16 | Teaching Design | Five tasks ↔ stages ↔ course concepts; baseline first | "Now the summary." **(handover Lau Pak Hei → Lui Shing Lam)** |
-| 17 | Summary | One outcome per stage; next steps; disclaimer | → Q&A |
+| 16 | Teaching Design | Five tasks ↔ stages ↔ course concepts; baseline first | "And you can try all of it yourself." |
+| 17 | Try It Yourself | The website: every step with real data; scan the QR code | "Now the summary." **(handover Lau Pak Hei → Lui Shing Lam)** |
+| 18 | Summary | One outcome per stage; next steps; disclaimer | → Q&A |
 
 ---
 
@@ -82,6 +83,7 @@ Questions go to Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak Hei and Lui
 | Why P0 and P2? | Zhang Yancheng | They isolate scaling, the course's question. P1 would duplicate P0 (no missing values); P3/P4 are queued next. |
 | Why are some chosen values at the grid edge? | Zhang Yancheng | Small declared grids, same budget for every model; widening them is an easy next step. |
 | Can this make money? | Zhang Haoyu | No. Error metrics ignore costs and risk; we make no profitability claim. |
+| Where can we see the details? | Zhang Yancheng | On our website (QR code on slide 17), built from the same data and results as the slides. |
 | Did the lesson improve learning? | Zhang Yancheng | The lesson is built and reproducible; measuring learning is what the classroom pilot is for. |
 | What should students learn? | Zhang Yancheng | Compare every model with a simple baseline, check what it could see, and ask how certain the gain is. |
 

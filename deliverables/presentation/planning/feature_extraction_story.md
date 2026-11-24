@@ -359,7 +359,7 @@ flowchart LR
 | B-7 | 网格边缘选择 | 见 3.3，可作为 Q&A |
 | B-8 | 报告 `deliverables/report/latex/sections/07_models.tex` 第 5 行也写"near-unregularised linear model" | 与幻灯片保持一致，改为"a linear baseline with a tuned L2 penalty"，并重新编译报告（我没有改报告，因为它是单独的评分交付物） |
 
-## 附录 C · v3 幻灯片对照（17 + 6 备份 + 2 参考文献）
+## 附录 C · v3 幻灯片对照（18 + 6 备份 + 2 参考文献）
 
 | # | 部分 | 标题 | 对应本文 | 目标时长 |
 |---|---|---|---|---|
@@ -379,7 +379,8 @@ flowchart LR
 | 14 | 4 | Results: All 20 Runs Land Within 1% of the Baseline | 4.2 | 0:55 |
 | 15 | 4 | How Certain? Every Interval Includes Zero | 4.3、4.5 | 0:55 |
 | 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 1:00 |
-| 17 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:50 |
+| 17 | 5 | Try It Yourself: The Whole Pipeline, Interactive（网站预览 + 二维码） | 5.2 | 0:35 |
+| 18 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:50 |
 
 备份：B1 完整 20 格矩阵 · B2 公平性与 manifest 审计 · B3 为什么删一行（周五例子）· B4 特征重要性 · B5 Q&A 卡片 · B6 MLP/LSTM 涨跌方向补充测试。
 

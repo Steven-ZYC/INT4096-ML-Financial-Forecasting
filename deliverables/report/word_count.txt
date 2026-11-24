@@ -65,8 +65,8 @@ Number of math displayed: 0
 
 Included file: ./sections/04_data.tex
 Encoding: ascii
-Sum count: 253
-Words in text: 161
+Sum count: 247
+Words in text: 155
 Words in headers: 4
 Words outside text (captions, etc.): 88
 Number of headers: 1
@@ -142,8 +142,8 @@ Number of math displayed: 0
 
 Included file: ./sections/10_education.tex
 Encoding: ascii
-Sum count: 159
-Words in text: 157
+Sum count: 172
+Words in text: 170
 Words in headers: 2
 Words outside text (captions, etc.): 0
 Number of headers: 1
@@ -153,8 +153,8 @@ Number of math displayed: 0
 
 Included file: ./sections/11_limitations.tex
 Encoding: ascii
-Sum count: 179
-Words in text: 164
+Sum count: 169
+Words in text: 154
 Words in headers: 15
 Words outside text (captions, etc.): 0
 Number of headers: 5
@@ -164,8 +164,8 @@ Number of math displayed: 0
 
 Included file: ./sections/12_learnings.tex
 Encoding: ascii
-Sum count: 156
-Words in text: 151
+Sum count: 145
+Words in text: 140
 Words in headers: 4
 Words outside text (captions, etc.): 0
 Number of headers: 1
@@ -241,8 +241,8 @@ Number of math displayed: 0
 
 Sum of files: main.tex
 File(s) total: main.tex
-Sum count: 3052
-Words in text: 2389
+Sum count: 3038
+Words in text: 2375
 Words in headers: 103
 Words outside text (captions, etc.): 541
 Number of headers: 30
@@ -256,16 +256,16 @@ Subcounts:
   159+4+0 (1/0/0/0) Included file: ./sections/01_introduction.tex
   177+17+0 (5/0/4/0) Included file: ./sections/02_background.tex
   126+2+0 (1/0/0/0) Included file: ./sections/03_questions.tex
-  161+4+88 (1/2/0/0) Included file: ./sections/04_data.tex
+  155+4+88 (1/2/0/0) Included file: ./sections/04_data.tex
   215+7+0 (3/0/4/0) Included file: ./sections/05_features.tex
   172+2+41 (1/1/4/1) Included file: ./sections/06_method.tex
   146+4+0 (1/0/1/0) Included file: ./sections/07_models.tex
   177+2+37 (1/1/1/0) Included file: ./sections/08_ablation.tex
   188+15+140 (4/3/0/0) Included file: ./sections/09_results.tex
   75+3+0 (1/0/1/0) Included file: ./sections/09b_experimental_dl.tex
-  157+2+0 (1/0/0/0) Included file: ./sections/10_education.tex
-  164+15+0 (5/0/0/0) Included file: ./sections/11_limitations.tex
-  151+4+0 (1/0/1/0) Included file: ./sections/12_learnings.tex
+  170+2+0 (1/0/0/0) Included file: ./sections/10_education.tex
+  154+15+0 (5/0/0/0) Included file: ./sections/11_limitations.tex
+  140+4+0 (1/0/1/0) Included file: ./sections/12_learnings.tex
   102+1+0 (1/0/0/0) Included file: ./sections/13_conclusion.tex
   0+0+41 (0/1/0/0) Included file: ./generated/dataset_table.tex
   0+0+47 (0/1/1/0) Included file: ./generated/splits_table.tex

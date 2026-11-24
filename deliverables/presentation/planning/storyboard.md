@@ -1,12 +1,12 @@
 # Slide Storyboard — One Pipeline, Five Stages
 
 **Deck:** `deliverables/presentation/slides/main.tex` → `deliverables/presentation/INT4096_Presentation.pdf`
-**Slides:** 17 narrative + 6 backup + 2 reference pages (25 pages) · **Speech:** 16:50 of a 20:00 slot
+**Slides:** 18 narrative + 6 backup + 2 reference pages (26 pages) · **Speech:** 16:40 of a 20:00 slot
 **Structure source:** `deliverables/presentation/planning/feature_extraction_story.md`. Change the story first, then the script, then the deck.
 **Companions:** `timing_plan.md` (clock, voice blocks) · `speaker_script_bilingual.md` (words to say) · `speaker_notes.md` (key messages, Q&A routing)
 
 > **Speakers.** The footer shows the part, the speaker's name, the page and a five-stage progress bar.
-> Dong Yuankun 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16 · Lui Shing Lam 17
+> Dong Yuankun 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16–17 · Lui Shing Lam 18
 > (`timing_plan.md`). All five members speak `[A]`.
 
 ---
@@ -24,7 +24,7 @@ questions up front; the footer progress bar shows where we are.
 | 2 Processing & Features | What can the model legally see? | problems → handling, slide 6 · one real row → ten features, slide 7 · same data for every model (pipeline, P0/P2, change target), slide 8 · split and leakage checks, slide 9 |
 | 3 Models & Tuning | Which models, tuned how fairly? | which and why, slide 10 · tuning protocol and chosen values, slide 11 · what else we explored, slide 12 |
 | 4 Evaluation | Measured how, and how certain? | metrics, slide 13 · results, slide 14 · uncertainty and why, slide 15 |
-| 5 Teaching Design | How does it become a lesson? | tasks ↔ stages ↔ course concepts, slide 16 · summary by stage, slide 17 |
+| 5 Teaching Design | How does it become a lesson? | tasks ↔ stages ↔ course concepts, slide 16 · interactive website, slide 17 · summary by stage, slide 18 |
 
 Every empirical number on a slide is a macro generated from `experiments/` and `data/raw/` by
 `scripts/build_slide_assets.py`. The tuning table on slide 11 is generated too
@@ -75,16 +75,17 @@ Every empirical number on a slide is a macro generated from `experiments/` and `
 | # | Title | Must land | Visual |
 |---|---|---|---|
 | 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | Five tasks, each from one stage and one course concept; baseline before models; materials | Task ↔ stage ↔ concept table |
-| 17 | Summary: What Each Stage Delivered | One outcome per stage; next steps; not investment advice | Stage / outcome table |
+| 17 | Try It Yourself: The Whole Pipeline, Interactive | The website shows every step with the real data; pick a day, pick a run; scan the QR code | Website preview + QR code |
+| 18 | Summary: What Each Stage Delivered | One outcome per stage; next steps; not investment advice | Stage / outcome table |
 
 ## Backup (not presented)
 
 | # | Title | Use when asked |
 |---|---|---|
-| 18 | Backup 1: Full 20-Run Transparency Matrix | "Did you cherry-pick P2?" |
-| 19 | Backup 2: Experimental Fairness and Manifest Audit | "Was the comparison fair?" |
-| 20 | Backup 3: Why One Row Is Dropped at Each Boundary | "How do you know there is no leakage?" |
-| 21 | Backup 4: What Signals Did the Models Rely On? | "Which features mattered?" |
-| 22 | Backup 5: Q&A Quick-Reference Cards | Any of the common questions |
-| 23 | Backup 6: Supplementary Test — Can Neural Networks Call the Direction? | "Why not deep learning?" (MLP and LSTM, decision D14) |
-| 24–25 | References | — |
+| 19 | Backup 1: Full 20-Run Transparency Matrix | "Did you cherry-pick P2?" |
+| 20 | Backup 2: Experimental Fairness and Manifest Audit | "Was the comparison fair?" |
+| 21 | Backup 3: Why One Row Is Dropped at Each Boundary | "How do you know there is no leakage?" |
+| 22 | Backup 4: What Signals Did the Models Rely On? | "Which features mattered?" |
+| 23 | Backup 5: Q&A Quick-Reference Cards | Any of the common questions |
+| 24 | Backup 6: Supplementary Test — Can Neural Networks Call the Direction? | "Why not deep learning?" (MLP and LSTM, decision D14) |
+| 25–26 | References | — |
