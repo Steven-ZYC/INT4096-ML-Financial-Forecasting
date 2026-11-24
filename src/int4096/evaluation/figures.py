@@ -1,6 +1,6 @@
 """Figure generation from stored run artifacts.
 
-Every figure is regenerated from files under ``artifacts/experiments``, never
+Every figure is regenerated from files under ``experiments/models``, never
 from in-memory values, and every figure records the run IDs it was built from in
 its caption file. That is what lets an auditor trace a picture back to a run.
 
@@ -19,8 +19,10 @@ import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_ARTIFACT_ROOT = REPO_ROOT / "artifacts" / "experiments"
-DEFAULT_FIGURE_ROOT = REPO_ROOT / "artifacts" / "figures"
+from ..paths import FIGURES, RUNS_ROOT
+
+DEFAULT_ARTIFACT_ROOT = RUNS_ROOT
+DEFAULT_FIGURE_ROOT = FIGURES
 
 # Additional formats written alongside every PNG. The LaTeX report sets this to
 # (".pdf",) so the report embeds vector graphics instead of a 150 dpi raster.
@@ -67,7 +69,8 @@ def load_registry(artifact_root: Path | None = None) -> pd.DataFrame:
 
 def load_predictions(run_id: str, artifact_root: Path | None = None) -> pd.DataFrame:
     root = Path(artifact_root) if artifact_root else DEFAULT_ARTIFACT_ROOT
-    path = root / run_id / "predictions.csv"
+    matches = sorted(root.glob(f"*/{run_id}/predictions.csv"))
+    path = matches[0] if matches else root / run_id / "predictions.csv"
     if not path.exists():
         raise FileNotFoundError(f"No predictions for run {run_id} at {path}")
     frame = pd.read_csv(path, parse_dates=["date"])

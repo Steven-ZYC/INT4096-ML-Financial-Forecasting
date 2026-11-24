@@ -46,7 +46,9 @@ from .manifest import (
 )
 from .tuning import select_hyperparameters
 
-ARTIFACT_ROOT = REPO_ROOT / "artifacts" / "experiments"
+from ..paths import RUNS_ROOT
+
+ARTIFACT_ROOT = RUNS_ROOT  # experiments/models/<model_id>/<run_id>/
 
 
 def _display_path(path: Path) -> str:
@@ -161,7 +163,7 @@ def run_cell(
         )
 
     run_id = make_run_id(asset, model_id, variant_name, seed)
-    run_dir = out_root / run_id
+    run_dir = out_root / model_id / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
     manifest = RunManifest(

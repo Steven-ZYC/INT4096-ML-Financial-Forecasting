@@ -108,7 +108,7 @@ print(" ", figures.plot_coverage_and_splits(frames, splits))
 print(" ", figures.plot_model_vs_naive(registry))
 print(" ", figures.plot_ablation_delta(registry))
 
-run_dirs = [d for d in (Path("artifacts/experiments")).iterdir() if d.is_dir()]
+run_dirs = sorted((d for d in Path("experiments/models").glob("*/*") if d.is_dir()), key=lambda d: d.name)
 print(" ", figures.plot_train_vs_validation(run_dirs))
 
 success = registry[(registry.status == "SUCCESS") & (registry.asset == "AAPL")]
@@ -117,12 +117,14 @@ if not success.empty:
     print(" ", figures.plot_observed_vs_predicted(run_id))
 PYEOF
 "$PY" -m int4096.experiments.registry_report
+"$PY" scripts/export_splits.py
+"$PY" scripts/summarize_models.py
 
 echo
 echo "== 7. Audit-fix verification probes =="
 "$PY" scripts/verify_fixes.py
 
 echo
-echo "Done. Artifacts: artifacts/experiments, artifacts/figures"
-echo "Registry:  docs/research/run_registry.md"
+echo "Done. Runs: experiments/models/<model>/, figures: experiments/figures"
+echo "Registry:  docs/research/run_registry.md · splits: data/splits/ · per-model summaries: experiments/models/*/README.md"
 echo "The sealed test block was NOT released by this script."

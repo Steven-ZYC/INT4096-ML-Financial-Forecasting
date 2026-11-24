@@ -1,6 +1,6 @@
 """Generate dataset cards and the feature dictionary from the real snapshots.
 
-Outputs Markdown into ``docs/research/data_cards/`` and
+Outputs Markdown into ``data/cards/`` and
 ``docs/research/feature_dictionary.md``. Every number in these documents is
 computed from the snapshot, never typed by hand.
 """
@@ -162,7 +162,7 @@ def render_card(asset: str, frame: pd.DataFrame, manifest: dict[str, Any], stats
 
 def write_cards(protocol_path: str | None = None, out_dir: str | Path | None = None) -> list[Path]:
     protocol = load_protocol(protocol_path)
-    out = Path(out_dir) if out_dir else DOCS_ROOT / "data_cards"
+    out = Path(out_dir) if out_dir else REPO_ROOT / "data" / "cards"
     out.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
 

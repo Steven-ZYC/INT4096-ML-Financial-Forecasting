@@ -19,7 +19,7 @@ import nbformat
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK = REPO_ROOT / "notebooks" / "INT4096_Final_Colab.ipynb"
+NOTEBOOK = REPO_ROOT / "deliverables" / "notebook" / "INT4096_Final_Colab.ipynb"
 
 
 

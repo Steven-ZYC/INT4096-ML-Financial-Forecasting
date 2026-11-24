@@ -54,7 +54,7 @@ jobs:
           PYTHONPATH=src python - <<'PY'
           import glob, json, subprocess
           dangling = []
-          for path in glob.glob("artifacts/experiments/*/manifest.json"):
+          for path in glob.glob("experiments/models/*/*/manifest.json"):
               commit = json.load(open(path))["git_commit"]
               if subprocess.run(["git", "cat-file", "-e", commit],
                                 capture_output=True).returncode != 0:
@@ -100,7 +100,7 @@ jobs:
       - name: Compile report and count words
         uses: xu-cheng/latex-action@v3
         with:
-          working_directory: reports/latex
+          working_directory: deliverables/report/latex
           root_file: main.tex
           post_compile: |
             echo "=== texcount (narrative word count) ==="
@@ -125,13 +125,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: INT4096_Final_Report
-          path: reports/latex/main.pdf
+          path: deliverables/report/latex/main.pdf
           if-no-files-found: error
 
       - name: Confirm the compiled PDF is present
         run: |
-          test -s reports/latex/main.pdf
-          ls -l reports/latex/main.pdf
+          test -s deliverables/report/latex/main.pdf
+          ls -l deliverables/report/latex/main.pdf
 
   slides:
     name: build presentation deck
@@ -157,7 +157,7 @@ jobs:
       - name: Compile deck
         uses: xu-cheng/latex-action@v3
         with:
-          working_directory: slides/latex
+          working_directory: deliverables/presentation/slides
           root_file: main.tex
           post_compile: |
             echo "=== deck check ==="
@@ -175,5 +175,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: INT4096_Presentation
-          path: slides/latex/main.pdf
+          path: deliverables/presentation/slides/main.pdf
           if-no-files-found: error

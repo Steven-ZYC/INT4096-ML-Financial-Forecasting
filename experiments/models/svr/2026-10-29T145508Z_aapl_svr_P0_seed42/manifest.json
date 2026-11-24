@@ -1,0 +1,199 @@
+{
+  "run_id": "2026-10-29T145508Z_aapl_svr_P0_seed42",
+  "status": "SUCCESS",
+  "protocol_version": "v1.1-delta-target",
+  "asset": "AAPL",
+  "prediction_target": "next_session_close",
+  "source_snapshot_sha256": "03fe7761ce7f612de5bb11482d57ef6706f96b1ed4e02db5ccccd2083a1c1604",
+  "model_id": "svr",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "git_commit": "ffa2289f0438fcd22b72cc560520d38b90994217",
+  "git_dirty": true,
+  "python_version": "3.14.4",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "dependencies_lock_hash": "",
+  "config_path": "configs/research_protocol.yaml#svr/P0",
+  "config_hash": "c54df861122ad0cb77b83d9ea55bfff9db9a6096d5112186e83728bf2620493a",
+  "source_name": "stockanalysis.com",
+  "source_coverage": "2021-10-28..2026-10-28",
+  "train_period": "2021-12-10..2024-11-08",
+  "validation_period": "2024-11-12..2025-11-03",
+  "test_period": "",
+  "cv_policy": "expanding_window n_splits=5 gap=1",
+  "hyperparameters": {
+    "C": 0.1,
+    "epsilon": 0.1,
+    "gamma": 0.01
+  },
+  "metrics": {
+    "validation_mae": 2.890740431960548,
+    "validation_rmse": 4.356840743147079,
+    "validation_r2": 0.9555700925029182,
+    "validation_mape_pct": 1.3085793732514026,
+    "validation_normalized_mae": 0.012741668406555443,
+    "validation_baseline_mae": 2.9056147540983597,
+    "validation_baseline_rmse": 4.361091145987039,
+    "validation_baseline_r2": 0.9554833612534198,
+    "validation_skill_mae": 0.005119165270217496,
+    "validation_skill_rmse": 0.0009746191257368197,
+    "validation_direction_accuracy": 0.5573770491803278,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": null,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 244.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 2.9056147540983597,
+    "validation_rmse": 4.361091145987039,
+    "validation_r2": 0.9554833612534198
+  },
+  "fold_metrics": [
+    {
+      "trial": 0,
+      "hyperparameters": {
+        "C": 0.1,
+        "epsilon": 0.1,
+        "gamma": 0.01
+      },
+      "validation_mae": 1.9761769053666747,
+      "seconds": 0.0502,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 1,
+      "hyperparameters": {
+        "C": 10.0,
+        "epsilon": 0.01,
+        "gamma": 0.1
+      },
+      "validation_mae": 2.0143117666475607,
+      "seconds": 0.0458,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 2,
+      "hyperparameters": {
+        "C": 0.1,
+        "epsilon": 0.1,
+        "gamma": "scale"
+      },
+      "validation_mae": 1.9864104062194408,
+      "seconds": 0.0408,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 3,
+      "hyperparameters": {
+        "C": 0.1,
+        "epsilon": 0.01,
+        "gamma": 0.1
+      },
+      "validation_mae": 1.984770435478954,
+      "seconds": 0.0393,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 4,
+      "hyperparameters": {
+        "C": 100.0,
+        "epsilon": 0.1,
+        "gamma": 0.01
+      },
+      "validation_mae": 2.0051108768609645,
+      "seconds": 0.0448,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 5,
+      "hyperparameters": {
+        "C": 100.0,
+        "epsilon": 0.01,
+        "gamma": "scale"
+      },
+      "validation_mae": 2.0836880948195664,
+      "seconds": 0.0544,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 6,
+      "hyperparameters": {
+        "C": 1000.0,
+        "epsilon": 0.01,
+        "gamma": 0.01
+      },
+      "validation_mae": 2.0192752119727997,
+      "seconds": 0.0517,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 7,
+      "hyperparameters": {
+        "C": 1.0,
+        "epsilon": 0.001,
+        "gamma": 0.1
+      },
+      "validation_mae": 1.9982532094261884,
+      "seconds": 0.0419,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 8,
+      "hyperparameters": {
+        "C": 100.0,
+        "epsilon": 0.01,
+        "gamma": 0.001
+      },
+      "validation_mae": 1.9920327037409327,
+      "seconds": 0.0385,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 9,
+      "hyperparameters": {
+        "C": 1000.0,
+        "epsilon": 0.01,
+        "gamma": 0.001
+      },
+      "validation_mae": 1.9920502694431872,
+      "seconds": 0.0486,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    }
+  ],
+  "artifacts": [
+    "experiments/models/svr/2026-10-29T145508Z_aapl_svr_P0_seed42/metrics.json",
+    "experiments/models/svr/2026-10-29T145508Z_aapl_svr_P0_seed42/predictions.csv",
+    "experiments/models/svr/2026-10-29T145508Z_aapl_svr_P0_seed42/config.json",
+    "experiments/models/svr/2026-10-29T145508Z_aapl_svr_P0_seed42/environment.json"
+  ],
+  "warnings": [
+    "test set sealed: no test metrics produced in this run",
+    "undefined (NaN) diagnostics retained as null: validation_baseline_direction_accuracy"
+  ],
+  "error": null,
+  "execution_seconds": 0.519,
+  "human_owner": "team",
+  "review_state": "UNREVIEWED",
+  "notes": "",
+  "schema_problems": []
+}

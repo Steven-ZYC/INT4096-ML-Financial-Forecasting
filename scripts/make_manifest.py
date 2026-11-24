@@ -20,14 +20,14 @@ TRACKED = [
     "data/raw/btc_daily.json",
     "data/raw/aapl_daily.manifest.json",
     "data/raw/btc_daily.manifest.json",
-    "artifacts/experiments/registry.jsonl",
+    "experiments/models/registry.jsonl",
     "configs/research_protocol.yaml",
     "docs/research/protocol.md",
-    "notebooks/INT4096_Final_Colab.ipynb",
-    "reports/final/INT4096_Final_Report.pdf",
-    "reports/word_count.txt",
-    "slides/final/INT4096_Presentation.pdf",
-    "artifacts/analysis/uncertainty_and_signal.json",
+    "deliverables/notebook/INT4096_Final_Colab.ipynb",
+    "deliverables/report/INT4096_Final_Report.pdf",
+    "deliverables/report/word_count.txt",
+    "deliverables/presentation/INT4096_Presentation.pdf",
+    "experiments/analysis/uncertainty_and_signal.json",
 ]
 
 
@@ -62,12 +62,12 @@ def main() -> int:
         "git_branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "git_dirty": bool(git("status", "--porcelain")),
         "protocol_version": "v1.1-delta-target",
-        "run_count": len(list((REPO_ROOT / "artifacts" / "experiments").glob("*/manifest.json"))),
+        "run_count": len(list((REPO_ROOT / "experiments" / "models").glob("*/*/manifest.json"))),
         "artifacts": entries,
         "missing": missing,
         "note": (
             "Hashes cover the exact bytes used. Re-run `bash scripts/reproduce.sh` "
-            "and `bash reports/latex/build.sh` to regenerate; run manifests record "
+            "and `bash deliverables/report/latex/build.sh` to regenerate; run manifests record "
             "the commit, data digest and protocol version behind every number."
         ),
     }

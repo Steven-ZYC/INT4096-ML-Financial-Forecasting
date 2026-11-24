@@ -24,7 +24,7 @@ human decision or an independent retest · `FAIL` = known defect.
 | Real read-only delegation | PASS | `int-scout` returned all 10 agent names |
 | Real bounded write delegation | PASS | all `src/`, `tests/`, `scripts/` produced by bounded lanes |
 | Real independent review delegation | PASS | `int-leakage-auditor` run; returned FAIL with 10 findings — see `docs/quality/leakage_audit.md` |
-| Requirements matrix with weights and provenance tags | PASS | `docs/requirements/course_requirements.md` |
+| Requirements matrix with weights and provenance tags | PASS | `docs/course/course_requirements.md` |
 | **Official course specification archived** | **PENDING** | `docs/course/` is empty; needs the real PDF |
 
 ## G1 — Data and temporal integrity
@@ -33,7 +33,7 @@ human decision or an independent retest · `FAIL` = known defect.
 |---|---|---|
 | Immutable snapshots with SHA-256 manifests | PASS | `data/raw/{aapl,btc}_daily.json` + `.manifest.json` |
 | Hash verified before every run | PASS | `run_cell` raises on mismatch; probe `LEAK-003` |
-| Dataset cards generated from data (not typed) | PASS | `docs/research/data_cards/*.md` via `int4096.data.cards` |
+| Dataset cards generated from data (not typed) | PASS | `data/cards/*.md` via `int4096.data.cards` |
 | Data quality checks on both assets | PASS | both `PASS`; 0 non-positive prices, 0 high<low, 0 missing core values |
 | Chronological split with frozen boundaries | PASS | `configs/research_protocol.yaml#splits` |
 | Boundary purge (no label crosses a split) | PASS | `purge_gap: 1`; `test_split_purge_gap_prevents_label_crossing` |
@@ -49,7 +49,7 @@ human decision or an independent retest · `FAIL` = known defect.
 |---|---|---|
 | Naive persistence produces metrics from a real run | PASS | registry rows for `linear_baseline` / all models carry `baseline_mae` |
 | Baseline aligned to the same forecast dates | PASS | `predictions.csv` has `y_true`, `y_pred`, `y_naive` per row |
-| Run manifest with git commit, data hash, protocol, seed | PASS | `artifacts/experiments/*/manifest.json` |
+| Run manifest with git commit, data hash, protocol, seed | PASS | `experiments/models/*/manifest.json` |
 | Metrics cross-checked against hand-computed values | PASS | `test_mae_rmse_r2_on_hand_computed_values` |
 | Failed runs recorded as FAILED, not deleted | PASS | registry is append-only; a `FAILED` linear_baseline row exists from an earlier interface bug (since fixed) |
 
@@ -81,10 +81,10 @@ human decision or an independent retest · `FAIL` = known defect.
 
 | Item | Status | Evidence |
 |---|---|---|
-| Learning objectives written and measurable | PASS | `docs/education/lesson_plan.md` |
-| Objectives mapped to real artifacts with run IDs | PASS | `docs/education/lesson_plan.md` §3 |
-| ≥3 formative tasks with worked answers | PASS | `docs/education/formative_tasks.md` (5 tasks) |
-| Teacher notes on misconceptions | PASS | `docs/education/teacher_notes.md` |
+| Learning objectives written and measurable | PASS | `deliverables/lesson/lesson_plan.md` |
+| Objectives mapped to real artifacts with run IDs | PASS | `deliverables/lesson/lesson_plan.md` §3 |
+| ≥3 formative tasks with worked answers | PASS | `deliverables/lesson/formative_tasks.md` (5 tasks) |
+| Teacher notes on misconceptions | PASS | `deliverables/lesson/teacher_notes.md` |
 | No fabricated learning-gain claim | PASS | statements are design statements, explicitly labelled |
 | Non-financial-advice disclaimer present | PASS | lesson plan, notebook, README, report |
 
@@ -104,12 +104,12 @@ human decision or an independent retest · `FAIL` = known defect.
 
 | Item | Status | Evidence |
 |---|---|---|
-| Report draft with word-count tracking | PENDING | skeleton at `docs/report/report_draft.md` |
+| Report draft with word-count tracking | PENDING | skeleton at `deliverables/report/report_draft.md` |
 | Figure map with run IDs | PENDING | will be generated with the report |
-| Slide storyboard, 5 speakers ≤20 min | PENDING | plan in `docs/management/responsibilities.md` §4 |
+| Slide storyboard, 5 speakers ≤20 min | PENDING | plan in `docs/project/responsibilities.md` §4 |
 | Original dataset deliverable | PASS | `data/raw/` (normalized snapshots + manifests) |
-| Colab notebook deliverable | PASS | `notebooks/INT4096_Final_Colab.ipynb` |
-| AI-use acknowledgement drafted | PENDING | template in `docs/report/report_draft.md` §9 |
+| Colab notebook deliverable | PASS | `deliverables/notebook/INT4096_Final_Colab.ipynb` |
+| AI-use acknowledgement drafted | PENDING | template in `deliverables/report/report_draft.md` §9 |
 | Claim audit (every number → artifact) | PENDING | `int-claim-auditor` run required |
 | Official specification archived | PENDING | see G0 |
 

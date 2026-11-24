@@ -42,7 +42,7 @@ Run (from the repository root)
     # Quick check that everything is wired up (a few epochs, one seed):
     python scripts/supplementary_direction_test.py --smoke
 
-Output: artifacts/supplementary/direction_test/<UTC timestamp>/
+Output: experiments/supplementary/direction_test/<UTC timestamp>/
     results.json        every number the slide and report may quote
     predictions.csv     per-date validation probabilities and labels
     holdout_search.csv  every configuration tried, scored on the training hold-out
@@ -234,7 +234,7 @@ def block_bootstrap_diff(hit_a: np.ndarray, hit_b: np.ndarray, seed: int = 42) -
 def classical_direction(asset: str) -> dict:
     """Direction accuracy of the main study's 20 runs (validation), for reference."""
     out = {}
-    for path in sorted((REPO_ROOT / "artifacts" / "experiments").glob(f"*_{asset.lower()}_*/metrics.json")):
+    for path in sorted((REPO_ROOT / "experiments" / "models").glob(f"*/*_{asset.lower()}_*/metrics.json")):
         m = json.loads(path.read_text(encoding="utf-8"))
         acc = m["metrics"].get("validation_direction_accuracy")
         if acc is not None and acc == acc:
@@ -293,7 +293,7 @@ def run_asset(d: dict, kind: str, device, seeds, max_epochs, search_rows: list) 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--smoke", action="store_true", help="tiny run to check wiring")
-    parser.add_argument("--out", type=Path, default=REPO_ROOT / "artifacts" / "supplementary" / "direction_test")
+    parser.add_argument("--out", type=Path, default=REPO_ROOT / "experiments" / "supplementary" / "direction_test")
     parser.add_argument("--cpu", action="store_true", help="force CPU even if CUDA is available")
     args = parser.parse_args()
 

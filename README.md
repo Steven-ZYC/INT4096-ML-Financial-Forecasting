@@ -13,22 +13,22 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 
 | Artifact | Path | Status |
 |---|---|---|
-| Final report (PDF) | [`reports/final/INT4096_Final_Report.pdf`](reports/final/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 words, sha256 `7b492de83b29eebe…` |
-| LaTeX source | [`reports/latex/main.tex`](reports/latex/main.tex) | builds clean (`bash reports/latex/build.sh`) |
-| Word-count log | [`reports/word_count.txt`](reports/word_count.txt) | 2,399 body + 100 headings |
-| Presentation (PDF) | [`slides/final/INT4096_Presentation.pdf`](slides/final/INT4096_Presentation.pdf) | 24 pages (17 + 5 backup + 2 references), sha256 `514210963c9d0c13…` |
-| Slide source | [`slides/latex/main.tex`](slides/latex/main.tex) | beamer; builds clean, 0 overfull boxes |
-| Slide planning docs | [`docs/presentation/`](docs/presentation/) | storyboard, timing plan, speaker notes, bilingual script |
-| Colab notebook | [`notebooks/INT4096_Final_Colab.ipynb`](notebooks/INT4096_Final_Colab.ipynb) | executes end to end in tests |
+| Final report (PDF) | [`deliverables/report/INT4096_Final_Report.pdf`](deliverables/report/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 words, sha256 `7b492de83b29eebe…` |
+| LaTeX source | [`deliverables/report/latex/main.tex`](deliverables/report/latex/main.tex) | builds clean (`bash deliverables/report/latex/build.sh`) |
+| Word-count log | [`deliverables/report/word_count.txt`](deliverables/report/word_count.txt) | 2,399 body + 100 headings |
+| Presentation (PDF) | [`deliverables/presentation/INT4096_Presentation.pdf`](deliverables/presentation/INT4096_Presentation.pdf) | 24 pages (17 + 5 backup + 2 references), sha256 `792bebb7ff4ebc1b…` |
+| Slide source | [`deliverables/presentation/slides/main.tex`](deliverables/presentation/slides/main.tex) | beamer; builds clean, 0 overfull boxes |
+| Slide planning docs | [`deliverables/presentation/planning/`](deliverables/presentation/planning/) | storyboard, timing plan, speaker notes, bilingual script |
+| Colab notebook | [`deliverables/notebook/INT4096_Final_Colab.ipynb`](deliverables/notebook/INT4096_Final_Colab.ipynb) | executes end to end in tests |
 | Protocol, runs, audit | [`docs/`](docs/) | frozen protocol, 20 runs, audit trail |
-| Teaching material | [`docs/education/`](docs/education/) | lesson, 5 tasks, teacher notes |
+| Teaching material | [`deliverables/lesson/`](deliverables/lesson/) | lesson, 5 tasks, teacher notes |
 
 > **Published:** <https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting>
 > (private, release [`v0.1.0`](https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting/releases/tag/v0.1.0)).
 > CI runs the tests and builds the report on every push; a clone of the remote
 > rebuilds the PDF byte-identically. GitHub is a reproducibility archive — the
 > **Moodle** upload remains the submission of record
-> ([checklist](docs/handoff/moodle_checklist.md)).
+> ([checklist](docs/project/moodle_checklist.md)).
 
 ---
 
@@ -51,8 +51,8 @@ price". Source of truth: [`docs/research/run_registry.md`](docs/research/run_reg
 
 The clearest teaching artifact in the project: applying feature scaling changes a
 **random forest by exactly 0.0000%** and a **kernel SVR by a measurable amount** —
-see [`artifacts/figures/fig06_ablation_delta.png`](artifacts/figures/) and
-[`docs/education/lesson_plan.md`](docs/education/lesson_plan.md).
+see [`experiments/figures/fig06_ablation_delta.png`](experiments/figures/) and
+[`deliverables/lesson/lesson_plan.md`](deliverables/lesson/lesson_plan.md).
 
 ---
 
@@ -73,10 +73,10 @@ bash scripts/reproduce.sh
 bash scripts/reproduce.sh --offline
 
 # 5. Build the report: regenerate figures/tables, compile, recount, copy PDF
-bash reports/latex/build.sh
+bash deliverables/report/latex/build.sh
 
 # 6. Build the slide deck (beamer)
-bash slides/build.sh
+bash deliverables/presentation/slides/build.sh
 ```
 
 The report build needs a TeX distribution with `latexmk`, `bibtex` and `texcount`
@@ -93,8 +93,8 @@ PYTHONPATH=src .venv/bin/python -m int4096.experiments.run \
   --max-trials 10 --max-seconds 90 --human-owner "Person 3"
 ```
 
-Writes `artifacts/experiments/<run_id>/{manifest.json,metrics.json,predictions.csv,config.json,environment.json}`
-and appends one line to `artifacts/experiments/registry.jsonl`.
+Writes `experiments/models/<run_id>/{manifest.json,metrics.json,predictions.csv,config.json,environment.json}`
+and appends one line to `experiments/models/registry.jsonl`.
 
 ### Regenerate documents from artifacts
 
@@ -108,7 +108,7 @@ PYTHONPATH=src .venv/bin/python scripts/build_notebook.py           # Colab note
 
 ## Google Colab
 
-Open [`notebooks/INT4096_Final_Colab.ipynb`](notebooks/INT4096_Final_Colab.ipynb)
+Open [`deliverables/notebook/INT4096_Final_Colab.ipynb`](deliverables/notebook/INT4096_Final_Colab.ipynb)
 and choose **Runtime → Run all**.
 
 The notebook:
@@ -130,33 +130,40 @@ data.
 ## What is in this repository
 
 ```text
-AGENTS.md                     working notes: layout, method, commands, talk workflow
+deliverables/                 EVERYTHING WE PRESENT OR SUBMIT (see deliverables/README.md)
+  presentation/               INT4096_Presentation.pdf (final deck)
+    slides/                   beamer source, figures, generated numbers/tables, build.sh
+    script/                   bilingual speaker script (.md source, .pdf to print)
+    planning/                 timing plan + speakers, storyboard, speaker notes, story
+  report/                     INT4096_Final_Report.pdf, word count, draft; latex/ source
+  notebook/                   Colab notebooks (final, teaching template)
+  lesson/                     lesson plan, formative tasks with answers, teacher notes
+data/                         (see data/README.md)
+  raw/                        immutable source snapshots + SHA-256 manifests
+  cards/                      dataset cards (provenance, statistics, quality checks)
+  splits/                     train/validation/test boundaries and tuning folds, per asset
+experiments/                  the only source of reported numbers (see experiments/README.md)
+  models/<model>/             one folder per model: its runs + README (grid, tuning trials, results)
+  models/registry.jsonl       append-only registry of every run
+  analysis/                   bootstrap intervals, autocorrelation diagnostic
+  supplementary/              add-on experiments (MLP/LSTM direction test)
 configs/research_protocol.yaml frozen protocol (machine-readable)
-docs/
-  requirements/               rubric, deadlines, requirement-to-evidence matrix
-  research/                   protocol, decision log, data cards, run registry
-  architecture/               multi-agent design, gates, verified delegation
-  quality/                    acceptance checklist, leakage audit record
-  management/                 five-person allocation
-  education/                  lesson plan, tasks, teacher notes
-  report/                     report skeleton with word-count tracking
 src/int4096/
-  data/                       providers, immutable snapshots, validation, cards
+  data/                       providers, snapshots, validation, splits, cards
   features/                   causal features, P0–P4 preprocessing variants
-  models/                     one lane per family, shared pipeline interface
+  models/                     one file per model family, shared pipeline interface
   evaluation/                 baselines, metrics, bootstrap, figures
   experiments/                runner, manifests, tuning, registry report
+  paths.py                    every repository location, in one place
 tests/                        83 tests, incl. mutation-verified leakage suite
-scripts/                      reproduce.sh, mutation_check.py, verify_fixes.py
-data/raw/                     immutable snapshots + SHA-256 manifests
-artifacts/                    run records, figures (regenerable)
-notebooks/                    submission notebook
-reports/latex/                report source, generated tables, vector figures
-reports/final/                compiled PDF
-reports/word_count.txt        texcount log with its exact configuration
-slides/latex/                 beamer deck source + generated macros/figures
-slides/final/                 compiled presentation PDF
-.github/workflows/ci.yml      tests + report build on push
+scripts/                      reproduce.sh, builders, mutation_check.py, verify_fixes.py
+docs/
+  course/                     course requirements and rubric
+  research/                   protocol, decision log, feature dictionary, run registry
+  quality/                    acceptance checklist, leakage audit, reproducibility manifest
+  project/                    responsibilities, hand-off checklists, history of the build
+AGENTS.md                     working notes for anyone changing the repository
+.github/workflows/ci.yml      tests, report build and deck build on push
 ```
 
 ---
@@ -170,7 +177,7 @@ slides/final/                 compiled presentation PDF
 | Preprocessing fitted on training rows only | Scaler lives inside the pipeline, refit per fold | `test_project_preprocessor_is_train_fitted` |
 | Data provenance | SHA-256 manifest verified before every run | `run_cell`, probe `LEAK-003` |
 | Every number traceable | Run manifests record commit, data hash, protocol, seed, config | `src/int4096/experiments/manifest.py` |
-| Failures are visible | Append-only registry; `FAILED`/`INCOMPLETE`/`NOT_RUN` states | `artifacts/experiments/registry.jsonl` |
+| Failures are visible | Append-only registry; `FAILED`/`INCOMPLETE`/`NOT_RUN` states | `experiments/models/registry.jsonl` |
 | Test block stays sealed | `allow_test=False` by default; notebook test asserts no unblinding | `tests/test_notebook.py` |
 | The test suite can actually fail | 5 injected leakage defects, all detected | `scripts/mutation_check.py` |
 
@@ -201,7 +208,7 @@ specialist subagents (Pi + `pi-subagents` 0.84.0):
 
 Five students are **human owners**, not processes; parallel agents are used for
 read-only inspection and non-overlapping file ownership. Full design, gates and
-verified delegation transcripts: [`docs/architecture/multi_agent_design.md`](docs/architecture/multi_agent_design.md).
+verified delegation transcripts: [`docs/project/multi_agent_design.md`](docs/project/multi_agent_design.md).
 
 ---
 

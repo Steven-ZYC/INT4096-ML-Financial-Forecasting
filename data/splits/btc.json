@@ -1,0 +1,96 @@
+{
+  "asset": "BTC",
+  "protocol_version": "v1.1-delta-target",
+  "rule": "chronological 60/20/20 on the asset's own calendar; one row purged at each boundary",
+  "modelling_rows": 1797,
+  "train": {
+    "first": "2021-11-27",
+    "last": "2024-11-07",
+    "rows": 1077
+  },
+  "validation": {
+    "first": "2024-11-09",
+    "last": "2025-11-01",
+    "rows": 358
+  },
+  "test_sealed": {
+    "first": "2025-11-03",
+    "last": "2026-10-28",
+    "rows": 360
+  },
+  "purged_rows": [
+    "2024-11-08",
+    "2025-11-02"
+  ],
+  "tuning_folds": {
+    "scheme": "expanding window inside the training block only",
+    "gap_rows": 1,
+    "folds": [
+      {
+        "fold": 1,
+        "fit": {
+          "first": "2021-11-27",
+          "last": "2022-10-15",
+          "rows": 323
+        },
+        "score": {
+          "first": "2022-10-17",
+          "last": "2023-03-15",
+          "rows": 150
+        }
+      },
+      {
+        "fold": 2,
+        "fit": {
+          "first": "2021-11-27",
+          "last": "2023-03-14",
+          "rows": 473
+        },
+        "score": {
+          "first": "2023-03-16",
+          "last": "2023-08-12",
+          "rows": 150
+        }
+      },
+      {
+        "fold": 3,
+        "fit": {
+          "first": "2021-11-27",
+          "last": "2023-08-11",
+          "rows": 623
+        },
+        "score": {
+          "first": "2023-08-13",
+          "last": "2024-01-09",
+          "rows": 150
+        }
+      },
+      {
+        "fold": 4,
+        "fit": {
+          "first": "2021-11-27",
+          "last": "2024-01-08",
+          "rows": 773
+        },
+        "score": {
+          "first": "2024-01-10",
+          "last": "2024-06-07",
+          "rows": 150
+        }
+      },
+      {
+        "fold": 5,
+        "fit": {
+          "first": "2021-11-27",
+          "last": "2024-06-06",
+          "rows": 923
+        },
+        "score": {
+          "first": "2024-06-08",
+          "last": "2024-11-07",
+          "rows": 153
+        }
+      }
+    ]
+  }
+}

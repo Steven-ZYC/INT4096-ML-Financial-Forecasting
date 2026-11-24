@@ -1,4 +1,4 @@
-"""Generate `notebooks/INT4096_Final_Colab.ipynb`.
+"""Generate `deliverables/notebook/INT4096_Final_Colab.ipynb`.
 
 The notebook is produced from source here so that its content is reviewable in
 version control as plain Python, and so it cannot silently drift from the
@@ -17,7 +17,7 @@ from pathlib import Path
 import nbformat as nbf
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-OUT = REPO_ROOT / "notebooks" / "INT4096_Final_Colab.ipynb"
+OUT = REPO_ROOT / "deliverables" / "notebook" / "INT4096_Final_Colab.ipynb"
 
 
 def md(text: str):
@@ -116,11 +116,13 @@ if not Path("data/raw/aapl_daily.json").exists() and REPO_URL:
 
 root = Path.cwd()
 if not (root / "src" / "int4096").exists():
-    # Fall back to the parent directory, which is the case when the notebook is
-    # opened from notebooks/ inside the repository.
-    if (root.parent / "src" / "int4096").exists():
-        os.chdir(root.parent)
-        root = Path.cwd()
+    # Walk up to the repository root, which is the case when the notebook is
+    # opened from deliverables/notebook/ inside the repository.
+    for parent in root.parents:
+        if (parent / "src" / "int4096").exists():
+            os.chdir(parent)
+            root = Path.cwd()
+            break
 
 print("working directory:", root)
 print("package present  :", (root / "src" / "int4096").exists())
@@ -553,7 +555,7 @@ print("conclusion of the comparison, not a failure of the models.")
 ### Where the numbers come from
 
 Every figure and metric in the submitted report is regenerated from
-`artifacts/experiments/` by `scripts/reproduce.sh`, and each run manifest records
+`experiments/models/` by `scripts/reproduce.sh`, and each run manifest records
 the git commit, dataset SHA-256, protocol version, seed and hyperparameters.
 """
     ),

@@ -1,7 +1,7 @@
 # Run Registry
 
 **Generated** by `python -m int4096.experiments.registry_report` from
-`artifacts/experiments/registry.jsonl`. Do not edit by hand.
+`experiments/models/registry.jsonl`. Do not edit by hand.
 
 The registry is **append-only**. A failed run is never deleted: failures are
 evidence, and the coverage table below depends on them being visible.

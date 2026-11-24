@@ -192,7 +192,7 @@ def test_manifest_rejects_failed_without_error():
 
 
 def test_manifest_rejects_nonexistent_artifact_path():
-    bad = _manifest(artifacts=["artifacts/experiments/does-not-exist/metrics.json"])
+    bad = _manifest(artifacts=["experiments/models/does-not-exist/metrics.json"])
     assert any("does not exist" in p for p in bad.validate())
 
 

@@ -1,8 +1,8 @@
 {
   "project": "INT4096 machine-learning coursework",
-  "generated_utc": "2026-11-17T16:48:25+00:00",
-  "git_commit": "72a600e528191864421fc56a598c0269e89f3fe6",
-  "git_branch": "main",
+  "generated_utc": "2026-11-24T00:41:46+00:00",
+  "git_commit": "96010d18ad91cfec4b465394ce1e7bf4053c3c51",
+  "git_branch": "presentation-restructure-v2",
   "git_dirty": true,
   "protocol_version": "v1.1-delta-target",
   "run_count": 20,
@@ -23,9 +23,9 @@
       "sha256": "e395cb0cc2ed4b60ceb604070494d63911067b338f55314ff7a4c8465a5b45ff",
       "bytes": 585
     },
-    "artifacts/experiments/registry.jsonl": {
-      "sha256": "68e9b0696e05c6d11161094d8d40150c96f89a7a7de271bd22dea323b780355d",
-      "bytes": 9620
+    "experiments/models/registry.jsonl": {
+      "sha256": "96e4055be96b6cb15630b48c7d8369b5b983c35daf8a0c245ad950179b03e027",
+      "bytes": 9812
     },
     "configs/research_protocol.yaml": {
       "sha256": "256442b964b505e71aff51f9b2afbff9692298d6443418aaf093fa125d9848a6",
@@ -35,27 +35,27 @@
       "sha256": "c98869f5f884c30664674048ce8c3265d055ad1f5ce930abcae5facd8fdb76ab",
       "bytes": 16006
     },
-    "notebooks/INT4096_Final_Colab.ipynb": {
-      "sha256": "a26f9a819b19138811202146ebedffe85dfa75c3002e91ba7de80dd43365c5c6",
-      "bytes": 24709
+    "deliverables/notebook/INT4096_Final_Colab.ipynb": {
+      "sha256": "0f698be97ea5e93d2f155d08237d674346853fa5fbc48775ab926704ad262c6d",
+      "bytes": 24769
     },
-    "reports/final/INT4096_Final_Report.pdf": {
+    "deliverables/report/INT4096_Final_Report.pdf": {
       "sha256": "16f53649e38097e648e1ffc38a2b359c72da0995f66b812a598366e31d76d978",
       "bytes": 566136
     },
-    "reports/word_count.txt": {
+    "deliverables/report/word_count.txt": {
       "sha256": "5a5ceb4c4308837942b3206f9a068dd659757dfdee5bf21c1cdf085add0f5814",
       "bytes": 7936
     },
-    "slides/final/INT4096_Presentation.pdf": {
-      "sha256": "b052f64b86bdbd1226c3f3fe32ca00e031f961e07c2f190f7644cadf2ae9321d",
-      "bytes": 317140
+    "deliverables/presentation/INT4096_Presentation.pdf": {
+      "sha256": "792bebb7ff4ebc1beabb7a1d758b006ddc83122cfb4c1518f71b71aadc5b32d1",
+      "bytes": 468668
     },
-    "artifacts/analysis/uncertainty_and_signal.json": {
-      "sha256": "9a6772616e12c5be85541cde437914fb968d2b9bfec88f69f383253471244440",
-      "bytes": 4839
+    "experiments/analysis/uncertainty_and_signal.json": {
+      "sha256": "4e3eee814eef039e39d30a14c717ec21c0292ab891914cbe78be7f8cf1e022d6",
+      "bytes": 4836
     }
   },
   "missing": [],
-  "note": "Hashes cover the exact bytes used. Re-run `bash scripts/reproduce.sh` and `bash reports/latex/build.sh` to regenerate; run manifests record the commit, data digest and protocol version behind every number."
+  "note": "Hashes cover the exact bytes used. Re-run `bash scripts/reproduce.sh` and `bash deliverables/report/latex/build.sh` to regenerate; run manifests record the commit, data digest and protocol version behind every number."
 }

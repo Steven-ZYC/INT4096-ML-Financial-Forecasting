@@ -16,20 +16,20 @@ trust and a lesson built on it.
 
 | What | Where |
 |---|---|
-| Assignment and rubric | `docs/requirements/course_requirements.md` |
+| Everything we present or submit | `deliverables/` (presentation, report, notebook, lesson) |
+| Final deck, slide source, script, timing | `deliverables/presentation/` (`slides/`, `script/`, `planning/`) |
+| Final report and LaTeX source | `deliverables/report/` |
+| Source data, dataset cards, split boundaries | `data/raw/`, `data/cards/`, `data/splits/` |
+| Model runs, one folder per model | `experiments/models/<model>/` (README per model: grid, trials, results) |
+| Cross-run analysis, add-on experiments | `experiments/analysis/`, `experiments/supplementary/` |
+| Assignment and rubric | `docs/course/course_requirements.md` |
 | Team decisions, dated | `docs/research/decision_log.md` |
 | Frozen protocol | `docs/research/protocol.md`, `configs/research_protocol.yaml` |
-| Code | `src/int4096/` (data, features, models, experiments, evaluation) |
-| Tests | `tests/` |
-| Experiment outputs | `artifacts/experiments/`, summaries in `artifacts/analysis/` |
-| Lesson materials | `docs/education/` |
-| Report | `docs/report/` |
-| Story, script, slides | `docs/story/`, `docs/presentation/`, `slides/latex/` |
-| Notebooks | `notebooks/` |
+| Code, tests, scripts | `src/int4096/` (paths in `paths.py`), `tests/`, `scripts/` |
 | Progress checklist | `docs/quality/acceptance_checklist.md` |
 
 If two documents disagree, the course requirements win, then the decision log, then the
-protocol. Results come from `artifacts/`, not from prose that quotes them.
+protocol. Results come from `experiments/`, not from prose that quotes them.
 
 ## How the method works
 
@@ -66,27 +66,27 @@ python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python -m pytest -q          # unit and leakage tests
 bash scripts/reproduce.sh              # data -> experiments -> artifacts
 python3 scripts/mutation_check.py      # injected leakage bugs should all be caught
-bash slides/build.sh                   # numbers + figures from artifacts, compile deck
+bash deliverables/presentation/slides/build.sh                   # numbers + figures from experiments/, compile deck
 python3 scripts/build_script_pdf.py    # printable bilingual script (xelatex + CJK font)
 ```
 
 Downloading data needs network access. The slide build needs `latexmk`, beamer with the
 metropolis theme, and `biblatex`. Beamer does not warn when content runs off the bottom of a
-page, so check the rendered PDF. The Colab notebook (`notebooks/INT4096_Final_Colab.ipynb`)
+page, so check the rendered PDF. The Colab notebook (`deliverables/notebook/INT4096_Final_Colab.ipynb`)
 should rebuild its outputs when run.
 
 ## The presentation
 
 Work in this order: story, then script, then slides.
 
-1. `docs/story/feature_extraction_story.md` holds the structure and the claims.
-2. `docs/presentation/speaker_script_bilingual.md` holds the words.
-3. `slides/latex/main.tex` is the deck.
+1. `deliverables/presentation/planning/feature_extraction_story.md` holds the structure and the claims.
+2. `deliverables/presentation/script/speaker_script_bilingual.md` holds the words.
+3. `deliverables/presentation/slides/main.tex` is the deck.
 
 Change the story first and bring the other two into line.
 
-- Numbers on slides come from macros in `slides/latex/generated/numbers.tex`, which
-  `scripts/build_slide_assets.py` generates from `artifacts/`.
-- The talk is split into voice blocks (`docs/presentation/timing_plan.md`). Each of the
-  five members speaks `[A]`.
+- Numbers on slides come from macros in `deliverables/presentation/slides/generated/numbers.tex`, which
+  `scripts/build_slide_assets.py` generates from `experiments/`.
+- Speakers are set in `deliverables/presentation/planning/timing_plan.md` and shown in each slide's
+  footer. Each of the five members speaks `[A]`.
 - The plan assumes about 105 spoken words a minute and has to fit inside 20 minutes `[A]`.

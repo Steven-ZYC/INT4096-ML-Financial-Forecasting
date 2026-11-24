@@ -245,3 +245,29 @@ configuration, and whether human approval is required.
   because its built-in early stopping draws a shuffled hold-out from the training rows.
 - **Affects:** new outputs under `artifacts/supplementary/direction_test/`; a backup slide once results exist.
 - **Requires human approval:** No further approval; the owner requested it.
+
+## D15 — Repository reorganised into deliverables / data / experiments
+
+- **Date:** 2026-11-24
+- **Proposer:** project owner (Zhang Yancheng)
+- **Status:** Accepted and implemented. No data, metric or run changed; only locations.
+- **Path mapping** (entries above keep their original paths; read them through this table):
+
+  | Before | After |
+  |---|---|
+  | `artifacts/experiments/<run_id>/` | `experiments/models/<model_id>/<run_id>/` |
+  | `artifacts/experiments/registry.jsonl` | `experiments/models/registry.jsonl` |
+  | `artifacts/analysis/`, `artifacts/figures/`, `artifacts/supplementary/` | `experiments/analysis/`, `experiments/figures/`, `experiments/supplementary/` |
+  | `slides/latex/`, `slides/build.sh`, `slides/final/` | `deliverables/presentation/slides/`, final PDF in `deliverables/presentation/` |
+  | `docs/presentation/`, `docs/story/` | `deliverables/presentation/script/` and `deliverables/presentation/planning/` |
+  | `reports/latex/`, `reports/final/`, `reports/word_count.txt`, `docs/report/` | `deliverables/report/` (`latex/` for the source) |
+  | `notebooks/` | `deliverables/notebook/` |
+  | `docs/education/` | `deliverables/lesson/` |
+  | `docs/research/data_cards/` | `data/cards/` |
+  | `docs/requirements/` | `docs/course/` |
+  | `docs/management/`, `docs/handoff/`, `docs/architecture/` | `docs/project/` |
+
+- **Added:** `data/splits/` (generated split boundaries and tuning folds), a generated README per model
+  folder, `src/int4096/paths.py` (all locations in one module). Path strings inside run manifests and
+  the registry were rewritten mechanically to the new locations; every other field is unchanged.
+- **Requires human approval:** No.

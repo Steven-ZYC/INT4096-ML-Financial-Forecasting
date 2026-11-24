@@ -1,0 +1,210 @@
+{
+  "run_id": "2026-10-29T145614Z_btc_hist_gradient_boosting_P0_seed42",
+  "status": "SUCCESS",
+  "protocol_version": "v1.1-delta-target",
+  "asset": "BTC",
+  "prediction_target": "next_session_close",
+  "source_snapshot_sha256": "dc5b146c46f57ab41687a1486e6c8b583fa59dcf2f1d7ed9beb68451c80f1886",
+  "model_id": "hist_gradient_boosting",
+  "preprocess_variant": "P0",
+  "seed": 42,
+  "git_commit": "ffa2289f0438fcd22b72cc560520d38b90994217",
+  "git_dirty": true,
+  "python_version": "3.14.4",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "dependencies_lock_hash": "",
+  "config_path": "configs/research_protocol.yaml#hist_gradient_boosting/P0",
+  "config_hash": "bd45f0651043dcd97934aa9f9af33b4d84066f7e12fa67180422fd010a4a1617",
+  "source_name": "binance",
+  "source_coverage": "2021-10-28..2026-10-29",
+  "train_period": "2021-11-27..2024-11-07",
+  "validation_period": "2024-11-09..2025-11-01",
+  "test_period": "",
+  "cv_policy": "expanding_window n_splits=5 gap=1",
+  "hyperparameters": {
+    "learning_rate": 0.01,
+    "max_iter": 300,
+    "max_depth": 3,
+    "min_samples_leaf": 20
+  },
+  "metrics": {
+    "validation_mae": 1605.0164568357156,
+    "validation_rmse": 2204.9105648886307,
+    "validation_r2": 0.9614093240878,
+    "validation_mape_pct": 1.608394913040122,
+    "validation_normalized_mae": 0.01567199327261995,
+    "validation_baseline_mae": 1604.3481005586596,
+    "validation_baseline_rmse": 2205.6682749719816,
+    "validation_baseline_r2": 0.9613827964191181,
+    "validation_skill_mae": -0.0004165905621251742,
+    "validation_skill_rmse": 0.0003435285767804386,
+    "validation_direction_accuracy": 0.4888268156424581,
+    "validation_direction_tie_rate": 0.0,
+    "validation_baseline_direction_accuracy": null,
+    "validation_baseline_direction_tie_rate": 1.0,
+    "validation_n_obs": 358.0
+  },
+  "baseline_metrics": {
+    "validation_mae": 1604.3481005586596,
+    "validation_rmse": 2205.6682749719816,
+    "validation_r2": 0.9613827964191181
+  },
+  "fold_metrics": [
+    {
+      "trial": 0,
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 300,
+        "max_depth": 3,
+        "min_samples_leaf": 20
+      },
+      "validation_mae": 757.4998722514554,
+      "seconds": 0.3287,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 1,
+      "hyperparameters": {
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "max_depth": null,
+        "min_samples_leaf": 50
+      },
+      "validation_mae": 768.9570506805634,
+      "seconds": 0.2113,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 2,
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_depth": 3,
+        "min_samples_leaf": 50
+      },
+      "validation_mae": 760.7100648101724,
+      "seconds": 0.2401,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 3,
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_iter": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 50
+      },
+      "validation_mae": 773.9494645509074,
+      "seconds": 0.2162,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 4,
+      "hyperparameters": {
+        "learning_rate": 0.05,
+        "max_iter": 100,
+        "max_depth": 5,
+        "min_samples_leaf": 20
+      },
+      "validation_mae": 781.7513295972051,
+      "seconds": 0.2034,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 5,
+      "hyperparameters": {
+        "learning_rate": 0.05,
+        "max_iter": 100,
+        "max_depth": null,
+        "min_samples_leaf": 50
+      },
+      "validation_mae": 768.9570506805634,
+      "seconds": 0.2126,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 6,
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_iter": 300,
+        "max_depth": 3,
+        "min_samples_leaf": 50
+      },
+      "validation_mae": 773.6486438764242,
+      "seconds": 0.1784,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 7,
+      "hyperparameters": {
+        "learning_rate": 0.05,
+        "max_iter": 100,
+        "max_depth": 3,
+        "min_samples_leaf": 5
+      },
+      "validation_mae": 795.7310414978616,
+      "seconds": 0.2416,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 8,
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 5
+      },
+      "validation_mae": 772.5629168909439,
+      "seconds": 0.4488,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    },
+    {
+      "trial": 9,
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_iter": 300,
+        "max_depth": null,
+        "min_samples_leaf": 20
+      },
+      "validation_mae": 813.3544813124684,
+      "seconds": 0.2634,
+      "status": "ok",
+      "error": null,
+      "stage": "inner_cv_train_block"
+    }
+  ],
+  "artifacts": [
+    "experiments/models/hist_gradient_boosting/2026-10-29T145614Z_btc_hist_gradient_boosting_P0_seed42/metrics.json",
+    "experiments/models/hist_gradient_boosting/2026-10-29T145614Z_btc_hist_gradient_boosting_P0_seed42/predictions.csv",
+    "experiments/models/hist_gradient_boosting/2026-10-29T145614Z_btc_hist_gradient_boosting_P0_seed42/config.json",
+    "experiments/models/hist_gradient_boosting/2026-10-29T145614Z_btc_hist_gradient_boosting_P0_seed42/environment.json"
+  ],
+  "warnings": [
+    "test set sealed: no test metrics produced in this run",
+    "undefined (NaN) diagnostics retained as null: validation_baseline_direction_accuracy"
+  ],
+  "error": null,
+  "execution_seconds": 2.681,
+  "human_owner": "team",
+  "review_state": "UNREVIEWED",
+  "notes": "",
+  "schema_problems": []
+}

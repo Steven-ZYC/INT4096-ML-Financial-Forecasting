@@ -1,0 +1,185 @@
+{
+  "generated_from": "experiments/models/*/predictions.csv",
+  "note": "derived analysis; no retraining",
+  "return_autocorrelation": {
+    "AAPL": {
+      "lag1_autocorrelation": 0.02126,
+      "r2_lag1": 0.000452,
+      "n_obs": 1254
+    },
+    "BTC": {
+      "lag1_autocorrelation": -0.02626,
+      "r2_lag1": 0.000689,
+      "n_obs": 1827
+    }
+  },
+  "skill_intervals": [
+    {
+      "run_id": "2026-10-29T145503Z_aapl_linear_baseline_P0_seed42",
+      "mae": 2.8986,
+      "skill_mae": 0.002403,
+      "ci_low": -0.001672,
+      "ci_high": 0.005078,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145504Z_aapl_linear_baseline_P2_seed42",
+      "mae": 2.9202,
+      "skill_mae": -0.005024,
+      "ci_low": -0.018828,
+      "ci_high": 0.00414,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145505Z_aapl_ridge_P0_seed42",
+      "mae": 2.8983,
+      "skill_mae": 0.002504,
+      "ci_low": -0.001205,
+      "ci_high": 0.005649,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145506Z_aapl_ridge_P2_seed42",
+      "mae": 2.8971,
+      "skill_mae": 0.002917,
+      "ci_low": -0.001531,
+      "ci_high": 0.006322,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145508Z_aapl_svr_P0_seed42",
+      "mae": 2.8907,
+      "skill_mae": 0.005119,
+      "ci_low": -0.003206,
+      "ci_high": 0.012536,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145509Z_aapl_svr_P2_seed42",
+      "mae": 2.8904,
+      "skill_mae": 0.00522,
+      "ci_low": -0.001076,
+      "ci_high": 0.010221,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145511Z_aapl_random_forest_P0_seed42",
+      "mae": 2.9283,
+      "skill_mae": -0.007824,
+      "ci_low": -0.02617,
+      "ci_high": 0.009527,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145521Z_aapl_random_forest_P2_seed42",
+      "mae": 2.9283,
+      "skill_mae": -0.007824,
+      "ci_low": -0.02617,
+      "ci_high": 0.009527,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145531Z_aapl_hist_gradient_boosting_P0_seed42",
+      "mae": 2.8985,
+      "skill_mae": 0.002465,
+      "ci_low": -0.002231,
+      "ci_high": 0.007096,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145535Z_aapl_hist_gradient_boosting_P2_seed42",
+      "mae": 2.8985,
+      "skill_mae": 0.002465,
+      "ci_low": -0.002231,
+      "ci_high": 0.007096,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145539Z_btc_linear_baseline_P0_seed42",
+      "mae": 1600.2052,
+      "skill_mae": 0.002582,
+      "ci_low": -0.002067,
+      "ci_high": 0.006461,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145540Z_btc_linear_baseline_P2_seed42",
+      "mae": 1603.5868,
+      "skill_mae": 0.000475,
+      "ci_low": -0.005915,
+      "ci_high": 0.00625,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145542Z_btc_ridge_P0_seed42",
+      "mae": 1601.8739,
+      "skill_mae": 0.001542,
+      "ci_low": -0.00222,
+      "ci_high": 0.004363,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145543Z_btc_ridge_P2_seed42",
+      "mae": 1602.3879,
+      "skill_mae": 0.001222,
+      "ci_low": -0.002059,
+      "ci_high": 0.003872,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145544Z_btc_svr_P0_seed42",
+      "mae": 1604.1858,
+      "skill_mae": 0.000101,
+      "ci_low": -0.001246,
+      "ci_high": 0.001387,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145546Z_btc_svr_P2_seed42",
+      "mae": 1603.1314,
+      "skill_mae": 0.000758,
+      "ci_low": -0.001845,
+      "ci_high": 0.003036,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145548Z_btc_random_forest_P0_seed42",
+      "mae": 1603.3734,
+      "skill_mae": 0.000608,
+      "ci_low": -0.00671,
+      "ci_high": 0.006051,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145601Z_btc_random_forest_P2_seed42",
+      "mae": 1603.3734,
+      "skill_mae": 0.000608,
+      "ci_low": -0.00671,
+      "ci_high": 0.006051,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145614Z_btc_hist_gradient_boosting_P0_seed42",
+      "mae": 1605.0165,
+      "skill_mae": -0.000417,
+      "ci_low": -0.005415,
+      "ci_high": 0.004571,
+      "ci_excludes_zero": false
+    },
+    {
+      "run_id": "2026-10-29T145617Z_btc_hist_gradient_boosting_P2_seed42",
+      "mae": 1605.0165,
+      "skill_mae": -0.000417,
+      "ci_low": -0.005415,
+      "ci_high": 0.004571,
+      "ci_excludes_zero": false
+    }
+  ],
+  "summary": {
+    "runs": 20,
+    "ci_includes_zero": 20,
+    "ci_excludes_zero": 0,
+    "max_skill": 0.00522,
+    "min_skill": -0.007824
+  }
+}

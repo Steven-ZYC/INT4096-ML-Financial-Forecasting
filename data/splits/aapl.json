@@ -1,0 +1,96 @@
+{
+  "asset": "AAPL",
+  "protocol_version": "v1.1-delta-target",
+  "rule": "chronological 60/20/20 on the asset's own calendar; one row purged at each boundary",
+  "modelling_rows": 1224,
+  "train": {
+    "first": "2021-12-10",
+    "last": "2024-11-08",
+    "rows": 733
+  },
+  "validation": {
+    "first": "2024-11-12",
+    "last": "2025-11-03",
+    "rows": 244
+  },
+  "test_sealed": {
+    "first": "2025-11-05",
+    "last": "2026-10-27",
+    "rows": 245
+  },
+  "purged_rows": [
+    "2024-11-11",
+    "2025-11-04"
+  ],
+  "tuning_folds": {
+    "scheme": "expanding window inside the training block only",
+    "gap_rows": 1,
+    "folds": [
+      {
+        "fold": 1,
+        "fit": {
+          "first": "2021-12-10",
+          "last": "2022-10-25",
+          "rows": 220
+        },
+        "score": {
+          "first": "2022-10-27",
+          "last": "2023-03-24",
+          "rows": 102
+        }
+      },
+      {
+        "fold": 2,
+        "fit": {
+          "first": "2021-12-10",
+          "last": "2023-03-23",
+          "rows": 322
+        },
+        "score": {
+          "first": "2023-03-27",
+          "last": "2023-08-21",
+          "rows": 102
+        }
+      },
+      {
+        "fold": 3,
+        "fit": {
+          "first": "2021-12-10",
+          "last": "2023-08-18",
+          "rows": 424
+        },
+        "score": {
+          "first": "2023-08-22",
+          "last": "2024-01-17",
+          "rows": 102
+        }
+      },
+      {
+        "fold": 4,
+        "fit": {
+          "first": "2021-12-10",
+          "last": "2024-01-16",
+          "rows": 526
+        },
+        "score": {
+          "first": "2024-01-18",
+          "last": "2024-06-12",
+          "rows": 102
+        }
+      },
+      {
+        "fold": 5,
+        "fit": {
+          "first": "2021-12-10",
+          "last": "2024-06-11",
+          "rows": 628
+        },
+        "score": {
+          "first": "2024-06-13",
+          "last": "2024-11-08",
+          "rows": 104
+        }
+      }
+    ]
+  }
+}
