@@ -368,6 +368,55 @@ def build_feature_example_macros(m: dict[str, str], protocol) -> None:
     m["NFeatures"] = str(X.shape[1])
 
 
+def latest_supplementary() -> dict | None:
+    """Newest COMPLETE run of scripts/supplementary_direction_test.py (smoke runs ignored)."""
+    root = REPO_ROOT / "experiments" / "supplementary" / "direction_test"
+    for path in sorted(root.glob("*/results.json"), reverse=True):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data.get("status") == "COMPLETE":
+            data["_dir"] = path.parent.name
+            return data
+    return None
+
+
+def build_supplementary_macros(m: dict[str, str]) -> None:
+    """MLP / LSTM next-day direction test (decision D14), for the backup slide."""
+    data = latest_supplementary()
+    m["SupPresent"] = "yes" if data else "no"
+    if not data:
+        return
+    p = lambda x: f"{x * 100:.1f}"  # noqa: E731
+    for asset, res in data["results"].items():
+        a = "AAPL" if asset == "AAPL" else "BTC"
+        m[f"SupUp{a}"] = p(res["validation_up_rate"])
+        m[f"SupMajRule{a}"] = res["mlp"]["majority_rule"]
+        m[f"SupMaj{a}"] = p(res["mlp"]["majority_accuracy"])
+        m[f"SupN{a}"] = str(res["mlp"]["n_validation"])
+        for kind, key in (("mlp", "Mlp"), ("lstm", "Lstm")):
+            r = res[kind]
+            m[f"Sup{key}{a}"] = p(r["accuracy_ensemble"])
+            m[f"Sup{key}{a}Lo"] = p(min(r["accuracy_by_seed"]))
+            m[f"Sup{key}{a}Hi"] = p(max(r["accuracy_by_seed"]))
+            lo, hi = r["diff_vs_majority_ci95"]
+            m[f"Sup{key}{a}Diff"] = f"{r['diff_vs_majority'] * 100:+.1f}"
+            m[f"Sup{key}{a}CiLo"] = f"{lo * 100:+.1f}"
+            m[f"Sup{key}{a}CiHi"] = f"{hi * 100:+.1f}"
+            m[f"Sup{key}{a}Loss"] = f"{r['holdout_logloss']:.3f}"
+        cl = res["classical_direction_accuracy"]
+        m[f"SupClassLo{a}"] = p(min(cl.values()))
+        m[f"SupClassHi{a}"] = p(max(cl.values()))
+    every = [res[k]["ci_includes_zero"] for res in data["results"].values() for k in ("mlp", "lstm")]
+    m["SupAllCiZero"] = "yes" if all(every) else "no"
+    m["SupNCi"] = str(len(every))
+    for kind, key in (("mlp", "Mlp"), ("lstm", "Lstm")):
+        losses = [res[kind]["holdout_logloss"] for res in data["results"].values()]
+        m[f"Sup{key}LossLo"] = f"{min(losses):.3f}"
+        m[f"Sup{key}LossHi"] = f"{max(losses):.3f}"
+    m["SupDevice"] = "GPU" if data.get("device", "").startswith("cuda") else "CPU"
+    m["SupSeeds"] = str(len(data.get("seeds", [])))
+    m["SupSeqLen"] = "20"
+
+
 def build_metric_macros(m: dict[str, str]) -> None:
     """MAE, RMSE and R2 for the best run per asset and its persistence baseline."""
     for asset in ("AAPL", "BTC"):
@@ -521,6 +570,7 @@ def main() -> int:
     build_split_macros(macros, protocol)
     build_metric_macros(macros)
     build_feature_example_macros(macros, protocol)
+    build_supplementary_macros(macros)
     write_backup_table(runs)
     write_tuning_table(protocol)
 

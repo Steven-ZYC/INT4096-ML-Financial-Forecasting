@@ -1,6 +1,6 @@
 # Bilingual Presentation Script (English spoken · 中文对照)
 
-**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 24 pages (17 narrative + 5 backup + 2 references)
+**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 25 pages (17 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
 **Speech:** 16:50 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:30 inside the 20:00 slot)
@@ -33,11 +33,11 @@
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,759 words, i.e. about 16 minutes 50 seconds. | 约每分钟 105 词；英文共 1,759 词，约 16 分 50 秒。 |
+| Pace | ~105 words per minute. The English below is 1,755 words, i.e. about 16 minutes 50 seconds. | 约每分钟 105 词；英文共 1,755 词，约 16 分 50 秒。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat before the question. | 第 1 页 R² 钩子：两个数字慢慢读，提问前停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
-| Backup slides | 18–22 stay in the file. **Backup 1** for "did you cherry-pick?", **Backup 3** for "why drop a row?". | 备用页 18–22；被问"是否挑选结果"开 Backup 1，问"为什么删一行"开 Backup 3。 |
+| Backup slides | 18–23 stay in the file. **Backup 1** for "did you cherry-pick?", **Backup 3** for "why drop a row?", **Backup 6** for "why not deep learning?". | 备用页 18–23；被问"是否挑选结果"开 Backup 1，问"为什么删一行"开 Backup 3，问"为什么不用深度学习"开 Backup 6。 |
 | Numbers | Never invent one. If unsure: "it is in our run records". | 绝不编数字；不确定就说"记录在仓库里"。 |
 | **Wording discipline** | Say "every **model-performance** number is from validation". The data statistics on slides 4–5 use the full five-year history. | 要说"每一个**模型表现**数字都来自验证集"；第 4–5 页的数据统计用的是完整五年历史。 |
 
@@ -52,7 +52,7 @@
 # INTRODUCTION · 开场 （Dong Yuankun）
 
 ## Slide 1 — Learning Machine Learning Through Financial Forecasting · 0:40
-**Page / 页码:** 1/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 1/25 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 用 R² 钩子开场：SVR 0.9556 对"照抄今天收盘价"0.9555，只差小数点后第四位；引出研究问题。
 
@@ -67,7 +67,7 @@
 ---
 
 ## Slide 2 — Roadmap: One Pipeline, Five Stages · 0:50
-**Page / 页码:** 2/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 2/25 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 五个阶段各回答一个问题；任务、对照基准、结论先说清；每人讲一个阶段。
 
@@ -88,7 +88,7 @@
 # PART 1 — DATA SELECTION · 第一部分：数据选择 （Dong Yuankun）
 
 ## Slide 3 — What We Used, and Exactly Where It Came From · 0:50
-**Page / 页码:** 3/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 3/25 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 两个数据集、两个公开来源，链接就是代码实际调用的地址；下载一次、原样保存、SHA-256 指纹每次运行都校验。
 
@@ -111,7 +111,7 @@
 ---
 
 ## Slide 4 — Why These Two: Two Markets With Different Characteristics · 1:05
-**Page / 页码:** 4/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 4/25 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 两个市场结构不同：交易日历、波动率、价格量级、公司行为都不一样；同一协议在两种结构上都成立，才是关于方法的结论；量级不同，所以只比较无单位指标。
 
@@ -130,7 +130,7 @@
 ---
 
 ## Slide 5 — Selection Conditions: From Raw Bars to Modelling Rows · 1:10
-**Page / 页码:** 5/24 · **Speaker / 讲者:** Dong Yuankun
+**Page / 页码:** 5/25 · **Speaker / 讲者:** Dong Yuankun
 
 **【中文要点】** 四个筛选条件：窗口在 2020 年拆股之后；用原始收盘价；六项质量检查，失败就停而不修补（两份数据都 PASS）；去掉前 30 行和最后 1 行。得到 1,224 / 1,797 行，再按时间 60/20/20 切分。
 
@@ -151,7 +151,7 @@
 # PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Zhang Yancheng）
 
 ## Slide 6 — Problems in the Raw Data, and How We Handled Each · 0:55
-**Page / 页码:** 6/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 6/25 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 原始价格不能直接用：价格会漂移，所以改用比率特征；其余问题都遵循"只用当时已知的信息"。
 
@@ -166,7 +166,7 @@
 ---
 
 ## Slide 7 — From One Day's Prices to Ten Features · 1:10
-**Page / 页码:** 7/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 7/25 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 用 2024-11-21 苹果的真实一行，逐个演示十个特征怎么算出来；全部只用当天及之前的数据，并经过"追加未来价格"测试。
 
@@ -185,7 +185,7 @@
 ---
 
 ## Slide 8 — Every Model Gets the Same Data: One Shared Pipeline · 1:20
-**Page / 页码:** 8/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 8/25 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 回答"每个模型数据是否相同"：完全相同（行、十个特征、目标、切分、调参折）；唯一开关是 P0/P2，用表格说明为什么要标准化；最后预测变化量再加回今天收盘价。
 
@@ -208,7 +208,7 @@
 ---
 
 ## Slide 9 — Chronological Split, and Proof That the Pipeline Cannot Peek · 1:00
-**Page / 页码:** 9/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 9/25 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 按时间 60/20/20 切分，每个边界删一行（标签是下一天收盘价，否则训练的答案落进验证块；审计量化为 0.408）；故意注入 6 种泄漏错误，全部被抓到；83 项测试通过。
 
@@ -229,26 +229,26 @@
 # PART 3 — MODELS AND FINE-TUNING · 第三部分：模型与调参 （Zhang Yancheng）
 
 ## Slide 10 — Five Models Plus a Baseline: Why Each One Is There · 1:10
-**Page / 页码:** 10/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 10/25 · **Speaker / 讲者:** Zhang Yancheng
 
-**【中文要点】** 一个基线加五个模型，代表三种机制（线性权重、核相似度、树切分）；每个模型说清"怎么预测、传统优势、在本研究里的角色"；不用深度学习。
+**【中文要点】** 一个基线加五个模型，代表三种机制（线性权重、核相似度、树切分）；每个模型说清"怎么预测、传统优势、在本研究里的角色"；主比较不用深度学习，但另做了 MLP/LSTM 补充测试（Backup 6）。
 
 **English — say this:**
-> Part three: models and fine-tuning. Beside the yardstick we use five models covering three ways of learning. Two linear ones: a linear baseline with a small penalty, the simplest learned model, and ridge, which searches a wide penalty range to test whether regularisation helps. Support vector regression with an RBF kernel predicts from similarity to training examples; it captures non-linear patterns but depends on distances, so it is our scale-sensitive case. Two tree ensembles: a random forest averages many independent trees, is robust and needs little tuning, and is our scale-invariant control. Gradient boosting adds trees one by one to fix the remaining error, and is often strongest on tabular data.
+> Part three: models and fine-tuning. Beside the yardstick, five models cover three ways of learning. Two are linear: a linear baseline with a small penalty, and ridge, which searches a wide penalty range to test whether regularisation helps. Support vector regression with an RBF kernel predicts from similarity to training examples; it captures non-linear patterns but depends on distances, so it is our scale-sensitive case. Two are tree ensembles: a random forest averages many independent trees and is our scale-invariant control, and gradient boosting adds trees one by one to fix the remaining error.
 >
-> No deep learning: the handout discourages it, and classical models stay interpretable.
+> The main comparison is classical, as the handout discourages deep learning. A separate MLP and LSTM test did no better; it is in our backup.
 
 **中文对照：**
-> 第三部分：模型与调参。除了基准，我们用五个模型覆盖三种学习方式。两个线性模型：带小惩罚的线性基线，是最简单的可学习模型；岭回归在很宽的惩罚范围里搜索，检验正则化是否有用。RBF 核支持向量回归根据与训练样本的相似度预测，能捕捉非线性，但依赖距离，所以是"对尺度敏感"的案例。两种树集成：随机森林平均许多独立的树，稳健、几乎不用调参，是"对尺度不变"的对照；梯度提升一棵接一棵地加树来修正剩余误差，在表格数据上通常最强。
+> 第三部分：模型与调参。除了基准，五个模型覆盖三种学习方式。两个线性模型：带小惩罚的线性基线，以及在很宽的惩罚范围里搜索、检验正则化是否有用的岭回归。RBF 核支持向量回归根据与训练样本的相似度预测，能捕捉非线性，但依赖距离，所以是"对尺度敏感"的案例。两种树集成：随机森林平均许多独立的树，是"对尺度不变"的对照；梯度提升一棵接一棵地加树来修正剩余误差。
 >
-> 不用深度学习：讲义不鼓励，而经典模型更容易解释。
+> 主比较用经典模型，因为讲义不鼓励深度学习。我们另外单独测试了 MLP 和 LSTM，没有更好，结果在备份页里。
 
 **→ Transition:** "Comparing them is only fair if they are tuned the same way." · **过渡：** "只有用同样方式调参，比较才公平。"
 
 ---
 
 ## Slide 11 — Fine-Tuning: The Same Search and Budget for Every Model · 1:05
-**Page / 页码:** 11/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 11/25 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 训练块内部五折扩展窗口交叉验证；随机搜索 10 次、每格 ≤90 秒、同一随机种子；目标是 MAE；验证块不参与调参；网格事先冻结。调参器几乎总是选最保守的设置。
 
@@ -267,7 +267,7 @@
 ---
 
 ## Slide 12 — What We Explored Beyond Hyperparameters · 0:55
-**Page / 页码:** 12/24 · **Speaker / 讲者:** Zhang Yancheng
+**Page / 页码:** 12/25 · **Speaker / 讲者:** Zhang Yancheng
 
 **【中文要点】** 另外三个探索方向：目标表示（价格水平→变化量）、预处理 P0 vs P2（20 次运行）、缩放的影响（树完全不变，SVR 和岭回归会变）；以及网格边缘的观察。
 
@@ -288,7 +288,7 @@
 # PART 4 — EVALUATION · 第四部分：评估 （Zhang Haoyu）
 
 ## Slide 13 — Four Metrics, Each With a Job · 1:00
-**Page / 页码:** 13/24 · **Speaker / 讲者:** Zhang Haoyu
+**Page / 页码:** 13/25 · **Speaker / 讲者:** Zhang Haoyu
 
 **【中文要点】** 四个指标各有分工：MAE 典型误差、RMSE 惩罚大错、R² 解释的方差占比、skill 相对基准的提升；R² 对任何贴着昨天价格的预测都很高，所以不用它排名；跨资产只用 skill。
 
@@ -307,7 +307,7 @@
 ---
 
 ## Slide 14 — Results: All 20 Runs Land Within 1% of the Baseline · 0:55
-**Page / 页码:** 14/24 · **Speaker / 讲者:** Zhang Haoyu
+**Page / 页码:** 14/25 · **Speaker / 讲者:** Zhang Haoyu
 
 **【中文要点】** 最好：苹果 SVR(P2) +0.52%（约少 1.5 美分误差），比特币线性基线(P0) +0.26%；20 次全部在 −0.78% 到 +0.52% 之间，5 次低于 0；完整 20 格见 Backup 1。
 
@@ -326,7 +326,7 @@
 ---
 
 ## Slide 15 — How Certain? Every Interval Includes Zero · 0:55
-**Page / 页码:** 15/24 · **Speaker / 讲者:** Zhang Haoyu
+**Page / 页码:** 15/25 · **Speaker / 讲者:** Zhang Haoyu
 
 **【中文要点】** 配对移动区块 Bootstrap（块长 10 天、1,000 次、95%）；20 个区间全部包含 0：与强基线持平；原因：相邻日收益率几乎不相关（苹果 +0.021，比特币 −0.026）。
 
@@ -351,7 +351,7 @@
 # PART 5 — TEACHING DESIGN · 第五部分：教学设计 （Lau Pak Hei: slide 16 · Lui Shing Lam: slide 17）
 
 ## Slide 16 — Teaching Design: The Pipeline Becomes a 60-Minute Lesson · 1:00
-**Page / 页码:** 16/24 · **Speaker / 讲者:** Lau Pak Hei
+**Page / 页码:** 16/25 · **Speaker / 讲者:** Lau Pak Hei
 
 **【中文要点】** 项目变成 60 分钟的课；五个任务各来自项目的一个部分；先看简单规则再看模型；有练习本和带答案的教师指南。
 
@@ -374,7 +374,7 @@
 ---
 
 ## Slide 17 — Summary: What Each Stage Delivered · 0:50
-**Page / 页码:** 17/24 · **Speaker / 讲者:** Lui Shing Lam
+**Page / 页码:** 17/25 · **Speaker / 讲者:** Lui Shing Lam
 
 **【中文要点】** 按五个部分各说一句成果；下一步；不是投资建议；谢谢、请提问。
 
@@ -399,7 +399,7 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 | Why AAPL and BTC? | Dong Yuankun | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. | 日历、波动率、量级、公司行为都不同：同一协议跑两种结构，是稳健性检验。 |
 | Is Binance BTC a global price? | Dong Yuankun | No. It is one exchange, quoted in USDT, which is not exactly USD. We say "BTC/USDT on Binance". | 不是。它是单一交易所、以 USDT 计价，USDT 不完全等于美元。 |
 | Why not adjusted close? | Dong Yuankun | Adjustments are revised after the fact, so they carry future information into the past. Our window has no split, so raw close is continuous. | 复权会事后修订，会把未来信息带进过去；窗口内没有拆股，原始收盘价是连续的。 |
-| Why classical ML, not deep learning? | Zhang Yancheng | The handout discourages it, and classical families keep the comparison interpretable. | 讲义不鼓励；经典模型让比较更可解释。 |
+| Why classical ML, not deep learning? | Zhang Yancheng | The handout discourages it, so the main comparison is classical. We also ran an MLP and an LSTM to predict next-day direction: on Apple both did worse than "always up", and all four intervals include zero → Backup 6. | 讲义不鼓励，所以主比较用经典模型。我们另外让 MLP 和 LSTM 预测涨跌：苹果上两者都不如"永远猜涨"，四个区间都包含 0 → Backup 6。 |
 | Did you leak future data? | Zhang Yancheng | Chronological split, a purged boundary row, a sealed test block, and 6 of 6 injected defects caught → Backup 3. | 按时间切分、边界删行、封存测试集、6/6 注入缺陷被抓到 → Backup 3。 |
 | Did you cherry-pick P2? | Zhang Haoyu | No. Backup 1 shows all 20 runs. The best Bitcoin result overall is the unscaled linear baseline at +0.26%. | 没有。Backup 1 有全部 20 次；比特币整体最好的是未缩放线性基线 +0.26%。 |
 | Was tuning fair? | Zhang Yancheng | Same folds, same 10 trials, same 90 s, same seed, grids frozen beforehand → Backup 2. | 同样的折、10 次试验、90 秒、同一种子、网格事先冻结 → Backup 2。 |
@@ -418,6 +418,7 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 | 20 | Why one row is dropped | "Friday's label is Monday's price. The purge keeps every training answer out of the validation block." | 周五的标签是周一的价格；删行保证训练的答案不会落进验证块。 |
 | 21 | Permutation importance | "One- and five-day returns, 30-day volatility and the 20-day average gap matter most. Magnitudes are tiny. Importance is not causation." | 1、5 日收益率、30 日波动率、20 日均线偏离最重要；量级很小；重要性不等于因果。 |
 | 22 | Q&A cards | "Short, prepared answers to the most likely questions." | 最可能问题的简短答案。 |
+| 23 | Supplementary MLP/LSTM test | "Asked to call tomorrow's direction, neither network beat a simple rule; all four intervals include zero." | 预测涨跌时两个神经网络都没有打败简单规则；四个区间都包含 0。 |
 
 # If you are running over · 超时怎么办
 

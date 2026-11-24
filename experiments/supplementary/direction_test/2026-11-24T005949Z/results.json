@@ -1,0 +1,168 @@
+{
+  "experiment": "supplementary_direction_test",
+  "status": "COMPLETE",
+  "question": "How often does the model correctly predict whether the next close is higher than today's?",
+  "not_part_of": "protocol v1.1 main comparison (20 runs); reported separately",
+  "data": "same snapshots, chronological split and purge as the main study; validation block only; test block not read",
+  "inputs": {
+    "mlp": "today's 10 engineered features",
+    "lstm": "last 20 days of the same 10 features (a sequence; not identical inputs)"
+  },
+  "selection": "grid {'hidden': (16, 32, 64), 'dropout': (0.0, 0.2), 'lr': (0.001, 0.003)} chosen by log-loss on the last 20% of the training block (gap 1); early stopping on the same hold-out; validation used once for reporting",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "max_epochs": 300,
+  "patience": 20,
+  "uncertainty": "moving-block bootstrap, block 10, 1000 resamples, 95%, accuracy minus majority rule",
+  "device": "cuda",
+  "torch": "2.9.1+cu130",
+  "python": "3.10.20",
+  "elapsed_seconds": 48.7,
+  "results": {
+    "AAPL": {
+      "train_up_rate": 0.5198,
+      "validation_up_rate": 0.5574,
+      "classical_direction_accuracy": {
+        "hist_gradient_boosting_P0": 0.5491803278688525,
+        "hist_gradient_boosting_P2": 0.5491803278688525,
+        "linear_baseline_P0": 0.5860655737704918,
+        "linear_baseline_P2": 0.5040983606557377,
+        "random_forest_P0": 0.5204918032786885,
+        "random_forest_P2": 0.5204918032786885,
+        "ridge_P0": 0.5573770491803278,
+        "ridge_P2": 0.5655737704918032,
+        "svr_P0": 0.5573770491803278,
+        "svr_P2": 0.5532786885245902
+      },
+      "mlp": {
+        "chosen_config": {
+          "hidden": 64,
+          "dropout": 0.2,
+          "lr": 0.001
+        },
+        "holdout_logloss": 0.68844,
+        "n_validation": 244,
+        "accuracy_ensemble": 0.541,
+        "accuracy_by_seed": [
+          0.5779,
+          0.5656,
+          0.5656,
+          0.5205,
+          0.4836
+        ],
+        "share_predicted_up": 0.6393,
+        "majority_rule": "always up",
+        "majority_accuracy": 0.5574,
+        "diff_vs_majority": -0.0164,
+        "diff_vs_majority_ci95": [
+          -0.1066,
+          0.0697
+        ],
+        "ci_includes_zero": true,
+        "seconds": 15.2
+      },
+      "lstm": {
+        "chosen_config": {
+          "hidden": 32,
+          "dropout": 0.0,
+          "lr": 0.001
+        },
+        "holdout_logloss": 0.69702,
+        "n_validation": 244,
+        "accuracy_ensemble": 0.5205,
+        "accuracy_by_seed": [
+          0.4549,
+          0.5,
+          0.5574,
+          0.5287,
+          0.5246
+        ],
+        "share_predicted_up": 0.6434,
+        "majority_rule": "always up",
+        "majority_accuracy": 0.5574,
+        "diff_vs_majority": -0.0369,
+        "diff_vs_majority_ci95": [
+          -0.1189,
+          0.0534
+        ],
+        "ci_includes_zero": true,
+        "seconds": 7.1
+      }
+    },
+    "BTC": {
+      "train_up_rate": 0.4921,
+      "validation_up_rate": 0.5196,
+      "classical_direction_accuracy": {
+        "hist_gradient_boosting_P0": 0.4888268156424581,
+        "hist_gradient_boosting_P2": 0.4888268156424581,
+        "linear_baseline_P0": 0.5111731843575419,
+        "linear_baseline_P2": 0.5307262569832403,
+        "random_forest_P0": 0.5139664804469274,
+        "random_forest_P2": 0.5139664804469274,
+        "ridge_P0": 0.5223463687150838,
+        "ridge_P2": 0.5111731843575419,
+        "svr_P0": 0.5083798882681564,
+        "svr_P2": 0.5083798882681564
+      },
+      "mlp": {
+        "chosen_config": {
+          "hidden": 32,
+          "dropout": 0.2,
+          "lr": 0.003
+        },
+        "holdout_logloss": 0.67623,
+        "n_validation": 358,
+        "accuracy_ensemble": 0.5,
+        "accuracy_by_seed": [
+          0.4888,
+          0.4972,
+          0.4972,
+          0.4888,
+          0.5
+        ],
+        "share_predicted_up": 0.3994,
+        "majority_rule": "always down",
+        "majority_accuracy": 0.4804,
+        "diff_vs_majority": 0.0196,
+        "diff_vs_majority_ci95": [
+          -0.0476,
+          0.0726
+        ],
+        "ci_includes_zero": true,
+        "seconds": 13.5
+      },
+      "lstm": {
+        "chosen_config": {
+          "hidden": 64,
+          "dropout": 0.2,
+          "lr": 0.003
+        },
+        "holdout_logloss": 0.68923,
+        "n_validation": 358,
+        "accuracy_ensemble": 0.5335,
+        "accuracy_by_seed": [
+          0.5,
+          0.5196,
+          0.4916,
+          0.5084,
+          0.5056
+        ],
+        "share_predicted_up": 0.405,
+        "majority_rule": "always down",
+        "majority_accuracy": 0.4804,
+        "diff_vs_majority": 0.0531,
+        "diff_vs_majority_ci95": [
+          -0.0028,
+          0.1006
+        ],
+        "ci_includes_zero": true,
+        "seconds": 12.7
+      }
+    }
+  }
+}

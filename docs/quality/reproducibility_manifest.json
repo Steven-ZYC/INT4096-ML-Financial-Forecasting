@@ -1,7 +1,7 @@
 {
   "project": "INT4096 machine-learning coursework",
-  "generated_utc": "2026-11-24T00:41:46+00:00",
-  "git_commit": "96010d18ad91cfec4b465394ce1e7bf4053c3c51",
+  "generated_utc": "2026-11-24T01:10:26+00:00",
+  "git_commit": "050ef0ef7d553f5ad57e4040aea5b60760ac2761",
   "git_branch": "presentation-restructure-v2",
   "git_dirty": true,
   "protocol_version": "v1.1-delta-target",
@@ -48,8 +48,8 @@
       "bytes": 7936
     },
     "deliverables/presentation/INT4096_Presentation.pdf": {
-      "sha256": "792bebb7ff4ebc1beabb7a1d758b006ddc83122cfb4c1518f71b71aadc5b32d1",
-      "bytes": 468668
+      "sha256": "d9886c266160263bc586ad516b62e2fc8b0904b9739d4f267265abe7383da088",
+      "bytes": 471005
     },
     "experiments/analysis/uncertainty_and_signal.json": {
       "sha256": "4e3eee814eef039e39d30a14c717ec21c0292ab891914cbe78be7f8cf1e022d6",

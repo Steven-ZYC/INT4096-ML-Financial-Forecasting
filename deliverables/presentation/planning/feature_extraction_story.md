@@ -287,6 +287,13 @@ flowchart LR
 
 ---
 
+### 4.8 补充测试：神经网络能预测涨跌方向吗？（D14）
+
+- `scripts/supplementary_direction_test.py`：MLP（今天的 10 个特征）和 LSTM（过去 20 天的特征序列）预测"明天收盘是否高于今天"。同一切分与删行；参数和提前停止只用训练块末尾 20%；验证集只用于报告；测试集不读。在 GPU 上用 5 个种子训练，概率取平均。
+- 结果见 `experiments/supplementary/direction_test/README.md` 与 Backup 6：苹果上两者都不如"永远猜涨"；比特币 LSTM 相对"永远猜跌"+5.3pp，但区间 [−0.3, +10.1] 包含 0，且验证期 52% 的日子上涨，换成"永远猜涨"优势很小；5 种子平均高于任何单个种子，说明是平均掉的噪声。所有模型在训练预留段上的 log-loss ≈ 0.69 ≈ ln 2（抛硬币）。
+- **能说**："在同样的数据上，神经网络（包括序列模型）也没能比简单规则更好地预测方向"。**不能说**："LSTM 在比特币上有效"。
+- LSTM 输入不同于主研究，所以它是补充测试，不进入 20 次运行的主矩阵。
+
 ## Act V · 教育：从实验到课堂
 
 ### 5.1 教育目标
@@ -352,7 +359,7 @@ flowchart LR
 | B-7 | 网格边缘选择 | 见 3.3，可作为 Q&A |
 | B-8 | 报告 `deliverables/report/latex/sections/07_models.tex` 第 5 行也写"near-unregularised linear model" | 与幻灯片保持一致，改为"a linear baseline with a tuned L2 penalty"，并重新编译报告（我没有改报告，因为它是单独的评分交付物） |
 
-## 附录 C · v3 幻灯片对照（17 + 5 备份 + 2 参考文献）
+## 附录 C · v3 幻灯片对照（17 + 6 备份 + 2 参考文献）
 
 | # | 部分 | 标题 | 对应本文 | 目标时长 |
 |---|---|---|---|---|
@@ -374,7 +381,7 @@ flowchart LR
 | 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 1:00 |
 | 17 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:50 |
 
-备份：B1 完整 20 格矩阵 · B2 公平性与 manifest 审计 · B3 为什么删一行（周五例子）· B4 特征重要性 · B5 Q&A 卡片。
+备份：B1 完整 20 格矩阵 · B2 公平性与 manifest 审计 · B3 为什么删一行（周五例子）· B4 特征重要性 · B5 Q&A 卡片 · B6 MLP/LSTM 涨跌方向补充测试。
 
 **v3 的两个取舍：** ① 第 16 页的五个任务采用 `deliverables/lesson/formative_tasks.md`（教师指南有逐题参考答案），解决了 5.2 中"两套任务名对不上"的问题；Colab Template 仍可作为练习本。② 第 11 页新增的"调参器几乎总选最保守设置"（岭回归 α 最大、HGB 学习率最小、AAPL 上 SVR 的 C 最小、RF 叶子最大）来自 `metrics.json` 的 `best_hyperparameters`，与"信号很少"的结论一致。
 

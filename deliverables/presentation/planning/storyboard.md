@@ -1,7 +1,7 @@
 # Slide Storyboard — One Pipeline, Five Stages
 
 **Deck:** `deliverables/presentation/slides/main.tex` → `deliverables/presentation/INT4096_Presentation.pdf`
-**Slides:** 17 narrative + 5 backup + 2 reference pages (24 pages) · **Speech:** 16:50 of a 20:00 slot
+**Slides:** 17 narrative + 6 backup + 2 reference pages (25 pages) · **Speech:** 16:50 of a 20:00 slot
 **Structure source:** `deliverables/presentation/planning/feature_extraction_story.md`. Change the story first, then the script, then the deck.
 **Companions:** `timing_plan.md` (clock, voice blocks) · `speaker_script_bilingual.md` (words to say) · `speaker_notes.md` (key messages, Q&A routing)
 
@@ -58,7 +58,7 @@ Every empirical number on a slide is a macro generated from `experiments/` and `
 
 | # | Title | Must land | Visual |
 |---|---|---|---|
-| 10 | Five Models Plus a Baseline: Why Each One Is There | How each predicts, its classic strength, its role here; three mechanisms; no deep learning | Model table |
+| 10 | Five Models Plus a Baseline: Why Each One Is There | How each predicts, its classic strength, its role here; three mechanisms; main comparison classical, MLP/LSTM tested separately (Backup 6) | Model table |
 | 11 | Fine-Tuning: The Same Search and Budget for Every Model | Inner expanding-window CV in the training block, 10 trials, ≤90 s, one seed, frozen grids; the tuner picks the most cautious settings | Fold diagram + generated grid/choice table |
 | 12 | What We Explored Beyond Hyperparameters | Target representation, P0 vs P2, what scaling changed (trees identical), grid edges | Four short items + `fig06_ablation_delta` |
 
@@ -86,4 +86,5 @@ Every empirical number on a slide is a macro generated from `experiments/` and `
 | 20 | Backup 3: Why One Row Is Dropped at Each Boundary | "How do you know there is no leakage?" |
 | 21 | Backup 4: What Signals Did the Models Rely On? | "Which features mattered?" |
 | 22 | Backup 5: Q&A Quick-Reference Cards | Any of the common questions |
-| 23–24 | References | — |
+| 23 | Backup 6: Supplementary Test — Can Neural Networks Call the Direction? | "Why not deep learning?" (MLP and LSTM, decision D14) |
+| 24–25 | References | — |

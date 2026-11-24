@@ -122,6 +122,52 @@ def model_readme(model_id: str, protocol) -> tuple[str, list[dict]]:
     return "\n".join(out), rows
 
 
+def supplementary_readme() -> None:
+    """README for experiments/supplementary/direction_test/ from its newest COMPLETE run."""
+    root = RUNS_ROOT.parent / "supplementary" / "direction_test"
+    runs = [p for p in sorted(root.glob("*/results.json"), reverse=True)
+            if json.loads(p.read_text(encoding="utf-8")).get("status") == "COMPLETE"]
+    if not runs:
+        return
+    d = json.loads(runs[0].read_text(encoding="utf-8"))
+    pct = lambda x: f"{x * 100:.1f}%"  # noqa: E731
+    out = [
+        "# Supplementary test: can neural networks call tomorrow's direction?",
+        "",
+        "**Generated** by `scripts/summarize_models.py` from the newest complete run "
+        f"(`{runs[0].parent.name}/`). Experiment: `scripts/supplementary_direction_test.py`; decision D14.",
+        "",
+        d["question"],
+        "",
+        f"- Data: {d['data']}.",
+        f"- Inputs: MLP = {d['inputs']['mlp']}; LSTM = {d['inputs']['lstm']}.",
+        f"- Selection: {d['selection']}.",
+        f"- Seeds {d['seeds']} (probabilities averaged); device `{d['device']}`, torch {d['torch']}.",
+        f"- Uncertainty: {d['uncertainty']}.",
+        "",
+        "| Asset | Validation days | Majority rule | MLP | LSTM | Classical models |",
+        "|---|---:|---|---|---|---|",
+    ]
+    for asset, r in d["results"].items():
+        cells = []
+        for k in ("mlp", "lstm"):
+            x = r[k]
+            lo, hi = x["diff_vs_majority_ci95"]
+            cells.append(f"{pct(x['accuracy_ensemble'])} (seeds {pct(min(x['accuracy_by_seed']))}–"
+                         f"{pct(max(x['accuracy_by_seed']))}); vs majority {x['diff_vs_majority'] * 100:+.1f} pp "
+                         f"[{lo * 100:+.1f}, {hi * 100:+.1f}]")
+        cl = r["classical_direction_accuracy"].values()
+        out.append(f"| {asset} | {r['mlp']['n_validation']} | {r['mlp']['majority_rule']}: "
+                   f"{pct(r['mlp']['majority_accuracy'])} | {cells[0]} | {cells[1]} | {pct(min(cl))}–{pct(max(cl))} |")
+    zero = [r[k]["ci_includes_zero"] for r in d["results"].values() for k in ("mlp", "lstm")]
+    verdict = ("Every interval includes zero: neither network calls the direction reliably better than "
+               "the majority rule." if all(zero) else
+               f"{len(zero) - sum(zero)} of {len(zero)} intervals exclude zero; read them with the "
+               "dependence caveat above.")
+    out += ["", verdict + " Direction accuracy ignores costs and risk; this is not a trading signal.", ""]
+    (root / "README.md").write_text("\n".join(out), encoding="utf-8")
+
+
 def main() -> int:
     protocol = load_protocol()
     index_rows = []
@@ -150,6 +196,7 @@ def main() -> int:
     lines += ["", "Validation skill versus \"tomorrow equals today\" (0 = no better). Naive persistence is "
               "computed inside every run, so it has no folder of its own.", ""]
     (RUNS_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8")
+    supplementary_readme()
     print(f"wrote {len(index_rows)} runs into {RUNS_ROOT.relative_to(REPO_ROOT)}/*/README.md")
     return 0
 

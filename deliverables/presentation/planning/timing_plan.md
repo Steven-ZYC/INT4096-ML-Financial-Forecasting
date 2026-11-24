@@ -1,6 +1,6 @@
 # Presentation Timing Plan
 
-**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — **24 pages = 17 narrative + 5 backup + 2 references**
+**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — **25 pages = 17 narrative + 6 backup + 2 references**
 **Build:** `bash deliverables/presentation/slides/build.sh` (0 overfull vertical boxes, 0 missing files)
 **Script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照) · **Notes:** `speaker_notes.md`
 **Structure:** `storyboard.md`, from `deliverables/presentation/planning/feature_extraction_story.md`
@@ -12,7 +12,7 @@
 
 | Component | Time |
 |---|---|
-| Formal speech (17 slides, 1,759 English words at ~105 wpm) | **16:50** |
+| Formal speech (17 slides, 1,755 English words at ~105 wpm) | **16:50** |
 | Slide changes and four handovers | 0:40 |
 | Q&A | 2:00 |
 | **Planned total** (0:30 of slack inside the 20-minute limit `[A]`) | **19:30** |
@@ -42,7 +42,7 @@
 | 7 | From One Day's Prices to Ten Features | 123 | 1:10 | 6:40 |
 | 8 | Every Model Gets the Same Data: One Shared Pipeline | 138 | 1:20 | 8:00 |
 | 9 | Chronological Split, and Proof That the Pipeline Cannot Peek | 101 | 1:00 | 9:00 |
-| 10 | Five Models Plus a Baseline: Why Each One Is There | 123 | 1:10 | 10:10 |
+| 10 | Five Models Plus a Baseline: Why Each One Is There | 119 | 1:10 | 10:10 |
 | 11 | Fine-Tuning: The Same Search and Budget for Every Model | 115 | 1:05 | 11:15 |
 | 12 | What We Explored Beyond Hyperparameters | 99 | 0:55 | 12:10 |
 | 13 | Four Metrics, Each With a Job | 108 | 1:00 | 13:10 |
@@ -50,7 +50,7 @@
 | 15 | How Certain? Every Interval Includes Zero | 100 | 0:55 | 15:00 |
 | 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 100 | 1:00 | 16:00 |
 | 17 | Summary: What Each Stage Delivered | 77 | 0:50 | 16:50 |
-| 18–24 | Backup 1–5 and References (not presented) | — | — | — |
+| 18–25 | Backup 1–6 and References (not presented) | — | — | — |
 
 ## Speakers
 

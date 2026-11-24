@@ -451,8 +451,8 @@
   \end{tabular}
   \par\vspace{3mm}
   \raggedright\footnotesize
-  Three mechanisms: linear weights, kernel similarity, tree splits. No deep learning: the course
-  handout discourages it, and classical models keep the comparison interpretable.
+  Three mechanisms: linear weights, kernel similarity, tree splits. The main comparison is classical:
+  the handout discourages deep learning. A separate MLP and LSTM test did no better (Backup 6).
 \end{frame}
 
 % 11 --------------------------------------------------------------------------
@@ -752,7 +752,7 @@
       \toprule
       Question & Answer in one line \\
       \midrule
-      Why classical ML over deep learning? & The handout discourages it, and classical families keep the comparison interpretable. \\
+      Why classical ML over deep learning? & The handout discourages it. A supplementary MLP and LSTM could not beat a simple rule at calling the direction (Backup 6). \\
       Does this mean markets are a pure random walk? & Lag-one return correlations are near zero, which is why a simple rule is such a strong baseline. \\
       Why compare AAPL and BTC? & One session-based equity and one 24/7 market: same protocol, different microstructure. \\
       Why P0 and P2? & They isolate the effect of scaling, the question the course cares about. P1 would duplicate P0 (no missing values); P3 and P4 are queued next. \\
@@ -761,6 +761,35 @@
       \bottomrule
     \end{tabular}
   \end{table}
+\end{frame}
+
+\begin{frame}{Backup 6: Supplementary Test --- Can Neural Networks Call the Direction?}
+  \centering\scriptsize
+  How often is ``will tomorrow close higher than today?'' answered correctly? Validation days only.
+  \par\vspace{1mm}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabular}{@{}lcc@{}}
+    \toprule
+    & \textbf{AAPL} (\SupNAAPL{} days) & \textbf{BTC} (\SupNBTC{} days) \\
+    \midrule
+    Majority rule from training & \SupMajRuleAAPL: \SupMajAAPL\% & \SupMajRuleBTC: \SupMajBTC\% \\
+    MLP, today's \NFeatures{} features & \SupMlpAAPL\% \ (seeds \SupMlpAAPLLo--\SupMlpAAPLHi) & \SupMlpBTC\% \ (seeds \SupMlpBTCLo--\SupMlpBTCHi) \\
+    LSTM, last \SupSeqLen{} days of features & \SupLstmAAPL\% \ (seeds \SupLstmAAPLLo--\SupLstmAAPLHi) & \SupLstmBTC\% \ (seeds \SupLstmBTCLo--\SupLstmBTCHi) \\
+    Five classical models (range) & \SupClassLoAAPL--\SupClassHiAAPL\% & \SupClassLoBTC--\SupClassHiBTC\% \\
+    \midrule
+    MLP vs majority, 95\% interval (pp) & \SupMlpAAPLDiff{} [\SupMlpAAPLCiLo, \SupMlpAAPLCiHi] & \SupMlpBTCDiff{} [\SupMlpBTCCiLo, \SupMlpBTCCiHi] \\
+    LSTM vs majority, 95\% interval (pp) & \SupLstmAAPLDiff{} [\SupLstmAAPLCiLo, \SupLstmAAPLCiHi] & \SupLstmBTCDiff{} [\SupLstmBTCCiLo, \SupLstmBTCCiHi] \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{1mm}
+  \raggedright
+  \begin{itemize}\scriptsize\setlength{\itemsep}{0pt}
+    \item All \SupNCi{} intervals include zero. On AAPL both networks trail ``always up''.
+    \item BTC LSTM: the majority rule was ``down'', but \SupUpBTC\% of validation days rose; against ``always up'' its edge is small,
+          and the \SupSeeds-seed average beats every single seed (averaging noise).
+    \item Hold-out log-loss \SupMlpLossLo--\SupMlpLossHi{} (MLP), \SupLstmLossLo--\SupLstmLossHi{} (LSTM): close to $\ln 2 = 0.693$, a coin flip.
+    \item Add-on study (D14): tuned on the end of the training block; \SupSeeds{} seeds on a \SupDevice; test block sealed.
+  \end{itemize}
 \end{frame}
 
 \section{References}

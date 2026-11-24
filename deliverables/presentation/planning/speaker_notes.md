@@ -1,6 +1,6 @@
 # Speaker Notes — Key Messages, Transitions, Q&A Routing
 
-**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` (24 pages: 17 narrative + 5 backup + 2 references)
+**Deck:** `deliverables/presentation/INT4096_Presentation.pdf` (25 pages: 17 narrative + 6 backup + 2 references)
 **Full spoken script:** `speaker_script_bilingual.md` / `.pdf` (English spoken, 中文对照)
 **Clock and voice blocks:** `timing_plan.md` · **Structure:** `storyboard.md`
 
@@ -72,7 +72,7 @@ Questions go to Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak Hei and Lui
 | Question | Answers | One-line answer |
 |---|---|---|
 | Where exactly is the data from? | Dong Yuankun | The two URLs on slide 3 are the exact calls in our code; files and hashes are in `data/raw/`. |
-| Why classical ML, not deep learning? | Zhang Yancheng | Handout discourages it; classical families keep the comparison interpretable. |
+| Why classical ML, not deep learning? | Zhang Yancheng | Handout discourages it, so the main comparison is classical. A supplementary MLP and LSTM could not call the next-day direction better than a simple rule; all four intervals include zero → Backup 6. |
 | Is this just a random walk? | Zhang Haoyu | At one day the return correlation is near zero, which is why a simple rule is such a strong baseline. |
 | Why AAPL and BTC? | Dong Yuankun | Different calendars, volatility, scale and corporate actions: one protocol on two structures is a robustness check. |
 | Did you leak future data? | Zhang Yancheng | Chronological split, boundary purge, sealed test, 6/6 injected defects caught → Backup 3. |
