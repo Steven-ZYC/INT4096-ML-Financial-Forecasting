@@ -362,8 +362,8 @@ flowchart LR
 | 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 1:05 |
 | 5 | 1 | Selection Conditions: From Raw Bars to Modelling Rows | 1.2–1.3 | 1:10 |
 | 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:05 |
-| 7 | 2 | Ten Features, Built Only From Information Available at the Close | 2.1–2.2 | 0:50 |
-| 8 | 2 | Engineering the Target: Predict the Change, Then Add It Back | 2.3 | 0:55 |
+| 7 | 2 | From One Day's Prices to Ten Features（2024-11-21 苹果真实一行逐项计算） | 2.1–2.2 | 1:10 |
+| 8 | 2 | Every Model Gets the Same Data: One Shared Pipeline（同一数据、P0/P2 唯一开关、预测变化量） | 2.2、2.3、2.5 | 1:20 |
 | 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 1:00 |
 | 10 | 3 | Five Models Plus a Baseline: Why Each One Is There | 3.1 | 1:10 |
 | 11 | 3 | Fine-Tuning: The Same Search and Budget for Every Model（网格与选中值由脚本生成） | 3.2–3.3 | 1:05 |

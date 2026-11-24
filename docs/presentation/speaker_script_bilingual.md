@@ -3,7 +3,7 @@
 **Deck:** `slides/final/INT4096_Presentation.pdf` — 24 pages (17 narrative + 5 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `docs/story/feature_extraction_story.md`
-**Speech:** 16:15 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 18:55 inside the 20:00 slot)
+**Speech:** 16:50 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:30 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English blocks.**
@@ -17,7 +17,7 @@
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
 > | 1–5 | Opening, Part 1 Data Selection | **Dong Yuankun** | 4:35 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:00 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:35 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16 | Part 5 Teaching Design | **Lau Pak Hei** | 1:00 |
 > | 17 | Part 5 Summary and close | **Lui Shing Lam** | 0:50 |
@@ -33,7 +33,7 @@
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,695 words, i.e. about 16 minutes 15 seconds. | 约每分钟 105 词；英文共 1,695 词，约 16 分 15 秒。 |
+| Pace | ~105 words per minute. The English below is 1,759 words, i.e. about 16 minutes 50 seconds. | 约每分钟 105 词；英文共 1,759 词，约 16 分 50 秒。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat before the question. | 第 1 页 R² 钩子：两个数字慢慢读，提问前停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -150,60 +150,60 @@
 
 # PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Zhang Yancheng）
 
-## Slide 6 — Problems in the Raw Data, and How We Handled Each · 1:05
+## Slide 6 — Problems in the Raw Data, and How We Handled Each · 0:55
 **Page / 页码:** 6/24 · **Speaker / 讲者:** Zhang Yancheng
 
-**【中文要点】** 原始数据的六个问题，每个都对应一个处理方法：价格水平漂移→比率特征；复权会修订→原始收盘价；两种日历→各用自己的"下一根"；窗口要历史→删前 30 行；尺度不同→P2 只在训练行上标准化；时间顺序→按时间切分并删边界行。
+**【中文要点】** 原始价格不能直接用：价格会漂移，所以改用比率特征；其余问题都遵循"只用当时已知的信息"。
 
 **English — say this:**
-> Part two: processing and feature engineering. Raw prices raise six problems, and each maps to one decision. Price levels drift and differ by asset, so a model fitted on old levels cannot extrapolate: we use returns and ratios. Adjusted prices carry future revisions: the target is the raw close. The calendars differ: each asset uses the next bar on its own calendar, and rows are never aligned across assets. Rolling windows need history, and back-filling would leak: we drop the first thirty rows. Features sit on different scales, which biases distance- and penalty-based models: setting P2 standardises them, fitted on training rows only. And time order rules out shuffling: we split by date.
+> Part two: processing and feature engineering. Raw prices cannot go straight into a model, and this table lists the six reasons, each paired with what we did. The most important is the first: prices drift to levels the training years never contained, so a model trained on raw prices cannot extrapolate. Instead we give the model ratios: how far the price moved, and how far it sits from its recent average. The other rows follow one rule: use only what was known at that moment, on each asset's own calendar, with nothing filled in from the future.
 
 **中文对照：**
-> 第二部分：数据处理与特征工程。原始价格带来六个问题，每个对应一个决定。价格水平会漂移、各资产不同，在旧水平上拟合的模型无法外推：所以用收益率和比率。复权价格带有未来的修订：目标用原始收盘价。日历不同：每个资产用自己日历上的下一根 K 线，绝不跨资产按行对齐。滚动窗口需要历史，向后填充会泄漏：删掉前 30 行。特征尺度不同，会让基于距离和惩罚的模型产生偏向：P2 设置做标准化，只在训练行上拟合。时间顺序不允许打乱：按日期切分。
+> 第二部分：数据处理与特征工程。原始价格不能直接喂给模型，表里列了六个原因，每个都配了我们的做法。最重要的是第一条：价格会漂移到训练年份里从没出现过的水平，用原始价格训练的模型无法外推。所以我们给模型的是比率：价格变动了多少、离近期均值有多远。其余几行遵循同一条规则：只用当时已知的信息，按各自资产的日历，不用任何来自未来的填充。
 
-**→ Transition:** "Here are the features that come out." · **过渡：** "得到的特征是这些。"
+**→ Transition:** "Here is what that looks like for one real day." · **过渡：** "看看真实的一天是什么样。"
 
 ---
 
-## Slide 7 — Ten Features, Built Only From Information Available at the Close · 0:50
+## Slide 7 — From One Day's Prices to Ten Features · 1:10
 **Page / 页码:** 7/24 · **Speaker / 讲者:** Zhang Yancheng
 
-**【中文要点】** 十个特征、六组，全部是只看过去的比率，没有价格水平；"不看未来"用测试保证；五个模型用完全相同的十个输入。
+**【中文要点】** 用 2024-11-21 苹果的真实一行，逐个演示十个特征怎么算出来；全部只用当天及之前的数据，并经过"追加未来价格"测试。
 
 **English — say this:**
-> The result is ten features in six groups: returns over one, five and twenty days; the gap from the five- and twenty-day averages; volatility over ten and thirty days; today's high-to-low range; volume against its five-day average; and the weekday.
+> Here is how one real day becomes ten numbers. Apple, Thursday the twenty-first of November 2024. It closed at 228.52, after 229.00 the day before, so the one-day return is minus 0.21 percent. Against five and twenty days ago, the same sum gives two more returns. The close sits 0.33 percent above its five-day average; that is the moving-average gap. Volatility measures how much daily returns jumped around over the last ten and thirty days. Range is today's high minus low, divided by the close. Volume change compares today's volume with its five-day average. And Thursday is coded as three.
 >
-> Every window looks backwards and ends at today's close, and no feature is a price level. We test this: we append absurd future prices, rebuild, and earlier rows must not change. All five models get exactly these ten inputs, so the comparison is about the models, not the information.
+> Every number uses only this day and earlier days. We test that by appending fake future prices: the earlier rows must not change.
 
 **中文对照：**
-> 结果是六组共十个特征：1、5、20 日收益率；相对 5 日和 20 日均线的偏离；10 日和 30 日波动率；当天高低幅度；成交量相对 5 日均量；以及星期几。
+> 这是真实的一天怎样变成十个数字。苹果，2024 年 11 月 21 日，星期四。收盘 228.52，前一天 229.00，所以一日收益率是 −0.21%。同样的算法对比 5 天前和 20 天前，又得到两个收益率。收盘价比 5 日均价高 0.33%，这就是均线偏离。波动率衡量过去 10 天和 30 天里日收益率跳动有多大。幅度是当天最高价减最低价，再除以收盘价。成交量变化是今天成交量相对 5 日均量。星期四编码为 3。
 >
-> 每个窗口都往回看、截止于今天收盘，没有任何特征是价格水平。这一点经过测试：在末尾追加离谱的未来价格、重新构造，之前的行不能变化。五个模型用的恰好是这十个输入，所以比较的是模型，而不是信息。
+> 每个数字只用这一天及之前的数据。我们用测试来保证：在末尾追加假的未来价格，之前的行不能有任何变化。
 
-**→ Transition:** "No price level means one more design step." · **过渡：** "没有价格水平，就还需要一步设计。"
+**→ Transition:** "Now, what happens to these numbers inside each model?" · **过渡：** "这些数字进入模型后会怎样？"
 
 ---
 
-## Slide 8 — Engineering the Target: Predict the Change, Then Add It Back · 0:55
+## Slide 8 — Every Model Gets the Same Data: One Shared Pipeline · 1:20
 **Page / 页码:** 8/24 · **Speaker / 讲者:** Zhang Yancheng
 
-**【中文要点】** 比率特征没有价格水平，所以让模型预测变化量，再加回今天的收盘价；误差仍按价格衡量；持续性就是"变化为 0"；这是迭代出来的设计。
+**【中文要点】** 回答"每个模型数据是否相同"：完全相同（行、十个特征、目标、切分、调参折）；唯一开关是 P0/P2，用表格说明为什么要标准化；最后预测变化量再加回今天收盘价。
 
 **English — say this:**
-> Because no feature is a price level, the model learns the change, and today's close supplies the level: forecast equals today's close plus the predicted change. Errors are still measured on the price, and persistence is simply a predicted change of zero.
+> And this is the pipeline every model goes through. Did every model get the same data? Yes. All five receive the same rows and the same ten features, predict the same target, tomorrow's close minus today's, and use the same splits and tuning folds. Only the learning algorithm changes.
 >
-> One real validation day, the twenty-first of November 2024: close 228.52, predicted change plus ten cents, forecast 228.62. The next close was 229.87, so the model missed by 1.25 and persistence by 1.35.
+> The one switch is preprocessing. P0 leaves the features as they are; P2 standardises each one with the training years' mean and spread. The table shows why: a daily return is about 0.02 in size, the weekday about 1.4, so raw, the weekday is a hundred times larger and dominates the distances in SVR and the penalty in ridge. Trees split one feature at a time, so they are unaffected.
 >
-> We found this by iteration: predicting the level directly made every model collapse toward the training average.
+> Finally, the model predicts the change, since ratios carry no price level, and we add it to today's close.
 
 **中文对照：**
-> 因为没有特征是价格水平，所以让模型学习变化量，价格水平由今天的收盘价提供：预测 = 今日收盘 + 预测变化。误差仍然按价格衡量，持续性就是"预测变化为 0"。
+> 这是每个模型都要经过的流水线。每个模型用的数据一样吗？一样。五个模型拿到相同的行、相同的十个特征，预测相同的目标（明天收盘减今天收盘），使用相同的切分和调参折。唯一变化的是学习算法。
 >
-> 验证集里真实的一天，2024 年 11 月 21 日：收盘 228.52，预测上涨 0.10，预测价 228.62。第二天实际 229.87，模型误差 1.25，持续性误差 1.35。
+> 唯一的开关是预处理。P0 里特征原样输入；P2 里每个特征用训练年份的均值和标准差做标准化。表格说明了原因：日收益率的量级约 0.02，星期几约 1.4，原始状态下星期几大了一百倍，会主导 SVR 的距离和岭回归的惩罚。树每次只按一个特征切分，所以不受影响。
 >
-> 这是迭代出来的：直接预测价格水平时，所有模型都塌向了训练期的平均值。
+> 最后，模型预测的是变化量（因为比率里没有价格水平），再加上今天的收盘价得到预测值。
 
-**→ Transition:** "The last processing step is the split." · **过渡：** "处理的最后一步是切分。"
+**→ Transition:** "Last: how the rows are split in time." · **过渡：** "最后：这些行怎样按时间切分。"
 
 ---
 
@@ -421,12 +421,12 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 5** (≈4:35) and the **end of slide 9**: it should read **≈8:25** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:35) and the **end of slide 9**: it should read **≈9:00** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
-| 8:55 or later after slide 9 | Slide 12: skip the grid-edge sentence and say only "trees unchanged, SVR and ridge move". (~20 s) | 第 12 页去掉网格边缘那句，只说"树不变，SVR 和岭回归会变"，省约 20 秒。 |
-| 9:25 or later | Slide 10: name the five models and their roles in one breath, without the strengths. (~25 s) | 再把第 10 页压成"模型名 + 角色"，省约 25 秒。 |
+| 9:30 or later after slide 9 | Slide 12: skip the grid-edge sentence and say only "trees unchanged, SVR and ridge move". (~20 s) | 第 12 页去掉网格边缘那句，只说"树不变，SVR 和岭回归会变"，省约 20 秒。 |
+| 10:00 or later | Slide 10: name the five models and their roles in one breath, without the strengths. (~25 s) | 再把第 10 页压成"模型名 + 角色"，省约 25 秒。 |
 | **Never cut** | Slide 13 (metrics), slide 14 (results), slide 15 (intervals). | **绝不能砍**第 13、14、15 页。 |
 
 # Rehearsal checklist · 排练清单

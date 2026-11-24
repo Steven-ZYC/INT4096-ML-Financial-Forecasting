@@ -299,56 +299,101 @@
 \end{frame}
 
 % 7 ---------------------------------------------------------------------------
-\begin{frame}{Ten Features, Built Only From Information Available at the Close}
+\begin{frame}{From One Day's Prices to Ten Features}
   \speaker{Zhang Yancheng}
-  \centering\footnotesize
-  \renewcommand{\arraystretch}{1.17}
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{@{}l l >{\raggedright\arraybackslash}p{.42\linewidth} r@{}}
-    \toprule
-    \textbf{Group} & \textbf{Name} & \textbf{Definition (at close $t$)} & \textbf{Count} \\
-    \midrule
-    Returns & \texttt{ret\_1, ret\_5, ret\_20} & $P_t / P_{t-k} - 1$, \ $k = 1, 5, 20$ & 3 \\
-    Moving-average gaps & \texttt{ma\_gap\_5, ma\_gap\_20} & $P_t / \text{SMA}_k - 1$, \ $k = 5, 20$ & 2 \\
-    Volatility & \texttt{vol\_10, vol\_30} & Std.\ dev.\ of 1-period returns over 10 and 30 bars & 2 \\
-    Price range & \texttt{range\_1} & $(\text{High}_t - \text{Low}_t) / P_t$ & 1 \\
-    Relative volume & \texttt{vol\_chg} & $\text{Vol}_t / \text{SMA}_5(\text{Vol}) - 1$ & 1 \\
-    Calendar & \texttt{dow} & Day of week, Monday $= 0$ & 1 \\
-    \bottomrule
-  \end{tabular}\par
-  \vspace{3mm}
-  \raggedright\footnotesize
-  \begin{itemize}
-    \item Every window is trailing and ends at today's close. No feature is a price level.
-    \item Tested: append absurd future prices, rebuild, and earlier rows must not change.
-    \item All five models get exactly these ten inputs, on both assets, in P0 and P2.
-  \end{itemize}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{.31\textwidth}
+      \footnotesize\textbf{AAPL, \ExDate{} (\FxDowName)}\par\vspace{1mm}
+      \scriptsize
+      \renewcommand{\arraystretch}{1.2}
+      \setlength{\tabcolsep}{3pt}
+      \begin{tabular}{@{}lr@{}}
+        Close today & \ExCt \\
+        Close yesterday & \FxPrevClose \\
+        High & \FxHigh \\
+        Low & \FxLow \\
+        5-day average close & \FxSmaFive \\
+        Volume & \FxVolM{}\,M \\
+        5-day average volume & \FxVolSmaM{}\,M \\
+      \end{tabular}
+      \par\vspace{3mm}
+      \scriptsize Only this day and earlier days are used. Next day's close is the answer, never an input.
+    \end{column}
+    \begin{column}{.66\textwidth}
+      \centering\scriptsize
+      \renewcommand{\arraystretch}{1.18}
+      \setlength{\tabcolsep}{4pt}
+      \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.46\linewidth}r@{}}
+        \toprule
+        \textbf{Feature} & \textbf{How it is computed} & \textbf{Value} \\
+        \midrule
+        \texttt{ret\_1} & $\ExCt / \FxPrevClose - 1$ & \FxRetOne\% \\
+        \texttt{ret\_5}, \texttt{ret\_20} & Same, against 5 and 20 days ago & \FxRetFive\%, \FxRetTwenty\% \\
+        \texttt{ma\_gap\_5} & $\ExCt / \FxSmaFive - 1$ & \FxGapFive\% \\
+        \texttt{ma\_gap\_20} & Same, against the 20-day average & \FxGapTwenty\% \\
+        \texttt{vol\_10}, \texttt{vol\_30} & Std.\ dev.\ of daily returns, last 10 and 30 days & \FxVolTen\%, \FxVolThirty\% \\
+        \texttt{range\_1} & $(\FxHigh - \FxLow) / \ExCt$ & \FxRange\% \\
+        \texttt{vol\_chg} & $\FxVolM / \FxVolSmaM - 1$ & \FxVolChg\% \\
+        \texttt{dow} & Day of week (Monday $= 0$) & \FxDow \\
+        \bottomrule
+      \end{tabular}
+      \par\vspace{2mm}
+      \raggedright\scriptsize
+      Every feature is a ratio or a spread, so none is a price level. Tested: append absurd future
+      prices, rebuild, and every earlier row must stay identical.
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % 8 ---------------------------------------------------------------------------
-\begin{frame}{Engineering the Target: Predict the Change, Then Add It Back}
+\begin{frame}{Every Model Gets the Same Data: One Shared Pipeline}
   \speaker{Zhang Yancheng}
-  \small Ratios carry no price level, so the model learns the change; today's close supplies the level.
-  \[
-    \underbrace{\widehat{P}_{t+1}}_{\text{forecast close}}
-    =
-    \underbrace{P_t}_{\text{known close}}
-    +
-    \underbrace{\widehat{\Delta P}_{t+1}}_{\text{learned change}}
-  \]
-  \begin{block}{A worked example from the AAPL validation set (\ExDate)}
-    \small Latest close \$\ExCt{}. Predicted change \ExDelta{} USD. Forecast \$\ExPred{}.
-    The next close was \$\ExActual{}.\\
-    Model error \$\ExErr{}. Persistence error \$\ExNaiveErr{}.
-  \end{block}
-  \vspace{1mm}
-  \small
-  \begin{itemize}
-    \item Errors are still measured on the price, so the question is unchanged.
-    \item Persistence is the special case: predicted change $= 0$.
-    \item Found by iteration: predicting the level directly made every model collapse toward
-      the training-period average.
-  \end{itemize}
+  \centering
+  \begin{tikzpicture}[font=\scriptsize,
+      box/.style={draw=black!45, fill=black!4, rounded corners=2pt, align=center,
+                  minimum height=10mm, text width=1.75cm},
+      key/.style={box, fill=accent!18, draw=accent!70},
+      arr/.style={-{Latex[length=1.4mm]}, black!55, thick}]
+    \node[box] (raw) {Daily bars\\(OHLCV)};
+    \node[key, right=3mm of raw] (x) {\NFeatures{} features\\per day};
+    \node[box, right=3mm of x, text width=2.05cm] (pre) {P0: as is\\P2: standardise\\(train mean, sd)};
+    \node[key, right=3mm of pre] (m) {One of the\\five models};
+    \node[box, right=3mm of m] (d) {Predicted\\change};
+    \node[box, right=3mm of d, text width=1.95cm] (f) {Forecast $=$\\today's close $+$ change};
+    \foreach \a/\b in {raw/x,x/pre,pre/m,m/d,d/f} \draw[arr] (\a) -- (\b);
+  \end{tikzpicture}
+  \par\vspace{3mm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{.52\textwidth}
+      \small\textbf{Why P2 exists: very different scales}\par\vspace{1mm}
+      \centering\scriptsize
+      \renewcommand{\arraystretch}{1.15}
+      \begin{tabular}{@{}lccc@{}}
+        \toprule
+        & Train sd & Raw value & After P2 \\
+        \midrule
+        \texttt{ret\_1} & \SdRetOne & \RawRetOne & \ZRetOne \\
+        \texttt{vol\_chg} & \SdVolChg & \RawVolChg & \ZVolChg \\
+        \texttt{dow} & \SdDow & \FxDow & \ZDow \\
+        \bottomrule
+      \end{tabular}
+      \par\vspace{1mm}\raggedright\scriptsize
+      Raw, \texttt{dow} is about 100 times larger than \texttt{ret\_1}: it dominates distances (SVR) and
+      penalties (ridge). Trees split one feature at a time, so they do not care.
+    \end{column}
+    \begin{column}{.44\textwidth}
+      \small\textbf{Identical for all five models}
+      \begin{itemize}\scriptsize\setlength{\itemsep}{0pt}
+        \item The same rows and the same \NFeatures{} columns
+        \item The same target: tomorrow's close minus today's
+        \item The same splits and tuning folds
+        \item The same P0 or P2 setting in each run
+      \end{itemize}
+      \vspace{1mm}
+      \scriptsize Only the learning algorithm changes. Example (\ExDate): close \ExCt, predicted change
+      \ExDelta, forecast \ExPred; the next close was \ExActual.
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % 9 ---------------------------------------------------------------------------

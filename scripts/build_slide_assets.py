@@ -323,6 +323,50 @@ def build_data_macros(m: dict[str, str]) -> None:
             m[f"AdjDiffPct{asset}"] = f"{differs.mean() * 100:.1f}"
 
 
+def build_feature_example_macros(m: dict[str, str], protocol) -> None:
+    """One real AAPL row, raw prices -> ten features -> P2 standardised values.
+
+    Uses the same date as the worked forecast example (``ExDate``) so the deck
+    follows a single day from raw bar to forecast. Standardisation statistics
+    come from the training block only, exactly as the P2 pipeline fits them.
+    """
+    if "ExDate" not in m:
+        return
+    from sklearn.preprocessing import StandardScaler
+
+    prepared = prepare_dataset("AAPL", protocol)
+    X, frame, split = prepared["X"], prepared["frame"], prepared["split"]
+    date = pd.Timestamp(m["ExDate"], tz=X.index.tz)
+    close, volume = frame["close"], frame["volume"]
+    row = X.loc[date]
+
+    m["FxPrevClose"] = num(close.shift(1)[date])
+    m["FxHigh"] = num(frame.loc[date, "high"])
+    m["FxLow"] = num(frame.loc[date, "low"])
+    m["FxSmaFive"] = num(close.rolling(5).mean()[date])
+    m["FxVolM"] = f"{volume[date] / 1e6:.1f}"
+    m["FxVolSmaM"] = f"{volume.rolling(5).mean()[date] / 1e6:.1f}"
+    m["FxDowName"] = date.day_name()
+    for col, key in [("ret_1", "RetOne"), ("ret_5", "RetFive"), ("ret_20", "RetTwenty"),
+                     ("ma_gap_5", "GapFive"), ("ma_gap_20", "GapTwenty"),
+                     ("vol_10", "VolTen"), ("vol_30", "VolThirty"),
+                     ("range_1", "Range"), ("vol_chg", "VolChg")]:
+        m[f"Fx{key}"] = f"{row[col] * 100:+.2f}" if col.startswith(("ret", "ma_gap", "vol_chg")) \
+            else f"{row[col] * 100:.2f}"
+    m["FxDow"] = str(int(row["dow"]))
+    m["RawRetOne"] = f"{row['ret_1']:+.4f}"
+    m["RawVolChg"] = f"{row['vol_chg']:+.4f}"
+
+    train = X.iloc[split.train_start:split.train_end]
+    scaler = StandardScaler().fit(train)
+    z = dict(zip(X.columns, scaler.transform(X.loc[[date]])[0]))
+    for col, key in [("ret_1", "RetOne"), ("vol_chg", "VolChg"), ("dow", "Dow")]:
+        sd = float(train[col].std(ddof=0))
+        m[f"Sd{key}"] = f"{sd:.3f}" if sd < 1 else f"{sd:.2f}"
+        m[f"Z{key}"] = f"{z[col]:+.2f}"
+    m["NFeatures"] = str(X.shape[1])
+
+
 def build_metric_macros(m: dict[str, str]) -> None:
     """MAE, RMSE and R2 for the best run per asset and its persistence baseline."""
     for asset in ("AAPL", "BTC"):
@@ -475,6 +519,7 @@ def main() -> int:
     build_data_macros(macros)
     build_split_macros(macros, protocol)
     build_metric_macros(macros)
+    build_feature_example_macros(macros, protocol)
     write_backup_table(runs)
     write_tuning_table(protocol)
 

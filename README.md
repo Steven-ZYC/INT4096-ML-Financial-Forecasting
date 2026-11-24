@@ -16,7 +16,7 @@ strategies for **next-session close prediction** on **Apple (AAPL)** and
 | Final report (PDF) | [`reports/final/INT4096_Final_Report.pdf`](reports/final/INT4096_Final_Report.pdf) | compiled, 10 pages, 2,499 words, sha256 `7b492de83b29eebe…` |
 | LaTeX source | [`reports/latex/main.tex`](reports/latex/main.tex) | builds clean (`bash reports/latex/build.sh`) |
 | Word-count log | [`reports/word_count.txt`](reports/word_count.txt) | 2,399 body + 100 headings |
-| Presentation (PDF) | [`slides/final/INT4096_Presentation.pdf`](slides/final/INT4096_Presentation.pdf) | 24 pages (17 + 5 backup + 2 references), sha256 `ee4aad38618d61d3…` |
+| Presentation (PDF) | [`slides/final/INT4096_Presentation.pdf`](slides/final/INT4096_Presentation.pdf) | 24 pages (17 + 5 backup + 2 references), sha256 `514210963c9d0c13…` |
 | Slide source | [`slides/latex/main.tex`](slides/latex/main.tex) | beamer; builds clean, 0 overfull boxes |
 | Slide planning docs | [`docs/presentation/`](docs/presentation/) | storyboard, timing plan, speaker notes, bilingual script |
 | Colab notebook | [`notebooks/INT4096_Final_Colab.ipynb`](notebooks/INT4096_Final_Colab.ipynb) | executes end to end in tests |
