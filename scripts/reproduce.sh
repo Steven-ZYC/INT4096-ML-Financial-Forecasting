@@ -119,6 +119,7 @@ PYEOF
 "$PY" -m int4096.experiments.registry_report
 "$PY" scripts/export_splits.py
 "$PY" scripts/summarize_models.py
+"$PY" scripts/build_website.py
 
 echo
 echo "== 7. Audit-fix verification probes =="

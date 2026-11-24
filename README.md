@@ -138,6 +138,7 @@ deliverables/                 EVERYTHING WE PRESENT OR SUBMIT (see deliverables/
   report/                     INT4096_Final_Report.pdf, word count, draft; latex/ source
   notebook/                   Colab notebooks (final, teaching template)
   lesson/                     lesson plan, formative tasks with answers, teacher notes
+  website/                    interactive explainer of the pipeline (index.html, built from the repo)
 data/                         (see data/README.md)
   raw/                        immutable source snapshots + SHA-256 manifests
   cards/                      dataset cards (provenance, statistics, quality checks)

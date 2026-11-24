@@ -1,0 +1,895 @@
+<title>Tomorrow Equals Today</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="An interactive walk through the INT4096 forecasting project: data, splits, features, models, tuning, evaluation and an experimental neural-network test.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: a lab notebook in seven steps. A sticky step rail on top; each step pairs a
+   short argument (left) with one live figure built from the project's real files (right). */
+:root {
+  --bg: #f4f5f6;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #7a7873;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --line: rgba(11,11,11,0.10);
+  --accent: #2a78d6;          /* series 1: the model / primary series */
+  --series-2: #eb6834;        /* series 2: persistence / second series */
+  --neg: #e34948;             /* diverging negative (worse than persistence) */
+  --series-3: #1baf7a;        /* validation / scoring slices */
+  --band-train: rgba(42,120,214,0.10);
+  --band-val: rgba(27,175,122,0.14);
+  --band-test: rgba(82,81,78,0.12);
+  --chip: #e8eaec;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a988f;
+    --grid: #2c2c2a; --axis: #4a4a46; --line: rgba(255,255,255,0.10);
+    --accent: #3987e5; --series-2: #d95926; --neg: #e66767; --series-3: #199e70;
+    --band-train: rgba(57,135,229,0.16); --band-val: rgba(25,158,112,0.20); --band-test: rgba(195,194,183,0.12);
+    --chip: #242423; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a988f;
+  --grid: #2c2c2a; --axis: #4a4a46; --line: rgba(255,255,255,0.10);
+  --accent: #3987e5; --series-2: #d95926; --neg: #e66767; --series-3: #199e70;
+  --band-train: rgba(57,135,229,0.16); --band-val: rgba(25,158,112,0.20); --band-test: rgba(195,194,183,0.12);
+  --chip: #242423; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; max-width: 64ch; }
+.eyebrow { font-family: var(--font-data); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+
+/* step rail */
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.rail .wrap { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: thin; }
+.rail a { flex: 0 0 auto; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 12px; border-radius: 999px; text-decoration: none; color: var(--ink-2); font-size: 13px; background: var(--chip); }
+.rail a .n { font-family: var(--font-data); font-size: 11px; color: var(--muted); }
+.rail a.on { background: var(--ink); color: var(--bg); }
+.rail a.on .n { color: var(--bg); opacity: .7; }
+
+/* hero */
+.hero { padding-block: 48px 36px; display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; }
+.hero h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.02; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lede { margin-top: 16px; color: var(--ink-2); font-size: 17px; }
+.duel { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.duel div { padding: 12px 14px; border-left: 3px solid var(--accent); background: var(--surface); }
+.duel div + div { border-left-color: var(--series-2); }
+.duel b { display: block; font-family: var(--font-data); font-size: 30px; font-weight: 500; letter-spacing: -0.02em; }
+.duel span { font-size: 13px; color: var(--ink-2); }
+
+/* steps */
+section.step { padding-block: 44px; border-top: 1px solid var(--line); scroll-margin-top: 64px; }
+.step-head { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; align-items: baseline; margin-bottom: 22px; }
+.step-head .idx { grid-row: span 2; font-family: var(--font-data); font-size: 13px; color: var(--muted); padding-top: 6px; }
+.step-head h2 { font-size: clamp(24px, 3vw, 32px); }
+.step-head .q { color: var(--ink-2); font-size: 16px; }
+.cols { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr); gap: 32px; align-items: start; }
+.prose { display: grid; gap: 12px; }
+.prose ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; display: grid; gap: 14px; }
+.panel h3 { font-size: 15px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--bg); }
+.seg button { border: 0; background: transparent; color: var(--ink-2); font: 500 13px var(--font-body); padding: 5px 12px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+select, input[type="range"] { font: 13px var(--font-body); color: var(--ink); }
+select { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+label.ctl { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--ink-2); }
+.note { font-size: 13px; color: var(--muted); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.chart text { fill: var(--muted); font: 11px var(--font-data); }
+.chart .lbl { fill: var(--ink-2); font: 500 12px var(--font-body); }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font: 12px/1.45 var(--font-data); padding: 6px 9px; border-radius: 5px; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); z-index: 3; }
+.tip[hidden] { display: none; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.legend i.dash { background: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 7px) !important; }
+
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--ink-2); font-size: 12px; }
+td.r, th.r { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.tablewrap { overflow-x: auto; }
+.good { color: var(--accent); }
+.bad { color: var(--neg); }
+
+.funnel { display: grid; gap: 6px; }
+.funnel .row { display: grid; grid-template-columns: 11.5em 1fr 5.2em; gap: 10px; align-items: center; font-size: 13px; }
+.funnel .bar { height: 14px; border-radius: 3px; background: var(--accent); opacity: .85; }
+.funnel .bar.cut { background: var(--neg); opacity: .8; }
+.funnel .bar.split { display: flex; gap: 2px; background: none; opacity: 1; }
+.funnel .bar.split span { height: 100%; border-radius: 3px; }
+
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+.feat { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; display: grid; gap: 4px; background: var(--bg); min-width: 0; }
+.feat .name { font-family: var(--font-data); font-size: 12px; color: var(--ink-2); }
+.feat .val { font-family: var(--font-data); font-size: 20px; font-variant-numeric: tabular-nums; }
+.feat .how { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.zbar { height: 6px; background: var(--grid); border-radius: 3px; position: relative; }
+.zbar span { position: absolute; top: 0; bottom: 0; background: var(--accent); border-radius: 3px; }
+.zbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--axis); }
+.rawbar { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px 14px; font-size: 13px; }
+.rawbar div span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+.models { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.model { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; background: var(--surface); display: grid; gap: 6px; align-content: start; }
+.model h3 { font-size: 15px; }
+.model .tag { font-family: var(--font-data); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.model dl { margin: 0; display: grid; grid-template-columns: 5.5em 1fr; gap: 3px 8px; font-size: 13px; }
+.model dt { color: var(--muted); }
+.model dd { margin: 0; }
+
+.metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.metric { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--bg); display: grid; gap: 2px; }
+.metric .k { font-size: 12px; color: var(--ink-2); font-weight: 600; }
+.metric .v { font-family: var(--font-data); font-size: 15px; font-variant-numeric: tabular-nums; }
+.metric .s { font-size: 12px; color: var(--muted); }
+
+.chain { counter-reset: c; display: grid; gap: 10px; padding: 0; margin: 0; list-style: none; }
+.chain li { counter-increment: c; display: grid; grid-template-columns: 2.2em 1fr; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.chain li::before { content: counter(c); font-family: var(--font-data); font-size: 20px; color: var(--accent); }
+.chain b { display: block; }
+.chain span { color: var(--ink-2); font-size: 14px; }
+footer { padding-block: 32px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
+code, .mono { font-family: var(--font-data); font-size: 0.92em; }
+.copy { font: 12px var(--font-data); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.copy span { overflow-x: auto; white-space: nowrap; flex: 1; min-width: 0; }
+.copy button { flex: 0 0 auto; font: 12px var(--font-body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 5px; padding: 3px 8px; cursor: pointer; }
+
+@media (max-width: 860px) {
+  .hero, .cols { grid-template-columns: minmax(0, 1fr); }
+  .funnel .row { grid-template-columns: 8.5em 1fr 4.6em; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+
+<nav class="rail" aria-label="Steps">
+  <div class="wrap" id="rail">
+    <a href="#question"><span class="n">00</span>Question</a>
+    <a href="#data"><span class="n">01</span>Data</a>
+    <a href="#split"><span class="n">02</span>Selection &amp; split</a>
+    <a href="#features"><span class="n">03</span>Features</a>
+    <a href="#models"><span class="n">04</span>Models &amp; tuning</a>
+    <a href="#evaluation"><span class="n">05</span>Evaluation</a>
+    <a href="#deep-learning"><span class="n">06</span>Neural nets</a>
+    <a href="#verdict"><span class="n">07</span>Verdict</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+  <header class="hero" id="question">
+    <div>
+      <div class="eyebrow">INT4096 · AI and Machine Learning in Education · EdUHK 2026–27</div>
+      <h1 style="margin-top:10px">Can a model beat <em>tomorrow equals today</em>?</h1>
+      <p class="lede">We forecast the next daily close of Apple and Bitcoin with five classical machine-learning models, under one leakage-safe protocol, and compared every one with a rule that just copies today's price. This page walks through each step with the real data.</p>
+      <div class="duel" aria-label="R squared on the same AAPL validation days">
+        <div><b class="num" id="hero-svr">–</b><span>R² · support vector regression</span></div>
+        <div><b class="num" id="hero-naive">–</b><span>R² · copy today's close</span></div>
+      </div>
+      <p class="note" style="margin-top:10px">Same 244 Apple validation days. A score that high, for both, is the first clue that R² alone says little here.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="hero-legend"></div>
+      <div class="chart" id="hero-chart" role="img" aria-label="AAPL validation: actual close, SVR forecast and persistence, last 40 days"></div>
+      <p class="note">Last 40 Apple validation days. The three lines are nearly on top of each other.</p>
+    </div>
+  </header>
+</div>
+
+<section class="step" id="data">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">01</span><h2>Data</h2><p class="q">Which data, from where, and why these two markets?</p></div>
+    <div class="cols">
+      <div class="prose">
+        <p>Two public daily price histories, downloaded once, saved unchanged and fingerprinted with SHA-256. Every run re-checks the fingerprint, so every number traces back to the same bytes.</p>
+        <p>We picked them because they differ in almost every way that matters for a forecaster:</p>
+        <div class="tablewrap"><table id="asset-table"></table></div>
+        <p>A finding that holds on both structures is about the method, not one market. Because the price scales differ by over a hundred times, the two are compared only with unit-free scores.</p>
+        <div style="display:grid;gap:6px">
+          <div class="eyebrow">Download links, exactly as our code calls them</div>
+          <div class="copy"><span id="link-AAPL"></span><button type="button" data-copy="link-AAPL">Copy</button></div>
+          <div class="copy"><span id="link-BTC"></span><button type="button" data-copy="link-BTC">Copy</button></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Price view">
+            <button type="button" data-view="rebased" aria-pressed="true">Rebased to 100</button>
+            <button type="button" data-view="raw" aria-pressed="false">Raw prices</button>
+          </div>
+        </div>
+        <div class="legend" id="price-legend"></div>
+        <div id="price-charts" style="display:grid;gap:12px"></div>
+        <p class="note">Full five-year history (descriptive). Rebased: each series starts at 100, so both fit one axis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="split">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">02</span><h2>Selection and split</h2><p class="q">Which rows qualify, and how are they cut in time?</p></div>
+    <div class="cols">
+      <div class="prose">
+        <p>Every row has to meet four conditions:</p>
+        <ul>
+          <li><b>Window:</b> five years from 28 Oct 2021, after Apple's 2020 split, so raw prices have no split jumps.</li>
+          <li><b>Raw close</b>, not adjusted close: adjustments are revised after the fact and would leak the future.</li>
+          <li><b>Quality gate:</b> no duplicate dates, missing values, non-positive prices, high below low, close outside the day's range or negative volume. A failure stops the pipeline; nothing is quietly repaired.</li>
+          <li><b>Complete history:</b> drop the first <span class="num" id="warmup">30</span> rows (rolling windows not yet full) and the last row (no next close to predict).</li>
+        </ul>
+        <p>The rows are then split <b>by date</b>: 60% train, 20% validation, 20% test. One row is dropped at each boundary, because the label is the next close: without that, the last training answer would be the first validation price.</p>
+        <p>Tuning only ever sees the training block, through five expanding-window folds. The validation block is used once, for reporting. The test block stays sealed.</p>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Asset" id="split-asset"></div>
+        </div>
+        <h3>From raw bars to modelling rows</h3>
+        <div class="funnel" id="funnel"></div>
+        <h3>The split in time</h3>
+        <div class="legend"><span><i style="background:var(--band-train);height:10px"></i>Train</span><span><i style="background:var(--band-val);height:10px"></i>Validation</span><span><i style="background:var(--band-test);height:10px"></i>Test (sealed)</span></div>
+        <div class="chart" id="split-chart" role="img" aria-label="Close price with train, validation and test blocks"></div>
+        <h3>Tuning folds, inside the training block</h3>
+        <div class="chart" id="fold-chart" role="img" aria-label="Five expanding-window tuning folds"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="features">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">03</span><h2>Features</h2><p class="q">What can the model see, and how is each number made?</p></div>
+    <div class="cols">
+      <div class="prose">
+        <p>Raw prices drift to levels the training years never contained, so a model fitted on prices cannot extrapolate. Each day is turned into ten <b>ratios</b> instead, all computed from that day and earlier days only.</p>
+        <p>Pick any modelling day to see its raw bar and the ten numbers the models receive. All five models get exactly these columns, on the same rows, with the same target: tomorrow's close minus today's.</p>
+        <p>The one switch is preprocessing. <b>P0</b> passes the values as they are. <b>P2</b> standardises each feature with the training block's mean and spread. Raw, the weekday is about a hundred times larger than a daily return, so it would dominate the distances in SVR and the penalty in ridge. Trees split on one feature at a time and do not care.</p>
+        <div class="tablewrap"><table id="scale-table"></table></div>
+        <p class="note">Leakage test: append absurd future prices, rebuild the features, and every earlier row must stay identical. Six injected leakage mistakes are all caught by the test suite.</p>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Asset" id="feat-asset"></div>
+          <div class="seg" role="group" aria-label="Preprocessing" id="feat-variant">
+            <button type="button" data-v="P0" aria-pressed="true">P0 raw</button>
+            <button type="button" data-v="P2" aria-pressed="false">P2 standardised</button>
+          </div>
+        </div>
+        <label class="ctl" for="feat-day" style="display:grid;gap:4px;grid-template-columns:1fr">
+          <span>Day: <b class="num" id="feat-date">–</b> <span id="feat-block" class="note"></span></span>
+          <input type="range" id="feat-day" min="0" max="1" value="0" style="width:100%">
+        </label>
+        <div class="rawbar" id="rawbar"></div>
+        <div class="feat-grid" id="feat-grid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="models">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">04</span><h2>Models and tuning</h2><p class="q">Which models, why each one, and how was each tuned fairly?</p></div>
+    <div class="models" id="model-cards"></div>
+    <div class="cols" style="margin-top:24px">
+      <div class="prose">
+        <p>Every model is tuned the same way: a random search of <b class="num" id="budget-trials">10</b> settings from a grid fixed before any result, at most <span class="num" id="budget-seconds">90</span> s per run, seed 42. Each setting is scored by its mean error over the five training-block folds. The validation block is never used for tuning.</p>
+        <p>Pick a model to see every trial it ran. Notice the pattern: the winning settings are mostly the most cautious ones, such as the strongest ridge penalty or the smallest boosting learning rate. With almost no signal to fit, the safest forecast stays close to "no change".</p>
+        <p>Beyond hyperparameters we also explored the target (price level first, then the change, after the level version collapsed toward the training average) and P0 versus P2 scaling. Both tree ensembles gave bit-identical predictions under scaling, exactly as split thresholds predict.</p>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <label class="ctl" for="tune-model">Model <select id="tune-model"></select></label>
+          <div class="seg" role="group" aria-label="Asset" id="tune-asset"></div>
+          <div class="seg" role="group" aria-label="Preprocessing" id="tune-variant">
+            <button type="button" data-v="P0" aria-pressed="false">P0</button>
+            <button type="button" data-v="P2" aria-pressed="true">P2</button>
+          </div>
+        </div>
+        <div class="chart" id="tune-chart" role="img" aria-label="Tuning trials and their fold error"></div>
+        <p class="note" id="tune-note"></p>
+        <div class="tablewrap"><table id="tune-table"></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="evaluation">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">05</span><h2>Evaluation</h2><p class="q">Measured how, against what, and how certain?</p></div>
+    <div class="cols">
+      <div class="prose">
+        <p>Each run is compared with <b>persistence</b>, the rule that tomorrow's close equals today's. Four measures, each with a job:</p>
+        <ul>
+          <li><b>MAE</b>: typical miss, in the asset's currency.</li>
+          <li><b>RMSE</b>: like MAE, but large misses count more.</li>
+          <li><b>R²</b>: share of price variance explained. High for anything that follows yesterday's price, so it never ranks models here.</li>
+          <li><b>Skill</b> = 1 − MAE<sub>model</sub> / MAE<sub>persistence</sub>. Zero means no better than the rule, and it has no units, so it is the only measure we compare across assets.</li>
+        </ul>
+        <p>The calculator recomputes every measure in your browser from the stored forecasts of the run you pick.</p>
+        <p>Then uncertainty: errors are paired by date and resampled in blocks of <span class="num" id="boot-block">10</span> days, <span class="num" id="boot-n">1,000</span> times, giving a 95% interval for each run's skill.</p>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <label class="ctl" for="eval-model">Model <select id="eval-model"></select></label>
+          <div class="seg" role="group" aria-label="Asset" id="eval-asset"></div>
+          <div class="seg" role="group" aria-label="Preprocessing" id="eval-variant">
+            <button type="button" data-v="P0" aria-pressed="false">P0</button>
+            <button type="button" data-v="P2" aria-pressed="true">P2</button>
+          </div>
+          <div class="seg" role="group" aria-label="Window" id="eval-window">
+            <button type="button" data-w="60" aria-pressed="true">Last 60 days</button>
+            <button type="button" data-w="all" aria-pressed="false">Whole year</button>
+          </div>
+        </div>
+        <div class="legend" id="eval-legend"></div>
+        <div class="chart" id="eval-chart" role="img" aria-label="Validation forecasts against the actual close"></div>
+        <div class="metrics" id="eval-metrics"></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:24px">
+      <h3>All 20 runs: skill with 95% block-bootstrap interval</h3>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Better than persistence</span><span><i style="background:var(--neg)"></i>Worse than persistence</span><span><i style="background:var(--axis)"></i>95% interval</span></div>
+      <div class="chart" id="forest" role="img" aria-label="Skill and interval for every run"></div>
+      <p class="note" id="forest-note"></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="deep-learning">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">06</span><h2>Neural networks <span class="eyebrow" style="vertical-align:middle">experimental</span></h2><p class="q">Would a neural network, even one that reads sequences, find what the classical models missed?</p></div>
+    <div class="cols">
+      <div class="prose">
+        <p>The course is about machine learning, so the main comparison stays classical. As a separate, experimental test we asked two neural networks a simpler question: <b>will tomorrow close higher than today?</b></p>
+        <ul>
+          <li><b>MLP</b>: today's ten features, the same inputs as the main study.</li>
+          <li><b>LSTM</b>: the last 20 days of those features, read as a sequence. Its inputs differ, so it is not an identical-input comparison.</li>
+        </ul>
+        <p>Settings were chosen on the end of the training block, results averaged over <span class="num" id="dl-seeds">5</span> random seeds, and the test block was not read. The yardstick is the majority rule from training: always predict the more common direction.</p>
+        <p id="dl-verdict"></p>
+      </div>
+      <div class="panel">
+        <div class="legend"><span><i style="background:var(--axis)"></i>Majority rule</span><span><i style="background:var(--accent)"></i>MLP</span><span><i style="background:var(--series-2)"></i>LSTM</span><span><i style="background:var(--grid);height:10px"></i>Range of the five classical models</span></div>
+        <div class="chart" id="dl-chart" role="img" aria-label="Direction accuracy by model and asset"></div>
+        <h3>How sure were the networks?</h3>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Asset" id="dl-asset"></div>
+          <div class="seg" role="group" aria-label="Network" id="dl-model">
+            <button type="button" data-m="mlp" aria-pressed="true">MLP</button>
+            <button type="button" data-m="lstm" aria-pressed="false">LSTM</button>
+          </div>
+        </div>
+        <div class="chart" id="dl-hist" role="img" aria-label="Histogram of predicted probability of an up day"></div>
+        <p class="note">Predicted probability that tomorrow closes higher, one bar per 0.02. Almost everything sits near 0.5: the networks rarely commit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="verdict">
+  <div class="wrap">
+    <div class="step-head"><span class="idx">07</span><h2>Verdict</h2><p class="q">How the conclusion follows, one step at a time.</p></div>
+    <ol class="chain" id="chain"></ol>
+    <div class="cols" style="margin-top:28px">
+      <div class="prose">
+        <h3 style="font-size:18px">What students take away</h3>
+        <p>Before trusting any AI score, ask three things: what could the model see when it predicted, how did a simple rule do on the same examples, and how certain is the improvement? This project answers all three with real data, and the answer to the last one is "not certain at all".</p>
+      </div>
+      <div class="panel">
+        <h3>The 60-minute lesson built on it</h3>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Task</th><th>Learners…</th><th>Course concept</th></tr></thead>
+          <tbody>
+            <tr><td class="r">1</td><td>Compare training error with unseen-data error</td><td>Fitting vs generalisation</td></tr>
+            <tr><td class="r">2</td><td>Find the leak in a feature snippet</td><td>Leakage prevention</td></tr>
+            <tr><td class="r">3</td><td>Read the skill table and explain a negative value</td><td>Metrics and baselines</td></tr>
+            <tr><td class="r">4</td><td>Predict which models care about scaling</td><td>Train-only preprocessing</td></tr>
+            <tr><td class="r">5</td><td>Explain why low error is not profit</td><td>Teacher judgement</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="wrap">
+  <footer>
+    <span>Built from the project repository by <code>scripts/build_website.py</code>: prices from <code>data/raw/</code>, splits from <code>data/splits/</code>, runs from <code>experiments/models/</code>, intervals from <code>experiments/analysis/</code>, the neural-network test from <code>experiments/supplementary/</code>. Protocol <span class="mono" id="proto"></span>. All model results are on the validation block; the test block is sealed.</span>
+    <span>Educational analysis of historical data. Not investment advice.</span>
+  </footer>
+</div>
+
+<script type="application/json" id="site-data">__SITE_DATA__</script>
+<script>
+(function () {
+  "use strict";
+  const D = JSON.parse(document.getElementById("site-data").textContent);
+  const $ = (s, r = document) => r.querySelector(s);
+  const NS = "http://www.w3.org/2000/svg";
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const MODEL_NAMES = { linear_baseline: "Linear baseline", ridge: "Ridge", svr: "SVR (RBF)", random_forest: "Random forest", hist_gradient_boosting: "Gradient boosting" };
+  const ASSETS = ["AAPL", "BTC"];
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? "–" : x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const pct = (x, d = 2) => (x == null || !isFinite(x)) ? "–" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(d) + "%";
+  const el = (tag, attrs = {}, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; };
+  const html = (tag, attrs = {}, text) => { const n = document.createElement(tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; return n; };
+
+  // ---------- generic helpers -------------------------------------------------
+  function seg(container, values, labels, current, onPick) {
+    container.innerHTML = "";
+    values.forEach((v, i) => {
+      const b = html("button", { type: "button", "aria-pressed": String(v === current) }, labels ? labels[i] : v);
+      b.addEventListener("click", () => { [...container.children].forEach(c => c.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); onPick(v); });
+      container.appendChild(b);
+    });
+  }
+  function bindSeg(container, attr, onPick) {
+    container.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+      container.querySelectorAll("button").forEach(c => c.setAttribute("aria-pressed", "false"));
+      b.setAttribute("aria-pressed", "true"); onPick(b.dataset[attr]);
+    }));
+  }
+  function niceTicks(lo, hi, n = 5) {
+    const span = hi - lo || Math.abs(hi) || 1, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n) || 10 * mag;
+    const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10)); return out;
+  }
+  // Tick labels: decimals follow the tick step, so neighbouring ticks never print the same text.
+  function tickText(ticks) {
+    const step = ticks.length > 1 ? Math.abs(ticks[1] - ticks[0]) : 1;
+    const big = Math.max(...ticks.map(Math.abs)) >= 10000 && step >= 1000;
+    const dec = big ? 0 : Math.max(0, Math.ceil(-Math.log10(step) - 1e-9));
+    return ticks.map(v => big ? (v / 1000).toFixed(step >= 1000 ? 0 : 1) + "k" : v.toFixed(dec));
+  }
+  const charts = []; // re-render on resize / theme change
+  function register(fn) { charts.push(fn); fn(); }
+
+  // Line chart with optional bands and a crosshair tooltip.
+  function lineChart(host, opt) {
+    host.innerHTML = "";
+    const W = Math.max(280, host.clientWidth), H = opt.height || 220, m = { t: 10, r: 14, b: 26, l: 46 };
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, host);
+    const n = opt.x.length, xs = (i) => m.l + (W - m.l - m.r) * (n === 1 ? 0.5 : i / (n - 1));
+    let lo = Infinity, hi = -Infinity;
+    opt.series.forEach(s => s.values.forEach(v => { if (v != null && isFinite(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }));
+    const pad = (hi - lo) * 0.06 || 1; lo -= pad; hi += pad;
+    const ys = (v) => m.t + (H - m.t - m.b) * (1 - (v - lo) / (hi - lo));
+    (opt.bands || []).forEach(b => el("rect", { x: xs(b.from), y: m.t, width: Math.max(1, xs(b.to) - xs(b.from)), height: H - m.t - m.b, fill: b.fill }, svg));
+    const yt = niceTicks(lo, hi, 4), ytl = tickText(yt);
+    yt.forEach((t, k) => {
+      el("line", { x1: m.l, x2: W - m.r, y1: ys(t), y2: ys(t), stroke: css("--grid"), "stroke-width": 1 }, svg);
+      el("text", { x: m.l - 6, y: ys(t) + 4, "text-anchor": "end" }, svg).textContent = ytl[k];
+    });
+    const years = []; let last = "";
+    opt.x.forEach((d, i) => { const y = opt.tickBy === "month" ? d.slice(0, 7) : d.slice(0, 4); if (y !== last) { years.push([i, y]); last = y; } });
+    const every = Math.ceil(years.length / Math.max(2, Math.floor((W - m.l) / 70)));
+    years.forEach(([i, y], k) => { if (k % every === 0 && i > 0) el("text", { x: xs(i), y: H - 8, "text-anchor": "middle" }, svg).textContent = opt.tickBy === "month" ? y.slice(2) : y; });
+    el("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: css("--axis") }, svg);
+    opt.series.forEach(s => {
+      let d = ""; s.values.forEach((v, i) => { if (v == null) return; d += (d ? "L" : "M") + xs(i).toFixed(1) + " " + ys(v).toFixed(1); });
+      el("path", { d, fill: "none", stroke: s.color, "stroke-width": s.width || 2, "stroke-dasharray": s.dash || "none", "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+    });
+    // crosshair
+    const cross = el("line", { y1: m.t, y2: H - m.b, stroke: css("--axis"), "stroke-width": 1, visibility: "hidden" }, svg);
+    const dots = opt.series.map(s => el("circle", { r: 4, fill: s.color, stroke: css("--surface"), "stroke-width": 2, visibility: "hidden" }, svg));
+    const tip = html("div", { class: "tip", hidden: "" }); host.appendChild(tip);
+    const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+    const move = (ev) => {
+      const r = svg.getBoundingClientRect(), px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+      const i = Math.max(0, Math.min(n - 1, Math.round((px - m.l) / (W - m.l - m.r) * (n - 1))));
+      cross.setAttribute("x1", xs(i)); cross.setAttribute("x2", xs(i)); cross.setAttribute("visibility", "visible");
+      opt.series.forEach((s, k) => { const v = s.values[i]; if (v == null) { dots[k].setAttribute("visibility", "hidden"); return; } dots[k].setAttribute("cx", xs(i)); dots[k].setAttribute("cy", ys(v)); dots[k].setAttribute("visibility", "visible"); });
+      tip.hidden = false; tip.style.left = xs(i) + "px"; tip.style.top = m.t + "px";
+      tip.innerHTML = `<b>${opt.x[i]}</b>` + (opt.extra ? opt.extra(i) : "") + opt.series.map(s => s.values[i] == null ? "" : `<br>${s.name}: ${(opt.valueFmt || fmt)(s.values[i])}`).join("");
+    };
+    hit.addEventListener("mousemove", move); hit.addEventListener("touchmove", move, { passive: true });
+    hit.addEventListener("mouseleave", () => { tip.hidden = true; cross.setAttribute("visibility", "hidden"); dots.forEach(d => d.setAttribute("visibility", "hidden")); });
+  }
+  function legend(host, items) {
+    host.innerHTML = items.map(it => `<span><i class="${it.dash ? "dash" : ""}" style="background:${it.color};color:${it.color}"></i>${it.name}</span>`).join("");
+  }
+
+  // ---------- hero ---------------------------------------------------------------
+  const runOf = (asset, model, variant) => D.runs.find(r => r.asset === asset && r.model === model && r.variant === variant);
+  const svrRun = runOf("AAPL", "svr", "P2");
+  $("#hero-svr").textContent = svrRun.r2.toFixed(4);
+  const naiveR2 = (() => { const t = D.truth.AAPL, mean = t.actual.reduce((a, b) => a + b, 0) / t.actual.length; let ss = 0, sr = 0; t.actual.forEach((y, i) => { ss += (y - mean) ** 2; sr += (y - t.naive[i]) ** 2; }); return 1 - sr / ss; })();
+  $("#hero-naive").textContent = naiveR2.toFixed(4);
+  register(() => {
+    const t = D.truth.AAPL, k = t.date.length - 40;
+    legend($("#hero-legend"), [{ name: "Actual next close", color: css("--ink") }, { name: "SVR forecast", color: css("--accent") }, { name: "Copy today's close", color: css("--series-2"), dash: true }]);
+    lineChart($("#hero-chart"), { x: t.date.slice(k), tickBy: "month", height: 230, series: [
+      { name: "Actual", values: t.actual.slice(k), color: css("--ink"), width: 2 },
+      { name: "SVR", values: svrRun.pred.slice(k), color: css("--accent") },
+      { name: "Persistence", values: t.naive.slice(k), color: css("--series-2"), dash: "5 4" } ] });
+  });
+
+  // ---------- 01 data --------------------------------------------------------------
+  (function () {
+    const A = D.assets.AAPL.stats, B = D.assets.BTC.stats;
+    const rows = [
+      ["", "Apple (AAPL)", "Bitcoin (BTC/USDT)"],
+      ["Source", D.assets.AAPL.source, D.assets.BTC.source + " (one exchange)"],
+      ["Calendar", `Exchange sessions; ${A.gaps_over_2d} weekend/holiday gaps`, "Every day; no gaps"],
+      ["Daily bars", A.bars.toLocaleString(), B.bars.toLocaleString()],
+      ["Daily return volatility", A.ret_sd_pct + "%", B.ret_sd_pct + "%"],
+      ["Close range", `${fmt(A.close_min, 0)}–${fmt(A.close_max, 0)} USD`, `${fmt(B.close_min, 0)}–${fmt(B.close_max, 0)} USDT`],
+      ["Corporate actions", `Dividends: adjusted close differs on ${A.adj_differs_pct}% of days`, "None"],
+    ];
+    const t = $("#asset-table");
+    t.innerHTML = "<thead><tr>" + rows[0].map(h => `<th>${h}</th>`).join("") + "</tr></thead><tbody>" + rows.slice(1).map(r => `<tr><th>${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("") + "</tbody>";
+    ASSETS.forEach(a => { const s = $("#link-" + a); s.textContent = D.assets[a].link; });
+    document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", () => {
+      const text = $("#" + b.dataset.copy).textContent;
+      const done = () => { b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy"), 1400); };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => selectText(b.dataset.copy)); else selectText(b.dataset.copy);
+    }));
+    function selectText(id) { const r = document.createRange(); r.selectNodeContents($("#" + id)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+    let view = "rebased";
+    bindSeg($("#data .seg"), "view", (v) => { view = v; draw(); });
+    function draw() {
+      const host = $("#price-charts"); host.innerHTML = "";
+      if (view === "rebased") {
+        // align both series on AAPL's dates (BTC has every day; AAPL's calendar is the shared subset)
+        const a = D.assets.AAPL.bars, b = D.assets.BTC.bars, bIdx = new Map(b.date.map((d, i) => [d, i]));
+        const dates = a.date.filter(d => bIdx.has(d)), a0 = a.close[a.date.indexOf(dates[0])], b0 = b.close[bIdx.get(dates[0])];
+        const aMap = new Map(a.date.map((d, i) => [d, a.close[i]]));
+        legend($("#price-legend"), [{ name: "AAPL", color: css("--accent") }, { name: "BTC", color: css("--series-2") }]);
+        const box = html("div", { class: "chart" }); host.appendChild(box);
+        lineChart(box, { x: dates, height: 260, valueFmt: (v) => v.toFixed(1), series: [
+          { name: "AAPL", values: dates.map(d => aMap.get(d) / a0 * 100), color: css("--accent") },
+          { name: "BTC", values: dates.map(d => b.close[bIdx.get(d)] / b0 * 100), color: css("--series-2") } ] });
+      } else {
+        $("#price-legend").innerHTML = "";
+        ASSETS.forEach((asset, k) => {
+          const bars = D.assets[asset].bars, cap = html("div", { class: "eyebrow" }, `${asset} close, ${D.assets[asset].currency}`);
+          const box = html("div", { class: "chart" }); host.appendChild(cap); host.appendChild(box);
+          lineChart(box, { x: bars.date, height: 170, series: [{ name: asset, values: bars.close, color: k ? css("--series-2") : css("--accent") }] });
+        });
+      }
+    }
+    register(draw);
+  })();
+
+  // ---------- 02 selection & split ---------------------------------------------------
+  (function () {
+    $("#warmup").textContent = D.assets.AAPL.warmup;
+    let asset = "AAPL";
+    seg($("#split-asset"), ASSETS, null, asset, (a) => { asset = a; draw(); });
+    function draw() {
+      const A = D.assets[asset], s = A.split, raw = A.stats.bars, rows = s.modelling_rows;
+      const steps = [
+        ["Raw daily bars", raw, "bar"], ["Quality gate (rows cut)", 0, "cut", "0"],
+        ["Warm-up rows", -A.warmup, "cut"], ["Last row (no label)", -1, "cut"],
+        ["Modelling rows", rows, "bar"],
+      ];
+      const f = $("#funnel"); f.innerHTML = "";
+      steps.forEach(([name, v, kind, txt]) => {
+        const w = kind === "bar" ? v / raw * 100 : Math.max(0.6, Math.abs(v) / raw * 100);
+        const row = html("div", { class: "row" });
+        row.append(html("span", {}, name));
+        const bar = html("div", { class: "bar" + (kind === "cut" ? " cut" : "") }); bar.style.width = (v === 0 ? 0 : w) + "%";
+        const cell = html("div"); cell.append(bar); row.append(cell);
+        row.append(html("span", { class: "num", style: "text-align:right" }, txt || (v > 0 ? v.toLocaleString() : "−" + Math.abs(v))));
+        f.append(row);
+      });
+      const tr = s.train.rows, va = s.validation.rows, te = s.test_sealed.rows;
+      const row = html("div", { class: "row" }); row.append(html("span", {}, "Train / val. / test"));
+      const bar = html("div", { class: "bar split" }); bar.style.width = (rows / raw * 100) + "%";
+      [[tr, "--accent"], [va, "--band-val"], [te, "--axis"]].forEach(([n, c]) => { const sp = html("span"); sp.style.flex = n; sp.style.background = c === "--band-val" ? css("--series-3") : css(c); bar.append(sp); });
+      const cell = html("div"); cell.append(bar); row.append(cell);
+      row.append(html("span", { class: "num", style: "text-align:right;font-size:12px" }, `${tr}/${va}/${te}`)); f.append(row);
+
+      // split chart
+      const bars = A.bars, idx = (d) => bars.date.indexOf(d);
+      const bands = [
+        { from: idx(s.train.first), to: idx(s.train.last), fill: css("--band-train") },
+        { from: idx(s.validation.first), to: idx(s.validation.last), fill: css("--band-val") },
+        { from: idx(s.test_sealed.first), to: idx(s.test_sealed.last), fill: css("--band-test") } ];
+      const block = (i) => i >= bands[2].from ? "test (sealed)" : i >= bands[1].from ? "validation" : i >= bands[0].from ? "train" : (s.purged_rows.includes(bars.date[i]) ? "purged" : "warm-up");
+      lineChart($("#split-chart"), { x: bars.date, height: 190, bands, extra: (i) => `<br>block: ${s.purged_rows.includes(bars.date[i]) ? "purged boundary row" : block(i)}`,
+        series: [{ name: "Close", values: bars.close, color: asset === "AAPL" ? css("--accent") : css("--series-2") }] });
+
+      // folds
+      const host = $("#fold-chart"); host.innerHTML = "";
+      const W = Math.max(280, host.clientWidth), rowH = 20, H = s.tuning_folds.folds.length * rowH + 24, l = 52, r = 10;
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, host);
+      const td = bars.date.slice(idx(s.train.first), idx(s.train.last) + 1), x = (d) => l + (W - l - r) * td.indexOf(d) / (td.length - 1);
+      const tip = html("div", { class: "tip", hidden: "" }); host.append(tip);
+      s.tuning_folds.folds.forEach((fo, k) => {
+        const y = 4 + k * rowH;
+        el("text", { x: l - 8, y: y + 12, "text-anchor": "end" }, svg).textContent = "Fold " + fo.fold;
+        const fit = el("rect", { x: x(fo.fit.first), y, width: x(fo.fit.last) - x(fo.fit.first), height: 14, rx: 3, fill: css("--accent"), opacity: 0.55 }, svg);
+        const sc = el("rect", { x: x(fo.score.first), y, width: Math.max(2, x(fo.score.last) - x(fo.score.first)), height: 14, rx: 3, fill: css("--series-3") }, svg);
+        [[fit, `fit ${fo.fit.first} → ${fo.fit.last} (${fo.fit.rows} rows)`], [sc, `score ${fo.score.first} → ${fo.score.last} (${fo.score.rows} rows)`]].forEach(([n, t]) => {
+          n.addEventListener("mousemove", () => { tip.hidden = false; tip.textContent = `Fold ${fo.fold}: ${t}`; tip.style.left = (+n.getAttribute("x") + +n.getAttribute("width") / 2) + "px"; tip.style.top = y + "px"; });
+          n.addEventListener("mouseleave", () => (tip.hidden = true));
+        });
+      });
+      el("text", { x: l, y: H - 4 }, svg).textContent = s.train.first;
+      el("text", { x: W - r, y: H - 4, "text-anchor": "end" }, svg).textContent = s.train.last + (W > 560 ? " (end of training block)" : "");
+    }
+    register(draw);
+  })();
+
+  // ---------- 03 features --------------------------------------------------------------
+  (function () {
+    let asset = "AAPL", variant = "P0";
+    const slider = $("#feat-day");
+    const HOW = {
+      ret_1: "close ÷ previous close − 1", ret_5: "close ÷ close 5 days ago − 1", ret_20: "close ÷ close 20 days ago − 1",
+      ma_gap_5: "close ÷ 5-day average − 1", ma_gap_20: "close ÷ 20-day average − 1",
+      vol_10: "spread of daily returns, last 10 days", vol_30: "spread of daily returns, last 30 days",
+      range_1: "(high − low) ÷ close", vol_chg: "volume ÷ 5-day average volume − 1", dow: "day of week, Monday = 0",
+    };
+    const isPct = (c) => c !== "dow";
+    function scaleTable() {
+      const F = D.assets[asset].features, ci = (c) => F.columns.indexOf(c);
+      const rows = ["ret_1", "vol_chg", "dow"].map(c => [c, F.train_sd[ci(c)]]);
+      $("#scale-table").innerHTML = `<thead><tr><th>Feature (${asset})</th><th class="r">Typical size (train sd)</th></tr></thead><tbody>` +
+        rows.map(([c, sd]) => `<tr><td class="mono">${c}</td><td class="r">${sd < 1 ? sd.toFixed(4) : sd.toFixed(2)}</td></tr>`).join("") + "</tbody>";
+    }
+    function setAsset(a) {
+      asset = a; const F = D.assets[a].features;
+      slider.max = F.date.length - 1;
+      let i = F.date.indexOf(D.example_date); if (i < 0) i = D.assets[a].split.validation ? F.date.indexOf(D.assets[a].split.validation.first) : 0;
+      slider.value = i; scaleTable(); draw();
+    }
+    seg($("#feat-asset"), ASSETS, null, asset, setAsset);
+    bindSeg($("#feat-variant"), "v", (v) => { variant = v; draw(); });
+    slider.addEventListener("input", draw);
+    function draw() {
+      const A = D.assets[asset], F = A.features, i = +slider.value, date = F.date[i], s = A.split;
+      const b = A.bars, j = b.date.indexOf(date), c = b.close;
+      const blk = date <= s.train.last ? "train" : date <= s.validation.last ? "validation" : "test (sealed)";
+      $("#feat-date").textContent = date + " (" + new Date(date + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", timeZone: "UTC" }) + ")";
+      $("#feat-block").textContent = "· " + blk + " block";
+      const sma = (arr, k) => arr.slice(j - k + 1, j + 1).reduce((x, y) => x + y, 0) / k;
+      const raw = [["Close", fmt(c[j])], ["Previous close", fmt(c[j - 1])], ["High", fmt(b.high[j])], ["Low", fmt(b.low[j])], ["5-day avg close", fmt(sma(c, 5))], ["Volume", (b.volume[j] / 1e6).toFixed(1) + " M"], ["5-day avg volume", (sma(b.volume, 5) / 1e6).toFixed(1) + " M"]];
+      $("#rawbar").innerHTML = raw.map(([k, v]) => `<div><span>${k}</span><b class="num">${v}</b></div>`).join("");
+      const live = {
+        ret_1: `${fmt(c[j])} ÷ ${fmt(c[j - 1])} − 1`, ma_gap_5: `${fmt(c[j])} ÷ ${fmt(sma(c, 5))} − 1`,
+        range_1: `(${fmt(b.high[j])} − ${fmt(b.low[j])}) ÷ ${fmt(c[j])}`, vol_chg: `${(b.volume[j] / 1e6).toFixed(1)}M ÷ ${(sma(b.volume, 5) / 1e6).toFixed(1)}M − 1`,
+      };
+      const g = $("#feat-grid"); g.innerHTML = "";
+      F.columns.forEach((col, k) => {
+        const v = F.values[i][k], z = (v - F.train_mean[k]) / F.train_sd[k];
+        const signed = ["ret_1", "ret_5", "ret_20", "ma_gap_5", "ma_gap_20", "vol_chg"].includes(col);
+        const shown = variant === "P2" ? (z >= 0 ? "+" : "−") + Math.abs(z).toFixed(2)
+          : isPct(col) ? (signed && v >= 0 ? "+" : signed ? "−" : "") + Math.abs(v * 100).toFixed(2) + "%" : String(v);
+        const card = html("div", { class: "feat" });
+        card.innerHTML = `<span class="name">${col}${variant === "P2" ? " · z-score" : ""}</span><span class="val">${shown}</span><span class="how">${live[col] || HOW[col]}</span>`;
+        if (variant === "P2") { const zb = html("div", { class: "zbar" }), sp = html("span"); const zc = Math.max(-3, Math.min(3, z)); sp.style.left = (50 + Math.min(0, zc) / 6 * 100) + "%"; sp.style.width = Math.abs(zc) / 6 * 100 + "%"; zb.append(sp); card.append(zb); }
+        g.append(card);
+      });
+    }
+    setAsset("AAPL");
+  })();
+
+  // ---------- 04 models & tuning ----------------------------------------------------------
+  (function () {
+    const CARDS = [
+      ["naive", "Persistence", "baseline", "Copies today's close", "Free, no training, strong on daily prices", "The yardstick every model must beat"],
+      ["linear_baseline", "Linear baseline", "linear", "Weighted sum of features, small L2 penalty", "Fast, transparent weights", "Simplest learned model"],
+      ["ridge", "Ridge", "linear", "Weighted sum, L2 penalty over a wide range", "Stable with correlated inputs", "Does regularisation help?"],
+      ["svr", "SVR (RBF kernel)", "kernel", "Similarity to training examples", "Non-linear, tolerant of small noise", "The scale-sensitive case"],
+      ["random_forest", "Random forest", "bagging", "Average of many independent trees", "Robust, little tuning", "The scale-invariant control"],
+      ["hist_gradient_boosting", "Gradient boosting", "boosting", "Trees added one by one to fix the remaining error", "Often strongest on tables", "Boosting versus bagging"],
+    ];
+    $("#model-cards").innerHTML = CARDS.map(([id, name, tag, how, str, role]) => `<article class="model"><span class="tag">${tag}</span><h3>${name}</h3><dl><dt>Predicts</dt><dd>${how}</dd><dt>Strength</dt><dd>${str}</dd><dt>Role here</dt><dd>${role}</dd></dl></article>`).join("");
+    $("#budget-trials").textContent = D.budget.trials; $("#budget-seconds").textContent = D.budget.seconds;
+    let model = "ridge", asset = "AAPL", variant = "P2";
+    const sel = $("#tune-model");
+    Object.keys(MODEL_NAMES).forEach(k => sel.append(html("option", { value: k }, MODEL_NAMES[k])));
+    sel.value = model; sel.addEventListener("change", () => { model = sel.value; draw(); });
+    seg($("#tune-asset"), ASSETS, null, asset, (a) => { asset = a; draw(); });
+    bindSeg($("#tune-variant"), "v", (v) => { variant = v; draw(); });
+    const pstr = (p) => Object.entries(p).map(([k, v]) => `${k}=${v === null ? "None" : v}`).join(", ");
+    function draw() {
+      const run = runOf(asset, model, variant), host = $("#tune-chart"); host.innerHTML = "";
+      const tr = run.trials, W = Math.max(280, host.clientWidth), H = 200, m = { t: 12, r: 14, b: 28, l: 52 };
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, host);
+      const vals = tr.map(t => t.cv_mae).filter(v => v != null); let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.15 || lo * 0.01; lo -= pad; hi += pad;
+      const xs = (i) => m.l + (W - m.l - m.r) * (i + 0.5) / tr.length, ys = (v) => m.t + (H - m.t - m.b) * (1 - (v - lo) / (hi - lo));
+      const tt = niceTicks(lo, hi, 4), ttl = tickText(tt);
+      tt.forEach((t, k) => { el("line", { x1: m.l, x2: W - m.r, y1: ys(t), y2: ys(t), stroke: css("--grid") }, svg); el("text", { x: m.l - 6, y: ys(t) + 4, "text-anchor": "end" }, svg).textContent = ttl[k]; });
+      el("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: css("--axis") }, svg);
+      const tip = html("div", { class: "tip", hidden: "" }); host.append(tip);
+      const best = JSON.stringify(run.best);
+      tr.forEach((t, i) => {
+        if (t.cv_mae == null) return;
+        const chosen = JSON.stringify(t.params) === best;
+        el("text", { x: xs(i), y: H - 8, "text-anchor": "middle" }, svg).textContent = i;
+        const c = el("circle", { cx: xs(i), cy: ys(t.cv_mae), r: chosen ? 7 : 5, fill: chosen ? css("--accent") : css("--surface"), stroke: chosen ? css("--surface") : css("--accent"), "stroke-width": 2 }, svg);
+        const hitc = el("circle", { cx: xs(i), cy: ys(t.cv_mae), r: 12, fill: "transparent" }, svg);
+        hitc.addEventListener("mousemove", () => { tip.hidden = false; tip.innerHTML = `trial ${i}${chosen ? " · chosen" : ""}<br>${pstr(t.params)}<br>fold MAE ${t.cv_mae.toFixed(3)}`; tip.style.left = xs(i) + "px"; tip.style.top = ys(t.cv_mae) + "px"; });
+        hitc.addEventListener("mouseleave", () => (tip.hidden = true));
+        if (chosen) { const lbl = el("text", { x: xs(i), y: ys(t.cv_mae) - 12, "text-anchor": "middle", class: "lbl" }, svg); lbl.textContent = "chosen"; }
+      });
+      $("#tune-note").textContent = `${MODEL_NAMES[model]} on ${asset} (${variant}): trials 0–${tr.length - 1} left to right. Lower fold MAE is better; the filled dot is the setting the search kept. Hover a dot for its settings.`;
+      const grid = D.grids[model];
+      $("#tune-table").innerHTML = `<thead><tr><th>Hyperparameter</th><th>Grid</th><th>Chosen</th></tr></thead><tbody>` +
+        Object.entries(grid).map(([k, vals]) => `<tr><td class="mono">${k}</td><td class="mono">${vals.map(v => v === null ? "None" : v).join(", ")}</td><td class="mono good" style="font-weight:500">${run.best[k] === null ? "None" : run.best[k]}</td></tr>`).join("") +
+        `<tr><td>Result</td><td colspan="2">validation MAE ${fmt(run.mae, run.asset === "BTC" ? 1 : 3)} · skill <b class="${run.skill >= 0 ? "good" : "bad"}">${pct(run.skill)}</b></td></tr></tbody>`;
+    }
+    register(draw);
+  })();
+
+  // ---------- 05 evaluation -----------------------------------------------------------------
+  (function () {
+    $("#boot-block").textContent = D.bootstrap.block; $("#boot-n").textContent = D.bootstrap.resamples.toLocaleString();
+    let model = "svr", asset = "AAPL", variant = "P2", win = "60";
+    const sel = $("#eval-model");
+    Object.keys(MODEL_NAMES).forEach(k => sel.append(html("option", { value: k }, MODEL_NAMES[k])));
+    sel.value = model; sel.addEventListener("change", () => { model = sel.value; draw(); });
+    seg($("#eval-asset"), ASSETS, null, asset, (a) => { asset = a; draw(); });
+    bindSeg($("#eval-variant"), "v", (v) => { variant = v; draw(); });
+    bindSeg($("#eval-window"), "w", (w) => { win = w; draw(); });
+    function metrics(y, p, ref) {
+      const n = y.length, mean = y.reduce((a, b) => a + b, 0) / n;
+      let ae = 0, se = 0, ss = 0, hit = 0, calls = 0;
+      y.forEach((v, i) => { const e = v - p[i]; ae += Math.abs(e); se += e * e; ss += (v - mean) ** 2; const dp = Math.sign(p[i] - ref[i]), dy = Math.sign(v - ref[i]); if (dp !== 0) { calls++; if (dp === dy) hit++; } });
+      return { mae: ae / n, rmse: Math.sqrt(se / n), r2: 1 - se / ss, dir: calls ? hit / calls : null };
+    }
+    function draw() {
+      const run = runOf(asset, model, variant), t = D.truth[asset];
+      const mm = metrics(t.actual, run.pred, t.naive), mn = metrics(t.actual, t.naive, t.naive);
+      const skill = 1 - mm.mae / mn.mae, dp = asset === "BTC" ? 1 : 2;
+      const k = win === "all" ? 0 : t.date.length - 60;
+      legend($("#eval-legend"), [{ name: "Actual next close", color: css("--ink") }, { name: MODEL_NAMES[model] + " forecast", color: css("--accent") }, { name: "Persistence", color: css("--series-2"), dash: true }]);
+      lineChart($("#eval-chart"), { x: t.date.slice(k), tickBy: "month", height: 240, valueFmt: (v) => fmt(v, dp), series: [
+        { name: "Actual", values: t.actual.slice(k), color: css("--ink") },
+        { name: MODEL_NAMES[model], values: run.pred.slice(k), color: css("--accent") },
+        { name: "Persistence", values: t.naive.slice(k), color: css("--series-2"), dash: "5 4" } ] });
+      const cards = [
+        ["MAE", fmt(mm.mae, dp), "persistence " + fmt(mn.mae, dp), "typical miss"],
+        ["RMSE", fmt(mm.rmse, dp), "persistence " + fmt(mn.rmse, dp), "big misses weigh more"],
+        ["R²", mm.r2.toFixed(4), "persistence " + mn.r2.toFixed(4), "nearly identical: no ranking"],
+        ["Skill", pct(skill), `95% interval ${pct(run.ci[0])} to ${pct(run.ci[1])}`, run.ci[0] <= 0 && run.ci[1] >= 0 ? "interval includes zero" : "interval excludes zero"],
+        ["Direction calls", mm.dir == null ? "–" : (mm.dir * 100).toFixed(1) + "%", "persistence makes no call", "secondary diagnostic"],
+      ];
+      $("#eval-metrics").innerHTML = cards.map(([kk, v, s, h]) => `<div class="metric"><span class="k">${kk}</span><span class="v ${kk === "Skill" ? (skill >= 0 ? "good" : "bad") : ""}">${v}</span><span class="s">${s}</span><span class="s">${h}</span></div>`).join("");
+    }
+    register(draw);
+
+    // forest plot of every run
+    register(() => {
+      const host = $("#forest"); host.innerHTML = "";
+      const runs = [...D.runs].sort((a, b) => a.asset === b.asset ? b.skill - a.skill : a.asset < b.asset ? -1 : 1);
+      const W = Math.max(300, host.clientWidth), rowH = 22, gapH = 26, l = Math.min(230, W * 0.42), r = 16;
+      const H = runs.length * rowH + gapH * 2 + 24;
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, host);
+      let lo = 0, hi = 0; runs.forEach(rr => { lo = Math.min(lo, rr.ci[0]); hi = Math.max(hi, rr.ci[1]); });
+      const pad = (hi - lo) * 0.05; lo -= pad; hi += pad;
+      const xs = (v) => l + (W - l - r) * (v - lo) / (hi - lo);
+      niceTicks(lo * 100, hi * 100, 5).forEach(tk => { const x = xs(tk / 100); el("line", { x1: x, x2: x, y1: 4, y2: H - 22, stroke: css("--grid") }, svg); el("text", { x, y: H - 6, "text-anchor": "middle" }, svg).textContent = (tk > 0 ? "+" : "") + tk + "%"; });
+      el("line", { x1: xs(0), x2: xs(0), y1: 4, y2: H - 22, stroke: css("--axis"), "stroke-width": 2 }, svg);
+      const tip = html("div", { class: "tip", hidden: "" }); host.append(tip);
+      let y = 6, last = null;
+      runs.forEach(rr => {
+        if (rr.asset !== last) { el("text", { x: 0, y: y + 14, class: "lbl" }, svg).textContent = rr.asset; y += gapH; last = rr.asset; }
+        const cy = y + rowH / 2 - 4, color = rr.skill >= 0 ? css("--accent") : css("--neg");
+        el("text", { x: l - 10, y: cy + 4, "text-anchor": "end" }, svg).textContent = `${MODEL_NAMES[rr.model]} ${rr.variant}`;
+        el("line", { x1: xs(rr.ci[0]), x2: xs(rr.ci[1]), y1: cy, y2: cy, stroke: css("--axis"), "stroke-width": 2, "stroke-linecap": "round" }, svg);
+        el("circle", { cx: xs(rr.skill), cy, r: 5, fill: color, stroke: css("--surface"), "stroke-width": 2 }, svg);
+        const hit = el("rect", { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent" }, svg);
+        hit.addEventListener("mousemove", () => { tip.hidden = false; tip.innerHTML = `${rr.asset} · ${MODEL_NAMES[rr.model]} · ${rr.variant}<br>skill ${pct(rr.skill)}<br>95% interval ${pct(rr.ci[0])} to ${pct(rr.ci[1])}`; tip.style.left = xs(rr.skill) + "px"; tip.style.top = (cy - 4) + "px"; });
+        hit.addEventListener("mouseleave", () => (tip.hidden = true));
+        y += rowH;
+      });
+      el("text", { x: xs(0), y: 12, "text-anchor": "middle", class: "lbl" }, svg).textContent = "persistence";
+      const zero = D.runs.filter(rr => rr.ci[0] <= 0 && rr.ci[1] >= 0).length, below = D.runs.filter(rr => rr.skill < 0).length;
+      $("#forest-note").textContent = `${zero} of ${D.runs.length} intervals include zero, and ${below} runs are below it. Consecutive daily returns are almost uncorrelated (lag-1 autocorrelation AAPL ${D.autocorr.AAPL.toFixed(3)}, BTC ${D.autocorr.BTC.toFixed(3)}), so there is little for any model to learn.`;
+    });
+  })();
+
+  // ---------- 06 experimental neural networks ----------------------------------------------------
+  (function () {
+    const dl = D.dl; if (!dl) { $("#deep-learning").hidden = true; return; }
+    $("#dl-seeds").textContent = dl.seeds.length;
+    const R = dl.results, zero = ASSETS.flatMap(a => ["mlp", "lstm"].map(k => R[a][k].ci_includes_zero));
+    $("#dl-verdict").textContent = `Result: ${zero.filter(Boolean).length} of ${zero.length} intervals for the difference from the majority rule include zero. On Apple both networks trail "always up". Hold-out log-loss sits near ln 2 ≈ 0.693, the score of a coin flip.`;
+    register(() => {
+      const host = $("#dl-chart"); host.innerHTML = "";
+      const W = Math.max(300, host.clientWidth), H = 230, m = { t: 14, r: 10, b: 40, l: 42 };
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, host);
+      const lo = 0.40, hi = 0.62, ys = (v) => m.t + (H - m.t - m.b) * (1 - (v - lo) / (hi - lo));
+      niceTicks(lo * 100, hi * 100, 5).forEach(tk => { el("line", { x1: m.l, x2: W - m.r, y1: ys(tk / 100), y2: ys(tk / 100), stroke: css("--grid") }, svg); el("text", { x: m.l - 6, y: ys(tk / 100) + 4, "text-anchor": "end" }, svg).textContent = tk + "%"; });
+      const groupW = (W - m.l - m.r) / 2, barW = Math.min(34, groupW / 5);
+      const tip = html("div", { class: "tip", hidden: "" }); host.append(tip);
+      ASSETS.forEach((a, g) => {
+        const x0 = m.l + g * groupW, cl = Object.values(R[a].classical_direction_accuracy);
+        const cx = x0 + groupW / 2;
+        el("rect", { x: x0 + 8, y: ys(Math.max(...cl)), width: groupW - 16, height: ys(Math.min(...cl)) - ys(Math.max(...cl)), fill: css("--grid"), rx: 3 }, svg);
+        if (g === 0) { el("line", { x1: m.l, x2: W - m.r, y1: ys(0.5), y2: ys(0.5), stroke: css("--axis"), "stroke-dasharray": "3 3" }, svg); el("text", { x: m.l + 4, y: ys(0.5) + 13 }, svg).textContent = "coin flip 50%"; }
+        const items = [["Majority (" + R[a].mlp.majority_rule + ")", R[a].mlp.majority_accuracy, css("--axis")], ["MLP", R[a].mlp.accuracy_ensemble, css("--accent")], ["LSTM", R[a].lstm.accuracy_ensemble, css("--series-2")]];
+        items.forEach(([name, v, color], k) => {
+          const x = cx + (k - 1) * (barW + 6) - barW / 2, y = ys(Math.max(lo, v));
+          const bar = el("rect", { x, y, width: barW, height: H - m.b - y, fill: color, rx: 4 }, svg);
+          el("text", { x: x + barW / 2, y: y - 4, "text-anchor": "middle" }, svg).textContent = (v * 100).toFixed(1);
+          const kk = name === "MLP" ? "mlp" : name === "LSTM" ? "lstm" : null;
+          bar.addEventListener("mousemove", () => { tip.hidden = false; tip.innerHTML = `${a} · ${name}<br>${(v * 100).toFixed(1)}% correct` + (kk ? `<br>seeds ${(Math.min(...R[a][kk].accuracy_by_seed) * 100).toFixed(1)}–${(Math.max(...R[a][kk].accuracy_by_seed) * 100).toFixed(1)}%<br>vs majority ${(R[a][kk].diff_vs_majority * 100).toFixed(1)} pp (${(R[a][kk].diff_vs_majority_ci95[0] * 100).toFixed(1)}, ${(R[a][kk].diff_vs_majority_ci95[1] * 100).toFixed(1)})` : ""); tip.style.left = (x + barW / 2) + "px"; tip.style.top = y + "px"; });
+          bar.addEventListener("mouseleave", () => (tip.hidden = true));
+        });
+        el("text", { x: cx, y: H - 20, "text-anchor": "middle", class: "lbl" }, svg).textContent = a;
+        el("text", { x: cx, y: H - 6, "text-anchor": "middle" }, svg).textContent = `${R[a].mlp.n_validation} validation days`;
+      });
+      el("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: css("--axis") }, svg);
+    });
+    let asset = "AAPL", kind = "mlp";
+    seg($("#dl-asset"), ASSETS, null, asset, (a) => { asset = a; hist(); });
+    bindSeg($("#dl-model"), "m", (k) => { kind = k; hist(); });
+    function hist() {
+      const host = $("#dl-hist"); host.innerHTML = "";
+      const probs = (dl.probs[asset] || {})[kind] || [], lo = 0.30, hi = 0.70, bw = 0.02, nb = Math.round((hi - lo) / bw);
+      const up = new Array(nb).fill(0), down = new Array(nb).fill(0);
+      probs.forEach(([p, y]) => { const b = Math.max(0, Math.min(nb - 1, Math.floor((p - lo) / bw))); (y ? up : down)[b]++; });
+      const W = Math.max(280, host.clientWidth), H = 170, m = { t: 10, r: 10, b: 26, l: 34 };
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, host);
+      const maxC = Math.max(1, ...up.map((u, i) => u + down[i])), xs = (v) => m.l + (W - m.l - m.r) * (v - lo) / (hi - lo), ys = (c) => m.t + (H - m.t - m.b) * (1 - c / maxC);
+      niceTicks(0, maxC, 3).forEach(t => { el("line", { x1: m.l, x2: W - m.r, y1: ys(t), y2: ys(t), stroke: css("--grid") }, svg); el("text", { x: m.l - 6, y: ys(t) + 4, "text-anchor": "end" }, svg).textContent = t; });
+      const tip = html("div", { class: "tip", hidden: "" }); host.append(tip);
+      for (let b = 0; b < nb; b++) {
+        const x = xs(lo + b * bw) + 1, w = Math.max(1, xs(lo + (b + 1) * bw) - xs(lo + b * bw) - 2), tot = up[b] + down[b];
+        if (!tot) continue;
+        const r = el("rect", { x, y: ys(tot), width: w, height: H - m.b - ys(tot), fill: kind === "mlp" ? css("--accent") : css("--series-2"), rx: 2 }, svg);
+        r.addEventListener("mousemove", () => { tip.hidden = false; tip.innerHTML = `p(up) ${(lo + b * bw).toFixed(2)}–${(lo + (b + 1) * bw).toFixed(2)}<br>${tot} days: ${up[b]} rose, ${down[b]} did not`; tip.style.left = (x + w / 2) + "px"; tip.style.top = ys(tot) + "px"; });
+        r.addEventListener("mouseleave", () => (tip.hidden = true));
+      }
+      [0.3, 0.4, 0.5, 0.6, 0.7].forEach(v => el("text", { x: xs(v), y: H - 8, "text-anchor": "middle" }, svg).textContent = v.toFixed(1));
+      el("line", { x1: xs(0.5), x2: xs(0.5), y1: m.t, y2: H - m.b, stroke: css("--axis"), "stroke-dasharray": "3 3" }, svg);
+      el("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: css("--axis") }, svg);
+    }
+    register(hist);
+  })();
+
+  // ---------- 07 verdict ----------------------------------------------------------------------------
+  (function () {
+    const best = (a) => D.runs.filter(r => r.asset === a).sort((x, y) => y.skill - x.skill)[0];
+    const bA = best("AAPL"), bB = best("BTC"), below = D.runs.filter(r => r.skill < 0).length;
+    const zero = D.runs.filter(r => r.ci[0] <= 0 && r.ci[1] >= 0).length;
+    const items = [
+      ["The inputs were legitimate.", `Ten backward-looking features, a chronological split with purged boundaries, and a test suite that catches six injected leakage mistakes. Nothing the models saw came from the future.`],
+      ["The comparison was fair.", `All five models got the same rows, features, target, folds and a budget of ${D.budget.trials} trials, ≤${D.budget.seconds} s each.`],
+      ["The best gains are tiny.", `Best Apple run: ${MODEL_NAMES[bA.model]} ${bA.variant} at ${pct(bA.skill)}; best Bitcoin run: ${MODEL_NAMES[bB.model]} ${bB.variant} at ${pct(bB.skill)}. ${below} of ${D.runs.length} runs are worse than persistence.`],
+      ["None of them is reliable.", `${zero} of ${D.runs.length} bootstrap intervals include zero: every model ties with "tomorrow equals today".`],
+      ["More capacity does not change it.", D.dl ? `An experimental MLP and LSTM could not call the next day's direction better than a majority rule.` : `Neural networks were not tested.`],
+      ["So the lesson is the baseline.", `On daily prices a simple rule is a very strong opponent. Always ask what a model was compared with before trusting its score.`],
+    ];
+    $("#chain").innerHTML = items.map(([b, s]) => `<li><div><b>${b}</b><span>${s}</span></div></li>`).join("");
+    $("#proto").textContent = D.protocol_version;
+  })();
+
+  // ---------- step rail, resize, theme ----------------------------------------------------------------
+  const links = [...document.querySelectorAll("#rail a")], targets = links.map(a => document.getElementById(a.getAttribute("href").slice(1)));
+  const onScroll = () => { let k = 0; targets.forEach((t, i) => { if (t && t.getBoundingClientRect().top < 120) k = i; }); links.forEach((a, i) => a.classList.toggle("on", i === k)); };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  let rt; const rerender = () => { clearTimeout(rt); rt = setTimeout(() => charts.forEach(fn => fn()), 120); };
+  addEventListener("resize", rerender);
+  if (matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rerender);
+  new MutationObserver(rerender).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>
