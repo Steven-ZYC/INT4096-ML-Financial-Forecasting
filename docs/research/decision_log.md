@@ -229,3 +229,19 @@ configuration, and whether human approval is required.
   `no missing inputs in snapshot` instead of publishing a duplicate cell. We do
   **not** inject synthetic NaNs into the main matrix.
 - **Requires human approval:** No.
+
+## D14 — Supplementary neural direction test (MLP and LSTM), outside the main matrix
+
+- **Date:** 2026-11-24
+- **Proposer:** project owner (Zhang Yancheng), after reporting oral instructor guidance that deep learning may be used if needed `[B]`
+- **Status:** Accepted as a supplementary experiment; the 20-run main comparison (protocol v1.1) is unchanged
+- **Choice:** `scripts/supplementary_direction_test.py` trains an MLP (today's 10 features) and an LSTM
+  (the last 20 days of the same features) to predict next-day direction (up / not up). Configuration
+  and early stopping use the last 20% of the training block (one-row gap); validation is used once
+  for reporting; the test block is not read. Accuracy is compared with the training-majority rule,
+  50%, and the classical models' direction accuracy, with a moving-block bootstrap interval.
+- **Why separate:** the LSTM reads sequences, so its inputs differ from the main study; mixing it into
+  the matrix would break the identical-input rule. The sklearn MLP lane (D2) stays gated, partly
+  because its built-in early stopping draws a shuffled hold-out from the training rows.
+- **Affects:** new outputs under `artifacts/supplementary/direction_test/`; a backup slide once results exist.
+- **Requires human approval:** No further approval; the owner requested it.
