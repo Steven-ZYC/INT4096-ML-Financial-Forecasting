@@ -50,7 +50,7 @@ can look it up."* Never improvise a number.
 | 3 | What We Used, and Where It Came From | Two public sources, exact URLs, fingerprinted files | "Why these two?" |
 | 4 | Why These Two | Calendar, volatility, scale, dividends all differ: robustness; only unit-free scores cross assets | "Not every row is usable." |
 | 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "…move on to Processing and Feature Engineering." **(handover Dong Yuankun → Zhang Yancheng)** |
-| 6 | Problems in the Raw Data | Six problems, six decisions | "Here is what that looks like for one real day." |
+| 6 | Problems in the Raw Data | Bridge from the data: six problems found; top three spoken, rows 4–6 kept as optional lines | "Now, the features." |
 | 7 | From One Day's Prices to Ten Features | One real day, concept first (today vs yesterday, 5 and 20 days ago, recent averages); no decimals read aloud; each feature from that day and earlier; tested | "Now, what happens to these numbers inside each model?" |
 | 8 | Every Model Gets the Same Data | Same data for all five; P0/P2 the only switch (scale table); predict the change, add it back | "Last: how the rows are split in time." |
 | 9 | Chronological Split and Leakage Checks | Purge per boundary; 6/6 defects caught | "Clean inputs, so part three…"  |

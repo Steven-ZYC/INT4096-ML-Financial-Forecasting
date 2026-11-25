@@ -17,7 +17,7 @@
 | Part | 要回答的问题 | 子问题（各一页） |
 |---|---|---|
 | 1 数据选择 | 用了什么数据、从哪来、为什么、哪些行合格？ | (a) 用了什么 + (b) 来源链接 → 第 3 页；(c) 为什么选这两个 → 第 4 页；(d) 筛选条件 → 第 5 页 |
-| 2 数据处理与特征工程 | 原始数据有什么问题？模型能合法地看到什么？ | 第 6 页口头点出前三项（价格漂移、复权价事后修订、交易日历不同），细节留在表里；十个特征（第 7 页）；目标变量（第 8 页）；切分与泄漏检验（第 9 页） |
+| 2 数据处理与特征工程 | 原始数据有什么问题？模型能合法地看到什么？ | 第 6 页承接数据部分：发现六个问题，因时间只讲前三项（价格漂移、复权价事后修订、交易日历不同），其余三项写在稿里备用；十个特征（第 7 页）；目标变量（第 8 页）；切分与泄漏检验（第 9 页） |
 | 3 模型与调参 | 用哪些模型、为什么、怎样公平地调参？ | 模型与理由（第 10 页）；调参流程与选中值（第 11 页）；超参数之外的探索（第 12 页） |
 | 4 评估 | 用什么指标、结果如何、有多确定？ | 四个指标（第 13 页）；20 次结果（第 14 页）；Bootstrap 与原因（第 15 页） |
 | 5 教学设计 | 项目怎样变成一节课？ | 任务↔阶段↔课程概念（第 16 页）；分阶段总结（第 17 页） |
@@ -368,7 +368,7 @@ flowchart LR
 | 3 | 1 | What We Used, and Exactly Where It Came From（含两个下载链接） | 1.1、参考文献·数据来源 | 0:35 |
 | 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 0:55 |
 | 5 | 1 | Selection Conditions: From Raw Bars to Modelling Rows | 1.2–1.3 | 1:05 |
-| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 0:55 |
+| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:10 |
 | 7 | 2 | From One Day's Prices to Ten Features（2024-11-21 苹果真实一行逐项计算） | 2.1–2.2 | 1:10 |
 | 8 | 2 | Every Model Gets the Same Data: One Shared Pipeline（同一数据、P0/P2 唯一开关、预测变化量） | 2.2、2.3、2.5 | 1:10 |
 | 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 0:50 |

@@ -3,7 +3,7 @@
 **Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 26 pages (18 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
-**Speech:** 16:50 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:30 inside the 20:00 slot)
+**Speech:** 17:05 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:45 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English Version.**
@@ -16,7 +16,7 @@
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
 > | 1–5 | Introduction, Part 1 Data Selection | **Dong Yuankun** | 4:50 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:05 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:20 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:20 |
 > | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:45 |
@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,758 spoken words (stage directions not counted), i.e. about 16 minutes 45 seconds. | 约每分钟 105 词；英文共 1,758 个要念的词（不含动作提示），约 16 分 45 秒。 |
+| Pace | ~105 words per minute. The English below is 1,790 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,790 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -222,7 +222,7 @@ With our data selected and prepared, we can now move on to Processing and Featur
 
 # Part 2: Processing & Features, Part 3: Models & Tuning · 第二部分：数据处理与特征工程，第三部分：模型与调参
 
-**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:05
+**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:20
 
 Lines in *[square brackets]* are stage directions: what to point at or do. Do not read them aloud. Point with your hand or the laser at the part of the slide named, then speak. Sentences in **bold** are the ones to slow down on.
 
@@ -232,19 +232,35 @@ Lines in *[square brackets]* are stage directions: what to point at or do. Do no
 
 ### Slide 6 — Problems in the Raw Data
 
-Thank you, Dong Yuankun. Now let's move on to Part Two, Processing and Feature Engineering.
+Thank you, Dong Yuankun. Now, Part Two: Processing and Feature Engineering.
 
-This table shows six issues. I'll highlight the three most important ones.
+Dong showed you our data. Looking at it closely, we found six problems that stop raw prices from going straight into a model. The table lists all six, with what we did.
 
-*[Point to the first three rows.]*
+**Because of time, I'll focus on the top three.**
 
-First, price levels change over time, so we use returns and ratios as features.
+*[Point to row 1.]*
 
-Second, adjusted prices can be revised later, so we use the raw closing price as our target.
+First, prices drift to levels a model has never seen. So we use returns and ratios as features.
 
-Third, Apple and Bitcoin follow different trading calendars, so we predict the next close on each asset's own calendar.
+*[Point to row 2.]*
 
-Given the time, I'll leave the details in the table and move on to our features.
+Second, adjusted prices are revised later, so they leak the future. So our target is the raw close.
+
+*[Point to row 3.]*
+
+Third, Apple trades on weekdays, but Bitcoin trades every day. So we predict the next close on each asset's own calendar.
+
+*[Sweep your hand over rows 4 to 6.]*
+
+The other three follow the same idea; the details are in the table. Now, the features.
+
+**Rows 4–6, only if there is time or someone asks (not in the timed plan):**
+
+> Fourth, rolling windows need history. The first thirty days do not have enough past data, so we drop them instead of filling them in.
+>
+> Fifth, the features have very different scales. So in one setting, P2, we standardise them, fitted on the training rows only.
+>
+> Sixth, time order matters. A shuffled split would train on the future, so we split by time and drop one row at each boundary.
 
 ### Slide 7 — From One Day to Ten Features
 
@@ -374,19 +390,35 @@ So, how well did all these models do? Zhang Haoyu will show you.
 
 ### 第 6 页 — 原始数据的问题
 
-谢谢 Dong Yuankun。接下来进入第二部分，数据处理与特征工程。
+谢谢 Dong Yuankun。接下来是第二部分：数据处理与特征工程。
 
-这张表有六个问题，我挑最重要的三个来说。
+Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题，让原始价格不能直接放进模型。表里列出了全部六个，以及我们的做法。
 
-*[指表格前三行。]*
+**由于时间关系，我重点讲前三个。**
 
-第一，价格水平会随时间变化，所以我们用收益率和比率来做特征。
+*[指第 1 行。]*
 
-第二，复权价可能事后修订，所以我们用原始收盘价作为预测目标。
+第一，价格会漂移到模型从没见过的水平。所以我们用收益率和比率做特征。
 
-第三，苹果和比特币的交易日历不同，所以我们分别按各自的日历预测下一次收盘。
+*[指第 2 行。]*
 
-时间有限，细节留在表里。接下来我们看特征。
+第二，复权价会事后修订，等于泄露了未来。所以预测目标用原始收盘价。
+
+*[指第 3 行。]*
+
+第三，苹果只在工作日交易，比特币每天都交易。所以我们按各自资产的日历预测下一次收盘。
+
+*[手扫过第 4–6 行。]*
+
+其余三个思路相同，细节在表里。接下来看特征。
+
+**第 4–6 行：仅在有时间或被问到时讲（不计入计时）：**
+
+> 第四，滚动窗口需要历史数据。前 30 天的历史不够，所以直接删掉，而不是填补。
+>
+> 第五，各个特征的尺度差别很大。所以在 P2 设置下我们把它们标准化，只用训练行来拟合。
+>
+> 第六，时间顺序很重要。打乱切分会用未来训练，所以我们按时间切分，并在每个边界删一行。
 
 ### 第 7 页 — 从一天的数据到十个特征
 
@@ -696,12 +728,12 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈8:55** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:10** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
-| 9:25 or later after slide 9 | Slide 10: drop the neural-network sentence. Slide 12: skip the "target" sentence. (~20 s) | 第 10 页去掉神经网络那句；第 12 页跳过"目标"那句，省约 20 秒。 |
-| 9:55 or later | Slide 11: shorten the fold-diagram paragraph to one sentence. (~10 s) | 再把第 11 页示意图那段压成一句，省约 10 秒。 |
+| 9:40 or later after slide 9 | Slide 10: drop the neural-network sentence. Slide 12: skip the "target" sentence. (~20 s) | 第 10 页去掉神经网络那句；第 12 页跳过"目标"那句，省约 20 秒。 |
+| 10:10 or later | Slide 11: shorten the fold-diagram paragraph to one sentence. (~10 s) | 再把第 11 页示意图那段压成一句，省约 10 秒。 |
 | **Never cut** | Slide 13 (metrics), slide 14 (results), slide 15 (intervals). | **绝不能砍**第 13、14、15 页。 |
 
 # Rehearsal checklist · 排练清单

@@ -1,29 +1,49 @@
-### Slide 6 - Problems in the Raw Data / 原始数据的问题 · 0:55
+### Slide 6 - Problems in the Raw Data / 原始数据的问题 · 1:10
 
 **English**
 
-> Thank you, Dong Yuankun. Now let's move on to Part Two, Processing and Feature Engineering.
->
-> This table shows six issues. I'll highlight the three most important ones.
+> Thank you, Dong Yuankun. Now, Part Two: Processing and Feature Engineering.
 
-*[Point to the first three rows. · 指表格前三行]*
+> Dong showed you our data. Looking at it closely, we found six problems that stop raw prices from going straight into a model. The table lists all six, with what we did.
 
-> First, price levels change over time, so we use returns and ratios as features.
+> **Because of time, I'll focus on the top three.**
+
+*[Point to row 1. · 指第 1 行]*
+
+> First, prices drift to levels a model has never seen. So we use returns and ratios as features.
+
+*[Point to row 2. · 指第 2 行]*
+
+> Second, adjusted prices are revised later, so they leak the future. So our target is the raw close.
+
+*[Point to row 3. · 指第 3 行]*
+
+> Third, Apple trades on weekdays, but Bitcoin trades every day. So we predict the next close on each asset's own calendar.
+
+*[Sweep your hand over rows 4 to 6. · 手扫过第 4–6 行]*
+
+> The other three follow the same idea; the details are in the table. Now, the features.
+
+**Rows 4–6, only if there is time or someone asks (not in the timed plan):**
+
+> Fourth, rolling windows need history. The first thirty days do not have enough past data, so we drop them instead of filling them in.
 >
-> Second, adjusted prices can be revised later, so we use the raw closing price as our target.
+> Fifth, the features have very different scales. So in one setting, P2, we standardise them, fitted on the training rows only.
 >
-> Third, Apple and Bitcoin follow different trading calendars, so we predict the next close on each asset's own calendar.
->
-> Given the time, I'll leave the details in the table and move on to our features.
+> Sixth, time order matters. A shuffled split would train on the future, so we split by time and drop one row at each boundary.
 
 **中文提词**
 
 - 谢谢 Dong Yuankun → 第二部分：数据处理与特征工程
-- 六个问题，点出三个重点
-- 价格漂移 → 用收益率和比率
-- 复权价事后改 → 预测原始收盘价
-- 交易日历不同 → 各自预测下一次收盘
-- 时间有限，细节看表 → 下一页讲特征
+- 承接：看完数据，发现六个问题 → 表里全列出来了
+- （重读）时间关系，只讲前三个
+- 1) 价格漂移到没见过的水平 → 用收益率和比率
+- 2) 复权价事后修订＝泄露未来 → 目标用原始收盘价
+- 3) 苹果工作日、比特币每天 → 各按自己的日历
+- 其余三个同理，看表 → 下一页：特征
+- 备用 4) 前 30 天历史不够 → 删掉不填补
+- 备用 5) 尺度不同 → P2 只用训练行标准化
+- 备用 6) 不能打乱 → 按时间切分，边界删一行
 
 <!-- pagebreak -->
 
@@ -227,8 +247,8 @@
 
 | Clock after slide 9 | Cut | 中文 |
 |---|---|---|
-| 9:25 or later | Slide 10: drop the neural-network sentence. Slide 12: drop the first paragraph. (~20 s) | 删第 10 页神经网络那句、第 12 页第一段 |
-| 9:55 or later | Slide 11: shorten the diagram paragraph to "Five folds, training years only." (~10 s) | 第 11 页示意图那段压成一句 |
+| 9:40 or later | Slide 10: drop the neural-network sentence. Slide 12: drop the first paragraph. (~20 s) | 删第 10 页神经网络那句、第 12 页第一段 |
+| 10:10 or later | Slide 11: shorten the diagram paragraph to "Five folds, training years only." (~10 s) | 第 11 页示意图那段压成一句 |
 
 ### Likely questions for you · 可能问你的问题
 
