@@ -87,6 +87,7 @@ def esc(text: str) -> str:
 def inline(text: str) -> str:
     """Bold and inline code, after escaping."""
     text = re.sub(r"\*\*(.+?)\*\*", r"\\textbf{\1}", text)
+    text = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"\\emph{\1}", text)
     text = re.sub(r"`(.+?)`", r"\\texttt{\1}", text)
     return text
 

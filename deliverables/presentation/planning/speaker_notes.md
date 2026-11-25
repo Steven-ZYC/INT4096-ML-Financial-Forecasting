@@ -49,19 +49,19 @@ can look it up."* Never improvise a number.
 | 2 | Roadmap: One Pipeline, Five Stages | Five stages, one question each; task, yardstick, one-line result | "Part one: the data." |
 | 3 | What We Used, and Where It Came From | Two public sources, exact URLs, fingerprinted files | "Why these two?" |
 | 4 | Why These Two | Calendar, volatility, scale, dividends all differ: robustness; only unit-free scores cross assets | "Not every row is usable." |
-| 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "With clean rows, part two…" **(handover Dong Yuankun → Zhang Yancheng)** |
+| 5 | Selection Conditions | Four conditions; reject, never repair; 1,224 / 1,797 rows | "…move on to Processing and Feature Engineering." **(handover Dong Yuankun → Zhang Yancheng)** |
 | 6 | Problems in the Raw Data | Six problems, six decisions | "Here is what that looks like for one real day." |
 | 7 | From One Day's Prices to Ten Features | Walk one real row: each feature from that day and earlier; tested | "Now, what happens to these numbers inside each model?" |
 | 8 | Every Model Gets the Same Data | Same data for all five; P0/P2 the only switch (scale table); predict the change, add it back | "Last: how the rows are split in time." |
-| 9 | Chronological Split and Leakage Checks | Purge per boundary (0.408); 6/6 defects caught | "Clean inputs, so part three…"  |
+| 9 | Chronological Split and Leakage Checks | Purge per boundary; 6/6 defects caught | "Clean inputs, so part three…"  |
 | 10 | Five Models Plus a Baseline | How each predicts, its strength, its role; three mechanisms | "Comparing them is only fair if…" |
 | 11 | Fine-Tuning | Same inner CV, trials, time, seed; frozen grids; cautious choices | "We also explored more than hyperparameters." |
-| 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2, trees identical, grid edges | "So how well did they do? Part four." **(handover Zhang Yancheng → Zhang Haoyu)** |
+| 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2, trees identical, grid edges | "So, how well did all these models do? Zhang Haoyu will show you." **(handover Zhang Yancheng → Zhang Haoyu)** |
 | 13 | Four Metrics | Each metric's job; R² trap; skill crosses assets | "Here is skill for every run." |
 | 14 | Results | Within 1% of the baseline; best +0.52% / +0.26%; every run shown | "But are those small leads real?" |
-| 15 | How Certain? | 20/20 intervals include zero; near-zero return correlation | "That result is exactly what we teach." **(handover Zhang Haoyu → Lau Pak Hei)** |
+| 15 | How Certain? | 20/20 intervals include zero; near-zero return correlation | "And that is exactly what our lesson teaches." **(handover Zhang Haoyu → Lau Pak Hei)** |
 | 16 | Teaching Design | Five tasks ↔ stages ↔ course concepts; baseline first | "And you can try all of it yourself." |
-| 17 | Try It Yourself | The website: every step with real data; scan the QR code | "Now the summary." **(handover Lau Pak Hei → Lui Shing Lam)** |
+| 17 | Try It Yourself | The website: every step with real data; scan the QR code | "Scan the code to try it." **(handover Lau Pak Hei → Lui Shing Lam)** |
 | 18 | Summary | One outcome per stage; next steps; disclaimer | → Q&A |
 
 ---

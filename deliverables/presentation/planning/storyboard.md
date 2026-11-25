@@ -1,7 +1,7 @@
 # Slide Storyboard — One Pipeline, Five Stages
 
 **Deck:** `deliverables/presentation/slides/main.tex` → `deliverables/presentation/INT4096_Presentation.pdf`
-**Slides:** 18 narrative + 6 backup + 2 reference pages (26 pages) · **Speech:** 16:40 of a 20:00 slot
+**Slides:** 18 narrative + 6 backup + 2 reference pages (26 pages) · **Speech:** 16:55 of a 20:00 slot
 **Structure source:** `deliverables/presentation/planning/feature_extraction_story.md`. Change the story first, then the script, then the deck.
 **Companions:** `timing_plan.md` (clock, voice blocks) · `speaker_script_bilingual.md` (words to say) · `speaker_notes.md` (key messages, Q&A routing)
 

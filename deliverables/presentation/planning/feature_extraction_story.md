@@ -363,24 +363,24 @@ flowchart LR
 
 | # | 部分 | 标题 | 对应本文 | 目标时长 |
 |---|---|---|---|---|
-| 1 | 开场 | Learning Machine Learning Through Financial Forecasting（R² 钩子 + 研究问题） | 0.2 | 0:40 |
-| 2 | 开场 | Roadmap: One Pipeline, Five Stages | 0.1–0.2 | 0:50 |
-| 3 | 1 | What We Used, and Exactly Where It Came From（含两个下载链接） | 1.1、参考文献·数据来源 | 0:50 |
-| 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 1:05 |
-| 5 | 1 | Selection Conditions: From Raw Bars to Modelling Rows | 1.2–1.3 | 1:10 |
-| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:05 |
-| 7 | 2 | From One Day's Prices to Ten Features（2024-11-21 苹果真实一行逐项计算） | 2.1–2.2 | 1:10 |
-| 8 | 2 | Every Model Gets the Same Data: One Shared Pipeline（同一数据、P0/P2 唯一开关、预测变化量） | 2.2、2.3、2.5 | 1:20 |
-| 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 1:00 |
-| 10 | 3 | Five Models Plus a Baseline: Why Each One Is There | 3.1 | 1:10 |
-| 11 | 3 | Fine-Tuning: The Same Search and Budget for Every Model（网格与选中值由脚本生成） | 3.2–3.3 | 1:05 |
-| 12 | 3 | What We Explored Beyond Hyperparameters | 2.3、2.5、3.3、4.4 | 0:55 |
-| 13 | 4 | Four Metrics, Each With a Job | 4.1 | 1:00 |
-| 14 | 4 | Results: All 20 Runs Land Within 1% of the Baseline | 4.2 | 0:55 |
+| 1 | 开场 | Learning Machine Learning Through Financial Forecasting（R² 钩子 + 研究问题） | 0.2 | 1:30 |
+| 2 | 开场 | Roadmap: One Pipeline, Five Stages | 0.1–0.2 | 0:45 |
+| 3 | 1 | What We Used, and Exactly Where It Came From（含两个下载链接） | 1.1、参考文献·数据来源 | 0:35 |
+| 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 0:55 |
+| 5 | 1 | Selection Conditions: From Raw Bars to Modelling Rows | 1.2–1.3 | 1:05 |
+| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:00 |
+| 7 | 2 | From One Day's Prices to Ten Features（2024-11-21 苹果真实一行逐项计算） | 2.1–2.2 | 1:15 |
+| 8 | 2 | Every Model Gets the Same Data: One Shared Pipeline（同一数据、P0/P2 唯一开关、预测变化量） | 2.2、2.3、2.5 | 1:10 |
+| 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 0:55 |
+| 10 | 3 | Five Models Plus a Baseline: Why Each One Is There | 3.1 | 1:05 |
+| 11 | 3 | Fine-Tuning: The Same Search and Budget for Every Model（网格与选中值由脚本生成） | 3.2–3.3 | 1:00 |
+| 12 | 3 | What We Explored Beyond Hyperparameters | 2.3、2.5、3.3、4.4 | 0:45 |
+| 13 | 4 | Four Metrics, Each With a Job | 4.1 | 1:05 |
+| 14 | 4 | Results: All 20 Runs Land Within 1% of the Baseline | 4.2 | 0:50 |
 | 15 | 4 | How Certain? Every Interval Includes Zero | 4.3、4.5 | 0:55 |
-| 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 1:00 |
-| 17 | 5 | Try It Yourself: The Whole Pipeline, Interactive（网站预览 + 二维码） | 5.2 | 0:35 |
-| 18 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:50 |
+| 16 | 5 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 5.1–5.2 | 0:50 |
+| 17 | 5 | Try It Yourself: The Whole Pipeline, Interactive（网站预览 + 二维码） | 5.2 | 0:30 |
+| 18 | 5 | Summary: What Each Stage Delivered | 5.4 | 0:45 |
 
 备份：B1 完整 20 格矩阵 · B2 公平性与 manifest 审计 · B3 为什么删一行（周五例子）· B4 特征重要性 · B5 Q&A 卡片 · B6 MLP/LSTM 涨跌方向补充测试。
 

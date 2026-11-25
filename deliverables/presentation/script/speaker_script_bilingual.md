@@ -3,28 +3,37 @@
 **Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 26 pages (18 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
-**Speech:** 16:40 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:20 inside the 20:00 slot)
+**Speech:** 16:55 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:35 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
-> **The presentation is delivered in English. Read only the English blocks.**
-> The Chinese is a translation to help you understand what you are saying, so you can speak from meaning instead of from memory. **Do not read the Chinese aloud.**
+> **The presentation is delivered in English. Read only the English Version.**
+> Each part has the full English text first, then the full Chinese translation. The Chinese helps you understand what you are saying, so you can speak from meaning instead of from memory. **Do not read the Chinese aloud.**
 >
-> **本演示用英文进行。上台只念英文部分。** 中文是逐段翻译，帮助你先理解、再自然地讲出来。中文不要念出来。
-> 忘词时看 **【中文要点】**——那是这一页唯一必须传达的内容。
+> **本演示用英文进行。上台只念 English Version。** 每一部分先是完整英文，再是完整中文翻译。中文帮助你先理解、再自然地讲出来，不要念出来。
 
 > ### Who speaks · 分工
 >
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
-> | 1–5 | Opening, Part 1 Data Selection | **Dong Yuankun** | 4:10 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:25 |
+> | 1–5 | Introduction, Part 1 Data Selection | **Dong Yuankun** | 4:50 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:10 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
-> | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:25 |
-> | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:50 |
+> | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:20 |
+> | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:45 |
 >
 > The speaker's name is also in each slide's footer. 每页幻灯片的页脚也写着讲者姓名。
->
-> **Slides 16–18 are written in short, plain sentences on purpose: read them exactly as written, slowly, without adding anything.** If either speaker stops for more than about five seconds, **Zhang Yancheng** steps in and finishes the slide from its 【中文要点】. 第 16–18 页刻意写成短句：照稿慢慢读，不要自由发挥。若讲者停顿超过约 5 秒，由 Zhang Yancheng 接上，按【中文要点】讲完该页。
+
+### How the script is written · 写法
+
+All five parts follow the same style, set by the Introduction and Part 1:
+
+- **Short sentences, one idea each.** Say them one at a time, with a small pause between.
+- **Signposts.** "First… Second… Finally…" so the audience always knows where they are.
+- **Explain, then give an example.** Every technical idea comes with a plain-language meaning and one concrete case (Apple at 200 dollars; Bitcoin above 77,000; one real day in November 2024).
+- **Bold = the sentence to stress.** Slow down on it.
+- **The last sentence of each part hands over** to the next part or speaker.
+
+全部五个部分都沿用开场和第一部分的风格：短句、每句一个意思；用"第一、第二、最后"做路标；先用白话解释概念，再举一个具体例子；粗体是要加重语气的句子；每部分最后一句负责交接。
 
 ---
 
@@ -33,13 +42,13 @@
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,721 words, i.e. about 16 minutes 40 seconds. | 约每分钟 105 词；英文共 1,721 词，约 16 分 40 秒。 |
+| Pace | ~105 words per minute. The English below is 1,761 words, i.e. about 16 minutes 50 seconds. | 约每分钟 105 词；英文共 1,761 词，约 16 分 50 秒。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
-| Slide 1 | The R² hook: read both numbers slowly, then pause one beat before the question. | 第 1 页 R² 钩子：两个数字慢慢读，提问前停一拍。 |
+| Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
 | Backup slides | 19–24 stay in the file. **Backup 1** for "did you cherry-pick?", **Backup 3** for "why drop a row?", **Backup 6** for "why not deep learning?". | 备用页 19–24；被问"是否挑选结果"开 Backup 1，问"为什么删一行"开 Backup 3，问"为什么不用深度学习"开 Backup 6。 |
 | Numbers | Never invent one. If unsure: "it is in our run records". | 绝不编数字；不确定就说"记录在仓库里"。 |
-| **Wording discipline** | Say "every **model-performance** number is from validation". The data statistics on slides 4–5 use the full five-year history. | 要说"每一个**模型表现**数字都来自验证集"；第 4–5 页的数据统计用的是完整五年历史。 |
+| **Wording discipline** | Say "every **model-performance** number is from validation". The data statistics on slides 3–5 use the full five-year history. | 要说"每一个**模型表现**数字都来自验证集"；第 3–5 页的数据统计用的是完整五年历史。 |
 
 ### The whole project in 30 seconds · 30 秒讲清整个项目
 
@@ -49,359 +58,488 @@
 
 ---
 
-# INTRODUCTION · 开场 （Dong Yuankun）
+# Introduction & Part 1: Data Selection · 开场与第一部分：数据选择
 
-## Slide 1 — Learning Machine Learning Through Financial Forecasting · 0:40
-**Page / 页码:** 1/26 · **Speaker / 讲者:** Dong Yuankun
+**Speaker / 讲者:** Dong Yuankun · **Slides / 页码:** 1–5 · **Target speaking time / 目标时长:** about 4:50
 
-**【中文要点】** 用 R² 钩子开场：SVR 0.9556 对"照抄今天收盘价"0.9555，只差小数点后第四位；引出研究问题。
+## English Version
 
-**English — say this:**
-> Good morning. Here is a number. On Apple's validation data, a support vector regression model scores an R-squared of 0.9556. Impressive? Now take a rule that simply copies today's closing price. It scores 0.9555. The difference is in the fourth decimal place. So our question is: can five classical models really beat that simple rule on Apple and Bitcoin, with the same data, the same rules, and no look at the future?
+### Slide 1 — Introduction
 
-**中文对照：**
-> 大家早上好。先看一个数字：在苹果验证集上，支持向量回归模型的 R² 是 0.9556。很厉害吗？再看一条规则：直接照抄今天的收盘价，R² 是 0.9555。差别在小数点后第四位。所以我们的问题是：在相同数据、相同规则、看不到未来的条件下，五种经典模型真的能在苹果和比特币上打败这条简单规则吗？
+Good morning everyone. Today, our project is about learning machine learning through financial forecasting.
 
-**→ Transition:** "Here is the pipeline." · **过渡：** "这就是整条流水线。"
+Our main question is: **Does a more complicated machine learning model necessarily produce better predictions?**
 
----
+To investigate this, we selected five machine learning models to predict the next daily closing prices of Apple and Bitcoin.
 
-## Slide 2 — Roadmap: One Pipeline, Five Stages · 0:50
-**Page / 页码:** 2/26 · **Speaker / 讲者:** Dong Yuankun
+However, before comparing these models, we introduced a very simple baseline called **Copy the Latest Close**, also known as *naive persistence*.
 
-**【中文要点】** 五个阶段各回答一个问题；任务、对照基准、结论先说清；每人讲一个阶段。
+The idea is straightforward: tomorrow's closing price is predicted to be exactly the same as today's closing price.
 
-**English — say this:**
-> We answer it as one pipeline with five stages, and each stage answers one question. Which data, and why? What may the model see? Which models, tuned how fairly? Measured how, and how certain? And how does it become a lesson?
->
-> The task is to forecast the next daily close; the yardstick is naive persistence, tomorrow equals today. The result in one line: all twenty model runs land within one percent of that yardstick, and none is reliably better. All five of us will present.
+For example, if Apple's closing price today is 200 dollars, our prediction for tomorrow is simply 200 dollars.
 
-**中文对照：**
-> 我们把它当作一条五个阶段的流水线来回答，每个阶段回答一个问题：用什么数据、为什么？模型可以看到什么？用哪些模型、调参是否公平？怎么衡量、有多确定？怎样变成一节课？
->
-> 任务是预测下一个交易日的收盘价；对照基准是朴素持续性：明天等于今天。一句话结论：全部 20 次模型运行都落在这条基准的 1% 以内，没有一个可靠地更好。我们五个人都会上台讲。
+Surprisingly, this simple method performs extremely well.
 
-**→ Transition:** "Part one: the data." · **过渡：** "第一部分：数据。"
+As you can see on this slide, the R-squared score of our best model, Support Vector Regression, is 0.9556, while the baseline achieves 0.9555.
 
----
+The difference is almost negligible.
 
-# PART 1 — DATA SELECTION · 第一部分：数据选择 （Dong Yuankun）
+This leads to the central idea of our project: **more complex models do not necessarily mean better predictions.**
 
-## Slide 3 — What We Used, and Exactly Where It Came From · 0:50
-**Page / 页码:** 3/26 · **Speaker / 讲者:** Dong Yuankun
+### Slide 2 — Roadmap
 
-**【中文要点】** 两个数据集、两个公开来源，链接就是代码实际调用的地址；下载一次、原样保存、SHA-256 指纹每次运行都校验。
+Our presentation follows five stages.
 
-**English — say this:**
-> Part one: data selection. Apple comes from the StockAnalysis public history API; Bitcoin from Binance's public API, as daily BTC-to-USDT candles. The two links are exactly the addresses our code calls.
->
-> Each daily bar has open, high, low, close and volume; Apple also has an adjusted close. The window is five years from October 2021: 1,255 trading days for Apple, 1,828 days for Bitcoin.
->
-> Each file was downloaded once and saved unchanged, with a SHA-256 fingerprint that every run re-checks. So every number traces back to the same bytes.
+First, Data Selection, where we explain which datasets we chose and why.
 
-**中文对照：**
-> 第一部分：数据选择。苹果数据来自 StockAnalysis 的公开历史接口；比特币来自 Binance 的公开接口，是 BTC 对 USDT 的日线。这两个链接就是我们代码实际调用的地址。
->
-> 每根日线有开盘、最高、最低、收盘和成交量；苹果还多一个复权收盘价。窗口是从 2021 年 10 月起的五年：苹果 1,255 个交易日，比特币 1,828 天。
->
-> 每个文件只下载一次、原样保存，并带有 SHA-256 指纹，每次运行都重新校验。所以每个数字都能追溯到同一份字节。
+Second, Processing and Feature Engineering, where we prepare the data for machine learning.
 
-**→ Transition:** "Why these two?" · **过渡：** "为什么选这两个？"
+Third, Models and Tuning, where we introduce our five models and explain how we optimise them.
 
----
+Fourth, Evaluation, where we compare their performance against our baseline.
 
-## Slide 4 — Why These Two: Two Markets With Different Characteristics · 0:55
-**Page / 页码:** 4/26 · **Speaker / 讲者:** Dong Yuankun
+Finally, Teaching Design, where we explore how to turn our findings into a learning experience.
 
-**【中文要点】** 两个市场结构不同：交易日历、波动率、价格量级、公司行为都不一样；同一协议在两种结构上都成立，才是关于方法的结论；量级不同，所以只比较无单位指标。
+Now, let's begin with the first stage.
 
-**English — say this:**
-> We chose them because they differ in every way that matters. Apple trades in exchange sessions, so its history has 261 weekend and holiday gaps; Bitcoin trades every day. Bitcoin is more volatile: daily returns vary by 2.66 percent, against 1.76 for Apple. Their prices differ by over a hundred times, and Apple pays dividends, so its adjusted close differs from the raw close on 95.5 percent of days.
->
-> A result that holds on two such different markets is about the method, not one market. And we compare them only with unit-free scores.
+### Slide 3 — Data Selection
 
-**中文对照：**
-> 选它们，是因为它们在所有重要方面都不同。苹果按交易所时段交易，所以历史里有 261 处周末和节假日间隔；比特币每天都交易。比特币波动更大：日收益率标准差 2.66%，苹果 1.76%。两者价格相差一百倍以上；苹果还会派息，所以复权收盘价有 95.5% 的天数与原始收盘价不同。
->
-> 在两个差异这么大的市场上都成立的结论，才是关于方法、而不是关于某个市场的。我们也只用无单位的分数来比较它们。
+We selected two financial assets: Apple, representing the traditional stock market, and Bitcoin, representing the cryptocurrency market.
 
-**→ Transition:** "Not every row is usable." · **过渡：** "但并不是每一行都能用。"
+For Apple, we obtained historical daily data from the StockAnalysis public API. For Bitcoin, we used Binance's public REST API.
 
----
+Both datasets cover approximately five years, starting from October 2021.
 
-## Slide 5 — Selection Conditions: From Raw Bars to Modelling Rows · 0:55
-**Page / 页码:** 5/26 · **Speaker / 讲者:** Dong Yuankun
+We collected 1,255 daily records for Apple and 1,828 for Bitcoin.
 
-**【中文要点】** 四个筛选条件：窗口在 2020 年拆股之后；用原始收盘价；六项质量检查，失败就停而不修补（两份数据都 PASS）；去掉前 30 行和最后 1 行。得到 1,224 / 1,797 行，再按时间 60/20/20 切分。
+### Slide 4 — Why These Two?
 
-**English — say this:**
-> Every row must meet four conditions. One: the window starts after Apple's 2020 split, so raw prices have no split jumps. Two: we use the raw close, because adjusted prices are revised later. Three: a quality gate checks for duplicate dates, missing values, impossible prices and negative volume; any failure stops the pipeline, and nothing is quietly repaired. Both datasets passed. Four: we drop the first thirty rows, where rolling windows are not yet full, and the last row, which has no next close.
->
-> That leaves 1,224 rows for Apple and 1,797 for Bitcoin, split by time sixty, twenty, twenty.
+The main reason for choosing these two assets is that they have different market characteristics.
 
-**中文对照：**
-> 每一行都必须满足四个条件。一：窗口从苹果 2020 年拆股之后开始，原始价格没有拆股跳变。二：用原始收盘价，因为复权价格会事后修订。三：质量闸门检查重复日期、缺失值、不可能的价格和负成交量；任何一项不通过，流水线就停下，绝不悄悄修补。两份数据都通过了。四：去掉前 30 行（滚动窗口还没填满）和最后 1 行（没有下一个收盘价）。
->
-> 最后得到苹果 1,224 行、比特币 1,797 行，按时间 60/20/20 切分。
+First, Apple follows traditional stock market trading hours, while Bitcoin trades continuously, 24 hours a day, seven days a week.
 
-**→ Transition (handover Dong Yuankun → Zhang Yancheng):** "With clean rows, part two turns them into model inputs." · **过渡：** "行数据干净了，第二部分把它们变成模型输入。"
+Second, Bitcoin has higher daily return volatility in our dataset: 2.66%, compared with Apple's 1.76%.
 
----
+Their price scales are also very different.
 
-# PART 2 — PROCESSING AND FEATURE ENGINEERING · 第二部分：数据处理与特征工程 （Zhang Yancheng）
+Finally, Apple has corporate actions such as dividends and stock splits, while Bitcoin does not have equivalent adjustments.
 
-## Slide 6 — Problems in the Raw Data, and How We Handled Each · 0:55
-**Page / 页码:** 6/26 · **Speaker / 讲者:** Zhang Yancheng
+These differences allow us to investigate how the same machine learning models perform across two different financial markets.
 
-**【中文要点】** 原始价格不能直接用：价格会漂移，所以改用比率特征；其余问题都遵循"只用当时已知的信息"。
+### Slide 5 — Selection Conditions
 
-**English — say this:**
-> Part two: processing and feature engineering. Raw prices cannot go straight into a model, and this table lists the six reasons, each paired with what we did. The most important is the first: prices drift to levels the training years never contained, so a model trained on raw prices cannot extrapolate. Instead we give the model ratios: how far the price moved, and how far it sits from its recent average. The other rows follow one rule: use only what was known at that moment, on each asset's own calendar, with nothing filled in from the future.
+Before modelling, we applied several data selection conditions.
 
-**中文对照：**
-> 第二部分：数据处理与特征工程。原始价格不能直接喂给模型，表里列了六个原因，每个都配了我们的做法。最重要的是第一条：价格会漂移到训练年份里从没出现过的水平，用原始价格训练的模型无法外推。所以我们给模型的是比率：价格变动了多少、离近期均值有多远。其余几行遵循同一条规则：只用当时已知的信息，按各自资产的日历，不用任何来自未来的填充。
+We used a five-year observation window, selected raw closing prices as our prediction target, and checked for missing values, duplicate dates, invalid prices and other data quality issues.
 
-**→ Transition:** "Here is what that looks like for one real day." · **过渡：** "看看真实的一天是什么样。"
+We also removed the first 30 rows because they lacked sufficient historical information for our rolling features, and removed the last row because its next closing price was unavailable.
 
----
+Finally, we divided the data chronologically into three parts: 60% for training, 20% for validation, and 20% for testing.
 
-## Slide 7 — From One Day's Prices to Ten Features · 1:10
-**Page / 页码:** 7/26 · **Speaker / 讲者:** Zhang Yancheng
+We also removed one row at each split boundary to prevent information leakage between datasets.
 
-**【中文要点】** 用 2024-11-21 苹果的真实一行，逐个演示十个特征怎么算出来；全部只用当天及之前的数据，并经过"追加未来价格"测试。
+With our data selected and prepared, we can now move on to Processing and Feature Engineering.
 
-**English — say this:**
-> Here is how one real day becomes ten numbers. Apple, Thursday the twenty-first of November 2024. It closed at 228.52, after 229.00 the day before, so the one-day return is minus 0.21 percent. Against five and twenty days ago, the same sum gives two more returns. The close sits 0.33 percent above its five-day average; that is the moving-average gap. Volatility measures how much daily returns jumped around over the last ten and thirty days. Range is today's high minus low, divided by the close. Volume change compares today's volume with its five-day average. And Thursday is coded as three.
->
-> Every number uses only this day and earlier days. We test that by appending fake future prices: the earlier rows must not change.
+## 中文版本
 
-**中文对照：**
-> 这是真实的一天怎样变成十个数字。苹果，2024 年 11 月 21 日，星期四。收盘 228.52，前一天 229.00，所以一日收益率是 −0.21%。同样的算法对比 5 天前和 20 天前，又得到两个收益率。收盘价比 5 日均价高 0.33%，这就是均线偏离。波动率衡量过去 10 天和 30 天里日收益率跳动有多大。幅度是当天最高价减最低价，再除以收盘价。成交量变化是今天成交量相对 5 日均量。星期四编码为 3。
->
-> 每个数字只用这一天及之前的数据。我们用测试来保证：在末尾追加假的未来价格，之前的行不能有任何变化。
+### 第 1 页 — 引入
 
-**→ Transition:** "Now, what happens to these numbers inside each model?" · **过渡：** "这些数字进入模型后会怎样？"
+大家早上好。今天我们小组要介绍的项目是通过金融预测来学习机器学习。
 
----
+我们想探讨的核心问题是：**一个更加复杂的机器学习模型，是否一定能够做出更好的预测？**
 
-## Slide 8 — Every Model Gets the Same Data: One Shared Pipeline · 1:10
-**Page / 页码:** 8/26 · **Speaker / 讲者:** Zhang Yancheng
+为了研究这个问题，我们选择了五种机器学习模型，用来预测 Apple 和 Bitcoin 下一天的收盘价。
 
-**【中文要点】** 回答"每个模型数据是否相同"：完全相同（行、十个特征、目标、切分、调参折）；唯一开关是 P0/P2，用表格说明为什么要标准化；最后预测变化量再加回今天收盘价。
+不过，在比较这些模型之前，我们先引入了一种非常简单的基准方法，叫作 **Copy the Latest Close**，也就是朴素持久性预测。
 
-**English — say this:**
-> And this is the pipeline every model goes through. Did every model get the same data? Yes: the same rows, the same ten features, the same target, tomorrow's close minus today's, and the same splits and folds. Only the algorithm changes.
->
-> The one switch is preprocessing. P0 leaves the features as they are; P2 standardises each one with the training years' mean and spread. The table shows why: a daily return is about 0.02 in size, the weekday about 1.4, so raw, the weekday dominates the distances in SVR and the penalty in ridge. Trees split one feature at a time, so they do not care.
->
-> Finally, the model predicts the change, and we add it to today's close.
+它的想法非常简单：我们假设明天的收盘价会和今天的收盘价完全一样。
 
-**中文对照：**
-> 这是每个模型都要经过的流水线。每个模型用的数据一样吗？一样：相同的行、相同的十个特征、相同的目标（明天收盘减今天收盘），以及相同的切分和调参折。唯一变化的是算法。
->
-> 唯一的开关是预处理。P0 保持特征原样；P2 用训练年份的均值和标准差把每个特征标准化。表格说明了原因：日收益率的量级约 0.02，星期几约 1.4，原始状态下星期几会主导 SVR 的距离和岭回归的惩罚。树每次只按一个特征切分，所以不受影响。
->
-> 最后，模型预测变化量，我们再把它加到今天的收盘价上。
+例如，如果 Apple 今天的收盘价是 200 美元，那么我们对明天的预测就是 200 美元。
 
-**→ Transition:** "Last: how the rows are split in time." · **过渡：** "最后：这些行怎样按时间切分。"
+令人意外的是，这种简单的方法表现得相当好。
 
----
+正如这一页所展示的，我们表现最好的模型——支持向量回归（SVR）——其 R-squared 分数是 0.9556，而这个简单基准方法的分数是 0.9555。
 
-## Slide 9 — Chronological Split, and Proof That the Pipeline Cannot Peek · 1:00
-**Page / 页码:** 9/26 · **Speaker / 讲者:** Zhang Yancheng
+两者之间的差距几乎可以忽略不计。
 
-**【中文要点】** 按时间 60/20/20 切分，每个边界删一行（标签是下一天收盘价，否则训练的答案落进验证块；审计量化为 0.408）；故意注入 6 种泄漏错误，全部被抓到；83 项测试通过。
+这也引出了我们项目的核心观点：**模型更加复杂，并不一定意味着预测效果更好。**
 
-**English — say this:**
-> We split by date, sixty, twenty, twenty, and the final block stays sealed. At each boundary we drop one row: the label is the next close, so otherwise the last training answer would be the first validation price. An independent audit showed that, without this purge, changing one test-period price moved the headline metric by 0.408.
->
-> Then we attack the pipeline on purpose: a script injects six known leakage mistakes, one at a time, and the tests must fail every time. All six are caught, and eighty-three automated tests pass. Every model-performance number from here on comes from the validation block.
+### 第 2 页 — Roadmap
 
-**中文对照：**
-> 按日期 60/20/20 切分，最后一块封存。每个边界删一行：标签是下一天收盘价，不删的话，最后一个训练样本的答案就是验证集的第一个价格。独立审计显示，不删行时，改动一个测试期价格就让头条指标移动 0.408。
->
-> 然后我们主动攻击流水线：脚本逐个注入六种已知的泄漏错误，测试每次都必须失败。六种全部被抓到，83 项自动测试全部通过。接下来每一个模型表现数字都来自验证块。
+我们的展示分为五个阶段。
 
-**→ Transition:** "Clean inputs, so part three: the models." · **过渡：** "输入干净了，第三部分：模型。"
+第一部分是数据选择，我们会介绍选择了哪些数据集，以及为什么选择它们。
+
+第二部分是数据处理与特征工程，介绍我们如何为机器学习准备数据。
+
+第三部分是模型与调参，我们会介绍五种模型，以及如何优化它们的参数。
+
+第四部分是模型评估，我们会将模型的表现与基准方法进行比较。
+
+最后是教学设计，我们会探讨如何把项目中的发现转化为一个学习体验。
+
+接下来，我们先从第一部分开始。
+
+### 第 3 页 — 数据选择
+
+我们选择了两种金融资产：Apple 代表传统股票市场，而 Bitcoin 代表加密货币市场。
+
+对于 Apple，我们从 StockAnalysis 的公开 API 获取历史日度数据；对于 Bitcoin，我们使用 Binance 的公开 REST API。
+
+两个数据集都覆盖了大约五年的时间，从 2021 年 10 月开始。
+
+我们收集了 1,255 条 Apple 日度记录，以及 1,828 条 Bitcoin 日度记录。
+
+### 第 4 页 — 为什么选择这两个资产？
+
+选择这两种资产的主要原因，是它们具有不同的市场特征。
+
+首先，Apple 遵循传统股票市场的交易时间，而 Bitcoin 则是每周七天、每天 24 小时持续交易。
+
+其次，在我们的数据中，Bitcoin 的日收益率波动率更高，为 2.66%，而 Apple 是 1.76%。
+
+另外，两者的价格尺度也有很大差异。
+
+最后，Apple 存在股息和股票拆分等公司行动，而 Bitcoin 没有同类的调整。
+
+这些差异让我们能够研究：当同样的机器学习模型应用于两个不同的金融市场时，它们的表现会有什么不同。
+
+### 第 5 页 — 数据筛选条件
+
+在建立模型之前，我们对数据应用了几项筛选条件。
+
+我们采用五年的观察窗口，选择原始收盘价作为预测目标，并检查数据中是否存在缺失值、重复日期、无效价格以及其他数据质量问题。
+
+我们还删除了最前面的 30 行，因为这些数据缺少计算滚动特征所需的历史信息；同时删除最后一行，因为它没有对应的下一期收盘价。
+
+最后，我们按照时间顺序将数据分为三个部分：60% 用于训练，20% 用于验证，20% 用于测试。
+
+此外，我们在每个数据集划分的边界处额外删除一行，以避免不同数据集之间发生信息泄漏。
+
+至此，我们完成了数据的选择和准备。接下来进入第二部分：数据处理与特征工程。
 
 ---
 
-# PART 3 — MODELS AND FINE-TUNING · 第三部分：模型与调参 （Zhang Yancheng）
+# Part 2: Processing & Features, Part 3: Models & Tuning · 第二部分：数据处理与特征工程，第三部分：模型与调参
 
-## Slide 10 — Five Models Plus a Baseline: Why Each One Is There · 1:10
-**Page / 页码:** 10/26 · **Speaker / 讲者:** Zhang Yancheng
+**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:10
 
-**【中文要点】** 一个基线加五个模型，代表三种机制（线性权重、核相似度、树切分）；每个模型说清"怎么预测、传统优势、在本研究里的角色"；主比较不用深度学习，但另做了 MLP/LSTM 补充测试（Backup 6）。
+## English Version
 
-**English — say this:**
-> Part three: models and fine-tuning. Beside the yardstick, five models cover three ways of learning. Two are linear: a linear baseline with a small penalty, and ridge, which searches a wide penalty range to test whether regularisation helps. Support vector regression with an RBF kernel predicts from similarity to training examples; it captures non-linear patterns but depends on distances, so it is our scale-sensitive case. Two are tree ensembles: a random forest averages many independent trees and is our scale-invariant control, and gradient boosting adds trees one by one to fix the remaining error.
->
-> The main comparison is classical, as the handout discourages deep learning. A separate MLP and LSTM test did no better; it is in our backup.
+### Slide 6 — Problems in the Raw Data
 
-**中文对照：**
-> 第三部分：模型与调参。除了基准，五个模型覆盖三种学习方式。两个线性模型：带小惩罚的线性基线，以及在很宽的惩罚范围里搜索、检验正则化是否有用的岭回归。RBF 核支持向量回归根据与训练样本的相似度预测，能捕捉非线性，但依赖距离，所以是"对尺度敏感"的案例。两种树集成：随机森林平均许多独立的树，是"对尺度不变"的对照；梯度提升一棵接一棵地加树来修正剩余误差。
->
-> 主比较用经典模型，因为讲义不鼓励深度学习。我们另外单独测试了 MLP 和 LSTM，没有更好，结果在备份页里。
+Thank you. Part two is processing and feature engineering.
 
-**→ Transition:** "Comparing them is only fair if they are tuned the same way." · **过渡：** "只有用同样方式调参，比较才公平。"
+Raw prices cannot go straight into a model. This table lists six problems, and what we did about each one.
+
+The biggest problem is that prices drift. For example, in our training years Bitcoin never closed above 77,000 dollars. In the validation year it reached almost 125,000. A model trained on raw prices cannot handle levels it has never seen.
+
+So instead of prices, we give the model ratios: how much the price moved, and how far it sits from its recent average.
+
+The other problems follow one simple rule: **use only what was known at that moment.**
+
+### Slide 7 — From One Day to Ten Features
+
+Here is how one real day becomes ten numbers: Apple, on the twenty-first of November 2024.
+
+It closed at 228.52 dollars, after 229.00 the day before. So the one-day return is minus 0.21 percent. Five and twenty days back give two more returns.
+
+The close was 0.33 percent above its five-day average. That is the moving-average gap, and we also use a twenty-day one.
+
+Volatility measures how much the price jumped around over ten and thirty days. Range is the day's high minus its low, divided by the close. Volume change compares today's volume with its recent average. And Thursday is coded as three.
+
+**Every feature uses only this day and earlier days.** Our tests add fake future prices to the data, and the earlier features must not change.
+
+### Slide 8 — Every Model Gets the Same Data
+
+So, **did every model get the same data?** Yes.
+
+Every model gets the same rows, the same ten features, the same target, and the same splits. Only the algorithm changes.
+
+There is one switch: preprocessing. P0 leaves the features as they are. P2 standardises them, using the average and spread of the training years only.
+
+Why does this matter? A daily return is about 0.02 in size, but the weekday is about 1.4. Without scaling, the weekday dominates models that measure distance, like SVR. Trees split one feature at a time, so they do not care.
+
+Finally, the model predicts tomorrow's **change**, and we add it to today's close. On our example day, SVR predicted plus 10 cents, so the forecast was 228.62.
+
+### Slide 9 — Splitting by Time
+
+Next, we split the data by time: the first 60 percent for training, the next 20 for validation, and the last 20 for testing. The test block stays sealed.
+
+At each boundary we drop one row. Why? Our label is tomorrow's close. So the answer of the last training row would be the first validation price. Dropping one row keeps them apart.
+
+We also attacked our own pipeline. A script injected six common leakage mistakes, one at a time. Our tests caught all six.
+
+From here on, **every model-performance number comes from the validation block.**
+
+### Slide 10 — Five Models and a Baseline
+
+Part three: models and tuning.
+
+Besides the baseline, we chose five models that learn in three different ways.
+
+First, two linear models. They give each feature a weight and add them up. Ridge also adds a penalty that keeps the weights small.
+
+Second, support vector regression. It predicts from how similar a day is to past days. Because it measures distance, it is sensitive to scale.
+
+Third, two tree ensembles. A random forest averages many independent trees. Gradient boosting adds trees one by one, each fixing the errors left so far.
+
+We also tried two neural networks, an MLP and an LSTM, in a separate test. Neither did better; see our backup slides.
+
+### Slide 11 — Fair Tuning
+
+A comparison is only fair if every model is tuned the same way.
+
+We tune inside the training years only. For example, we fit on the first part, test on the next slice, then grow the window and repeat, five times.
+
+Each model tries ten random settings, with the same time limit and seed. We keep the setting with the lowest average error. The validation block is never touched.
+
+Look at what the tuner chose: mostly the most cautious settings. Ridge took the strongest penalty, and boosting took the smallest learning rate. **The tuner is telling us that the safest forecast stays close to "no change".**
+
+### Slide 12 — What Else We Explored
+
+We explored more than settings.
+
+First, the target: we changed it from the price to the price change, as you saw.
+
+Second, every model ran twice, on raw and on standardised features. That gives twenty runs.
+
+Third, this chart shows what scaling changed. The two tree models gave exactly the same predictions, as expected. SVR and ridge changed, because they depend on scale.
+
+So, how well did all these models do? Zhang Haoyu will show you.
+
+## 中文版本
+
+### 第 6 页 — 原始数据的问题
+
+谢谢。第二部分是数据处理与特征工程。
+
+原始价格不能直接放进模型。这张表列出了六个问题，以及我们对每个问题的处理方法。
+
+最大的问题是价格会漂移。例如，在训练年份里，比特币的收盘价从没超过 77,000 美元；到了验证年份，它涨到了接近 125,000 美元。用原始价格训练的模型无法处理它从没见过的水平。
+
+所以我们不给模型价格，而是给它比率：价格变动了多少，以及它离近期均值有多远。
+
+其余问题都遵循一条简单的规则：**只用当时已经知道的信息。**
+
+### 第 7 页 — 从一天的数据到十个特征
+
+这是真实的一天怎样变成十个数字：苹果，2024 年 11 月 21 日。
+
+当天收盘 228.52 美元，前一天是 229.00。所以一日收益率是 −0.21%。和 5 天前、20 天前比较，又得到两个收益率。
+
+收盘价比 5 日均价高 0.33%，这就是均线偏离；我们还用了 20 日的版本。
+
+波动率衡量过去 10 天和 30 天里价格跳动有多大。幅度是当天最高价减最低价，再除以收盘价。成交量变化是今天的成交量和近期平均成交量的比较。星期四编码为 3。
+
+**每个特征只用这一天及之前的数据。** 我们的测试会在数据末尾加入假的未来价格，之前的特征必须完全不变。
+
+### 第 8 页 — 每个模型用的数据都一样
+
+那么，**每个模型用的数据都一样吗？** 是的。
+
+每个模型用相同的行、相同的十个特征、相同的目标和相同的切分。唯一变化的是算法。
+
+只有一个开关：预处理。P0 保持特征原样；P2 把特征标准化，只用训练年份的均值和波动幅度。
+
+为什么重要？日收益率的量级大约是 0.02，而星期几大约是 1.4。不做缩放的话，星期几会主导依赖距离的模型，比如 SVR。树每次只按一个特征切分，所以不受影响。
+
+最后，模型预测的是明天的**变化量**，我们再把它加到今天的收盘价上。在刚才的例子里，SVR 预测 +10 美分，所以预测值是 228.62。
+
+### 第 9 页 — 按时间切分
+
+接下来，我们按时间切分数据：前 60% 用于训练，接下来 20% 用于验证，最后 20% 用于测试。测试块一直封存。
+
+每个边界我们删掉一行。为什么？因为标签是明天的收盘价，所以最后一个训练行的答案，恰好就是验证集的第一个价格。删掉一行就能把它们隔开。
+
+我们还主动攻击了自己的流水线：一个脚本逐个注入六种常见的泄漏错误，我们的测试全部抓到了。
+
+从这里开始，**每一个模型表现数字都来自验证块。**
+
+### 第 10 页 — 五个模型和一个基准
+
+第三部分：模型与调参。
+
+除了基准，我们选了五个模型，它们用三种不同的方式学习。
+
+第一，两个线性模型。它们给每个特征一个权重，再加起来。岭回归还加了一个惩罚项，让权重保持很小。
+
+第二，支持向量回归。它根据某一天和过去的日子有多相似来预测。因为它衡量距离，所以对尺度敏感。
+
+第三，两种树集成。随机森林把许多独立的树取平均；梯度提升一棵接一棵地加树，每棵都修正前面留下的误差。
+
+我们还在另一个独立测试里试了两个神经网络，MLP 和 LSTM。两者都没有更好，见备份页。
+
+### 第 11 页 — 公平调参
+
+只有每个模型都用同样的方式调参，比较才公平。
+
+我们只在训练年份里面调参。例如，先用前面一段拟合，在下一小段上测试，然后把窗口扩大再重复，一共五次。
+
+每个模型试 10 组随机设置，时间限制相同、随机种子相同，保留平均误差最低的那组。验证块从来不碰。
+
+看看调参器选了什么：大多是最保守的设置。岭回归选了最强的惩罚，梯度提升选了最小的学习率。**调参器在告诉我们：最安全的预测就是贴近"不变"。**
+
+### 第 12 页 — 其他探索
+
+我们探索的不只是参数设置。
+
+第一，目标：我们把它从价格改成了价格变化量，前面已经看到。
+
+第二，每个模型都跑两次，一次用原始特征，一次用标准化特征，总共 20 次运行。
+
+第三，这张图显示缩放改变了什么。两种树模型的预测完全相同，和预期一样。SVR 和岭回归有变化，因为它们依赖尺度。
+
+那么，这些模型到底表现如何？请 Zhang Haoyu 为大家介绍。
 
 ---
 
-## Slide 11 — Fine-Tuning: The Same Search and Budget for Every Model · 1:05
-**Page / 页码:** 11/26 · **Speaker / 讲者:** Zhang Yancheng
+# Part 4: Evaluation · 第四部分：评估
 
-**【中文要点】** 训练块内部五折扩展窗口交叉验证；随机搜索 10 次、每格 ≤90 秒、同一随机种子；目标是 MAE；验证块不参与调参；网格事先冻结。调参器几乎总是选最保守的设置。
+**Speaker / 讲者:** Zhang Haoyu · **Slides / 页码:** 13–15 · **Target speaking time / 目标时长:** about 2:50
 
-**English — say this:**
-> Every model is tuned the same way. Inside the training block only, five expanding-window folds: fit on the earlier part, score on the next slice. A random search tries ten settings per model, within ninety seconds and with the same seed, and keeps the one with the lowest average error. The validation block is never used, and the grids were fixed in our protocol before any result.
->
-> The table shows each grid and the choice. Notice the pattern: the choices are mostly the most cautious ones. Ridge takes the strongest penalty, boosting the smallest learning rate, SVR on Apple the smallest C. The tuner is telling us the safest forecast stays close to "no change".
+## English Version
 
-**中文对照：**
-> 每个模型的调参方式完全相同。只在训练块内部做五折扩展窗口：用前面一段拟合、在下一小段打分。随机搜索每个模型试 10 组参数，限时 90 秒、同一个随机种子，保留平均误差最低的那组。验证块从不使用，网格在看到任何结果前就写进了协议。
->
-> 表里是每个网格和选中的值。注意规律：选中的大多是最保守的设置。岭回归选最强的惩罚，梯度提升选最小的学习率，苹果上的 SVR 选最小的 C。调参器在告诉我们：最安全的预测就是贴近"不变"。
+### Slide 13 — Four Metrics
 
-**→ Transition:** "We also explored more than hyperparameters." · **过渡：** "我们探索的不止超参数。"
+Thank you. Part four is evaluation. We use four metrics, and each one has a job.
 
----
+Mean absolute error, or MAE, is the typical miss in dollars. Root mean squared error, or RMSE, punishes big misses more.
 
-## Slide 12 — What We Explored Beyond Hyperparameters · 0:55
-**Page / 页码:** 12/26 · **Speaker / 讲者:** Zhang Yancheng
+R-squared is the share of price movement the model explains. Skill compares the model with the simple rule: zero means no better than the rule.
 
-**【中文要点】** 另外三个探索方向：目标表示（价格水平→变化量）、预处理 P0 vs P2（20 次运行）、缩放的影响（树完全不变，SVR 和岭回归会变）；以及网格边缘的观察。
+For our best Apple model, MAE is 2.89 dollars, against 2.91 for the rule. R-squared is 0.9556, against 0.9555.
 
-**English — say this:**
-> Beyond hyperparameters, we explored three design choices. First, the target: from price level to change, as you saw. Second, preprocessing: every model ran on raw features, P0, and standardised features, P2, giving twenty runs. A missing-value setting was skipped, because there are no missing values.
->
-> Third, what scaling changed, in the chart. Both tree ensembles gave identical predictions, exactly as split thresholds predict. SVR and ridge moved, because distances and penalties depend on scale; the Apple linear baseline's error rose by 0.74 percent. And ridge chose the edge of its grid, so wider grids are a clear next step.
+**That is the trap: any forecast that follows yesterday's price gets a high R-squared.** So we rank models by skill. It has no units, so it also works across assets.
 
-**中文对照：**
-> 除了超参数，我们还探索了三个设计选择。第一，目标：从价格水平改成变化量，前面讲过。第二，预处理：每个模型都在原始特征 P0 和标准化特征 P2 上各跑一次，共 20 次运行。缺失值填补的设置没有跑，因为数据没有缺失值。
->
-> 第三，缩放改变了什么，见右图。两种树集成的预测完全相同，正如阈值切分所预期。SVR 和岭回归有变化，因为距离和惩罚依赖尺度；苹果线性基线的误差上升了 0.74%。另外，岭回归选中了网格边缘，所以放宽网格是明确的下一步。
+### Slide 14 — Results
 
-**→ Transition (handover Zhang Yancheng → Zhang Haoyu):** "So how well did they do? Part four." · **过渡：** "那它们表现如何？第四部分。"
+Here is the skill of every run.
 
----
+The best Apple run is SVR with standardised features, at plus 0.52 percent. That is about one and a half cents less error per forecast. The best Bitcoin run is the linear baseline on raw features, at plus 0.26 percent.
 
-# PART 4 — EVALUATION · 第四部分：评估 （Zhang Haoyu）
+Across all twenty runs, skill stays between minus 0.78 and plus 0.52 percent, and five runs are worse than the rule.
 
-## Slide 13 — Four Metrics, Each With a Job · 1:00
-**Page / 页码:** 13/26 · **Speaker / 讲者:** Zhang Haoyu
+**On daily prices, a simple rule is a very strong opponent.** Backup slide one shows every run.
 
-**【中文要点】** 四个指标各有分工：MAE 典型误差、RMSE 惩罚大错、R² 解释的方差占比、skill 相对基准的提升；R² 对任何贴着昨天价格的预测都很高，所以不用它排名；跨资产只用 skill。
+### Slide 15 — How Certain Are We?
 
-**English — say this:**
-> Part four: evaluation. Four metrics, each with a job. Mean absolute error is the typical miss in dollars. Root mean squared error punishes large misses. R-squared is the share of price variance explained. Skill is one minus the model's error over persistence's error: zero means no better than the rule, and it has no units.
->
-> For the best Apple model against persistence: MAE 2.89 against 2.91, RMSE 4.36 for both, R-squared 0.9556 against 0.9555. That last pair is the trap: any forecast that follows yesterday's price scores a high R-squared, so it never ranks models. Skill is our main measure, and the only one we use across assets.
+But are these small leads real, or just luck?
 
-**中文对照：**
-> 第四部分：评估。四个指标，各有分工。平均绝对误差是以美元计的典型误差；均方根误差惩罚大错；R² 是被解释的价格方差占比；skill 是 1 减去"模型误差除以持续性误差"：0 表示和规则一样，而且没有单位。
->
-> 苹果最好的模型对比持续性：MAE 2.89 对 2.91，RMSE 都是 4.36，R² 0.9556 对 0.9555。最后这一对就是陷阱：任何跟着昨天价格走的预测 R² 都很高，所以它从不用来排名。skill 是主要指标，也是跨资产唯一使用的指标。
+We compare each model with the rule on the same days, resample the days in blocks of ten, a thousand times, and get a 95 percent interval.
 
-**→ Transition:** "Here is skill for every run." · **过渡：** "这是每次运行的 skill。"
+**All twenty intervals include zero**, even the best Apple run. So no model is reliably better; they are tied with the rule.
 
----
+Why is the rule so hard to beat? Today's return tells us almost nothing about tomorrow's. The correlation is about plus 0.02 for Apple and minus 0.03 for Bitcoin: almost zero.
 
-## Slide 14 — Results: All 20 Runs Land Within 1% of the Baseline · 0:55
-**Page / 页码:** 14/26 · **Speaker / 讲者:** Zhang Haoyu
+And that is exactly what our lesson teaches.
 
-**【中文要点】** 最好：苹果 SVR(P2) +0.52%（约少 1.5 美分误差），比特币线性基线(P0) +0.26%；20 次全部在 −0.78% 到 +0.52% 之间，5 次低于 0；完整 20 格见 Backup 1。
+## 中文版本
 
-**English — say this:**
-> Here is skill for every model on validation data. The best Apple run is SVR with standardised features, at plus 0.52 percent: about one and a half cents less error per forecast. The best Bitcoin run is the linear baseline on raw features, at plus 0.26.
->
-> Across all twenty runs, skill sits between minus 0.78 and plus 0.52 percent, and five runs are worse than the rule. That narrow band is the finding: on daily prices, a simple rule is a very strong opponent. Every run is shown; the full grid is in Backup 1.
+### 第 13 页 — 四个指标
 
-**中文对照：**
-> 这是每个模型在验证集上的 skill。苹果最好的是标准化特征下的 SVR，+0.52%：每次预测大约少 1.5 美分误差。比特币最好的是原始特征下的线性基线，+0.26%。
->
-> 全部 20 次运行的 skill 在 −0.78% 到 +0.52% 之间，有 5 次比规则更差。这个很窄的范围就是发现：在日度价格上，简单规则是非常强的对手。每一次运行都展示了，完整表格在 Backup 1。
+谢谢。第四部分是评估。我们用四个指标，每个都有自己的作用。
 
-**→ Transition:** "But are those small leads real?" · **过渡：** "但这些小小的领先是真的吗？"
+平均绝对误差 MAE，是以美元计的典型误差。均方根误差 RMSE，对大的误差惩罚更重。
 
----
+R² 是模型解释了多少价格变动。Skill 把模型和简单规则作比较：0 表示没有比规则更好。
 
-## Slide 15 — How Certain? Every Interval Includes Zero · 0:55
-**Page / 页码:** 15/26 · **Speaker / 讲者:** Zhang Haoyu
+我们最好的苹果模型，MAE 是 2.89 美元，规则是 2.91；R² 是 0.9556，规则是 0.9555。
 
-**【中文要点】** 配对移动区块 Bootstrap（块长 10 天、1,000 次、95%）；20 个区间全部包含 0：与强基线持平；原因：相邻日收益率几乎不相关（苹果 +0.021，比特币 −0.026）。
+**这就是陷阱：任何跟着昨天价格走的预测，R² 都会很高。** 所以我们用 skill 来给模型排名。它没有单位，所以也能跨资产比较。
 
-**English — say this:**
-> Are those small leads real? We pair each model's errors with the rule's on the same dates, resample blocks of ten consecutive days a thousand times, and take a ninety-five percent interval; blocks keep the dependence between neighbouring days.
->
-> Each row is one run. All twenty intervals contain zero, including the best Apple run. So the precise reading is parity with a strong baseline, not a winner.
->
-> Why so hard to beat? The correlation between one day's return and the next is plus 0.021 for Apple and minus 0.026 for Bitcoin, essentially zero. Yesterday's move says almost nothing about today's.
+### 第 14 页 — 结果
 
-**中文对照：**
-> 这些小小的领先是真的吗？我们把每个模型的误差和规则的误差按相同日期配对，每次重采样连续十天的块，重复一千次，取 95% 区间；分块保留了相邻日期之间的相关性。
->
-> 每一行是一次运行。20 个区间全部包含 0，包括苹果最好的那次。所以准确的结论是：与强基线持平，而不是有赢家。
->
-> 为什么这么难打败？今天和明天收益率的相关性，苹果 +0.021，比特币 −0.026，基本为零。昨天的涨跌几乎说明不了今天。
+这是每一次运行的 skill。
 
-**→ Transition (handover Zhang Haoyu → Lau Pak Hei):** "That result is exactly what we teach. Part five." · **过渡：** "这个结果正是我们要教的。第五部分。"
+苹果最好的是标准化特征下的 SVR，+0.52%，相当于每次预测少了大约 1.5 美分的误差。比特币最好的是原始特征下的线性基线，+0.26%。
+
+全部 20 次运行的 skill 都在 −0.78% 到 +0.52% 之间，其中 5 次比规则更差。
+
+**在日度价格上，简单规则是非常强的对手。** 备份页第一页展示了每一次运行。
+
+### 第 15 页 — 我们有多确定？
+
+但这些小小的领先是真的，还是运气？
+
+我们在相同的日子上把每个模型和规则比较，以连续十天为一块重采样一千次，得到 95% 区间。
+
+**20 个区间全部包含 0**，包括苹果最好的那一次。所以没有模型可靠地更好；它们和规则打平。
+
+为什么规则这么难打败？因为今天的收益率几乎说明不了明天。相关系数苹果约 +0.02，比特币约 −0.03，几乎为零。
+
+而这正是我们的课要教的。
 
 ---
 
-# PART 5 — TEACHING DESIGN · 第五部分：教学设计 （Lau Pak Hei: slides 16–17 · Lui Shing Lam: slide 18）
+# Part 5: Teaching Design · 第五部分：教学设计
 
-## Slide 16 — Teaching Design: The Pipeline Becomes a 60-Minute Lesson · 0:50
-**Page / 页码:** 16/26 · **Speaker / 讲者:** Lau Pak Hei
+**Speakers / 讲者:** Lau Pak Hei (slides 16–17) · Lui Shing Lam (slide 18) · **Target speaking time / 目标时长:** about 2:05
 
-**【中文要点】** 项目变成 60 分钟的课；五个任务各来自项目的一个部分；先看简单规则再看模型。
+These slides are written in short, plain sentences. **Read them exactly as written, slowly, without adding anything.** If you stop for more than about five seconds, Zhang Yancheng steps in and finishes the slide from the key point in the table at the end of this part.
 
-**English — say this:**
-> Part five: teaching design. We turned our project into a sixty-minute lesson for students who are new to machine learning.
->
-> It has five tasks, and each one comes from a part of our project. Learners compare training error with error on new data, find a leak in a short piece of code, read our skill table, say which models care about scaling, and explain why low error is not profit.
->
-> Students see the simple rule first, and the models after.
+这几页刻意写成短句。**照稿慢慢读，不要自由发挥。** 若停顿超过约 5 秒，由 Zhang Yancheng 接上，按本部分末尾表格里的要点讲完。
 
-**中文对照：**
-> 第五部分：教学设计。我们把项目做成了一节 60 分钟的课，对象是刚接触机器学习的学生。
->
-> 这节课有五个任务，每个任务来自项目的一个部分。学生比较训练误差和新数据上的误差，在一小段代码里找出泄漏，读我们的 skill 表，说出哪些模型在意缩放，并解释为什么误差低不等于赚钱。
->
-> 学生先看简单规则，再看模型。
+## English Version
 
-**→ Transition:** "And you can try all of it yourself." · **过渡：** "而且这一切你都可以亲自试一试。"
+### Slide 16 — Teaching Design (Lau Pak Hei)
 
----
+Part five is teaching design. We turned our project into a sixty-minute lesson for students who are new to machine learning.
 
-## Slide 17 — Try It Yourself: The Whole Pipeline, Interactive · 0:35
-**Page / 页码:** 17/26 · **Speaker / 讲者:** Lau Pak Hei
+It has five tasks, and each one comes from a part of our project. Learners compare training error with error on new data, find a leak in a short piece of code, read our skill table, say which models care about scaling, and explain why low error is not profit.
 
-**【中文要点】** 整个流程都做成了一个网站，用的是我们的真实数据；可以挑任意一天看十个特征，挑任意模型重新算分数；扫码即可打开。
+Students see the simple rule first, and the models after.
 
-**English — say this:**
-> Everything you saw today is also on a website. It walks through the same steps, with our real data. You can pick any day and see its ten features. You can pick any model and recompute its scores. It opens in any browser. Scan the code to try it.
+And you can try all of it yourself.
 
-**中文对照：**
-> 今天看到的所有内容也都放在一个网站上。它按同样的步骤展示，用的是我们的真实数据。你可以挑任意一天，看它的十个特征；也可以挑任意一个模型，重新计算它的分数。任何浏览器都能打开。扫这个二维码就可以试。
+### Slide 17 — Try It Yourself (Lau Pak Hei)
 
-**→ Transition (handover Lau Pak Hei → Lui Shing Lam):** "Now the summary." · **过渡：** "下面是总结。"
+Everything you saw today is also on a website. It walks through the same steps, with our real data.
 
----
+You can pick any day and see its ten features. You can pick any model and recompute its scores. It opens in any browser.
 
-## Slide 18 — Summary: What Each Stage Delivered · 0:50
-**Page / 页码:** 18/26 · **Speaker / 讲者:** Lui Shing Lam
+Scan the code to try it.
 
-**【中文要点】** 按五个部分各说一句成果；下一步；不是投资建议；谢谢、请提问。
+### Slide 18 — Summary (Lui Shing Lam)
 
-**English — say this:**
-> To sum up. Data: two different markets, from public sources we can trace. Processing: ten features that only look backwards. Models: five models, tuned in the same way. Evaluation: all twenty runs are within one percent of the simple rule. Teaching: a sixty-minute lesson with five tasks.
->
-> Next, we will test on the sealed data once, and try the lesson with a real class. This is not investment advice. Thank you. We are happy to take questions.
+To sum up. Data: two different markets, from public sources we can trace. Processing: ten features that only look backwards. Models: five models, tuned in the same way. Evaluation: all twenty runs are within one percent of the simple rule. Teaching: a sixty-minute lesson with five tasks.
 
-**中文对照：**
-> 总结一下。数据：两个不同的市场，来源公开、可追溯。处理：十个只往回看的特征。模型：五个模型，用同样的方式调参。评估：20 次运行都在简单规则的 1% 以内。教学：一节 60 分钟、五个任务的课。
->
-> 下一步：在封存的数据上测试一次，并在真实班级里试这节课。这不构成投资建议。谢谢大家，欢迎提问。
+Next, we will test on the sealed data once, and try the lesson with a real class. This is not investment advice. Thank you. We are happy to take questions.
+
+## 中文版本
+
+### 第 16 页 — 教学设计（Lau Pak Hei）
+
+第五部分是教学设计。我们把项目做成了一节 60 分钟的课，对象是刚接触机器学习的学生。
+
+这节课有五个任务，每个任务来自项目的一个部分。学生比较训练误差和新数据上的误差；在一小段代码里找出泄漏；读我们的 skill 表；说出哪些模型在意缩放；并解释为什么误差低不等于赚钱。
+
+学生先看简单规则，再看模型。
+
+而且这一切你都可以亲自试一试。
+
+### 第 17 页 — 亲自试一试（Lau Pak Hei）
+
+今天看到的所有内容也都放在一个网站上。它按同样的步骤展示，用的是我们的真实数据。
+
+你可以挑任意一天，看它的十个特征；也可以挑任意一个模型，重新计算它的分数。任何浏览器都能打开。
+
+扫这个二维码就可以试。
+
+### 第 18 页 — 总结（Lui Shing Lam）
+
+总结一下。数据：两个不同的市场，来源公开、可追溯。处理：十个只往回看的特征。模型：五个模型，用同样的方式调参。评估：20 次运行都在简单规则的 1% 以内。教学：一节 60 分钟、五个任务的课。
+
+下一步：在封存的数据上测试一次，并在真实班级里试这节课。这不构成投资建议。谢谢大家，欢迎提问。
+
+## Fallback key points · 后备要点（Zhang Yancheng）
+
+| Slide | Key point | 要点 |
+|---|---|---|
+| 16 | The project becomes a 60-minute lesson; five tasks, one from each part; simple rule first, models after. | 项目变成 60 分钟的课；五个任务各来自一个部分；先看简单规则再看模型。 |
+| 17 | The whole pipeline is on a website with our real data; pick a day, pick a model; scan the code. | 整个流程做成了网站，用真实数据；挑一天、挑一个模型；扫码打开。 |
+| 18 | One sentence per stage; next steps; not investment advice; thank you, questions. | 每个阶段一句成果；下一步；不是投资建议；谢谢、请提问。 |
+
 ---
 
 # Q&A — bilingual cheat sheet · 问答中英对照
@@ -438,22 +576,22 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 5** (≈4:10) and the **end of slide 9**: it should read **≈8:25** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:10** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
-| 8:55 or later after slide 9 | Slide 12: skip the grid-edge sentence and say only "trees unchanged, SVR and ridge move". (~20 s) | 第 12 页去掉网格边缘那句，只说"树不变，SVR 和岭回归会变"，省约 20 秒。 |
-| 9:25 or later | Slide 10: name the five models and their roles in one breath, without the strengths. (~25 s) | 再把第 10 页压成"模型名 + 角色"，省约 25 秒。 |
+| 9:40 or later after slide 9 | Slide 10: drop the neural-network sentence. Slide 12: skip the "target" sentence. (~20 s) | 第 10 页去掉神经网络那句；第 12 页跳过"目标"那句，省约 20 秒。 |
+| 10:10 or later | Slide 11: skip the "For example…" walkthrough of the folds. (~10 s) | 再跳过第 11 页"例如……"那段，省约 10 秒。 |
 | **Never cut** | Slide 13 (metrics), slide 14 (results), slide 15 (intervals). | **绝不能砍**第 13、14、15 页。 |
 
 # Rehearsal checklist · 排练清单
 
-- [ ] Every speaker has read their **English** blocks aloud twice. 每位讲者把英文大声读两遍。
-- [ ] Every speaker can say their **【中文要点】** from memory. 不看稿能说出中文要点。
-- [ ] Each part starts by naming the part ("Part three: models…"). 每部分开口先报部分名称。
+- [ ] Every speaker has read their **English Version** aloud twice. 每位讲者把英文大声读两遍。
+- [ ] Every speaker can explain each of their slides in one sentence without the script. 不看稿能用一句话讲出每一页的意思。
+- [ ] Each part starts by naming the part ("Part three: models and tuning"). 每部分开口先报部分名称。
 - [ ] The four handovers (after slides 5, 12, 15, 17) are rehearsed. 四次交接要练。
 - [ ] **Lau Pak Hei and Lui Shing Lam** each read their slides aloud to Zhang Yancheng at least three times before the talk, timed, with no ad-libbing. Lau Pak Hei 和 Lui Shing Lam 正式前至少各对 Zhang Yancheng 计时朗读三遍，不加词。
-- [ ] Zhang Yancheng can deliver slides 16–18 from the 【中文要点】 as the fallback. Zhang Yancheng 能按【中文要点】讲完第 16–18 页作为后备。
+- [ ] Zhang Yancheng can deliver slides 16–18 from the fallback key points as the backup. Zhang Yancheng 能按后备要点讲完第 16–18 页。
 - [ ] Two full timed run-throughs with a visible clock. 全流程计时彩排两次。
 - [ ] Backup 1 and Backup 3 are ready in a second window. 准备好 Backup 1 和 3。
 - [ ] Say "every **model-performance** number is from validation", not "every number". 说"每个模型表现数字"，不说"每个数字"。
