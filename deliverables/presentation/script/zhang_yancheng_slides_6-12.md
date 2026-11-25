@@ -1,4 +1,4 @@
-### Slide 6 - Problems in the Raw Data / 原始数据的问题 · 1:10
+### Slide 6 - Problems in the Raw Data / 原始数据的问题 · 1:15
 
 **English**
 
@@ -10,7 +10,7 @@
 
 *[Point to row 1. · 指第 1 行]*
 
-> First, prices drift to levels a model has never seen. So we use returns and ratios as features.
+> First, prices drift to levels a model has never seen. So we use returns and ratios over **rolling windows**: each day compared with the five to thirty days before it.
 
 *[Point to row 2. · 指第 2 行]*
 
@@ -22,7 +22,7 @@
 
 *[Sweep your hand over rows 4 to 6. · 手扫过第 4–6 行]*
 
-> The other three follow the same idea; the details are in the table. Now, the features.
+> The rest are in the table. Now, the features.
 
 **Rows 4–6, only if there is time or someone asks (not in the timed plan):**
 
@@ -37,11 +37,11 @@
 - 谢谢 Dong Yuankun → 第二部分：数据处理与特征工程
 - 承接：看完数据，发现六个问题 → 表里全列出来了
 - （重读）时间关系，只讲前三个
-- 1) 价格漂移到没见过的水平 → 用收益率和比率
+- 1) 价格漂移到没见过的水平 → 滚动窗口上的收益率和比率（对比前 5–30 天）
 - 2) 复权价事后修订＝泄露未来 → 目标用原始收盘价
 - 3) 苹果工作日、比特币每天 → 各按自己的日历
-- 其余三个同理，看表 → 下一页：特征
-- 备用 4) 前 30 天历史不够 → 删掉不填补
+- 其余看表 → 下一页：特征
+- 备用 4) 滚动窗口要 30 天历史 → 前 30 天删掉不填补（Dong 第 5 页提过）
 - 备用 5) 尺度不同 → P2 只用训练行标准化
 - 备用 6) 不能打乱 → 按时间切分，边界删一行
 

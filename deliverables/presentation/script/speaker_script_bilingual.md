@@ -3,7 +3,7 @@
 **Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 26 pages (18 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
-**Speech:** 17:05 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:45 inside the 20:00 slot)
+**Speech:** 17:10 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:50 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English Version.**
@@ -16,7 +16,7 @@
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
 > | 1–5 | Introduction, Part 1 Data Selection | **Dong Yuankun** | 4:50 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:20 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:25 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:20 |
 > | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:45 |
@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,790 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,790 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
+| Pace | ~105 words per minute. The English below is 1,795 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,795 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -222,7 +222,7 @@ With our data selected and prepared, we can now move on to Processing and Featur
 
 # Part 2: Processing & Features, Part 3: Models & Tuning · 第二部分：数据处理与特征工程，第三部分：模型与调参
 
-**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:20
+**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:25
 
 Lines in *[square brackets]* are stage directions: what to point at or do. Do not read them aloud. Point with your hand or the laser at the part of the slide named, then speak. Sentences in **bold** are the ones to slow down on.
 
@@ -240,7 +240,7 @@ Dong showed you our data. Looking at it closely, we found six problems that stop
 
 *[Point to row 1.]*
 
-First, prices drift to levels a model has never seen. So we use returns and ratios as features.
+First, prices drift to levels a model has never seen. So we use returns and ratios over **rolling windows**: each day compared with the five to thirty days before it.
 
 *[Point to row 2.]*
 
@@ -252,7 +252,7 @@ Third, Apple trades on weekdays, but Bitcoin trades every day. So we predict the
 
 *[Sweep your hand over rows 4 to 6.]*
 
-The other three follow the same idea; the details are in the table. Now, the features.
+The rest are in the table. Now, the features.
 
 **Rows 4–6, only if there is time or someone asks (not in the timed plan):**
 
@@ -398,7 +398,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 *[指第 1 行。]*
 
-第一，价格会漂移到模型从没见过的水平。所以我们用收益率和比率做特征。
+第一，价格会漂移到模型从没见过的水平。所以我们在**滚动窗口**上计算收益率和比率：把每一天和它之前 5 到 30 天作比较。
 
 *[指第 2 行。]*
 
@@ -410,7 +410,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 *[手扫过第 4–6 行。]*
 
-其余三个思路相同，细节在表里。接下来看特征。
+其余的都在表里。接下来看特征。
 
 **第 4–6 行：仅在有时间或被问到时讲（不计入计时）：**
 
@@ -728,7 +728,7 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:10** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:15** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
