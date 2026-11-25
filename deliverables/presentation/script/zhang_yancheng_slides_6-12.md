@@ -28,7 +28,7 @@
 
 > Fourth, rolling windows need history. The first thirty days do not have enough past data, so we drop them instead of filling them in.
 >
-> Fifth, the features have very different scales. So in one setting, P2, we standardise them, fitted on the training rows only.
+> Fifth, the features have very different scales. So in one setting, P2, we standardise them, using the training rows only.
 >
 > Sixth, time order matters. A shuffled split would train on the future, so we split by time and drop one row at each boundary.
 
@@ -47,11 +47,15 @@
 
 <!-- pagebreak -->
 
-### Slide 7 - From One Day to Ten Features / 从一天的数据到十个特征 · 1:15
+### Slide 7 - From One Day to Ten Features / 从一天的数据到十个特征 · 1:25
 
 **English**
 
 > That may sound a bit abstract, so let's take apart one real day of Apple.
+
+*[Point to the left table, then the right one. · 先指左表，再指右表]*
+
+> On the left we have different columns of the raw data, while on the right are the features that we extract.
 
 *[Point to the small table on the left. · 指左边小表]*
 
@@ -75,11 +79,12 @@
 
 *[Point to the note under the table. · 指表格下方说明]*
 
-> That makes ten features. Apart from the weekday, **each one is a comparison, not a price.** And **none can see tomorrow**: we added fake future prices, and the earlier features did not change.
+> That makes ten features. Apart from the weekday, **each one is a comparison.** And **none can see tomorrow**: we added fake future prices, and the earlier features did not change.
 
 **中文提词**
 
 - 引入：刚才可能有点抽象 → 拆开苹果真实的一天
+- 左边是原始数据的列，右边是提取的特征
 - 开高低收量 = OHLCV；开盘价没用到
 - 价格本身信息少 → 对它提问：比昨天动了多少 = 一日收益率
 - 比 5 天、20 天前呢？
@@ -97,7 +102,7 @@
 
 *[Trace the arrows across the top, left to right. · 从左到右沿顶部箭头指]*
 
-> Follow the arrows. Our daily OHLCV data becomes ten features, go through preprocessing, and enter one of the five models.
+> Follow the arrows. Our daily OHLCV data becomes ten features, goes through preprocessing, and enters one of the five models.
 
 *[Point to the list on the right. · 指右边列表]*
 
@@ -192,11 +197,11 @@
 
 <!-- pagebreak -->
 
-### Slide 11 - Fair Tuning / 公平调参 · 1:00
+### Slide 11 - Fair Tuning / 公平调参 · 1:05
 
 **English**
 
-> A comparison is only fair if every model is tuned the same way.
+> We tried our best to build an environment where every model is tuned the same way, to make a fair comparison.
 
 *[Point to the fold diagram on the left. · 指左边折叠示意图]*
 
@@ -208,14 +213,14 @@
 
 *[Point to the "Chosen" columns of the table. · 指表格 Chosen 两列]*
 
-> Now look at what was chosen. Ridge took alpha 1000, the strongest penalty. Boosting took the smallest learning rate. These are the most cautious settings. **The tuner is telling us that the safest forecast stays close to "no change".**
+> Now look at what was chosen. Ridge took alpha 1000, the strongest penalty. Boosting took the smallest learning rate. The tuning results suggest that conservative predictions generalise better, possibly because the market data contains more noise than reliable predictive signals.
 
 **中文提词**
 
-- 同样的调参方式，比较才公平
+- 尽力让每个模型调参方式相同 → 公平比较
 - 只用训练期。蓝色拟合、绿色打分，窗口逐次扩大
 - 10 组设置、同时限、同种子。验证集不参与
-- 岭回归 alpha 1000，提升用最小学习率 → 接近“不变”
+- 岭回归 alpha 1000，提升用最小学习率 → 保守预测泛化更好（可能噪声多于信号）
 
 <!-- pagebreak -->
 

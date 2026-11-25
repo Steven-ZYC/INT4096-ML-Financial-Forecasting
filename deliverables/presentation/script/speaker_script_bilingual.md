@@ -3,7 +3,7 @@
 **Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 26 pages (18 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
-**Speech:** 17:10 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:50 inside the 20:00 slot)
+**Speech:** 17:25 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 20:05, which is 0:05 over the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English Version.**
@@ -16,7 +16,7 @@
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
 > | 1–5 | Introduction, Part 1 Data Selection | **Dong Yuankun** | 4:50 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:25 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:40 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:20 |
 > | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:45 |
@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,796 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,796 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
+| Pace | ~105 words per minute. The English below is 1,823 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,823 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -222,7 +222,7 @@ With our data selected and prepared, we can now move on to Processing and Featur
 
 # Part 2: Processing & Features, Part 3: Models & Tuning · 第二部分：数据处理与特征工程，第三部分：模型与调参
 
-**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:25
+**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:40
 
 Lines in *[square brackets]* are stage directions: what to point at or do. Do not read them aloud. Point with your hand or the laser at the part of the slide named, then speak. Sentences in **bold** are the ones to slow down on.
 
@@ -258,13 +258,17 @@ The rest are in the table. Now, the features.
 
 > Fourth, rolling windows need history. The first thirty days do not have enough past data, so we drop them instead of filling them in.
 >
-> Fifth, the features have very different scales. So in one setting, P2, we standardise them, fitted on the training rows only.
+> Fifth, the features have very different scales. So in one setting, P2, we standardise them, using the training rows only.
 >
 > Sixth, time order matters. A shuffled split would train on the future, so we split by time and drop one row at each boundary.
 
 ### Slide 7 — From One Day to Ten Features
 
 That may sound a bit abstract, so let's take apart one real day of Apple.
+
+*[Point to the left table, then the right one.]*
+
+On the left we have different columns of the raw data, while on the right are the features that we extract.
 
 *[Point to the small table on the left.]*
 
@@ -288,7 +292,7 @@ How jumpy has it been? How wide was the day? Was trading busier than usual? And 
 
 *[Point to the note under the table.]*
 
-That makes ten features. Apart from the weekday, **each one is a comparison, not a price.** And **none can see tomorrow**: we added fake future prices, and the earlier features did not change.
+That makes ten features. Apart from the weekday, **each one is a comparison.** And **none can see tomorrow**: we added fake future prices, and the earlier features did not change.
 
 ### Slide 8 — Every Model Gets the Same Data
 
@@ -296,7 +300,7 @@ You may be wondering: **did every model get the same data?**
 
 *[Trace the arrows across the top, left to right.]*
 
-Follow the arrows. Our daily OHLCV data becomes ten features, go through preprocessing, and enter one of the five models.
+Follow the arrows. Our daily OHLCV data becomes ten features, goes through preprocessing, and enters one of the five models.
 
 *[Point to the list on the right.]*
 
@@ -358,7 +362,7 @@ We also tried two neural networks, an MLP and an LSTM. Neither did better; that 
 
 ### Slide 11 — Fair Tuning
 
-A comparison is only fair if every model is tuned the same way.
+We tried our best to build an environment where every model is tuned the same way, to make a fair comparison.
 
 *[Point to the fold diagram on the left.]*
 
@@ -370,7 +374,7 @@ Every model gets the same deal: ten random settings, the same time limit, the sa
 
 *[Point to the "Chosen" columns of the table.]*
 
-Now look at what was chosen. Ridge took alpha 1000, the strongest penalty. Boosting took the smallest learning rate. These are the most cautious settings. **The tuner is telling us that the safest forecast stays close to "no change".**
+Now look at what was chosen. Ridge took alpha 1000, the strongest penalty. Boosting took the smallest learning rate. The tuning results suggest that conservative predictions generalise better, possibly because the market data contains more noise than reliable predictive signals.
 
 ### Slide 12 — What Else We Explored
 
@@ -426,6 +430,10 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 刚才讲的可能有点抽象，所以我们把苹果真实的一天拆开来看。
 
+*[先指左边表，再指右边表。]*
+
+左边是原始数据的各列，右边是我们提取出来的特征。
+
 *[指左边小表。]*
 
 每一天有开盘、最高、最低、收盘和成交量，简称 **OHLCV**。除了开盘价，其余我们都用到。
@@ -448,7 +456,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 *[指表格下方说明。]*
 
-这样就得到十个特征。除了星期几，**每一个都是比较，而不是价格。** 而且**没有一个能看到明天**：我们加入假的未来价格，之前的特征完全没变。
+这样就得到十个特征。除了星期几，**每一个都是比较。** 而且**没有一个能看到明天**：我们加入假的未来价格，之前的特征完全没变。
 
 ### 第 8 页 — 每个模型用的数据都一样
 
@@ -518,7 +526,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 ### 第 11 页 — 公平调参
 
-只有每个模型都用同样的方式调参，比较才公平。
+我们尽力营造一个让每个模型以同样方式调参的环境，从而做到公平比较。
 
 *[指向左边的折叠示意图。]*
 
@@ -530,7 +538,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 *[指向表格里 "Chosen" 两列。]*
 
-再看选中的值。岭回归选了 alpha 1000，最强的惩罚；梯度提升选了最小的学习率。这些都是最保守的设置。**调参器在告诉我们：最安全的预测就是贴近"不变"。**
+再看选中的值。岭回归选了 alpha 1000，最强的惩罚；梯度提升选了最小的学习率。调参结果表明，保守的预测泛化得更好，可能是因为市场数据里的噪声多于可靠的预测信号。
 
 ### 第 12 页 — 其他探索
 
@@ -732,7 +740,7 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:15** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:25** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
