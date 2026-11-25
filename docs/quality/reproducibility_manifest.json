@@ -1,7 +1,7 @@
 {
   "project": "INT4096 machine-learning coursework",
-  "generated_utc": "2026-11-24T02:29:09+00:00",
-  "git_commit": "c50fe0f75d0f4020964538beeda57ae55a78bd80",
+  "generated_utc": "2026-11-25T15:47:42+00:00",
+  "git_commit": "d15b45fb229182c2a913d42ce5a1d158c6ec04d1",
   "git_branch": "main",
   "git_dirty": true,
   "protocol_version": "v1.1-delta-target",
@@ -32,24 +32,24 @@
       "bytes": 7583
     },
     "docs/research/protocol.md": {
-      "sha256": "c98869f5f884c30664674048ce8c3265d055ad1f5ce930abcae5facd8fdb76ab",
-      "bytes": 16006
+      "sha256": "573993a436c1ebde0201085b3d0c889844d1081147472b14573f801e35696947",
+      "bytes": 16082
     },
     "deliverables/notebook/INT4096_Final_Colab.ipynb": {
       "sha256": "0f698be97ea5e93d2f155d08237d674346853fa5fbc48775ab926704ad262c6d",
       "bytes": 24769
     },
     "deliverables/report/INT4096_Final_Report.pdf": {
-      "sha256": "b8a0bb719c735b265aa006ed4191bc6def197c1328102f215016cbfcdd246dd9",
-      "bytes": 571562
+      "sha256": "e41e4a16079553f0e67def93cf1b1fbbfa6d307d688afe0ac34aaba10a1f92f9",
+      "bytes": 571661
     },
     "deliverables/report/word_count.txt": {
-      "sha256": "67cc7f4184ce30e5ba265e6fd98501b25f6bb8debb39f02ae92ea3b35fd6865b",
+      "sha256": "0026578aadbd7f83e6fd92c5076db3935eeb5611b7a1e88c14525fc57db9b29b",
       "bytes": 8590
     },
     "deliverables/presentation/INT4096_Presentation.pdf": {
-      "sha256": "160dd968301a8d50cabbefb087e5af898c216013c9600691c051fe24560f8b71",
-      "bytes": 619255
+      "sha256": "5aa0b77bb284882b1a7489772220d9bcce0bb341d2fbe04d7abd0b89be70bbdc",
+      "bytes": 619336
     },
     "experiments/analysis/uncertainty_and_signal.json": {
       "sha256": "4e3eee814eef039e39d30a14c717ec21c0292ab891914cbe78be7f8cf1e022d6",

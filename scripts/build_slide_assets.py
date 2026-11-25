@@ -415,6 +415,8 @@ def build_supplementary_macros(m: dict[str, str]) -> None:
     m["SupDevice"] = "GPU" if data.get("device", "").startswith("cuda") else "CPU"
     m["SupSeeds"] = str(len(data.get("seeds", [])))
     m["SupSeqLen"] = "20"
+    m["SupMaxEpochs"] = str(data["max_epochs"])
+    m["SupPatience"] = str(data["patience"])
 
 
 def build_metric_macros(m: dict[str, str]) -> None:

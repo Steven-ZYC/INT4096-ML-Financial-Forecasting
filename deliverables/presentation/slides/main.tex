@@ -817,6 +817,7 @@
           and the \SupSeeds-seed average beats every single seed (averaging noise).
     \item Hold-out log-loss \SupMlpLossLo--\SupMlpLossHi{} (MLP), \SupLstmLossLo--\SupLstmLossHi{} (LSTM): close to $\ln 2 = 0.693$, a coin flip.
     \item Add-on study (D14): tuned on the end of the training block; \SupSeeds{} seeds on a \SupDevice; test block sealed.
+    \item Training: Adam, batch 64, up to \SupMaxEpochs{} epochs; stop after \SupPatience{} without hold-out improvement.
   \end{itemize}
 \end{frame}
 

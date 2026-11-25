@@ -461,6 +461,8 @@ def write_supplementary_table() -> dict[str, str]:
         "SupLossLo": f"{min(losses):.3f}",
         "SupLossHi": f"{max(losses):.3f}",
         "SupSeeds": str(len(data.get("seeds", []))),
+        "SupMaxEpochs": str(data["max_epochs"]),
+        "SupPatience": str(data["patience"]),
     }
 
 

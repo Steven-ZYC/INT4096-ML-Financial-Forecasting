@@ -271,3 +271,20 @@ configuration, and whether human approval is required.
   folder, `src/int4096/paths.py` (all locations in one module). Path strings inside run manifests and
   the registry were rewritten mechanically to the new locations; every other field is unchanged.
 - **Requires human approval:** No.
+
+## D16 — Wording correction: what gradient boosting stops early on
+
+- **Date:** 2026-11-25
+- **Proposer:** project owner (Zhang Yancheng)
+- **Status:** Accepted. Documentation only; no code, data, metric or run changed.
+- **Issue:** protocol §5 said "Early stopping on validation only", which reads as if the project's
+  validation block decides when boosting stops.
+- **What the code does** (`src/int4096/models/hist_gradient_boosting.py`): `early_stopping=True` with
+  `validation_fraction=0.1` and `n_iter_no_change=20`. The 10% is drawn at random from the rows passed
+  to `fit()` (training rows, or the training part of a CV fold), so it is not in time order. The
+  validation block is never passed to `fit()`. `max_iter` is therefore an upper limit.
+- **Choice:** correct the protocol wording, and state this in the report. The protocol version stays
+  `v1.1-delta-target` because behaviour and every protocol value are unchanged.
+- **Also documented:** the report and Backup 6 now state the MLP / LSTM training settings (D14). The
+  number of epochs actually run was not recorded and is not quoted.
+- **Requires human approval:** No further approval; the owner requested it.

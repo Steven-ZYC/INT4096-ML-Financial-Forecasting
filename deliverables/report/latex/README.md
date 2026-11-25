@@ -1,8 +1,8 @@
 # LaTeX Report — Build and Provenance
 
 Compiled output: [`../final/INT4096_Final_Report.pdf`](../final/INT4096_Final_Report.pdf)
-(10 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **2,399 body + 100 headings = 2,499**.
+(11 pages, A4).
+Word count: [`../word_count.txt`](../word_count.txt) — **2,387 body + 103 headings = 2,490**.
 
 ## Build
 
@@ -32,7 +32,7 @@ Verified: two consecutive `--clean` builds, and a build from a **fresh clone of
 the remote**, all produce the identical file (and a clean working tree):
 
 ```
-16f53649e38097e648e1ffc38a2b359c72da0995f66b812a598366e31d76d978  INT4096_Final_Report.pdf
+e41e4a16079553f0e67def93cf1b1fbbfa6d307d688afe0ac34aaba10a1f92f9  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -65,10 +65,10 @@ oral guidance, not as a published rule, so the report states both.
 
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 2,399** — body prose across `main.tex` and every `\input` section.
-- **Words in headers: 100** — section and paragraph headings.
-- **Narrative total: 2,499.**
-- **Words outside text: 493** — figure captions and float content, excluded from
+- **Words in text: 2,387** — body prose across `main.tex` and every `\input` section.
+- **Words in headers: 103** — section and paragraph headings.
+- **Narrative total: 2,490.**
+- **Words outside text: 541** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.
 
@@ -76,14 +76,14 @@ Not counted as narrative: bibliography entries, table bodies, the title block,
 LaTeX markup and citation keys.
 
 This is a reproducible count, not a claim about the instructor's own tool. If
-their counter includes captions, the figure would be about 2,990 and the owner
+their counter includes captions, the figure would be about 3,030 and the owner
 should discuss it; `deliverables/report/word_count.txt` records the exact configuration used.
 
 ## Layout checks performed
 
-- `pdfinfo`: A4, 10 pages.
-- Log: 0 overfull boxes, 0 underfull boxes, 0 warnings (after fixing a wide inline
-  formula and two table widths).
+- A4, 11 pages.
+- Log: 0 overfull boxes, 0 warnings; 2 underfull boxes in the generated neural-network
+  table (`generated/dl_table.tex`).
 - `pdftotext`: 0 unresolved `??` references; all 7 figures and 4 tables present;
   10 citations rendered.
 

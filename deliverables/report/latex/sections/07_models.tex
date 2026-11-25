@@ -1,17 +1,18 @@
 \section{Model Selection and Baselines}
 \label{sec:models}
 
-The five families differ in mechanism rather than to reach a count: a linear
+The five families differ in mechanism: a linear
 baseline (ridge with a small penalty) as a learned floor, Ridge searched over a wide
 penalty range, RBF support vector regression as a kernel method, a random forest as
-a bagged ensemble, and histogram gradient boosting as a boosted ensemble. Neural
+a bagged ensemble, and histogram gradient boosting as a boosted ensemble. Gradient
+boosting also stops early, using a random 10\% of its training rows, so its
+iteration setting is an upper limit. Neural
 networks stay out of the main comparison because the handout discourages deep
 learning; an experimental test is reported separately (Section~\ref{sec:dl}).
 
-The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. It is not a straw man: for a near-random-walk series it is strong, free, and
+The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. For a near-random-walk series it is strong, free, and
 defines the zero of the skill scale \citep{makridakis2018m4,hyndman2021fpp3}.
 
-Every family is built through one shared code path, so each receives identical
-feature columns in identical order and any scaler sits inside its pipeline where
-it is refitted per fold. Tests assert that column identity and that a fixed seed
-is deterministic.
+One shared code path gives every family identical feature columns, and any
+scaler is refitted per fold inside its pipeline. Tests check column identity and
+seed determinism.

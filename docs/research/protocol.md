@@ -189,7 +189,7 @@ A test asserts the purge explicitly.
 | `ridge` | Regularized linear | yes | Transparent reference |
 | `svr` | Kernel method (RBF) | **strongly** | Demonstrates scaling sensitivity |
 | `random_forest` | Bagging | no (negative control) | Weak extrapolation |
-| `hist_gradient_boosting` | Boosting | no | Early stopping on validation only |
+| `hist_gradient_boosting` | Boosting | no | Early stopping on a random 10% of the training rows passed to `fit()`; the validation block is not used (D16) |
 | `mlp` *(optional)* | Neural | yes | **Requires owner approval (D2)** |
 
 Fairness rules:
