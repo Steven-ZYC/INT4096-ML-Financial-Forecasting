@@ -51,38 +51,41 @@
 
 **English**
 
+> That may sound a bit abstract, so let's take apart one real day of Apple.
+
 *[Point to the small table on the left. · 指左边小表]*
 
-> To make this concrete, let's look at one real day of Apple's data. On the left, its prices; on the right, its ten features.
+> Each day gives us open, high, low, close and volume: **OHLCV** for short. We use all but the open.
 
-*[Point to "Close today" and "Close yesterday" on the left, then to ret_1. · 指左边今天、昨天收盘，再指 ret_1]*
+*[Point to ret_1. · 指 ret_1]*
 
-> First, today's close against yesterday's close. That change, in percent, is the one-day return.
+> But a price alone tells a model little. So we ask it questions. How much did it move since yesterday? That is the one-day return.
 
 *[Point to ret_5 and ret_20. · 指 ret_5 和 ret_20]*
 
-> Then the same against five days ago and twenty days ago: the short move and the longer move.
+> And since five or twenty days ago?
 
 *[Point to ma_gap_5 and ma_gap_20. · 指 ma_gap_5 和 ma_gap_20]*
 
-> Next, today's close against its five-day and twenty-day average: is the price above or below its recent trend?
+> Is it above or below its recent average?
 
 *[Move down the remaining rows. · 往下指过其余几行]*
 
-> Then volatility, how jumpy the price was; range, how wide the day was; volume change; and the weekday. Notice that **every one is a comparison, not a price.**
+> How jumpy has it been? How wide was the day? Was trading busier than usual? And which weekday is it?
 
 *[Point to the note under the table. · 指表格下方说明]*
 
-> Now the key point: **every feature uses only today and earlier days, never tomorrow.** We test it: we add fake future prices, and the earlier rows must not change.
+> That makes ten features. Apart from the weekday, **each one is a comparison, not a price.** And **none can see tomorrow**: we added fake future prices, and the earlier features did not change.
 
 **中文提词**
 
-- 引入：To make this concrete → 看苹果真实的一天；左边价格，右边十个特征
-- 今天收盘 vs 昨天收盘 → 一日收益率
-- 再比 5 天前、20 天前 → 短期和较长期变化
-- 今天收盘 vs 5 日、20 日均价 → 在趋势上方还是下方
-- 波动率、日内幅度、成交量变化、星期几 → 都是比较，不是价格
-- 关键：只用今天和过去；加假未来数据，旧行不变
+- 引入：刚才可能有点抽象 → 拆开苹果真实的一天
+- 开高低收量 = OHLCV；开盘价没用到
+- 价格本身信息少 → 对它提问：比昨天动了多少 = 一日收益率
+- 比 5 天、20 天前呢？
+- 在近期均价上方还是下方？
+- 跳动大不大、当天多宽、交易活跃吗、星期几
+- （重读）十个特征：除星期几都是比较；看不到明天（假未来数据测试）
 
 <!-- pagebreak -->
 
@@ -94,7 +97,7 @@
 
 *[Trace the arrows across the top, left to right. · 从左到右沿顶部箭头指]*
 
-> Follow the arrows. Daily prices become ten features, go through preprocessing, and enter one of the five models.
+> Follow the arrows. Our daily OHLCV data becomes ten features, go through preprocessing, and enter one of the five models.
 
 *[Point to the list on the right. · 指右边列表]*
 
@@ -115,7 +118,7 @@
 **中文提词**
 
 - 提问：每个模型拿到一样的数据吗？
-- 价格 → 十个特征 → 预处理 → 模型
+- OHLCV → 十个特征 → 预处理 → 模型
 - 同样的行、特征、目标和切分
 - P0 原样。P2 只用训练期拟合标准化
 - 收益率很小，星期几大约大一百倍 → 尺度影响 SVR，树不受影响

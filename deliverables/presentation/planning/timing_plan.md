@@ -12,7 +12,7 @@
 
 | Component | Time |
 |---|---|
-| Formal speech (18 slides, 1,798 spoken English words at ~105 wpm) | **17:10** |
+| Formal speech (18 slides, 1,796 spoken English words at ~105 wpm) | **17:10** |
 | Slide changes and four handovers | 0:40 |
 | Q&A | 2:00 |
 | **Planned total** (0:10 of slack inside the 20-minute limit `[A]`) | **19:50** |
@@ -39,8 +39,8 @@
 | 4 | Why These Two: Two Markets With Different Characteristics | 93 | 0:55 | 3:45 |
 | 5 | Selection Conditions: From Raw Bars to Modelling Rows | 115 | 1:05 | 4:50 |
 | 6 | Problems in the Raw Data, and How We Handled Each | 125 | 1:10 | 6:00 |
-| 7 | From One Day's Prices to Ten Features | 131 | 1:15 | 7:15 |
-| 8 | Every Model Gets the Same Data: One Shared Pipeline | 124 | 1:10 | 8:25 |
+| 7 | From One Day's Prices to Ten Features | 127 | 1:15 | 7:15 |
+| 8 | Every Model Gets the Same Data: One Shared Pipeline | 126 | 1:10 | 8:25 |
 | 9 | Chronological Split, and Proof That the Pipeline Cannot Peek | 88 | 0:50 | 9:15 |
 | 10 | Five Models Plus a Baseline: Why Each One Is There | 118 | 1:05 | 10:20 |
 | 11 | Fine-Tuning: The Same Search and Budget for Every Model | 106 | 1:00 | 11:20 |

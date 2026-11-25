@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,798 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,798 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
+| Pace | ~105 words per minute. The English below is 1,796 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,796 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -264,29 +264,31 @@ The rest are in the table. Now, the features.
 
 ### Slide 7 — From One Day to Ten Features
 
+That may sound a bit abstract, so let's take apart one real day of Apple.
+
 *[Point to the small table on the left.]*
 
-To make this concrete, let's look at one real day of Apple's data. On the left, its prices; on the right, its ten features.
+Each day gives us open, high, low, close and volume: **OHLCV** for short. We use all but the open.
 
-*[Point to "Close today" and "Close yesterday" on the left, then to ret_1.]*
+*[Point to ret_1.]*
 
-First, today's close against yesterday's close. That change, in percent, is the one-day return.
+But a price alone tells a model little. So we ask it questions. How much did it move since yesterday? That is the one-day return.
 
 *[Point to ret_5 and ret_20.]*
 
-Then the same against five days ago and twenty days ago: the short move and the longer move.
+And since five or twenty days ago?
 
 *[Point to ma_gap_5 and ma_gap_20.]*
 
-Next, today's close against its five-day and twenty-day average: is the price above or below its recent trend?
+Is it above or below its recent average?
 
 *[Move down the remaining rows.]*
 
-Then volatility, how jumpy the price was; range, how wide the day was; volume change; and the weekday. Notice that **every one is a comparison, not a price.**
+How jumpy has it been? How wide was the day? Was trading busier than usual? And which weekday is it?
 
 *[Point to the note under the table.]*
 
-Now the key point: **every feature uses only today and earlier days, never tomorrow.** We test it: we add fake future prices, and the earlier rows must not change.
+That makes ten features. Apart from the weekday, **each one is a comparison, not a price.** And **none can see tomorrow**: we added fake future prices, and the earlier features did not change.
 
 ### Slide 8 — Every Model Gets the Same Data
 
@@ -294,7 +296,7 @@ You may be wondering: **did every model get the same data?**
 
 *[Trace the arrows across the top, left to right.]*
 
-Follow the arrows. Daily prices become ten features, go through preprocessing, and enter one of the five models.
+Follow the arrows. Our daily OHLCV data becomes ten features, go through preprocessing, and enter one of the five models.
 
 *[Point to the list on the right.]*
 
@@ -422,29 +424,31 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 ### 第 7 页 — 从一天的数据到十个特征
 
-*[指向左边的小表。]*
+刚才讲的可能有点抽象，所以我们把苹果真实的一天拆开来看。
 
-为了讲得具体一点，我们来看苹果真实的一天。左边是它的价格，右边是它的十个特征。
+*[指左边小表。]*
 
-*[指向左边的"今天收盘"和"昨天收盘"，再指 ret_1。]*
+每一天有开盘、最高、最低、收盘和成交量，简称 **OHLCV**。除了开盘价，其余我们都用到。
 
-第一，今天收盘对比昨天收盘，变化的百分比就是一日收益率。
+*[指 ret_1。]*
 
-*[指向 ret_5 和 ret_20。]*
+但单独一个价格对模型来说信息很少，所以我们对它提问题。比昨天动了多少？这就是一日收益率。
 
-然后同样对比 5 天前和 20 天前：短期变化和较长期变化。
+*[指 ret_5 和 ret_20。]*
 
-*[指向 ma_gap_5 和 ma_gap_20。]*
+那比 5 天前、20 天前呢？
 
-接着，今天收盘对比 5 日和 20 日均价：价格在近期趋势的上方还是下方？
+*[指 ma_gap_5 和 ma_gap_20。]*
+
+它在近期均价的上方还是下方？
 
 *[往下指过其余几行。]*
 
-然后是波动率（价格跳得多厉害）、幅度（当天波动多宽）、成交量变化，以及星期几。请注意，**每一个都是比较，而不是价格。**
+最近跳动大不大？当天波动有多宽？交易是否比平时活跃？今天星期几？
 
-*[指向表格下方的说明。]*
+*[指表格下方说明。]*
 
-关键点来了：**每个特征只用今天和以前的数据，绝不用明天。** 我们用测试来保证：加入假的未来价格，之前的行必须完全不变。
+这样就得到十个特征。除了星期几，**每一个都是比较，而不是价格。** 而且**没有一个能看到明天**：我们加入假的未来价格，之前的特征完全没变。
 
 ### 第 8 页 — 每个模型用的数据都一样
 
@@ -452,7 +456,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 *[从左到右沿着上方的箭头指过去。]*
 
-跟着箭头看：每日价格变成十个特征，经过预处理，进入五个模型中的一个。
+跟着箭头看：每日的 OHLCV 数据变成十个特征，经过预处理，进入五个模型中的一个。
 
 *[指向右边的列表。]*
 
