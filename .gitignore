@@ -58,7 +58,7 @@ experiments/supplementary/*/*_smoke/
 deliverables/presentation/slides/main.pdf
 deliverables/report/latex/main.pdf
 # Generated from speaker_script_bilingual.md by scripts/build_script_pdf.py
-deliverables/presentation/script/speaker_script_bilingual.tex
+deliverables/presentation/script/*.tex
 
 # Personal data: member names + student IDs are kept local only.
 # Student IDs must never enter a commit (see docs/project/github_push.md).
