@@ -4,7 +4,7 @@ The Markdown in `deliverables/presentation/script/speaker_script_bilingual.md` i
 truth; this script converts it to LaTeX (xelatex + xeCJK, with a CJK font) and
 compiles a PDF next to it. It handles exactly the constructs used in that file:
 ATX headings, block quotes, pipe tables, bullet and checkbox lists, bold inline,
-inline code, and rule lines.
+inline code, rule lines, and explicit page breaks.
 
 Anything it does not recognise is emitted as a paragraph rather than dropped, so
 text can never silently disappear from the printed script.
@@ -129,6 +129,12 @@ def convert(markdown: str) -> str:
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
+
+        if stripped == "<!-- pagebreak -->":
+            close_blocks()
+            out.append(r"\clearpage")
+            i += 1
+            continue
 
         # ---- table block -------------------------------------------------
         if stripped.startswith("|") and i + 1 < len(lines) and re.match(

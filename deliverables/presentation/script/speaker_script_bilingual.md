@@ -3,7 +3,7 @@
 **Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 26 pages (18 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
-**Speech:** 17:05 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:45 inside the 20:00 slot)
+**Speech:** 16:50 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:30 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English Version.**
@@ -16,7 +16,7 @@
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
 > | 1–5 | Introduction, Part 1 Data Selection | **Dong Yuankun** | 4:50 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:20 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:05 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:20 |
 > | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:45 |
@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,784 spoken words (stage directions not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,784 个要念的词（不含动作提示），约 17 分钟。 |
+| Pace | ~105 words per minute. The English below is 1,758 spoken words (stage directions not counted), i.e. about 16 minutes 45 seconds. | 约每分钟 105 词；英文共 1,758 个要念的词（不含动作提示），约 16 分 45 秒。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -222,7 +222,7 @@ With our data selected and prepared, we can now move on to Processing and Featur
 
 # Part 2: Processing & Features, Part 3: Models & Tuning · 第二部分：数据处理与特征工程，第三部分：模型与调参
 
-**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:20
+**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:05
 
 Lines in *[square brackets]* are stage directions: what to point at or do. Do not read them aloud. Point with your hand or the laser at the part of the slide named, then speak. Sentences in **bold** are the ones to slow down on.
 
@@ -232,43 +232,45 @@ Lines in *[square brackets]* are stage directions: what to point at or do. Do no
 
 ### Slide 6 — Problems in the Raw Data
 
-Thank you. Part two is processing and feature engineering.
+Thank you, Dong Yuankun. Now let's move on to Part Two, Processing and Feature Engineering.
 
-Raw prices cannot go straight into a model. This table shows six problems. Read each row from left to right: the problem, why it matters, and what we did.
+This table shows six issues. I'll highlight the three most important ones.
 
-*[Point to the first row.]*
+*[Point to the first three rows.]*
 
-The first row is the most important: prices drift. For example, in our training years Bitcoin never closed above 77,000 dollars. In the validation year, it reached almost 125,000. A model trained on raw prices cannot handle levels it has never seen.
+First, price levels change over time, so we use returns and ratios as features.
 
-*[Point to the last cell of the first row.]*
+Second, adjusted prices can be revised later, so we use the raw closing price as our target.
 
-So, as the last column says, we give the model ratios instead of prices.
+Third, Apple and Bitcoin follow different trading calendars, so we predict the next close on each asset's own calendar.
 
-*[Sweep your hand down the other five rows.]*
-
-The other five rows all follow one rule, and it runs through our whole project: **use only what was known at that moment.**
+Given the time, I'll leave the details in the table and move on to our features.
 
 ### Slide 7 — From One Day to Ten Features
 
 *[Point to the small table on the left.]*
 
-On the left is one real day: Apple, the twenty-first of November 2024. On the right are the ten features we compute from it.
+On the left is one real day for Apple. On the right are its ten features.
 
-*[Point to the first row of the right table, ret_1.]*
+*[Point to "Close today" and "Close yesterday" on the left, then to ret_1.]*
 
-Let's work out the first one together. Apple closed at 228.52, after 229.00 the day before. So the one-day return is minus 0.21 percent. The next row does the same against five and twenty days ago.
+First, today's close against yesterday's close. That change, in percent, is the one-day return.
 
-*[Point to ma_gap_5.]*
+*[Point to ret_5 and ret_20.]*
 
-Next, the close was 0.33 percent above its five-day average. That is the moving-average gap.
+Then the same against five days ago and twenty days ago: the short move and the longer move.
+
+*[Point to ma_gap_5 and ma_gap_20.]*
+
+Next, today's close against its five-day and twenty-day average: is the price above or below its recent trend?
 
 *[Move down the remaining rows.]*
 
-Then volatility, range and volume change. Notice that **every one is a ratio, not a price.** And the last row: Thursday is coded as three.
+Then volatility, how jumpy the price was; range, how wide the day was; volume change; and the weekday. Notice that **every one is a comparison, not a price.**
 
 *[Point to the note under the table.]*
 
-Now the key point: **every feature uses only this day and earlier days.** We test it by adding fake future prices; the earlier rows must not change.
+Now the key point: **every feature uses only today and earlier days, never tomorrow.** We test it: we add fake future prices, and the earlier rows must not change.
 
 ### Slide 8 — Every Model Gets the Same Data
 
@@ -288,11 +290,11 @@ There is just one switch. P0 leaves the features as they are. P2 standardises th
 
 *[Point to the table at the bottom left.]*
 
-Why? Compare these rows. A daily return is about 0.02 in size; the weekday is about 1.4, a hundred times larger. Without scaling, the weekday dominates SVR. Trees do not care.
+Why? Compare these rows. A daily return is a tiny number, but the weekday is about a hundred times larger. Without scaling, the weekday dominates SVR. Trees do not care.
 
 *[Point to the last box of the diagram.]*
 
-Finally, the forecast is today's close plus the predicted change. On our example day: 228.52 plus 10 cents, so 228.62.
+Finally, the forecast is today's close plus the predicted change. So the model only has to learn the change, not the whole price.
 
 ### Slide 9 — Splitting by Time
 
@@ -372,43 +374,45 @@ So, how well did all these models do? Zhang Haoyu will show you.
 
 ### 第 6 页 — 原始数据的问题
 
-谢谢。第二部分是数据处理与特征工程。
+谢谢 Dong Yuankun。接下来进入第二部分，数据处理与特征工程。
 
-原始价格不能直接放进模型。这张表列出了六个问题。每一行从左往右读：问题、为什么重要、我们怎么做。
+这张表有六个问题，我挑最重要的三个来说。
 
-*[指向第一行。]*
+*[指表格前三行。]*
 
-第一行最重要：价格会漂移。例如，在训练年份里，比特币的收盘价从没超过 77,000 美元；到了验证年份，它涨到了接近 125,000。用原始价格训练的模型无法处理它从没见过的水平。
+第一，价格水平会随时间变化，所以我们用收益率和比率来做特征。
 
-*[指向第一行最右边那一格。]*
+第二，复权价可能事后修订，所以我们用原始收盘价作为预测目标。
 
-所以，正如最后一列写的，我们给模型的是比率，而不是价格。
+第三，苹果和比特币的交易日历不同，所以我们分别按各自的日历预测下一次收盘。
 
-*[手从上往下扫过其余五行。]*
-
-其余五行都遵循同一条规则，而且这条规则贯穿整个项目：**只用当时已经知道的信息。**
+时间有限，细节留在表里。接下来我们看特征。
 
 ### 第 7 页 — 从一天的数据到十个特征
 
 *[指向左边的小表。]*
 
-左边是真实的一天：苹果，2024 年 11 月 21 日。右边是我们从它算出的十个特征。
+左边是苹果真实的一天，右边是它的十个特征。
 
-*[指向右表第一行 ret_1。]*
+*[指向左边的"今天收盘"和"昨天收盘"，再指 ret_1。]*
 
-我们一起算第一个。苹果当天收盘 228.52，前一天是 229.00，所以一日收益率是 −0.21%。下一行是同样的算法，对比 5 天前和 20 天前。
+第一，今天收盘对比昨天收盘，变化的百分比就是一日收益率。
 
-*[指向 ma_gap_5。]*
+*[指向 ret_5 和 ret_20。]*
 
-接着，收盘价比 5 日均价高 0.33%，这就是均线偏离。
+然后同样对比 5 天前和 20 天前：短期变化和较长期变化。
+
+*[指向 ma_gap_5 和 ma_gap_20。]*
+
+接着，今天收盘对比 5 日和 20 日均价：价格在近期趋势的上方还是下方？
 
 *[往下指过其余几行。]*
 
-然后是波动率、幅度和成交量变化。请注意，**每一个都是比率，而不是价格。** 最后一行：星期四编码为 3。
+然后是波动率（价格跳得多厉害）、幅度（当天波动多宽）、成交量变化，以及星期几。请注意，**每一个都是比较，而不是价格。**
 
 *[指向表格下方的说明。]*
 
-关键点来了：**每个特征只用这一天及之前的数据。** 我们用测试来保证：加入假的未来价格，之前的行必须完全不变。
+关键点来了：**每个特征只用今天和以前的数据，绝不用明天。** 我们用测试来保证：加入假的未来价格，之前的行必须完全不变。
 
 ### 第 8 页 — 每个模型用的数据都一样
 
@@ -428,11 +432,11 @@ So, how well did all these models do? Zhang Haoyu will show you.
 
 *[指向左下方的表格。]*
 
-为什么？比较这几行。日收益率的量级约 0.02，星期几约 1.4，大了一百倍。不做缩放的话，星期几会主导 SVR。树不受影响。
+为什么？比较这几行。日收益率是一个很小的数，而星期几大了大约一百倍。不做缩放的话，星期几会主导 SVR。树不受影响。
 
 *[指向流程图最后一个方框。]*
 
-最后，预测值等于今天的收盘价加上预测的变化量。在例子那天：228.52 加 10 美分，也就是 228.62。
+最后，预测值等于今天的收盘价加上预测的变化量。所以模型只需要学变化，而不是整个价格。
 
 ### 第 9 页 — 按时间切分
 
@@ -692,12 +696,12 @@ Questions are answered by Dong Yuankun, Zhang Yancheng or Zhang Haoyu. Lau Pak H
 
 # If you are running over · 超时怎么办
 
-Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈9:10** (see `timing_plan.md`).
+Check the clock at the **end of slide 5** (≈4:50) and the **end of slide 9**: it should read **≈8:55** (see `timing_plan.md`).
 
 | Situation | Cut | 中文 |
 |---|---|---|
-| 9:40 or later after slide 9 | Slide 10: drop the neural-network sentence. Slide 12: skip the "target" sentence. (~20 s) | 第 10 页去掉神经网络那句；第 12 页跳过"目标"那句，省约 20 秒。 |
-| 10:10 or later | Slide 11: skip the "For example…" walkthrough of the folds. (~10 s) | 再跳过第 11 页"例如……"那段，省约 10 秒。 |
+| 9:25 or later after slide 9 | Slide 10: drop the neural-network sentence. Slide 12: skip the "target" sentence. (~20 s) | 第 10 页去掉神经网络那句；第 12 页跳过"目标"那句，省约 20 秒。 |
+| 9:55 or later | Slide 11: shorten the fold-diagram paragraph to one sentence. (~10 s) | 再把第 11 页示意图那段压成一句，省约 10 秒。 |
 | **Never cut** | Slide 13 (metrics), slide 14 (results), slide 15 (intervals). | **绝不能砍**第 13、14、15 页。 |
 
 # Rehearsal checklist · 排练清单
