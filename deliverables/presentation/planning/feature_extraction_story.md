@@ -368,13 +368,13 @@ flowchart LR
 | 3 | 1 | What We Used, and Exactly Where It Came From（含两个下载链接） | 1.1、参考文献·数据来源 | 0:35 |
 | 4 | 1 | Why These Two: Two Markets With Different Characteristics | 1.1 | 0:55 |
 | 5 | 1 | Selection Conditions: From Raw Bars to Modelling Rows | 1.2–1.3 | 1:05 |
-| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:00 |
+| 6 | 2 | Problems in the Raw Data, and How We Handled Each | 1.1、2.1、2.4–2.5 | 1:05 |
 | 7 | 2 | From One Day's Prices to Ten Features（2024-11-21 苹果真实一行逐项计算） | 2.1–2.2 | 1:15 |
 | 8 | 2 | Every Model Gets the Same Data: One Shared Pipeline（同一数据、P0/P2 唯一开关、预测变化量） | 2.2、2.3、2.5 | 1:10 |
-| 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 0:55 |
+| 9 | 2 | Chronological Split, and Proof That the Pipeline Cannot Peek | 2.4、2.6 | 0:50 |
 | 10 | 3 | Five Models Plus a Baseline: Why Each One Is There | 3.1 | 1:05 |
 | 11 | 3 | Fine-Tuning: The Same Search and Budget for Every Model（网格与选中值由脚本生成） | 3.2–3.3 | 1:00 |
-| 12 | 3 | What We Explored Beyond Hyperparameters | 2.3、2.5、3.3、4.4 | 0:45 |
+| 12 | 3 | What We Explored Beyond Hyperparameters | 2.3、2.5、3.3、4.4 | 0:55 |
 | 13 | 4 | Four Metrics, Each With a Job | 4.1 | 1:05 |
 | 14 | 4 | Results: All 20 Runs Land Within 1% of the Baseline | 4.2 | 0:50 |
 | 15 | 4 | How Certain? Every Interval Includes Zero | 4.3、4.5 | 0:55 |

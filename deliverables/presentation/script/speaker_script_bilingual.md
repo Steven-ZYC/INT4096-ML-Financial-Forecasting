@@ -3,7 +3,7 @@
 **Deck:** `deliverables/presentation/INT4096_Presentation.pdf` — 26 pages (18 narrative + 6 backup + 2 references)
 **Structure:** one part per pipeline stage: Data Selection → Processing & Features → Models & Tuning → Evaluation → Teaching Design
 **Clock:** `timing_plan.md` · **Key messages:** `speaker_notes.md` · **Story:** `deliverables/presentation/planning/feature_extraction_story.md`
-**Speech:** 16:55 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:35 inside the 20:00 slot)
+**Speech:** 17:05 planned (+0:40 for four handovers and slide changes, +2:00 Q&A = 19:45 inside the 20:00 slot)
 
 > ### How to use this document · 使用方法
 > **The presentation is delivered in English. Read only the English Version.**
@@ -16,7 +16,7 @@
 > | Slides | Part | Speaker | Time |
 > |---|---|---|---:|
 > | 1–5 | Introduction, Part 1 Data Selection | **Dong Yuankun** | 4:50 |
-> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:10 |
+> | 6–12 | Part 2 Processing & Features, Part 3 Models & Tuning | **Zhang Yancheng** | 7:20 |
 > | 13–15 | Part 4 Evaluation | **Zhang Haoyu** | 2:50 |
 > | 16–17 | Part 5 Teaching Design and website | **Lau Pak Hei** | 1:20 |
 > | 18 | Part 5 Summary and close | **Lui Shing Lam** | 0:45 |
@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,761 words, i.e. about 16 minutes 50 seconds. | 约每分钟 105 词；英文共 1,761 词，约 16 分 50 秒。 |
+| Pace | ~105 words per minute. The English below is 1,784 spoken words (stage directions not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,784 个要念的词（不含动作提示），约 17 分钟。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -222,7 +222,11 @@ With our data selected and prepared, we can now move on to Processing and Featur
 
 # Part 2: Processing & Features, Part 3: Models & Tuning · 第二部分：数据处理与特征工程，第三部分：模型与调参
 
-**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:10
+**Speaker / 讲者:** Zhang Yancheng · **Slides / 页码:** 6–12 · **Target speaking time / 目标时长:** about 7:20
+
+Lines in *[square brackets]* are stage directions: what to point at or do. Do not read them aloud. Point with your hand or the laser at the part of the slide named, then speak. Sentences in **bold** are the ones to slow down on.
+
+方括号 *[ ]* 里是动作提示：指向哪里、做什么，不要念出来。先指到屏幕上对应的位置，再开口。**粗体**句子放慢、加重。
 
 ## English Version
 
@@ -230,81 +234,137 @@ With our data selected and prepared, we can now move on to Processing and Featur
 
 Thank you. Part two is processing and feature engineering.
 
-Raw prices cannot go straight into a model. This table lists six problems, and what we did about each one.
+Raw prices cannot go straight into a model. This table shows six problems. Read each row from left to right: the problem, why it matters, and what we did.
 
-The biggest problem is that prices drift. For example, in our training years Bitcoin never closed above 77,000 dollars. In the validation year it reached almost 125,000. A model trained on raw prices cannot handle levels it has never seen.
+*[Point to the first row.]*
 
-So instead of prices, we give the model ratios: how much the price moved, and how far it sits from its recent average.
+The first row is the most important: prices drift. For example, in our training years Bitcoin never closed above 77,000 dollars. In the validation year, it reached almost 125,000. A model trained on raw prices cannot handle levels it has never seen.
 
-The other problems follow one simple rule: **use only what was known at that moment.**
+*[Point to the last cell of the first row.]*
+
+So, as the last column says, we give the model ratios instead of prices.
+
+*[Sweep your hand down the other five rows.]*
+
+The other five rows all follow one rule, and it runs through our whole project: **use only what was known at that moment.**
 
 ### Slide 7 — From One Day to Ten Features
 
-Here is how one real day becomes ten numbers: Apple, on the twenty-first of November 2024.
+*[Point to the small table on the left.]*
 
-It closed at 228.52 dollars, after 229.00 the day before. So the one-day return is minus 0.21 percent. Five and twenty days back give two more returns.
+On the left is one real day: Apple, the twenty-first of November 2024. On the right are the ten features we compute from it.
 
-The close was 0.33 percent above its five-day average. That is the moving-average gap, and we also use a twenty-day one.
+*[Point to the first row of the right table, ret_1.]*
 
-Volatility measures how much the price jumped around over ten and thirty days. Range is the day's high minus its low, divided by the close. Volume change compares today's volume with its recent average. And Thursday is coded as three.
+Let's work out the first one together. Apple closed at 228.52, after 229.00 the day before. So the one-day return is minus 0.21 percent. The next row does the same against five and twenty days ago.
 
-**Every feature uses only this day and earlier days.** Our tests add fake future prices to the data, and the earlier features must not change.
+*[Point to ma_gap_5.]*
+
+Next, the close was 0.33 percent above its five-day average. That is the moving-average gap.
+
+*[Move down the remaining rows.]*
+
+Then volatility, range and volume change. Notice that **every one is a ratio, not a price.** And the last row: Thursday is coded as three.
+
+*[Point to the note under the table.]*
+
+Now the key point: **every feature uses only this day and earlier days.** We test it by adding fake future prices; the earlier rows must not change.
 
 ### Slide 8 — Every Model Gets the Same Data
 
-So, **did every model get the same data?** Yes.
+You may be wondering: **did every model get the same data?**
 
-Every model gets the same rows, the same ten features, the same target, and the same splits. Only the algorithm changes.
+*[Trace the arrows across the top, left to right.]*
 
-There is one switch: preprocessing. P0 leaves the features as they are. P2 standardises them, using the average and spread of the training years only.
+Follow the arrows. Daily prices become ten features, go through preprocessing, and enter one of the five models.
 
-Why does this matter? A daily return is about 0.02 in size, but the weekday is about 1.4. Without scaling, the weekday dominates models that measure distance, like SVR. Trees split one feature at a time, so they do not care.
+*[Point to the list on the right.]*
 
-Finally, the model predicts tomorrow's **change**, and we add it to today's close. On our example day, SVR predicted plus 10 cents, so the forecast was 228.62.
+As the list on the right says, all five models get the same rows, features, target and splits. **Only the algorithm changes.**
+
+*[Point to the third box, "P0 / P2".]*
+
+There is just one switch. P0 leaves the features as they are. P2 standardises them, using the training years only.
+
+*[Point to the table at the bottom left.]*
+
+Why? Compare these rows. A daily return is about 0.02 in size; the weekday is about 1.4, a hundred times larger. Without scaling, the weekday dominates SVR. Trees do not care.
+
+*[Point to the last box of the diagram.]*
+
+Finally, the forecast is today's close plus the predicted change. On our example day: 228.52 plus 10 cents, so 228.62.
 
 ### Slide 9 — Splitting by Time
 
-Next, we split the data by time: the first 60 percent for training, the next 20 for validation, and the last 20 for testing. The test block stays sealed.
+*[Trace the bar at the top from left to right.]*
 
-At each boundary we drop one row. Why? Our label is tomorrow's close. So the answer of the last training row would be the first validation price. Dropping one row keeps them apart.
+Next, the split. Time runs from left to right: sixty percent to train, twenty to validate, twenty to test. The grey test block stays sealed.
 
-We also attacked our own pipeline. A script injected six common leakage mistakes, one at a time. Our tests caught all six.
+*[Point to the two small red boxes, "Drop 1 row".]*
 
-From here on, **every model-performance number comes from the validation block.**
+Notice these two small red boxes. At each boundary we drop one row. Why? Our label is tomorrow's close, so the last training answer would be the first validation price.
+
+*[Point to the right column.]*
+
+We also attacked our own pipeline with six common leakage mistakes, one at a time. **All six were caught.**
+
+*[Point to the line at the bottom.]*
+
+So please remember: **every model-performance number from here on comes from the validation block.**
 
 ### Slide 10 — Five Models and a Baseline
 
 Part three: models and tuning.
 
-Besides the baseline, we chose five models that learn in three different ways.
+*[Point to the first row.]*
 
-First, two linear models. They give each feature a weight and add them up. Ridge also adds a penalty that keeps the weights small.
+The table has one row per model. The first row is our baseline. Below it are five models that learn in three different ways.
 
-Second, support vector regression. It predicts from how similar a day is to past days. Because it measures distance, it is sensitive to scale.
+*[Point to the linear baseline and ridge rows.]*
+
+First, two linear models. They give each feature a weight and add them up; ridge also keeps the weights small.
+
+*[Point to the SVR row.]*
+
+Second, SVR. It predicts from how similar a day is to past days. It measures distance, so **it is sensitive to scale. Keep that in mind.**
+
+*[Point to the last two rows.]*
 
 Third, two tree ensembles. A random forest averages many independent trees. Gradient boosting adds trees one by one, each fixing the errors left so far.
 
-We also tried two neural networks, an MLP and an LSTM, in a separate test. Neither did better; see our backup slides.
+*[Point to the note at the bottom.]*
+
+We also tried two neural networks, an MLP and an LSTM. Neither did better; that is backup six.
 
 ### Slide 11 — Fair Tuning
 
 A comparison is only fair if every model is tuned the same way.
 
-We tune inside the training years only. For example, we fit on the first part, test on the next slice, then grow the window and repeat, five times.
+*[Point to the fold diagram on the left.]*
 
-Each model tries ten random settings, with the same time limit and seed. We keep the setting with the lowest average error. The validation block is never touched.
+Look at the diagram. Each bar is one fold, inside the training years only. We fit on the blue part and score on the green slice. Then the window grows, five times.
 
-Look at what the tuner chose: mostly the most cautious settings. Ridge took the strongest penalty, and boosting took the smallest learning rate. **The tuner is telling us that the safest forecast stays close to "no change".**
+*[Point to the bullet points.]*
+
+Every model gets the same deal: ten random settings, the same time limit, the same seed. **The validation block is never touched.**
+
+*[Point to the "Chosen" columns of the table.]*
+
+Now look at what was chosen. Ridge took alpha 1000, the strongest penalty. Boosting took the smallest learning rate. These are the most cautious settings. **The tuner is telling us that the safest forecast stays close to "no change".**
 
 ### Slide 12 — What Else We Explored
 
-We explored more than settings.
+*[Point to points 1 and 2 on the left.]*
 
-First, the target: we changed it from the price to the price change, as you saw.
+We also changed the target from price to price change, and we ran every model on raw and on standardised features: twenty runs.
 
-Second, every model ran twice, on raw and on standardised features. That gives twenty runs.
+*[Point to the chart.]*
 
-Third, this chart shows what scaling changed. The two tree models gave exactly the same predictions, as expected. SVR and ridge changed, because they depend on scale.
+The chart shows what scaling changed. Each bar is one model on one asset. Red means the error went up; green means it went down.
+
+*[Point to the empty rows in the middle.]*
+
+Look at the middle: **the tree models have no bar at all.** Their predictions were exactly the same, just as we expected. The linear models and SVR moved, because they depend on scale.
 
 So, how well did all these models do? Zhang Haoyu will show you.
 
@@ -314,81 +374,137 @@ So, how well did all these models do? Zhang Haoyu will show you.
 
 谢谢。第二部分是数据处理与特征工程。
 
-原始价格不能直接放进模型。这张表列出了六个问题，以及我们对每个问题的处理方法。
+原始价格不能直接放进模型。这张表列出了六个问题。每一行从左往右读：问题、为什么重要、我们怎么做。
 
-最大的问题是价格会漂移。例如，在训练年份里，比特币的收盘价从没超过 77,000 美元；到了验证年份，它涨到了接近 125,000 美元。用原始价格训练的模型无法处理它从没见过的水平。
+*[指向第一行。]*
 
-所以我们不给模型价格，而是给它比率：价格变动了多少，以及它离近期均值有多远。
+第一行最重要：价格会漂移。例如，在训练年份里，比特币的收盘价从没超过 77,000 美元；到了验证年份，它涨到了接近 125,000。用原始价格训练的模型无法处理它从没见过的水平。
 
-其余问题都遵循一条简单的规则：**只用当时已经知道的信息。**
+*[指向第一行最右边那一格。]*
+
+所以，正如最后一列写的，我们给模型的是比率，而不是价格。
+
+*[手从上往下扫过其余五行。]*
+
+其余五行都遵循同一条规则，而且这条规则贯穿整个项目：**只用当时已经知道的信息。**
 
 ### 第 7 页 — 从一天的数据到十个特征
 
-这是真实的一天怎样变成十个数字：苹果，2024 年 11 月 21 日。
+*[指向左边的小表。]*
 
-当天收盘 228.52 美元，前一天是 229.00。所以一日收益率是 −0.21%。和 5 天前、20 天前比较，又得到两个收益率。
+左边是真实的一天：苹果，2024 年 11 月 21 日。右边是我们从它算出的十个特征。
 
-收盘价比 5 日均价高 0.33%，这就是均线偏离；我们还用了 20 日的版本。
+*[指向右表第一行 ret_1。]*
 
-波动率衡量过去 10 天和 30 天里价格跳动有多大。幅度是当天最高价减最低价，再除以收盘价。成交量变化是今天的成交量和近期平均成交量的比较。星期四编码为 3。
+我们一起算第一个。苹果当天收盘 228.52，前一天是 229.00，所以一日收益率是 −0.21%。下一行是同样的算法，对比 5 天前和 20 天前。
 
-**每个特征只用这一天及之前的数据。** 我们的测试会在数据末尾加入假的未来价格，之前的特征必须完全不变。
+*[指向 ma_gap_5。]*
+
+接着，收盘价比 5 日均价高 0.33%，这就是均线偏离。
+
+*[往下指过其余几行。]*
+
+然后是波动率、幅度和成交量变化。请注意，**每一个都是比率，而不是价格。** 最后一行：星期四编码为 3。
+
+*[指向表格下方的说明。]*
+
+关键点来了：**每个特征只用这一天及之前的数据。** 我们用测试来保证：加入假的未来价格，之前的行必须完全不变。
 
 ### 第 8 页 — 每个模型用的数据都一样
 
-那么，**每个模型用的数据都一样吗？** 是的。
+大家可能会问：**每个模型用的数据都一样吗？**
 
-每个模型用相同的行、相同的十个特征、相同的目标和相同的切分。唯一变化的是算法。
+*[从左到右沿着上方的箭头指过去。]*
 
-只有一个开关：预处理。P0 保持特征原样；P2 把特征标准化，只用训练年份的均值和波动幅度。
+跟着箭头看：每日价格变成十个特征，经过预处理，进入五个模型中的一个。
 
-为什么重要？日收益率的量级大约是 0.02，而星期几大约是 1.4。不做缩放的话，星期几会主导依赖距离的模型，比如 SVR。树每次只按一个特征切分，所以不受影响。
+*[指向右边的列表。]*
 
-最后，模型预测的是明天的**变化量**，我们再把它加到今天的收盘价上。在刚才的例子里，SVR 预测 +10 美分，所以预测值是 228.62。
+正如右边列表写的，五个模型用相同的行、特征、目标和切分。**唯一变化的是算法。**
+
+*[指向第三个方框 "P0 / P2"。]*
+
+只有一个开关。P0 保持特征原样；P2 把特征标准化，只用训练年份的数据。
+
+*[指向左下方的表格。]*
+
+为什么？比较这几行。日收益率的量级约 0.02，星期几约 1.4，大了一百倍。不做缩放的话，星期几会主导 SVR。树不受影响。
+
+*[指向流程图最后一个方框。]*
+
+最后，预测值等于今天的收盘价加上预测的变化量。在例子那天：228.52 加 10 美分，也就是 228.62。
 
 ### 第 9 页 — 按时间切分
 
-接下来，我们按时间切分数据：前 60% 用于训练，接下来 20% 用于验证，最后 20% 用于测试。测试块一直封存。
+*[从左到右沿着上方的条形指过去。]*
 
-每个边界我们删掉一行。为什么？因为标签是明天的收盘价，所以最后一个训练行的答案，恰好就是验证集的第一个价格。删掉一行就能把它们隔开。
+接下来是切分。时间从左往右：60% 训练、20% 验证、20% 测试。灰色的测试块一直封存。
 
-我们还主动攻击了自己的流水线：一个脚本逐个注入六种常见的泄漏错误，我们的测试全部抓到了。
+*[指向两个红色小方框 "Drop 1 row"。]*
 
-从这里开始，**每一个模型表现数字都来自验证块。**
+注意这两个红色小方框。每个边界我们删掉一行。为什么？因为标签是明天的收盘价，最后一个训练样本的答案，恰好就是验证集的第一个价格。
+
+*[指向右边一栏。]*
+
+我们还用六种常见的泄漏错误主动攻击自己的流水线，一次注入一种。**六种全部被抓到。**
+
+*[指向底部那一行字。]*
+
+所以请记住：**从这里开始，每一个模型表现数字都来自验证块。**
 
 ### 第 10 页 — 五个模型和一个基准
 
 第三部分：模型与调参。
 
-除了基准，我们选了五个模型，它们用三种不同的方式学习。
+*[指向第一行。]*
 
-第一，两个线性模型。它们给每个特征一个权重，再加起来。岭回归还加了一个惩罚项，让权重保持很小。
+这张表每一行是一个模型。第一行是基准，下面是五个模型，用三种不同的方式学习。
 
-第二，支持向量回归。它根据某一天和过去的日子有多相似来预测。因为它衡量距离，所以对尺度敏感。
+*[指向线性基线和岭回归两行。]*
+
+第一，两个线性模型。它们给每个特征一个权重再加起来；岭回归还会让权重保持很小。
+
+*[指向 SVR 那一行。]*
+
+第二，SVR。它根据某一天和过去的日子有多相似来预测。它衡量距离，所以**对尺度敏感。请记住这一点。**
+
+*[指向最后两行。]*
 
 第三，两种树集成。随机森林把许多独立的树取平均；梯度提升一棵接一棵地加树，每棵都修正前面留下的误差。
 
-我们还在另一个独立测试里试了两个神经网络，MLP 和 LSTM。两者都没有更好，见备份页。
+*[指向底部的说明。]*
+
+我们还试了两个神经网络，MLP 和 LSTM，都没有更好，见备份第六页。
 
 ### 第 11 页 — 公平调参
 
 只有每个模型都用同样的方式调参，比较才公平。
 
-我们只在训练年份里面调参。例如，先用前面一段拟合，在下一小段上测试，然后把窗口扩大再重复，一共五次。
+*[指向左边的折叠示意图。]*
 
-每个模型试 10 组随机设置，时间限制相同、随机种子相同，保留平均误差最低的那组。验证块从来不碰。
+看这张图。每一条是一个折，全部在训练年份里面。我们在蓝色部分拟合，在绿色小段上打分，然后窗口扩大，一共五次。
 
-看看调参器选了什么：大多是最保守的设置。岭回归选了最强的惩罚，梯度提升选了最小的学习率。**调参器在告诉我们：最安全的预测就是贴近"不变"。**
+*[指向右边的要点。]*
+
+每个模型条件完全一样：10 组随机设置、相同的时间限制、相同的随机种子。**验证块从来不碰。**
+
+*[指向表格里 "Chosen" 两列。]*
+
+再看选中的值。岭回归选了 alpha 1000，最强的惩罚；梯度提升选了最小的学习率。这些都是最保守的设置。**调参器在告诉我们：最安全的预测就是贴近"不变"。**
 
 ### 第 12 页 — 其他探索
 
-我们探索的不只是参数设置。
+*[指向左边第 1、2 点。]*
 
-第一，目标：我们把它从价格改成了价格变化量，前面已经看到。
+我们还把目标从价格改成价格变化量，并让每个模型分别在原始特征和标准化特征上运行：一共 20 次。
 
-第二，每个模型都跑两次，一次用原始特征，一次用标准化特征，总共 20 次运行。
+*[指向右边的图。]*
 
-第三，这张图显示缩放改变了什么。两种树模型的预测完全相同，和预期一样。SVR 和岭回归有变化，因为它们依赖尺度。
+这张图显示缩放改变了什么。每一条是一个模型在一个资产上的结果。红色表示误差变大，绿色表示误差变小。
+
+*[指向中间空着的几行。]*
+
+看中间：**树模型完全没有条形。** 它们的预测完全相同，和我们预期的一样。线性模型和 SVR 有变化，因为它们依赖尺度。
 
 那么，这些模型到底表现如何？请 Zhang Haoyu 为大家介绍。
 

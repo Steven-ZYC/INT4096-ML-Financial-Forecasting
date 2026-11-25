@@ -12,10 +12,10 @@
 
 | Component | Time |
 |---|---|
-| Formal speech (18 slides, 1,761 English words at ~105 wpm) | **16:55** |
+| Formal speech (18 slides, 1,784 spoken English words at ~105 wpm) | **17:05** |
 | Slide changes and four handovers | 0:40 |
 | Q&A | 2:00 |
-| **Planned total** (0:25 of slack inside the 20-minute limit `[A]`) | **19:35** |
+| **Planned total** (0:15 of slack inside the 20-minute limit `[A]`) | **19:45** |
 
 ## Part structure
 
@@ -24,10 +24,10 @@
 | Introduction | What is the question, and what is the route? | 1–2 | 2:15 |
 | 1 — Data Selection | Which data, from where, why, and which rows qualify? | 3–5 | 2:35 |
 | 2 — Processing & Features | What problems did raw data have, and what can the model see? | 6–9 | 4:20 |
-| 3 — Models & Tuning | Which models, why, and tuned how fairly? | 10–12 | 2:50 |
+| 3 — Models & Tuning | Which models, why, and tuned how fairly? | 10–12 | 3:00 |
 | 4 — Evaluation | Which metrics, what results, how certain? | 13–15 | 2:50 |
 | 5 — Teaching Design | How does the project become a lesson, where can people try it, and what did each stage deliver? | 16–18 | 2:05 |
-| **Total** | | 18 | **16:55** |
+| **Total** | | 18 | **17:05** |
 
 ## Slide-by-slide
 
@@ -38,31 +38,31 @@
 | 3 | What We Used, and Exactly Where It Came From | 58 | 0:35 | 2:50 |
 | 4 | Why These Two: Two Markets With Different Characteristics | 93 | 0:55 | 3:45 |
 | 5 | Selection Conditions: From Raw Bars to Modelling Rows | 115 | 1:05 | 4:50 |
-| 6 | Problems in the Raw Data, and How We Handled Each | 107 | 1:00 | 5:50 |
-| 7 | From One Day's Prices to Ten Features | 129 | 1:15 | 7:05 |
-| 8 | Every Model Gets the Same Data: One Shared Pipeline | 123 | 1:10 | 8:15 |
-| 9 | Chronological Split, and Proof That the Pipeline Cannot Peek | 95 | 0:55 | 9:10 |
-| 10 | Five Models Plus a Baseline: Why Each One Is There | 113 | 1:05 | 10:15 |
+| 6 | Problems in the Raw Data, and How We Handled Each | 117 | 1:05 | 5:55 |
+| 7 | From One Day's Prices to Ten Features | 127 | 1:15 | 7:10 |
+| 8 | Every Model Gets the Same Data: One Shared Pipeline | 122 | 1:10 | 8:20 |
+| 9 | Chronological Split, and Proof That the Pipeline Cannot Peek | 88 | 0:50 | 9:10 |
+| 10 | Five Models Plus a Baseline: Why Each One Is There | 118 | 1:05 | 10:15 |
 | 11 | Fine-Tuning: The Same Search and Budget for Every Model | 106 | 1:00 | 11:15 |
-| 12 | What We Explored Beyond Hyperparameters | 76 | 0:45 | 12:00 |
-| 13 | Four Metrics, Each With a Job | 111 | 1:05 | 13:05 |
-| 14 | Results: All 20 Runs Land Within 1% of the Baseline | 85 | 0:50 | 13:55 |
-| 15 | How Certain? Every Interval Includes Zero | 97 | 0:55 | 14:50 |
-| 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 89 | 0:50 | 15:40 |
-| 17 | Try It Yourself: The Whole Pipeline, Interactive | 49 | 0:30 | 16:10 |
-| 18 | Summary: What Each Stage Delivered | 77 | 0:45 | 16:55 |
+| 12 | What We Explored Beyond Hyperparameters | 94 | 0:55 | 12:10 |
+| 13 | Four Metrics, Each With a Job | 111 | 1:05 | 13:15 |
+| 14 | Results: All 20 Runs Land Within 1% of the Baseline | 85 | 0:50 | 14:05 |
+| 15 | How Certain? Every Interval Includes Zero | 97 | 0:55 | 15:00 |
+| 16 | Teaching Design: The Pipeline Becomes a 60-Minute Lesson | 89 | 0:50 | 15:50 |
+| 17 | Try It Yourself: The Whole Pipeline, Interactive | 49 | 0:30 | 16:20 |
+| 18 | Summary: What Each Stage Delivered | 77 | 0:45 | 17:05 |
 | 19–26 | Backup 1–6 and References (not presented) | — | — | — |
 
 ## Speakers
 
 | Speaker | Slides | Content | Time | Share |
 |---|---|---|---:|---:|
-| Dong Yuankun | 1–5 | Opening (R² hook, roadmap); Part 1 data selection | **4:50** | 29% |
-| Zhang Yancheng | 6–12 | Part 2 processing and features; Part 3 models, tuning, what else we explored | **7:10** | 42% |
+| Dong Yuankun | 1–5 | Opening (R² hook, roadmap); Part 1 data selection | **4:50** | 28% |
+| Zhang Yancheng | 6–12 | Part 2 processing and features; Part 3 models, tuning, what else we explored | **7:20** | 43% |
 | Zhang Haoyu | 13–15 | Part 4: metrics, results, uncertainty | **2:50** | 17% |
 | Lau Pak Hei | 16–17 | Part 5: teaching design; the interactive website | **1:20** | 8% |
 | Lui Shing Lam | 18 | Part 5: summary and close | **0:45** | 4% |
-| **Total** | 18 | | **16:55** | 100% |
+| **Total** | 18 | | **17:05** | 100% |
 
 Every speaker names each part as it starts ("Part two: processing and feature engineering").
 

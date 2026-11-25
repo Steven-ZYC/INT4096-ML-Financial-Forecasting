@@ -56,7 +56,7 @@ can look it up."* Never improvise a number.
 | 9 | Chronological Split and Leakage Checks | Purge per boundary; 6/6 defects caught | "Clean inputs, so part three…"  |
 | 10 | Five Models Plus a Baseline | How each predicts, its strength, its role; three mechanisms | "Comparing them is only fair if…" |
 | 11 | Fine-Tuning | Same inner CV, trials, time, seed; frozen grids; cautious choices | "We also explored more than hyperparameters." |
-| 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2, trees identical, grid edges | "So, how well did all these models do? Zhang Haoyu will show you." **(handover Zhang Yancheng → Zhang Haoyu)** |
+| 12 | What We Explored Beyond Hyperparameters | Target, P0 vs P2; trees identical, linear models and SVR move | "So, how well did all these models do? Zhang Haoyu will show you." **(handover Zhang Yancheng → Zhang Haoyu)** |
 | 13 | Four Metrics | Each metric's job; R² trap; skill crosses assets | "Here is skill for every run." |
 | 14 | Results | Within 1% of the baseline; best +0.52% / +0.26%; every run shown | "But are those small leads real?" |
 | 15 | How Certain? | 20/20 intervals include zero; near-zero return correlation | "And that is exactly what our lesson teaches." **(handover Zhang Haoyu → Lau Pak Hei)** |

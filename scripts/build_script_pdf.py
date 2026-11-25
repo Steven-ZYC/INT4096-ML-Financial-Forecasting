@@ -229,6 +229,14 @@ def convert(markdown: str) -> str:
             i += 1
             continue
 
+        # ---- stage direction: *[Point to ...]* on its own line -----------
+        direction = re.match(r"^\*\[(.+)\]\*$", stripped)
+        if direction:
+            close_blocks()
+            out.append(r"{\small\itshape\color{muted}[" + inline(esc(direction.group(1))) + r"]\par}")
+            i += 1
+            continue
+
         # ---- ordinary paragraph -----------------------------------------
         close_blocks()
         out.append(inline(esc(stripped)) + r"\par")
