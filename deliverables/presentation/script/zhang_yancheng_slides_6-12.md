@@ -1,10 +1,10 @@
-### Slide 6 - Problems in the Raw Data / 原始数据的问题 · 1:15
+### Slide 6 - Problems in the Raw Data / 原始数据的问题 · 1:10
 
 **English**
 
 > Thank you, Dong Yuankun. Now, Part Two: Processing and Feature Engineering.
 
-> Dong showed you our data. Looking at it closely, we found six problems that stop raw prices from going straight into a model. The table lists all six, with what we did.
+> Dong showed you our data. Looking at it closely, we found six problems that stop raw prices from going straight into a model, listed in this table.
 
 > **Because of time, I'll focus on the top three.**
 
@@ -35,7 +35,7 @@
 **中文提词**
 
 - 谢谢 Dong Yuankun → 第二部分：数据处理与特征工程
-- 承接：看完数据，发现六个问题 → 表里全列出来了
+- 承接：看完数据，发现六个问题 → 都在这张表里
 - （重读）时间关系，只讲前三个
 - 1) 价格漂移到没见过的水平 → 滚动窗口上的收益率和比率（对比前 5–30 天）
 - 2) 复权价事后修订＝泄露未来 → 目标用原始收盘价
@@ -47,13 +47,13 @@
 
 <!-- pagebreak -->
 
-### Slide 7 - From One Day to Ten Features / 从一天的数据到十个特征 · 1:10
+### Slide 7 - From One Day to Ten Features / 从一天的数据到十个特征 · 1:15
 
 **English**
 
 *[Point to the small table on the left. · 指左边小表]*
 
-> On the left is one real day for Apple. On the right are its ten features.
+> To make this concrete, let's look at one real day of Apple's data. On the left, its prices; on the right, its ten features.
 
 *[Point to "Close today" and "Close yesterday" on the left, then to ret_1. · 指左边今天、昨天收盘，再指 ret_1]*
 
@@ -77,7 +77,7 @@
 
 **中文提词**
 
-- 左边：苹果真实的一天 → 右边：十个特征
+- 引入：To make this concrete → 看苹果真实的一天；左边价格，右边十个特征
 - 今天收盘 vs 昨天收盘 → 一日收益率
 - 再比 5 天前、20 天前 → 短期和较长期变化
 - 今天收盘 vs 5 日、20 日均价 → 在趋势上方还是下方

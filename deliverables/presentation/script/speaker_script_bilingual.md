@@ -42,7 +42,7 @@ All five parts follow the same style, set by the Introduction and Part 1:
 | Item | English | 中文 |
 |---|---|---|
 | Language | English throughout; slides are English too. | 全程英文，幻灯片也是英文。 |
-| Pace | ~105 words per minute. The English below is 1,795 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,795 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
+| Pace | ~105 words per minute. The English below is 1,798 spoken words (stage directions and optional lines not counted), i.e. about 17 minutes. | 约每分钟 105 词；英文共 1,798 个要念的词（不含动作提示和备用内容），约 17 分钟。 |
 | Logic | Every part answers one question on the roadmap (slide 2). Say the part name aloud when you start. | 每一部分回答路线图（第 2 页）上的一个问题；开口先报部分名称。 |
 | Slide 1 | The R² hook: read both numbers slowly, then pause one beat. | 第 1 页 R² 钩子：两个数字慢慢读，然后停一拍。 |
 | Who clicks | One person clicks for the whole talk (any member). | 全程由一个人翻页。 |
@@ -234,7 +234,7 @@ Lines in *[square brackets]* are stage directions: what to point at or do. Do no
 
 Thank you, Dong Yuankun. Now, Part Two: Processing and Feature Engineering.
 
-Dong showed you our data. Looking at it closely, we found six problems that stop raw prices from going straight into a model. The table lists all six, with what we did.
+Dong showed you our data. Looking at it closely, we found six problems that stop raw prices from going straight into a model, listed in this table.
 
 **Because of time, I'll focus on the top three.**
 
@@ -266,7 +266,7 @@ The rest are in the table. Now, the features.
 
 *[Point to the small table on the left.]*
 
-On the left is one real day for Apple. On the right are its ten features.
+To make this concrete, let's look at one real day of Apple's data. On the left, its prices; on the right, its ten features.
 
 *[Point to "Close today" and "Close yesterday" on the left, then to ret_1.]*
 
@@ -392,7 +392,7 @@ So, how well did all these models do? Zhang Haoyu will show you.
 
 谢谢 Dong Yuankun。接下来是第二部分：数据处理与特征工程。
 
-Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题，让原始价格不能直接放进模型。表里列出了全部六个，以及我们的做法。
+Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题，让原始价格不能直接放进模型，都列在这张表里。
 
 **由于时间关系，我重点讲前三个。**
 
@@ -424,7 +424,7 @@ Dong 刚才介绍了我们的数据。仔细看时，我们发现了六个问题
 
 *[指向左边的小表。]*
 
-左边是苹果真实的一天，右边是它的十个特征。
+为了讲得具体一点，我们来看苹果真实的一天。左边是它的价格，右边是它的十个特征。
 
 *[指向左边的"今天收盘"和"昨天收盘"，再指 ret_1。]*
 
