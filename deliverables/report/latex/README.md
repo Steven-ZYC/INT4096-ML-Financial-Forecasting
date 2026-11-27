@@ -63,7 +63,7 @@ references**. The instructor separately allowed approximately **500 more in
 face-to-face consultation**, reported by the project owner. That is recorded as
 oral guidance, not as a published rule, so the report states both.
 
-The team limits the report to 2,100 words, counting table text as well: **2,094**.
+The team limits the main text (body and headings; tables and captions excluded) to 2,100 words.
 `texcount -inc -sum main.tex` is the measurement:
 
 - **Words in text: 1,391** — body prose across `main.tex` and every `\input` section.
@@ -77,7 +77,7 @@ Not counted as narrative: bibliography entries, table bodies, the title block,
 LaTeX markup and citation keys.
 
 This is a reproducible count, not a claim about the instructor's own tool. If
-their counter includes captions, the figure would be about 2,580 with captions and table text and the owner
+their counter includes captions, the figure would be higher and the owner
 should discuss it; `deliverables/report/word_count.txt` records the exact configuration used.
 
 ## Layout checks performed
