@@ -1,38 +1,77 @@
 \section{Dataset and Data Provenance}
 \label{sec:data}
 
-Both series are committed as \repodir{data/raw}{immutable snapshots} with a SHA-256 digest, provider,
-row count and download timestamp. Each experiment recomputes the digest and stops
-on a mismatch.
+\textbf{Two public datasets, saved once and never edited.} Each experiment
+\textbf{re-checks the SHA-256 fingerprint} and stops on a mismatch
+(\repodir{data/raw}{raw data}, \repodir{data/cards}{dataset cards}).
 
-\input{generated/dataset_table}
+\begin{table}[H]
+\centering
+\caption{Where the data came from and how many rows we use. Modelling rows exclude
+the first \Warmup{} bars (feature windows not yet full) and the last bar (no next
+close).}
+\label{tab:dataset}
+\small
+\begin{tabular}{@{}L{0.20\linewidth} L{0.36\linewidth} L{0.36\linewidth}@{}}
+\toprule
+ & \textbf{Apple (AAPL)} & \textbf{Bitcoin (BTC/USDT)} \\
+\midrule
+\textbf{Source} & StockAnalysis public history API & Binance public REST API, spot \\
+Endpoint & \scriptsize\url{https://stockanalysis.com/api/symbol/s/aapl/history} & \scriptsize\url{https://api.binance.com/api/v3/klines} \\
+Fields & date, open, high, low, close, volume, adjusted close & open time, open, high, low, close, volume \\
+\textbf{Window} & \WindowAAPL & \WindowBTC \\
+Daily bars & \ObsAAPL & \ObsBTC \\
+Quality checks$^{*}$ & \textbf{\QualityAAPL} & \textbf{\QualityBTC} \\
+\textbf{Modelling rows} & \textbf{\RowsAAPL} & \textbf{\RowsBTC} \\
+Train / validation / test & \TrainRowsAAPL{} / \ValidationRowsAAPL{} / \TestRowsAAPL & \TrainRowsBTC{} / \ValidationRowsBTC{} / \TestRowsBTC \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize
+$^{*}$Duplicate dates, missing values, non-positive prices, inconsistent high, low or close, negative volume.
+\end{table}
 
-We do not align the datasets by row. AAPL follows the exchange calendar, with
-about 251 bars per year and gaps at weekends and holidays. BTC trades continuously
-and has no gap beyond one day. Raw price errors are not comparable, so cross-asset
-statements use unitless measures.
+\begin{table}[H]
+\centering
+\caption{The two datasets differ. How we handled each difference.}
+\label{tab:differences}
+\small
+\begin{tabular}{@{}L{0.16\linewidth} L{0.21\linewidth} L{0.19\linewidth} L{0.35\linewidth}@{}}
+\toprule
+Difference & AAPL & BTC & \textbf{What we did} \\
+\midrule
+Unit & listed share, USD & one exchange, USDT & Compare assets only by \textbf{unit-free skill} \\
+Calendar & exchange sessions; \GapsAAPL{} weekend or holiday gaps & every day & Keep \textbf{each calendar}; never align rows \\
+Close range & \CloseRangeAAPL & \CloseRangeBTC & Use \textbf{returns and ratios} as inputs \\
+Daily volatility & \RetSdAAPL\% & \RetSdBTC\% & \textbf{Fit and score separately} \\
+Adjusted price & differs on \AdjDiffPctAAPL\% of days & none & Predict the \textbf{raw close} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The target is the \emph{raw} close. Providers revise adjusted prices later for
-dividends and splits, so adjusted history contains values unavailable at decision
-time. No split discontinuity falls in the window (the adjusted/raw ratio never
-jumps by more than 2\%), and we ignore dividends. BTC is a single venue quoted in
-USDT, not a global price index.
+Providers revise adjusted prices later, so they contain \textbf{information
+unavailable at decision time}. No split discontinuity falls in the window (the
+adjusted/raw ratio never jumps by more than 2\%), and we ignore dividends.
+
+% Keep the generated split table here, in numbering order.
+\begingroup
+\let\floatingtable\table
+\renewcommand{\table}[1][]{\floatingtable[H]}
+\input{generated/splits_table}
+\endgroup
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\linewidth]{figures/fig01_coverage_and_splits.pdf}
-  \caption{Price history per asset with the fixed 60/20/20 chronological split.
-  Blue is training, green validation, red the sealed test block, which no run in
-  this report has read. The unshaded start is the feature warm-up. The panels are
-  separate series with separate vertical scales.}
+  \includegraphics[width=0.9\linewidth]{figures/fig01_coverage_and_splits.pdf}
+  \caption{Price history with the fixed 60/20/20 chronological split. Blue is
+  training, green validation, red the \textbf{sealed test block}, which no run has
+  read. The unshaded start is the feature warm-up.}
   \label{fig:coverage}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\linewidth]{figures/fig02_asset_characteristics.pdf}
-  \caption{How the markets differ. Left: each series rebased to 100 at its first
-  observation. Right: trailing 30-session realised volatility, annualised. BTC is
-  usually the more volatile series.}
+  \includegraphics[width=0.9\linewidth]{figures/fig02_asset_characteristics.pdf}
+  \caption{How the markets differ. Left: each series rebased to 100. Right:
+  annualised 30-session volatility. BTC is usually more volatile.}
   \label{fig:assets}
 \end{figure}

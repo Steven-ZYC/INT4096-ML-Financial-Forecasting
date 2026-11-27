@@ -1,18 +1,32 @@
-\section{Research Questions}
+\section{Research Questions and Hypotheses}
 \label{sec:questions}
 
-\begin{description}[leftmargin=1.4em,style=nextline]
-  \item[RQ1.] Under identical, leakage-safe conditions, how do distinct models
-  perform against naive persistence on AAPL and BTC?
-  \item[RQ2.] How do complexity, tuning and changing market conditions affect
-  generalisation and error patterns?
-  \item[RQ3.] How much do preprocessing and feature choices change forecast error,
-  and does the effect depend on model and market?
-  \item[RQ4.] What do examples and counterexamples teach learners about model
-  behaviour, evaluation and responsible interpretation?
+\begin{description}[leftmargin=3em,style=sameline]
+  \item[RQ1.] How do distinct models perform against naive persistence under
+  identical, leakage-safe conditions?
+  \item[RQ2.] How do complexity, tuning and market conditions affect
+  generalisation?
+  \item[RQ3.] How much do preprocessing and feature choices change forecast error?
+  \item[RQ4.] What do examples and counterexamples teach learners?
 \end{description}
 
-The \repofile{docs/research/protocol.md}{protocol} states five hypotheses: persistence is competitive at this horizon
-(H1); AAPL is more predictable than BTC (H2); scaling moves error more for
-scaling-sensitive models than for trees (H3); complexity widens the
-train--validation gap (H4); features matter more than the scaler (H5).
+The \repofile{docs/research/protocol.md}{protocol} states five hypotheses.
+Table~\ref{tab:hypotheses} also gives each verdict.
+
+\begin{table}[H]
+\centering
+\caption{Hypotheses and verdicts.}
+\label{tab:hypotheses}
+\small
+\begin{tabular}{@{}l L{0.46\linewidth} L{0.43\linewidth}@{}}
+\toprule
+ & Hypothesis & Verdict \\
+\midrule
+H1 & Persistence is competitive at this horizon & \textbf{Consistent} \\
+H2 & AAPL is more predictable than BTC & \textbf{Unresolved}: AAPL has lower normalised error, but persistence shows a similar gap; skill favours neither \\
+H3 & Scaling moves scaling-sensitive models more than trees & \textbf{Consistent} \\
+H4 & Complexity widens the train--validation gap & \textbf{Open}: future work \\
+H5 & Features matter more than the scaler & \textbf{Open}: future work \\
+\bottomrule
+\end{tabular}
+\end{table}

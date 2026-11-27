@@ -1,8 +1,8 @@
 # LaTeX Report — Build and Provenance
 
 Compiled output: [`../INT4096_Final_Report.pdf`](../INT4096_Final_Report.pdf)
-(10 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **2,149 body + 103 headings = 2,252**.
+(11 pages, A4).
+Word count: [`../word_count.txt`](../word_count.txt) — **1,352 body + 74 headings = 1,426**.
 
 ## Build
 
@@ -31,7 +31,7 @@ embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 SHA-256 of the committed PDF:
 
 ```
-56ff6d32f52e2f4b6512fa03cab19a7c3e54d96e701b5b60bbf6a28a79e7b053  INT4096_Final_Report.pdf
+1e4bb8cef73cc4a7443ee3c23a8d062fa2ca00fd183e5948790f6bbc7cf2bbb5  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -49,6 +49,7 @@ following are regenerated from `experiments/models/`:
 | `generated/dataset_table.tex` | snapshot manifests + validation report |
 | `generated/splits_table.tex` | `prepare_dataset()` on the frozen protocol |
 | `generated/numbers.tex` | measured values used in prose, as LaTeX macros |
+| `../../presentation/slides/generated/numbers.tex` | data facts and the worked feature example, from `scripts/build_slide_assets.py` |
 | `figures/*.pdf` | matplotlib, vector output, one `.caption.txt` per figure with run IDs |
 
 Prose therefore cites `\SkillAAPLRandomForest` rather than a literal number: a
@@ -62,13 +63,13 @@ references**. The instructor separately allowed approximately **500 more in
 face-to-face consultation**, reported by the project owner. That is recorded as
 oral guidance, not as a published rule, so the report states both.
 
-The team limits the narrative to 2,300 words.
+The team limits the report to 2,100 words, counting table text as well: **2,055**.
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 2,149** — body prose across `main.tex` and every `\input` section.
-- **Words in headers: 103** — section and paragraph headings.
-- **Narrative total: 2,252.**
-- **Words outside text: 480** — figure captions and float content, excluded from
+- **Words in text: 1,352** — body prose across `main.tex` and every `\input` section.
+- **Words in headers: 74** — section and paragraph headings.
+- **Narrative total: 1,426.**
+- **Words outside text: 489** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.
 
@@ -76,12 +77,12 @@ Not counted as narrative: bibliography entries, table bodies, the title block,
 LaTeX markup and citation keys.
 
 This is a reproducible count, not a claim about the instructor's own tool. If
-their counter includes captions, the figure would be about 2,730 and the owner
+their counter includes captions, the figure would be about 2,540 with captions and table text and the owner
 should discuss it; `deliverables/report/word_count.txt` records the exact configuration used.
 
 ## Layout checks performed
 
-- A4, 10 pages.
+- A4, 11 pages.
 - Log: 0 overfull boxes, 0 warnings; 2 underfull boxes in the generated neural-network
   table (`generated/dl_table.tex`).
 - `pdftotext`: 0 unresolved `??` references; all 7 figures and 4 tables present;

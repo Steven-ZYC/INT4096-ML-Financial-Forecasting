@@ -1,24 +1,22 @@
 \section{Preprocessing Ablation}
 \label{sec:ablation}
 
-For RQ3 we vary scaling alone and hold model, features, split and tuning budget
-fixed. P0 is unscaled; P2 is standardised using training rows only.
+For RQ3 we change \textbf{scaling only}: P0 is unscaled; P2 is standardised using
+training rows. Model, features, split and budget stay fixed.
 
 \input{generated/ablation_table}
 
-For both tree ensembles, predictions under P0 and P2 are identical on both assets,
-as Section~\ref{sec:background} predicts. This is a useful negative control: a
-change would point to a bug.
-
-The other models move slightly, in both directions. Standardisation barely changes
-AAPL Ridge and worsens the AAPL linear baseline (Table~\ref{tab:ablation}). Every
-configuration stays within about one percentage point of persistence. For
-teaching, this separates \emph{a transform changes the model} from \emph{a
-transform improves the forecast}.
-
-The missing-value variant (P1) was unnecessary: neither dataset has missing
-values, so it would duplicate P0. Section~\ref{sec:limitations} proposes further
-variants.
+\begin{itemize}
+  \item \textbf{Trees: identical predictions} under P0 and P2 on both assets, as
+  Section~\ref{sec:background} predicts. This negative control would expose a bug.
+  \item \textbf{Other models: small moves in both directions.} Scaling barely
+  changes AAPL Ridge and worsens the AAPL linear baseline
+  (Table~\ref{tab:ablation}).
+  \item \textbf{Lesson:} a transform can change a model without improving the
+  forecast.
+  \item \textbf{P1 was unnecessary:} there are no missing values, so it would
+  duplicate P0. Section~\ref{sec:limitations} proposes further variants.
+\end{itemize}
 
 \begin{figure}[t]
   \centering

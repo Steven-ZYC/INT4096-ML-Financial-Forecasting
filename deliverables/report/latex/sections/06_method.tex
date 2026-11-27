@@ -1,14 +1,16 @@
 \section{Experimental Methodology}
 \label{sec:method}
 
-Each asset is split chronologically into 60\% training, 20\% validation and 20\%
-sealed test on its own session index, with a one-row purge at each boundary
-(Table~\ref{tab:splits}). All models see the same boundaries and dates. Random
-search chooses hyperparameters using expanding-window cross-validation inside the
-training block: five folds, a one-row gap and a minimum initial training fraction
-of 0.30. Tuning never sees validation. Every model gets the same budget,
-\TrialsUsed{} trials and at most \SecondsUsed{}~s per cell (protocol caps:
-\TrialsMax{} and \SecondsMax{}~s), and every attempted configuration is \repodir{experiments/models}{logged}.
+\begin{itemize}
+  \item \textbf{Split:} chronological 60/20/20 per asset, one row purged at each
+  boundary (Table~\ref{tab:splits}). All models see the same dates.
+  \item \textbf{Tuning:} random search with expanding-window cross-validation
+  \textbf{inside the training block only}: five folds, a one-row gap, minimum
+  initial fraction 0.30.
+  \item \textbf{Equal budget:} \TrialsUsed{} trials and at most \SecondsUsed{}~s per
+  cell (caps: \TrialsMax{} and \SecondsMax{}~s). Every attempt is
+  \repodir{experiments/models}{logged}.
+\end{itemize}
 
 \begin{figure}[t]
   \centering
@@ -43,13 +45,15 @@ of 0.30. Tuning never sees validation. Every model gets the same budget,
   \label{fig:pipeline}
 \end{figure}
 
-We compute MAE, RMSE and $R^2$, plus \emph{skill} relative to persistence on the
-same forecast dates:
+We compute MAE, RMSE, $R^2$ and \textbf{skill} against persistence on the same
+dates:
 \begin{equation*}
   \text{skill}_{\text{MAE}} \;=\; 1 - \frac{\text{MAE}_{\text{model}}}{\text{MAE}_{\text{naive}}}.
 \end{equation*}
-Skill is primary because it has a meaningful zero. $R^2$ is high for any forecast
-that follows a trending price: naive persistence reaches $R^2 \approx 0.96$. We
-therefore omit it from Table~\ref{tab:results}. Absolute errors are never compared
-across assets. Intervals come from a moving-block bootstrap over consecutive dates.
-Blocks retain only some serial dependence, so the intervals are indicative.
+\begin{itemize}
+  \item \textbf{Skill is primary:} zero means no better than copying today's price.
+  \item \textbf{$R^2$ misleads on trending prices:} persistence reaches
+  $R^2 \approx 0.96$, so Table~\ref{tab:results} omits it.
+  \item \textbf{Uncertainty:} a moving-block bootstrap over consecutive dates. It
+  retains only some serial dependence, so intervals are indicative.
+\end{itemize}

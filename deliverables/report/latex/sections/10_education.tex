@@ -1,20 +1,25 @@
 \section{Educational Implications}
 \label{sec:education}
 
-We answer RQ4 with a designed resource. No learners were observed or surveyed, so
-we describe what the lesson makes visible, not what anyone learned.
+RQ4 is answered by a \textbf{designed resource}; no learners were observed.
+Learners should be able to:
 
-Learners should be able to: explain why a model with good historical scores may
-fail tomorrow; identify leakage in code; interpret a skill score, including a
-negative one; predict which models are scale-sensitive and justify the prediction;
-and distinguish forecast error from profit. Each objective uses project material.
-For example, the negative random-forest entry in Table~\ref{tab:results} prompts
-skill interpretation, and Figure~\ref{fig:ablation} asks why the tree bars are
-zero.
+\begin{enumerate}
+  \item explain why a model with good historical scores may \textbf{fail
+  tomorrow};
+  \item \textbf{identify leakage} in code;
+  \item \textbf{interpret a skill score}, including a negative one;
+  \item \textbf{predict which models are scale-sensitive} and justify it;
+  \item distinguish \textbf{forecast error from profit}.
+\end{enumerate}
 
-The negative headline result is useful for teaching. A demonstration where the
-complex model wins can suggest that complexity is enough. This one asks: \emph{what
-is the baseline, and did we beat it?} The lesson includes \repofile{deliverables/lesson/formative_tasks.md}{five formative tasks} with
-worked answers. \repofile{deliverables/notebook/INT4096_Final_Colab.ipynb}{A notebook} re-runs the comparison, and a website walks through each
-step with the project data:
+Each objective uses project material: the negative random-forest entry in
+Table~\ref{tab:results} prompts skill reading, and Figure~\ref{fig:ablation} asks
+why the tree bars are zero. The negative result teaches the key question:
+\textbf{\emph{what is the baseline, and did we beat it?}}
+
+Materials: \repofile{deliverables/lesson/formative_tasks.md}{five formative tasks}
+with answers,
+\repofile{deliverables/notebook/INT4096_Final_Colab.ipynb}{a notebook} that re-runs
+the comparison, and a website:
 \url{https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/}.

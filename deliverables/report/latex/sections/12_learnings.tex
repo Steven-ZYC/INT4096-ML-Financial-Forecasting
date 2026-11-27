@@ -1,15 +1,15 @@
 \section{Challenges and Team Learnings}
 \label{sec:learnings}
 
-The first challenge was target representation. Initial runs reported skill near
-$-1800\%$. The features contained no price level, so the models could not recover
-it and collapsed towards the training mean. After seeing this, we changed the
-training target to the price change and \repofile{docs/research/decision_log.md}{recorded the decision}.
-
-The second was the boundary purge, found when an auditor traced a label to a test
-price. Our first leakage tests had also passed with a one-bar forward shift
-present. A passing test suite means more once it has been shown able to fail.
-
-The third was fairness. Sharing one construction path, tuning budget and feature
-set took more effort than fitting the models, but it made the comparison
-meaningful.
+\begin{itemize}
+  \item \textbf{Target representation:} initial runs reported skill near $-1800\%$.
+  Without a price level among the features, models collapsed towards the training
+  mean. After seeing this, we changed the target to the price change and
+  \repofile{docs/research/decision_log.md}{recorded the decision}.
+  \item \textbf{Boundary purge:} an auditor found the problem by tracing a label to
+  a test price.
+  \item \textbf{Testing the tests:} our first leakage tests passed with a one-bar
+  forward shift present. A test suite must be shown able to fail.
+  \item \textbf{Fairness:} one construction path, budget and feature set took more
+  effort than fitting the models.
+\end{itemize}

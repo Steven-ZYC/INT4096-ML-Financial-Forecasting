@@ -1,28 +1,26 @@
 \section{Limitations and Future Improvements}
 \label{sec:limitations}
 
-\paragraph{Scope and target.}
-We study two assets, one period, one horizon and the raw close, ignoring dividends.
-BTC is one venue's USDT price. One-session prediction is a hard setting for trained
-models. RQ2 is only partly answered: we did not compare volatility periods or
-tuning budgets. For RQ3, we tested scaling but not feature choices.
-
-\paragraph{Statistics and evaluation.}
-All skill values lie within one percentage point of zero, and every interval
-includes zero. This does not show that the models are equivalent. Block resampling
-may also understate uncertainty. All main results are validation results, and
-validation influenced model selection. The sealed test block is reserved for a
-final estimate.
-
-\paragraph{Measurement integrity.}
-An independent AI audit agent found two high-severity defects: a boundary leak and
-a test suite that missed look-ahead bugs. Both were fixed and retested. Passing
-tests reduce risk but cannot rule out all errors.
-
-\paragraph{Education.}
-Without a learner study, claims about the lesson are design claims.
+\begin{itemize}
+  \item \textbf{Scope:} two assets, one period, a one-session horizon and the raw
+  close. Dividends are ignored; BTC is one exchange's USDT price.
+  \item \textbf{Partial answers:} we did not compare volatility periods or tuning
+  budgets (RQ2), and tested scaling but not feature choices (RQ3).
+  \item \textbf{Statistics:} skill lies within one percentage point of zero and
+  every interval includes zero. This \textbf{does not show equivalence}. Block
+  resampling may understate uncertainty.
+  \item \textbf{Validation only:} validation influenced model selection. The sealed
+  test block is reserved for a final estimate.
+  \item \textbf{Integrity:} an independent AI audit agent found two high-severity
+  defects, a boundary leak and tests that missed look-ahead bugs. Both were fixed
+  and retested.
+  \item \textbf{Education:} without a learner study, lesson claims are design
+  claims.
+\end{itemize}
 
 \paragraph{Future improvements.}
-A reduced feature set (P3) would test whether features matter more than the scaler
-(H5). Robust scaling with winsorisation (P4) would examine sensitivity to extreme
-values. Recording training error would allow a test of H4.
+\begin{itemize}
+  \item \textbf{Reduced feature set (P3)} to test H5.
+  \item \textbf{Robust scaling with winsorisation (P4)} to examine extreme values.
+  \item \textbf{Record training error} to test H4.
+\end{itemize}

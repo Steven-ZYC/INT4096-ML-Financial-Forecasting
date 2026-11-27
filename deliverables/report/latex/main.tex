@@ -15,6 +15,9 @@
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{graphicx}
+\usepackage{array}
+\usepackage{float}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{enumitem}
@@ -64,6 +67,13 @@
   Lau Pak Hei \quad Lui Shing Lam}
 
 \input{generated/numbers.tex}
+% Data facts and the worked feature example come from the slide generator
+% (scripts/build_slide_assets.py). Where a name exists in both files, the report's
+% own value is kept.
+\let\reportnewcommand\newcommand
+\let\newcommand\providecommand
+\input{../../presentation/slides/generated/numbers.tex}
+\let\newcommand\reportnewcommand
 
 \title{\vspace{-1.2cm}\bfseries Learning Machine Learning Through Financial
 Time-Series Forecasting:\\[2pt]
@@ -83,12 +93,12 @@ Apple and Bitcoin}
 Financial forecasting makes generalisation, leakage and baseline comparison
 checkable. We compare five models and two preprocessing variants for next-session
 close prediction on Apple (AAPL) and Bitcoin (BTC) under a documented,
-leakage-audited protocol. Across \NRunTotal{} runs, no model beat naive persistence
-by more than \BestAAPLSkill\% (AAPL) or \BestBTCAllSkill\% (BTC), \NBelowAll{} runs
-were worse, and every bootstrap interval includes zero. Experimental neural
-networks showed no clear advantage. We turn this negative result into a
-five-objective lesson on reading skill scores, finding leakage and understanding
-scaling. Without a learner study, we make no claim of learning gains.
+leakage-audited protocol. \textbf{Across \NRunTotal{} runs, no model beat naive
+persistence by more than \BestAAPLSkill\% (AAPL) or \BestBTCAllSkill\% (BTC)},
+\NBelowAll{} runs were worse, and \textbf{every bootstrap interval includes zero}.
+Experimental neural networks showed no clear advantage. We turn this negative
+result into a five-objective lesson. Without a learner study, we claim no learning
+gains.
 \end{abstract}
 
 \vspace{0.2cm}

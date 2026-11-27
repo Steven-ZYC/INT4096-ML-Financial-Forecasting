@@ -1,16 +1,30 @@
 \section{Model Selection and Baselines}
 \label{sec:models}
 
-The five models are a linear baseline (ridge restricted to small penalties), Ridge
-searched over a wider penalty range, RBF support vector regression, a random
-forest, and histogram gradient boosting. Gradient boosting stops early using a
-random 10\% of its training rows, so its iteration setting is an upper limit.
+\textbf{Naive persistence}, $\hat{C}_{t+1} = C_t$, is the mandatory baseline
+\citep{makridakis2018m4,hyndman2021fpp3}. Table~\ref{tab:models} shows why each
+model is included.
+
+\begin{table}[H]
+\centering
+\caption{The baseline and five models.}
+\label{tab:models}
+\small
+\begin{tabular}{@{}L{0.30\linewidth} L{0.37\linewidth} L{0.26\linewidth}@{}}
+\toprule
+\textbf{Model} & \textbf{How it predicts} & \textbf{Role here} \\
+\midrule
+Naive persistence & copies today's close & the yardstick \\
+Linear baseline & weighted sum, small L2 penalty & simplest learned model \\
+Ridge \citep{hastie2009elements} & weighted sum, wider penalty search & does regularisation help? \\
+SVR, RBF kernel \citep{drucker1997support} & similarity to training examples & scale-sensitive case \\
+Random forest \citep{breiman2001random} & average of independently grown trees & scale-invariant control \\
+Hist.\ gradient boosting \citep{friedman2001gradient} & trees added in sequence to fix errors & boosting versus bagging \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All models share \repodir{src/int4096/models}{one code path} and the same
+features. Gradient boosting stops early using a random 10\% of its training rows.
 Neural networks stay outside the main comparison because the handout discourages
-deep learning; Section~\ref{sec:dl} reports a separate test.
-
-The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. It is free,
-strong for a near-random-walk series, and defines zero skill
-\citep{makridakis2018m4,hyndman2021fpp3}.
-
-All models share \repodir{src/int4096/models}{one code path} and the same feature columns, and any scaler is
-refitted per fold. Tests check column identity and seed determinism.
+deep learning (see Section~\ref{sec:dl}).
