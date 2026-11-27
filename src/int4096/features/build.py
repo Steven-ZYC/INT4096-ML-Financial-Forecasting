@@ -54,7 +54,7 @@ def add_volatility(
 ) -> pd.DataFrame:
     """Trailing realized volatility of 1-bar returns."""
     out = pd.DataFrame(index=frame.index)
-    rets = frame["close"].pct_change(return_horizon)
+    rets = frame["close"].pct_change(return_horizon, fill_method=None)
     for w in windows:
         out[f"vol_{w}"] = rets.rolling(
             window=w, min_periods=min_periods or w

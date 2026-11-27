@@ -89,7 +89,8 @@ for asset in AAPL BTC; do
 done
 
 echo
-echo "== 6. Figures and registry report =="
+echo "== 6. Bootstrap intervals, figures and registry report =="
+"$PY" -m int4096.evaluation.analysis
 "$PY" - <<'PYEOF'
 from pathlib import Path
 from int4096.config import load_protocol
@@ -97,14 +98,15 @@ from int4096.evaluation import figures
 from int4096.experiments.run import prepare_dataset
 
 protocol = load_protocol()
-frames, splits = {}, {}
+frames, splits, dates = {}, {}, {}
 for asset in ("AAPL", "BTC"):
     prepared = prepare_dataset(asset, protocol)
     frames[asset] = prepared["frame"]
     splits[asset] = prepared["split"]
+    dates[asset] = prepared["X"].index
 
 registry = figures.load_registry()
-print(" ", figures.plot_coverage_and_splits(frames, splits))
+print(" ", figures.plot_coverage_and_splits(frames, splits, dates))
 print(" ", figures.plot_model_vs_naive(registry))
 print(" ", figures.plot_ablation_delta(registry))
 

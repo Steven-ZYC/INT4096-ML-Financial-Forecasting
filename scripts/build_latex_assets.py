@@ -186,11 +186,11 @@ def write_ablation_table(runs: pd.DataFrame) -> Path:
         r"\label{tab:ablation}",
         r"\small",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l r r r r r@{}}",
+        r"\begin{tabular}{@{}l r r r r r r@{}}",
         r"\toprule",
-        r" & \multicolumn{3}{c}{AAPL} & \multicolumn{2}{c}{BTC} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(l){5-6}",
-        r"Model & P0 MAE & P2 MAE & $\Delta$ & P0 MAE & $\Delta$ \\",
+        r" & \multicolumn{3}{c}{AAPL} & \multicolumn{3}{c}{BTC} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(l){5-7}",
+        r"Model & P0 MAE & P2 MAE & $\Delta$ & P0 MAE & P2 MAE & $\Delta$ \\",
         r"\midrule",
     ]
     for model_id in MODEL_ORDER:
@@ -199,16 +199,13 @@ def write_ablation_table(runs: pd.DataFrame) -> Path:
             p0 = runs[(runs.asset == asset) & (runs.model_id == model_id) & (runs.variant == "P0")]
             p2 = runs[(runs.asset == asset) & (runs.model_id == model_id) & (runs.variant == "P2")]
             if p0.empty or p2.empty:
-                cells += ["--", "--"] if asset == "BTC" else ["--", "--", "--"]
+                cells += ["--", "--", "--"]
                 continue
             a = float(p0.iloc[0]["mae"])
             b = float(p2.iloc[0]["mae"])
             delta = (b - a) / a * 100.0
             delta_tex = r"\textbf{0.000}" if abs(delta) < 5e-10 else f"{delta:+.3f}"
-            if asset == "AAPL":
-                cells += [fmt(a, 3), fmt(b, 3), delta_tex]
-            else:
-                cells += [fmt(a, 3), delta_tex]
+            cells += [fmt(a, 3), fmt(b, 3), delta_tex]
         lines.append(" & ".join(cells) + r" \\")
     lines += [
         r"\bottomrule",
@@ -473,17 +470,18 @@ def write_figures(protocol) -> list[Path]:
     figures.EXTRA_FORMATS = (".pdf",)
 
     produced: list[Path] = []
-    frames, splits = {}, {}
+    frames, splits, dates = {}, {}, {}
     for asset in ("AAPL", "BTC"):
         prepared = prepare_dataset(asset, protocol)
         frames[asset] = prepared["frame"]
         splits[asset] = prepared["split"]
+        dates[asset] = prepared["X"].index
 
     registry_path = REPO_ROOT / "experiments" / "models" / "registry.jsonl"
     registry = figures.load_registry()
 
     produced.append(
-        figures.plot_coverage_and_splits(frames, splits, figure_root=FIGURES)
+        figures.plot_coverage_and_splits(frames, splits, dates, figure_root=FIGURES)
     )
     produced.append(
         figures.plot_asset_characteristics(frames, figure_root=FIGURES)

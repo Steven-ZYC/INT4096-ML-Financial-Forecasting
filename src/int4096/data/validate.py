@@ -140,7 +140,7 @@ def validate_frame(frame, asset: str | None = None, price_tolerance: float = 1e-
             )
 
     # -- extreme daily moves (reported as context, not an error) -------
-    returns = frame["close"].pct_change()
+    returns = frame["close"].pct_change(fill_method=None)
     report.checks["max_abs_daily_return"] = (
         round(float(returns.abs().max()), 6) if returns.notna().any() else None
     )

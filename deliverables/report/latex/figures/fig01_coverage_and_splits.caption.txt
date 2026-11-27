@@ -1,4 +1,4 @@
-Price history per asset with the frozen 60/20/20 chronological split. Shaded regions mark train (blue), validation (green) and sealed test (red). The two assets have different calendars and are plotted separately, never aligned by row.
+Price history per asset with the frozen 60/20/20 chronological split. Shaded regions mark train (blue), validation (green) and sealed test (red); the unshaded start is the feature warm-up. The two assets have different calendars and are plotted separately, never aligned by row.
 
 run_ids: n/a
 generated_by: int4096.evaluation.figures

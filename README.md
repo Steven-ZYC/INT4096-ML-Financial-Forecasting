@@ -110,21 +110,26 @@ PYTHONPATH=src .venv/bin/python scripts/build_notebook.py           # Colab note
 ## Google Colab
 
 Open [`deliverables/notebook/INT4096_Final_Colab.ipynb`](deliverables/notebook/INT4096_Final_Colab.ipynb)
-and choose **Runtime → Run all**.
+and choose **Runtime → Run all**. It needs no other files: the project code and the
+data snapshots are inside it, and it writes them to a new workspace folder.
 
 The notebook:
 
-- installs only what is missing;
-- verifies the dataset SHA-256 before using it;
-- contains a live demonstration that features cannot see the future;
-- runs the baseline and four model families on the validation block;
-- shows the preprocessing ablation;
-- includes two learner-facing leakage exercises;
+- verifies the dataset SHA-256 and shows that features cannot see the future;
+- runs the unit tests and the leakage mutation check;
+- repeats all 20 experiments with the submitted settings and compares the results;
+- computes the bootstrap intervals and runs the experimental MLP / LSTM (GPU optional);
+- draws the report's data figures with the same code that builds the report;
 - **does not** unblind the test block.
 
-If the data files are absent, set `INT4096_REPO` to your repository URL, or upload
-`data/raw/` beside the notebook. The notebook fails loudly rather than inventing
-data.
+The notebook is generated, so edit the source files and rebuild it. A copy with saved
+outputs (the run log) comes from a separate step, which needs PyTorch for the neural
+section:
+
+```bash
+python scripts/build_notebook.py
+python scripts/execute_notebook.py    # writes INT4096_Final_Colab_executed.ipynb
+```
 
 ---
 

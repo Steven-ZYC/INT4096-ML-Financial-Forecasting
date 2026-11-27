@@ -28,6 +28,38 @@ DEFAULT_FIGURE_ROOT = FIGURES
 # (".pdf",) so the report embeds vector graphics instead of a 150 dpi raster.
 EXTRA_FORMATS: tuple[str, ...] = ()
 
+# Reader-facing names and one fixed order, so charts match the report tables.
+MODEL_LABELS = {
+    "linear_baseline": "Linear baseline",
+    "ridge": "Ridge",
+    "svr": "SVR (RBF)",
+    "random_forest": "Random forest",
+    "hist_gradient_boosting": "Gradient boosting",
+}
+VARIANT_LABELS = {"P0": "unscaled", "P2": "standardised"}
+
+
+def model_label(model_id: str) -> str:
+    return MODEL_LABELS.get(model_id, model_id)
+
+
+def skill_chart_rows(registry: pd.DataFrame, variant: str = "P2") -> pd.DataFrame:
+    """Exactly one row per asset and model: the latest successful run of ``variant``.
+
+    Plotting both preprocessing variants on one model axis would draw two bars on
+    top of each other, so the chart is restricted to a single variant.
+    """
+    data = registry[
+        (registry["status"] == "SUCCESS") & (registry["preprocess_variant"] == variant)
+    ].dropna(subset=["validation_skill_mae"])
+    data = data.sort_values("run_id").drop_duplicates(["asset", "model_id"], keep="last")
+    if data.empty:
+        raise ValueError(f"No successful {variant} runs to plot")
+    order = {model_id: i for i, model_id in enumerate(MODEL_LABELS)}
+    return data.sort_values(
+        ["asset", "model_id"], key=lambda col: col.map(order) if col.name == "model_id" else col
+    )
+
 
 def _pdf_metadata() -> dict:
     """Fixed PDF metadata so repeated builds are byte-comparable.
@@ -98,32 +130,47 @@ def _save(fig, path: Path, caption: str, run_ids: list[str], caption_dir: Path) 
     return path
 
 
+def split_spans(split: Any, sample_dates: pd.DatetimeIndex) -> dict[str, tuple]:
+    """First and last date of each block.
+
+    Split positions count rows of the feature matrix (after the warm-up rows are
+    dropped), so they must be looked up in that matrix's dates, never in the raw
+    price frame.
+    """
+    return {
+        "train": (sample_dates[split.train_start], sample_dates[split.train_end - 1]),
+        "validation": (sample_dates[split.validation_start], sample_dates[split.validation_end - 1]),
+        "test": (sample_dates[split.test_start], sample_dates[split.test_end - 1]),
+    }
+
+
 def plot_coverage_and_splits(
     frames: dict[str, pd.DataFrame],
     splits: dict[str, Any],
+    sample_dates: dict[str, pd.DatetimeIndex],
     run_ids: list[str] | None = None,
     figure_root: Path | None = None,
 ) -> Path:
-    """Figure 1: data coverage and the frozen chronological splits per asset."""
+    """Figure 1: data coverage and the frozen chronological splits per asset.
+
+    ``sample_dates[asset]`` is the index of that asset's feature matrix.
+    """
     plt = _mpl()
     fig_root = Path(figure_root) if figure_root else DEFAULT_FIGURE_ROOT
     fig, axes = plt.subplots(len(frames), 1, figsize=(10, 3.2 * len(frames)), squeeze=False)
 
     for ax, (asset, frame) in zip(axes[:, 0], frames.items()):
         ax.plot(frame.index, frame["close"], lw=0.9, color="black", label="Close (raw)")
-        split = splits[asset]
-        boundaries = [
-            frame.index[split.train_end - 1],
-            frame.index[split.validation_start],
-            frame.index[split.validation_end - 1],
-            frame.index[split.test_start],
-        ]
-        ax.axvline(boundaries[0], color="tab:blue", ls="--", lw=1)
-        ax.axvline(boundaries[2], color="tab:red", ls="--", lw=1)
-        ax.axvspan(frame.index[0], boundaries[0], alpha=0.08, color="tab:blue")
-        ax.axvspan(boundaries[0], boundaries[2], alpha=0.08, color="tab:green")
-        ax.axvspan(boundaries[2], frame.index[-1], alpha=0.12, color="tab:red")
-        ax.set_title(f"{asset}: {len(frame)} sessions, chronological 60/20/20 split")
+        spans = split_spans(splits[asset], sample_dates[asset])
+        for name, colour, alpha, label in (
+            ("train", "tab:blue", 0.10, "training"),
+            ("validation", "tab:green", 0.12, "validation"),
+            ("test", "tab:red", 0.14, "sealed test"),
+        ):
+            ax.axvspan(*spans[name], alpha=alpha, color=colour, label=label)
+        ax.axvline(spans["validation"][0], color="tab:blue", ls="--", lw=1)
+        ax.axvline(spans["test"][0], color="tab:red", ls="--", lw=1)
+        ax.set_title(f"{asset}: {len(frame):,} daily bars, chronological 60/20/20 split")
         ax.set_ylabel("Price (quote currency)")
         ax.legend(loc="upper left", fontsize=8)
 
@@ -132,7 +179,8 @@ def plot_coverage_and_splits(
         fig,
         fig_root / "fig01_coverage_and_splits.png",
         "Price history per asset with the frozen 60/20/20 chronological split. "
-        "Shaded regions mark train (blue), validation (green) and sealed test (red). "
+        "Shaded regions mark train (blue), validation (green) and sealed test (red); "
+        "the unshaded start is the feature warm-up. "
         "The two assets have different calendars and are plotted separately, never aligned by row.",
         run_ids or [],
         fig_root,
@@ -142,34 +190,38 @@ def plot_coverage_and_splits(
 def plot_model_vs_naive(
     registry: pd.DataFrame,
     figure_root: Path | None = None,
+    variant: str = "P2",
 ) -> Path:
-    """Figure 4: skill relative to persistence, per asset and model.
+    """Skill relative to persistence, per asset and model, for one variant.
 
     Skill < 0 means the model is worse than simply repeating today's price.
     """
     plt = _mpl()
     fig_root = Path(figure_root) if figure_root else DEFAULT_FIGURE_ROOT
 
-    data = registry[registry["status"] == "SUCCESS"].dropna(subset=["validation_skill_mae"])
+    data = skill_chart_rows(registry, variant)
     assets = sorted(data["asset"].unique())
     fig, axes = plt.subplots(
-        1, len(assets), figsize=(5.6 * len(assets), 4.2), squeeze=False, sharex=True
+        1, len(assets), figsize=(5.6 * len(assets), 4.2), squeeze=False,
+        sharex=True, sharey=True,
     )
 
     # A shared x-axis is essential: per-panel autoscaling would make BTC's
     # ~0.001 skill look as large as AAPL's ~0.005, which would be a visual
     # exaggeration of the result. We also pad the limit so zero is never flush
-    # against the frame.
+    # against the frame (and so the value labels fit).
     values = data["validation_skill_mae"].to_numpy(dtype="float64")
-    bound = float(np.nanmax(np.abs(values))) if len(values) else 0.01
-    bound = max(bound * 1.25, 0.005)
+    bound = max(float(np.max(np.abs(values))) * 1.45, 0.005)
 
     from matplotlib.ticker import MaxNLocator
 
     for ax, asset in zip(axes[0], assets):
-        subset = data[data["asset"] == asset].sort_values("validation_skill_mae")
-        colours = ["tab:green" if v > 0 else "tab:red" for v in subset["validation_skill_mae"]]
-        ax.barh(subset["model_id"], subset["validation_skill_mae"], color=colours)
+        subset = data[data["asset"] == asset]
+        skills = subset["validation_skill_mae"].to_numpy(dtype="float64")
+        labels = [model_label(m) for m in subset["model_id"]]
+        colours = ["tab:green" if v > 0 else "tab:red" for v in skills]
+        bars = ax.barh(labels, skills, color=colours)
+        ax.bar_label(bars, labels=[f"{v * 100:+.2f}%" for v in skills], padding=3, fontsize=8)
         ax.axvline(0, color="black", lw=1)
         ax.set_xlim(-bound, bound)
         # Three ticks only: the figure is scaled to text width in the report and
@@ -179,17 +231,20 @@ def plot_model_vs_naive(
         ax.tick_params(labelsize=8)
         ax.set_title(f"{asset} (validation)", fontsize=10)
         ax.set_xlabel("skill vs naive persistence", fontsize=9)
+    axes[0][0].invert_yaxis()  # first model on top; the y axis is shared
 
+    variant_name = VARIANT_LABELS.get(variant, variant)
     fig.suptitle(
-        "Skill relative to naive persistence is near zero on both assets "
-        "(shared axis)", y=1.02, fontsize=11
+        f"Skill relative to naive persistence, {variant_name} inputs ({variant}), shared axis",
+        y=1.02, fontsize=11,
     )
     return _save(
         fig,
         fig_root / "fig04_model_vs_naive.png",
-        "Validation skill score relative to naive persistence, per asset. "
-        "Bars to the left of zero indicate a model worse than repeating the current price. "
-        "Dollar errors are not compared across assets; only the unitless skill score is.",
+        f"Validation skill score relative to naive persistence, per asset, {variant_name} "
+        f"inputs ({variant}). Bars to the left of zero indicate a model worse than repeating "
+        "the current price. Dollar errors are not compared across assets; only the unitless "
+        "skill score is.",
         sorted(data["run_id"].tolist()),
         fig_root,
     )
@@ -218,7 +273,13 @@ def plot_observed_vs_predicted(
     ax1.plot(subset["date"], subset["y_naive"], label="Naive (today's close)", color="tab:blue", ls="--", lw=1)
     ax1.set_ylabel("Price")
     ax1.legend(fontsize=8)
-    ax1.set_title(f"{run_id} — {split}")
+    # run id layout: <stamp>_<asset>_<model>_<variant>_seed<n>
+    parts = run_id.split("_")
+    model_id = "_".join(parts[2:-2])
+    ax1.set_title(
+        f"{parts[1].upper()} {split}: {model_label(model_id)}, "
+        f"{VARIANT_LABELS.get(parts[-2], parts[-2])} inputs"
+    )
 
     error = subset["y_pred"] - subset["y_true"]
     ax2.bar(subset["date"], error, color="tab:orange", width=1.0)
@@ -310,7 +371,8 @@ def plot_ablation_delta(
         relative = (float(row.validation_mae) - reference) / reference if reference else np.nan
         pairs.append(
             {
-                "label": f"{row.asset}/{row.model_id}/{row.preprocess_variant}",
+                "label": f"{row.asset}: {model_label(row.model_id)}"
+                + ("" if row.preprocess_variant == "P2" else f" ({row.preprocess_variant})"),
                 "delta": relative,
                 "run_id": row.run_id,
             }
@@ -363,7 +425,7 @@ def plot_asset_characteristics(
         rebased = frame["close"] / frame["close"].iloc[0] * 100.0
         axes[0].plot(frame.index, rebased, lw=0.9, color=colours.get(asset), label=asset)
 
-        returns = frame["close"].pct_change(1)
+        returns = frame["close"].pct_change(1, fill_method=None)
         volatility = returns.rolling(30, min_periods=30).std(ddof=0) * np.sqrt(252) * 100.0
         axes[1].plot(frame.index, volatility, lw=0.9, color=colours.get(asset), label=asset)
 

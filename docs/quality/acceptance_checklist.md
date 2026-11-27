@@ -94,7 +94,7 @@ human decision or an independent retest · `FAIL` = known defect.
 |---|---|---|
 | One-command reproduction script | PASS | `scripts/reproduce.sh` |
 | Pinned dependency set | PASS | `requirements.txt`, `pyproject.toml` |
-| Notebook executes end to end, no cached outputs | PASS | `tests/test_notebook.py` (4 tests, executes all 15 code cells) |
+| Notebook executes end to end, no cached outputs | PASS | `tests/test_notebook.py` (runs every cell in an empty folder and checks all 20 results match) |
 | Notebook has no absolute paths or secrets | PASS | `test_notebook_has_no_hardcoded_absolute_paths` |
 | Snapshot hashes match files | PASS | `test_real_snapshot_counts_if_present` |
 | Figures regenerated from stored metrics | PASS | `int4096.evaluation.figures` writes `.caption.txt` with run IDs |

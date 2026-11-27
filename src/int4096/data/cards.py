@@ -24,7 +24,7 @@ DOCS_ROOT = REPO_ROOT / "docs" / "research"
 
 def describe_frame(frame: pd.DataFrame) -> dict[str, Any]:
     """Descriptive statistics used in the dataset card."""
-    returns = frame["close"].pct_change().dropna()
+    returns = frame["close"].pct_change(fill_method=None).dropna()
     gaps = frame.index.to_series().diff().dt.days.dropna()
     return {
         "rows": int(len(frame)),

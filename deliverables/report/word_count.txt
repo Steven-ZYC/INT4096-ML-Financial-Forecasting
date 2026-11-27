@@ -120,10 +120,10 @@ Number of math displayed: 0
 
 Included file: ./sections/09_results.tex
 Encoding: ascii
-Sum count: 343
+Sum count: 350
 Words in text: 188
 Words in headers: 15
-Words outside text (captions, etc.): 140
+Words outside text (captions, etc.): 147
 Number of headers: 4
 Number of floats/tables/figures: 3
 Number of math inlines: 0
@@ -241,10 +241,10 @@ Number of math displayed: 0
 
 Sum of files: main.tex
 File(s) total: main.tex
-Sum count: 3050
+Sum count: 3057
 Words in text: 2387
 Words in headers: 103
-Words outside text (captions, etc.): 541
+Words outside text (captions, etc.): 548
 Number of headers: 30
 Number of floats/tables/figures: 12
 Number of math inlines: 18
@@ -261,7 +261,7 @@ Subcounts:
   172+2+41 (1/1/4/1) Included file: ./sections/06_method.tex
   139+4+0 (1/0/1/0) Included file: ./sections/07_models.tex
   177+2+37 (1/1/1/0) Included file: ./sections/08_ablation.tex
-  188+15+140 (4/3/0/0) Included file: ./sections/09_results.tex
+  188+15+147 (4/3/0/0) Included file: ./sections/09_results.tex
   94+3+0 (1/0/1/0) Included file: ./sections/09b_experimental_dl.tex
   170+2+0 (1/0/0/0) Included file: ./sections/10_education.tex
   154+15+0 (5/0/0/0) Included file: ./sections/11_limitations.tex

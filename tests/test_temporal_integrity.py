@@ -238,8 +238,8 @@ def test_features_match_independent_trailing_formulas(synthetic_frame):
     expected["ret_20"] = close / close.shift(20) - 1.0
     expected["ma_gap_5"] = close / trailing_mean(close, 5) - 1.0
     expected["ma_gap_20"] = close / trailing_mean(close, 20) - 1.0
-    expected["vol_10"] = close.pct_change(1).rolling(window=10, min_periods=10).std(ddof=0)
-    expected["vol_30"] = close.pct_change(1).rolling(window=30, min_periods=30).std(ddof=0)
+    expected["vol_10"] = close.pct_change(1, fill_method=None).rolling(window=10, min_periods=10).std(ddof=0)
+    expected["vol_30"] = close.pct_change(1, fill_method=None).rolling(window=30, min_periods=30).std(ddof=0)
     expected["range_1"] = (high - low) / close
     expected["vol_chg"] = volume / trailing_mean(volume, 5) - 1.0
     expected["dow"] = synthetic_frame.index.day_of_week.astype("float64")

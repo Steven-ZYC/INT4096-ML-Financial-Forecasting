@@ -55,7 +55,7 @@ def asset_block(asset: str, protocol) -> dict:
     dates = [f"{d:%Y-%m-%d}" for d in frame.index]
     xdates = [f"{d:%Y-%m-%d}" for d in X.index]
 
-    returns = frame["close"].pct_change().dropna()
+    returns = frame["close"].pct_change(fill_method=None).dropna()
     gaps = frame.index.to_series().diff().dt.days.dropna()
     train = X.iloc[split.train_start:split.train_end]
     block = {

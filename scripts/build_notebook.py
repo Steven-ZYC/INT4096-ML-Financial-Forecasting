@@ -1,17 +1,22 @@
 """Generate `deliverables/notebook/INT4096_Final_Colab.ipynb`.
 
-The notebook is produced from source here so that its content is reviewable in
-version control as plain Python, and so it cannot silently drift from the
-library code. Cells are written to be run top-to-bottom in a fresh Colab kernel:
-no hidden state, no manual edits, no cached outputs.
+The notebook is self-contained: this builder copies the repository's own source,
+configuration, tests and data snapshots into its cells. Run top to bottom in a
+fresh kernel, it writes them into a new workspace folder, repeats the experiments
+with the submitted settings, checks the results against the submitted ones and
+draws the report's figures with the same code.
 
-Usage:
+Rebuild after changing any embedded file (a test fails if the notebook is stale):
+
     python scripts/build_notebook.py
 """
 
 from __future__ import annotations
 
+import base64
 import json
+import textwrap
+import zlib
 from pathlib import Path
 
 import nbformat as nbf
@@ -19,574 +24,533 @@ import nbformat as nbf
 REPO_ROOT = Path(__file__).resolve().parents[1]
 OUT = REPO_ROOT / "deliverables" / "notebook" / "INT4096_Final_Colab.ipynb"
 
-
-def md(text: str):
-    return nbf.v4.new_markdown_cell(text.strip("\n"))
-
-
-def code(text: str):
-    return nbf.v4.new_code_cell(text.strip("\n"))
-
-
-CELLS = [
-    md(
-        """
-# Learning Machine Learning Through Financial Time-Series Forecasting
-
-**INT4096 — Artificial Intelligence and Machine Learning in Education**
-Education University of Hong Kong · Semester 1, 2026–27 · Group project
-
-A reproducible comparison of model families and preprocessing strategies for
-next-session close prediction on **AAPL** and **BTC**.
-
----
-
-### What this notebook does
-
-1. Loads an **immutable** snapshot of each asset and verifies its SHA-256.
-2. Builds strictly **causal** features (only bars up to and including `t`).
-3. Splits chronologically — 60% train, 20% validation, 20% **sealed** test.
-4. Runs a naive persistence baseline and four model families.
-5. Reports MAE / RMSE / R² **and** skill relative to persistence.
-6. Shows one preprocessing ablation: does scaling help, and for which models?
-
-### What this notebook deliberately does **not** do
-
-- It does not unblind the test block. The final 20% is sealed (decision D7).
-- It does not claim the models are profitable. **This is not investment advice.**
-- It does not claim that students learned anything: no learner study was run.
-
-### How to run
-
-`Runtime → Run all`. The first cell installs dependencies (~30 s).
-Everything after that is deterministic given the committed data snapshot.
-"""
-    ),
-    md("## 0. Setup\n\nColab already provides most of the scientific stack; we only install what is missing."),
-    code(
-        """
-import importlib
-import os
-import subprocess
-import sys
-
-REQUIRED = ["numpy", "pandas", "scipy", "sklearn", "matplotlib", "yaml"]
-missing = [name for name in REQUIRED if importlib.util.find_spec(name) is None]
-
-if missing and os.environ.get("INT4096_SKIP_INSTALL") == "1":
-    raise RuntimeError(f"Missing packages {missing} and INT4096_SKIP_INSTALL=1 is set.")
-if missing:
-    print("Installing:", missing)
-    subprocess.run([sys.executable, "-m", "pip", "install", "-q", *missing], check=True)
-else:
-    print("All required packages are already available.")
-
-import numpy as np, pandas as pd, sklearn, matplotlib
-print("python  ", sys.version.split()[0])
-print("numpy   ", np.__version__)
-print("pandas  ", pd.__version__)
-print("sklearn ", sklearn.__version__)
-print("matplotlib", matplotlib.__version__)
-"""
-    ),
-    md(
-        """
-## 1. Get the project code and data
-
-This notebook is designed to run from the repository root. If you opened it
-directly in Colab, clone the project first (replace the URL with your own
-repository), or upload the `data/raw/` folder alongside the notebook.
-
-The **check** below is what matters: the notebook refuses to proceed unless it
-can see the snapshot files and their SHA-256 manifests.
-"""
-    ),
-    code(
-        """
-import os
-import subprocess
-import sys
-from pathlib import Path
-
-REPO_URL = os.environ.get("INT4096_REPO", "")  # optional: set to clone automatically
-
-if not Path("data/raw/aapl_daily.json").exists() and REPO_URL:
-    subprocess.run(["git", "clone", "--depth", "1", REPO_URL, "int4096"], check=True)
-    os.chdir("int4096")
-
-root = Path.cwd()
-if not (root / "src" / "int4096").exists():
-    # Walk up to the repository root, which is the case when the notebook is
-    # opened from deliverables/notebook/ inside the repository.
-    for parent in root.parents:
-        if (parent / "src" / "int4096").exists():
-            os.chdir(parent)
-            root = Path.cwd()
-            break
-
-print("working directory:", root)
-print("package present  :", (root / "src" / "int4096").exists())
-print("snapshot present :", (root / "data" / "raw" / "aapl_daily.json").exists())
-print("manifest present :", (root / "data" / "raw" / "aapl_daily.manifest.json").exists())
-
-sys.path.insert(0, str(root / "src"))
-import int4096
-print("int4096 version  :", int4096.__version__)
-"""
-    ),
-    md(
-        """
-## 2. Load the immutable snapshots and verify integrity
-
-A dataset that cannot be identified by hash is not reproducible. `run_cell`
-enforces this; the check is repeated here so a reader sees it happen.
-
-Both assets are daily bars, but they are **different datasets**: AAPL follows
-exchange sessions (weekends and holidays are gaps), BTC trades every UTC day.
-We never align them by row number.
-"""
-    ),
-    code(
-        """
-from int4096.config import load_protocol
-from int4096.data.load import load_snapshot, read_manifest, resolve_snapshot_path
-from int4096.data.snapshot import sha256_file
-from int4096.data.validate import validate_frame
-
-protocol = load_protocol()
-print("protocol version:", protocol.version)
-print("label mode      :", protocol.label_mode, "(models fit the price CHANGE; error is reported on the price)")
-print()
-
-frames = {}
-for asset in ("AAPL", "BTC"):
-    frame = load_snapshot(asset)
-    manifest = read_manifest(asset)
-    actual = sha256_file(resolve_snapshot_path(asset))
-    assert actual == manifest["sha256"], f"{asset}: snapshot hash mismatch"
-
-    report = validate_frame(frame, asset=asset)
-    frames[asset] = frame
-    print(f"{asset}: {len(frame):,} bars  {frame.index[0].date()} .. {frame.index[-1].date()}  "
-          f"quality={'PASS' if report.passed else 'ISSUES'}")
-    print(f"       sha256 {actual[:16]}...  source={manifest['source']['provider']}")
-
-pd.concat({k: v.tail(3)[["close", "volume"]] for k, v in frames.items()}, axis=1)
-"""
-    ),
-    md(
-        """
-## 3. Causal features
-
-Every feature is a trailing ratio: a return, a gap to a moving average, a
-trailing volatility, an intra-bar range, or a volume anomaly.
-
-**Why ratios and not prices?** Price levels are non-stationary and would let a
-model look accurate simply by copying today's price. Ratios are scale-free,
-which is also what makes a comparison between a $200 stock and an $80,000 coin
-meaningful at all.
-
-Two demonstration cells follow. The first shows that appending extreme *future*
-data leaves earlier features untouched. If it changed them, the pipeline would be
-peeking into the future.
-"""
-    ),
-    code(
-        """
-from int4096.features.build import build_features, feature_dictionary
-
-frame = frames["AAPL"]
-X, y = build_features(frame, lookback=protocol.lookback, min_periods=protocol.min_periods,
-                      mode=protocol.label_mode)
-print(f"design matrix: {X.shape[0]} rows x {X.shape[1]} features")
-print("features:", list(X.columns))
-print()
-display(pd.DataFrame(feature_dictionary()))
-"""
-    ),
-    code(
-        """
-# --- the look-ahead demonstration -------------------------------------------
-future = frame.iloc[[-1]].copy()
-future.index = pd.DatetimeIndex([frame.index[-1] + pd.Timedelta(days=1)], name=frame.index.name)
-for column in ("open", "high", "low", "close", "volume", "adj_close"):
-    future[column] = future[column].to_numpy() * 50.0   # absurd future values
-
-extended = pd.concat([frame, future])
-X_ext, _ = build_features(extended, lookback=protocol.lookback,
-                          min_periods=protocol.min_periods, mode=protocol.label_mode)
-
-shared = X.index
-difference = (X.loc[shared] - X_ext.loc[shared]).abs().max().max()
-print(f"largest change in any historical feature after appending extreme future data: {difference:.3e}")
-assert difference < 1e-12, "features depend on future data — this is a leak"
-print("PASS: features are causal (they cannot see the future).")
-"""
-    ),
-    md(
-        """
-## 4. Chronological split, with a purge at each boundary
-
-Random shuffling of time-ordered rows would let the model train on the future.
-We split by time instead, and we **purge one row at each boundary**:
-
-with `y_t = Close_{t+1}`, the last training label is a validation-block price and
-the last validation label would be a *sealed test* price. Dropping one row at
-each boundary removes both channels. (This was found by an independent audit —
-see `docs/quality/leakage_audit.md`, finding LEAK-001.)
-"""
-    ),
-    code(
-        """
-from int4096.data.split import chronological_split
-from int4096.experiments.run import prepare_dataset
-
-splits = {}
-for asset in ("AAPL", "BTC"):
-    prepared = prepare_dataset(asset, protocol)
-    splits[asset] = prepared["split"]
-    info = prepared["split"].describe(prepared["X"].index)
-    print(asset)
-    for key in ("train_period", "validation_period", "test_period", "train_rows",
-                "validation_rows", "test_rows"):
-        print(f"   {key:18s} {info[key]}")
-    print()
-"""
-    ),
-    code(
-        """
-import matplotlib.pyplot as plt
-
-fig, axes = plt.subplots(len(frames), 1, figsize=(11, 3.4 * len(frames)), squeeze=False)
-for ax, (asset, frame) in zip(axes[:, 0], frames.items()):
-    split = splits[asset]
-    ax.plot(frame.index, frame["close"], color="black", lw=0.8, label="Close (raw)")
-    ax.axvspan(frame.index[0], frame.index[split.train_end], alpha=0.10, color="tab:blue")
-    ax.axvspan(frame.index[split.validation_start], frame.index[split.validation_end],
-               alpha=0.10, color="tab:green")
-    ax.axvspan(frame.index[split.test_start], frame.index[-1], alpha=0.14, color="tab:red")
-    ax.set_title(f"{asset}: train (blue) / validation (green) / sealed test (red)")
-    ax.set_ylabel("Price")
-    ax.legend(loc="upper left", fontsize=8)
-fig.tight_layout()
-plt.show()
-print("The red block is sealed: no cell in this notebook fits or scores on it.")
-"""
-    ),
-    md(
-        """
-## 5. The baseline everything must beat: naive persistence
-
-"Tomorrow's close will be today's close" is a genuinely strong forecaster for
-near-random-walk prices. If a fancy model cannot beat it, that is the finding,
-not a failure of the analysis.
-"""
-    ),
-    code(
-        """
-from int4096.evaluation.baselines import naive_persistence
-from int4096.evaluation.metrics import evaluate_predictions, mae
-
-asset = "AAPL"
-prepared = prepare_dataset(asset, protocol)
-X, y, split, frame = prepared["X"], prepared["y"], prepared["split"], prepared["frame"]
-
-val_index = X.index[split.validation_start:split.validation_end]
-reference = frame.loc[val_index, protocol.label_field].to_numpy()
-truth = reference + y.loc[val_index].to_numpy()      # delta mode -> price level
-naive = naive_persistence(reference)
-
-baseline_metrics = evaluate_predictions(truth, naive, naive, reference=reference)
-print(f"Naive persistence on {asset} validation ({len(truth)} sessions)")
-print(f"  MAE  = {baseline_metrics['mae']:.3f}")
-print(f"  RMSE = {baseline_metrics['rmse']:.3f}")
-print(f"  R2   = {baseline_metrics['r2']:.4f}   <- high because price levels trend; not evidence of skill")
-print(f"  direction accuracy = {baseline_metrics['direction_accuracy']} "
-      f"(ties: {baseline_metrics['direction_tie_rate']:.0%}) -> makes no directional call, so n/a")
-"""
-    ),
-    md(
-        """
-## 6. Model comparison under identical conditions
-
-Four model families get the **same** features, split, evaluation dates and tuning
-budget. Each builds a scikit-learn pipeline in which any scaler is fitted on the
-training rows only, inside the pipeline, so it is refitted per fold.
-
-- `linear_baseline` — near-unregularized linear model (the "learned floor")
-- `ridge` — regularized linear reference
-- `svr` — kernel method, strongly scale-sensitive
-- `random_forest` — bagged trees, scale-invariant, weak extrapolation
-- `hist_gradient_boosting` — boosted trees, sequential residual fitting
-"""
-    ),
-    code(
-        """
-from int4096.experiments.tuning import select_hyperparameters
-from int4096.data.split import expanding_window_folds
-from int4096.models.base import build_estimator
-from int4096.features.pipeline import select_feature_columns
-
-MODELS = ["linear_baseline", "ridge", "svr", "random_forest", "hist_gradient_boosting"]
-VARIANT = protocol.variant("P2")
-variant_name = "P2"
-
-results = []
-for asset in ("AAPL", "BTC"):
-    prepared = prepare_dataset(asset, protocol)
-    X, y, split, frame = prepared["X"], prepared["y"], prepared["split"], prepared["frame"]
-    columns = select_feature_columns(VARIANT, list(X.columns))
-
-    train = np.arange(split.train_start, split.train_end)
-    val = np.arange(split.validation_start, split.validation_end)
-    X_train, y_train = X.iloc[train], y.iloc[train]
-    X_val = X.iloc[val]
-    reference = frame.loc[X_val.index, protocol.label_field].to_numpy()
-    truth = reference + y.iloc[val].to_numpy()
-
-    folds = expanding_window_folds(len(X_train), n_splits=protocol.cv["n_splits"],
-                                   gap=protocol.cv["gap"],
-                                   min_train_fraction=protocol.cv["min_train_cv_fraction"]
-                                   if "min_train_cv_fraction" in protocol.cv
-                                   else protocol.cv["min_train_fraction"])
-
-    for model_id in MODELS:
-        space = dict(protocol.model(model_id).get("search_space") or {})
-
-        def score(config, model_id=model_id):
-            scores = []
-            for fold_train, fold_val in folds:
-                estimator = build_estimator(model_id, config, 42, VARIANT, feature_columns=None)
-                estimator.fit(X_train.iloc[fold_train], y_train.iloc[fold_train])
-                predictions = estimator.predict(X_train.iloc[fold_val])
-                scores.append(float(np.mean(np.abs(y_train.iloc[fold_val].to_numpy() - predictions))))
-            return float(np.mean(scores))
-
-        search = select_hyperparameters(score, space, max_trials=6, max_seconds=60, seed=42)
-        final = build_estimator(model_id, search.best_hyperparameters, 42, VARIANT)
-        final.fit(X_train, y_train)
-
-        predicted_delta = final.predict(X_val)
-        predicted_price = reference + predicted_delta
-        bundle = evaluate_predictions(truth, predicted_price, naive_persistence(reference),
-                                      reference=reference)
-        results.append({
-            "asset": asset, "model": model_id,
-            "mae": bundle["mae"], "rmse": bundle["rmse"], "r2": bundle["r2"],
-            "skill_mae": bundle["skill_mae"],
-            "direction_accuracy": bundle["direction_accuracy"],
-        })
-
-results_df = pd.DataFrame(results)
-results_df
-"""
-    ),
-    md(
-        """
-### Reading this table
-
-`skill_mae = 1 - MAE_model / MAE_naive`. Zero means "no better than copying
-today's price". **Negative means worse.**
-
-Dollar errors (MAE/RMSE) are **not** comparable between AAPL and BTC — the quote
-scales differ by orders of magnitude. Only `skill_mae` can be compared across the
-two assets.
-"""
-    ),
-    code(
-        """
-pivot = results_df.pivot(index="model", columns="asset", values="skill_mae").round(4)
-print("skill_MAE by model and asset (0 = no better than persistence)")
-display(pivot)
-
-fig, axes = plt.subplots(1, 2, figsize=(11, 3.8), sharex=True)
-bound = max(0.01, float(results_df["skill_mae"].abs().max()) * 1.3)
-for ax, asset in zip(axes, ("AAPL", "BTC")):
-    subset = results_df[results_df["asset"] == asset].sort_values("skill_mae")
-    colours = ["tab:green" if v > 0 else "tab:red" for v in subset["skill_mae"]]
-    ax.barh(subset["model"], subset["skill_mae"], color=colours)
-    ax.axvline(0, color="black", lw=1)
-    ax.set_xlim(-bound, bound)
-    ax.xaxis.set_major_formatter(lambda v, _: f"{v*100:+.1f}%")
-    ax.set_title(asset)
-    ax.set_xlabel("skill vs naive persistence (shared axis)")
-fig.suptitle("Trained models are within a fraction of a percent of persistence")
-fig.tight_layout()
-plt.show()
-"""
-    ),
-    md(
-        """
-## 7. Deep dive: does preprocessing matter?
-
-Scaling changes the **geometry** of the feature space. A kernel method measures
-distances there, so scaling should matter for SVR. A tree only compares
-thresholds within one feature, so scaling should be irrelevant to a forest.
-
-That second claim is a **negative control**: if scaling changes the forest's
-predictions, something is wrong with the pipeline, not with the world.
-"""
-    ),
-    code(
-        """
-ablation = []
-for asset in ("AAPL", "BTC"):
-    prepared = prepare_dataset(asset, protocol)
-    X, y, split, frame = prepared["X"], prepared["y"], prepared["split"], prepared["frame"]
-    train = np.arange(split.train_start, split.train_end)
-    val = np.arange(split.validation_start, split.validation_end)
-    X_train, y_train, X_val = X.iloc[train], y.iloc[train], X.iloc[val]
-    reference = frame.loc[X_val.index, protocol.label_field].to_numpy()
-    truth = reference + y.iloc[val].to_numpy()
-
-    for model_id in ("ridge", "svr", "random_forest", "hist_gradient_boosting"):
-        for variant_name in ("P0", "P2"):
-            variant = protocol.variant(variant_name)
-            estimator = build_estimator(model_id, {}, 42, variant)
-            estimator.fit(X_train, y_train)
-            predicted = reference + estimator.predict(X_val)
-            ablation.append({
-                "asset": asset, "model": model_id, "variant": variant_name,
-                "mae": mae(truth, predicted),
-            })
-
-ablation_df = pd.DataFrame(ablation)
-wide = ablation_df.pivot_table(index=["asset", "model"], columns="variant", values="mae")
-wide["delta_pct_vs_P0"] = (wide["P2"] - wide["P0"]) / wide["P0"] * 100
-wide.round(4)
-"""
-    ),
-    code(
-        """
-print("Effect of scaling (P0 -> P2) on validation MAE")
-for (asset, model), row in wide.iterrows():
-    tag = "  <- exactly invariant (as theory predicts)" if abs(row["delta_pct_vs_P0"]) < 1e-9 else ""
-    print(f"  {asset}  {model:24s} {row['delta_pct_vs_P0']:+7.4f}%{tag}")
-
-fig, ax = plt.subplots(figsize=(8, 3.6))
-labels = [f"{a}/{m}" for a, m in wide.index]
-ax.barh(labels, wide["delta_pct_vs_P0"], color=["tab:red" if v > 0 else "tab:green" for v in wide["delta_pct_vs_P0"]])
-ax.axvline(0, color="black", lw=1)
-ax.set_xlabel("change in validation MAE when scaling is applied (%)")
-ax.set_title("Scaling barely matters for these models — and is exactly neutral for trees")
-ax.tick_params(axis="y", labelsize=8)
-fig.tight_layout()
-plt.show()
-"""
-    ),
-    md(
-        """
-## 8. Worked examples for learners
-
-### Example A — why R² can look impressive while a model has no skill
-
-R² compares variance explained *around the mean of the evaluation window*. On a
-trending price series, the mean is far from every point, so variance is huge and
-even a naive forecast scores high. That is why this project reports skill relative
-to persistence alongside R².
-
-### Example B — spot the leakage
-
-The next cell contains a **deliberately leaky** feature. Decide what is wrong
-before running it.
-"""
-    ),
-    code(
-        """
-def leaky_features(frame):
-    out = pd.DataFrame(index=frame.index)
-    out["ret_1"] = frame["close"].pct_change(1)
-    out["tomorrow_ret"] = frame["close"].pct_change(1).shift(-1)   # <-- look here
-    return out
-
-leaky = leaky_features(frame)
-print("correlation of each feature with the realised next-day return:")
-target = frame["close"].pct_change(1).shift(-1)
-for column in leaky.columns:
-    print(f"  {column:14s} {leaky[column].corr(target):+.3f}")
-
-print()
-print("Answer: 'tomorrow_ret' is shift(-1) — it IS the target. A correlation of +1.000")
-print("means the model would be predicting the answer, not forecasting it.")
-print("It is also unavailable at decision time, so it could never be used in practice.")
-"""
-    ),
-    md(
-        """
-### Example C — why the naive baseline is hard to beat
-
-Daily price changes are close to unpredictable in sign. The cell below shows how
-much of next-day variance is explained by yesterday's return: if it is near zero,
-momentum cannot be learned from `ret_1` alone, and no amount of model capacity
-creates information that is not in the features.
-"""
-    )
-    ,
-    code(
-        """
-for asset in ("AAPL", "BTC"):
-    close = frames[asset]["close"]
-    r = close.pct_change(1)
-    print(f"{asset}: corr(ret_t, ret_t+1) = {r.corr(r.shift(-1)):+.4f}   "
-          f"(R^2 = {r.corr(r.shift(-1))**2:.4f})")
-print()
-print("A near-zero autocorrelation is the statistical face of the random-walk-like")
-print("behaviour that makes persistence a strong baseline. This is the honest")
-print("conclusion of the comparison, not a failure of the models.")
-"""
-    ),
-    md(
-        """
-## 9. Limitations and responsible interpretation
-
-1. **This is not investment advice.** Error metrics say nothing about profit,
-   risk, or transaction costs. A model with low MAE can lose money.
-2. **Short horizons are close to unpredictable.** Persistence is strong on
-   one-session-ahead closes; that is a property of the data, not a modelling flaw.
-3. **Two assets, one window.** AAPL and BTC over 2021–2026 cover specific market
-   regimes. Conclusions do not generalise to other periods or assets.
-4. **BTC is a venue-specific USDT price**, not a global USD index.
-5. **Adjusted vs raw prices.** We use raw close; dividends are ignored, and
-   adjusted series carry retroactive factors that can leak into history.
-6. **No learner study was conducted.** The educational material is a *designed
-   resource*; no claim about student learning outcomes is made.
-7. **The test block is sealed.** Nothing here was tuned on it.
-
-### Where the numbers come from
-
-Every figure and metric in the submitted report is regenerated from
-`experiments/models/` by `scripts/reproduce.sh`, and each run manifest records
-the git commit, dataset SHA-256, protocol version, seed and hyperparameters.
-"""
-    ),
-    code(
-        """
-print(int4096.DISCLAIMER)
-"""
-    ),
+# Embedded source files, grouped in reading order. Every .py under
+# src/int4096 must appear exactly once (checked in build()).
+CODE_GROUPS = [
+    ("Configuration (the research protocol)", [
+        "configs/research_protocol.yaml", "pyproject.toml",
+        "src/int4096/__init__.py", "src/int4096/paths.py", "src/int4096/config.py",
+    ]),
+    ("Data: providers, snapshots, validation and chronological splits", [
+        "src/int4096/data/__init__.py", "src/int4096/data/load.py",
+        "src/int4096/data/validate.py", "src/int4096/data/split.py",
+        "src/int4096/data/providers.py", "src/int4096/data/snapshot.py",
+        "src/int4096/data/cards.py",
+    ]),
+    ("Features and preprocessing", [
+        "src/int4096/features/__init__.py", "src/int4096/features/build.py",
+        "src/int4096/features/pipeline.py",
+    ]),
+    ("Models", [
+        "src/int4096/models/__init__.py", "src/int4096/models/base.py",
+        "src/int4096/models/ridge.py", "src/int4096/models/svr.py",
+        "src/int4096/models/random_forest.py",
+        "src/int4096/models/hist_gradient_boosting.py", "src/int4096/models/mlp.py",
+    ]),
+    ("Experiment runner and tuning", [
+        "src/int4096/experiments/__init__.py", "src/int4096/experiments/manifest.py",
+        "src/int4096/experiments/tuning.py", "src/int4096/experiments/run.py",
+        "src/int4096/experiments/registry_report.py",
+    ]),
+    ("Evaluation, analysis and figures", [
+        "src/int4096/evaluation/__init__.py", "src/int4096/evaluation/baselines.py",
+        "src/int4096/evaluation/metrics.py", "src/int4096/evaluation/analysis.py",
+        "src/int4096/evaluation/figures.py",
+    ]),
+    ("Scripts: report tables and figures, neural experiment, mutation check", [
+        "scripts/build_latex_assets.py", "scripts/supplementary_direction_test.py",
+        "scripts/mutation_check.py",
+    ]),
+    ("Tests", [
+        "tests/conftest.py", "tests/test_data_contract.py",
+        "tests/test_metrics_and_manifest.py", "tests/test_model_lanes.py",
+        "tests/test_temporal_integrity.py", "tests/test_figures.py",
+    ]),
+]
+
+DATA_FILES = [
+    "data/raw/aapl_daily.json", "data/raw/aapl_daily.manifest.json",
+    "data/raw/btc_daily.json", "data/raw/btc_daily.manifest.json",
 ]
 
 
-def build() -> Path:
+def md(text: str):
+    return nbf.v4.new_markdown_cell(textwrap.dedent(text).strip("\n"))
+
+
+def code(text: str):
+    return nbf.v4.new_code_cell(textwrap.dedent(text).strip("\n"))
+
+
+def file_cell(relative: str):
+    content = (REPO_ROOT / relative).read_text(encoding="utf-8")
+    return nbf.v4.new_code_cell(f"%%writefile {relative}\n{content.rstrip(chr(10))}")
+
+
+def data_cell():
+    blobs = {
+        name: base64.b64encode(zlib.compress((REPO_ROOT / name).read_bytes(), 9)).decode()
+        for name in DATA_FILES
+    }
+    lines = ["#@title Embedded data snapshots (compressed; verified by SHA-256 below)",
+             "import base64, zlib", "from pathlib import Path", "", "SNAPSHOTS = {"]
+    for name, blob in blobs.items():
+        lines.append(f'    "{name}": (')
+        lines += [f'        "{chunk}"' for chunk in textwrap.wrap(blob, 100)]
+        lines.append("    ),")
+    lines += [
+        "}",
+        "for name, blob in SNAPSHOTS.items():",
+        "    path = Path(name)",
+        "    path.parent.mkdir(parents=True, exist_ok=True)",
+        "    path.write_bytes(zlib.decompress(base64.b64decode(blob)))",
+        '    print(f"wrote {name}  ({path.stat().st_size:,} bytes)")',
+    ]
+    cell = nbf.v4.new_code_cell("\n".join(lines))
+    cell.metadata["cellView"] = "form"
+    return cell
+
+
+def published_results() -> dict:
+    """The submitted numbers, read from experiments/ at build time."""
+    runs = {}
+    for path in sorted((REPO_ROOT / "experiments" / "models").glob("*/*/metrics.json")):
+        blob = json.loads(path.read_text(encoding="utf-8"))
+        key = f"{blob['asset']}|{blob['model_id']}|{blob['preprocess_variant']}"
+        metrics = blob["metrics"]
+        runs[key] = [metrics["validation_mae"], metrics["validation_skill_mae"]]
+    neural = {}
+    root = REPO_ROOT / "experiments" / "supplementary" / "direction_test"
+    for path in sorted(root.glob("*/results.json"), reverse=True):
+        blob = json.loads(path.read_text(encoding="utf-8"))
+        if blob.get("status") == "COMPLETE":
+            for asset, result in blob["results"].items():
+                for kind in ("mlp", "lstm"):
+                    neural[f"{asset}|{kind}"] = result[kind]["accuracy_ensemble"]
+            neural["device"] = f"{blob['device']}, torch {blob['torch']}"
+            break
+    return {"runs": runs, "neural": neural}
+
+
+def pinned_versions() -> dict:
+    versions = {}
+    for line in (REPO_ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines():
+        if "==" in line and not line.startswith("#"):
+            name, version = line.split("==")
+            versions[name.strip()] = version.strip()
+    return versions
+
+
+def build_cells() -> list:
+    cells = [
+        md("""
+        # Learning Machine Learning Through Financial Time-Series Forecasting
+
+        **INT4096: Artificial Intelligence and Machine Learning in Education**
+        The Education University of Hong Kong, Semester 1, 2026–27. Group project.
+
+        A comparison of model families and preprocessing strategies for next-session
+        close prediction on **AAPL** and **BTC**.
+
+        ### How to run
+
+        `Runtime → Run all`. The notebook needs no other files and no downloads of data:
+        the project code and the data snapshots are inside it.
+
+        | Section | What it produces |
+        |---|---|
+        | 1–2 | Environment, project code and data, written to a new workspace folder |
+        | 3–5 | Data check, features, leakage tests |
+        | 6–7 | All 20 experiments, checked against the submitted results |
+        | 8–9 | Bootstrap intervals; experimental MLP and LSTM |
+        | 10 | The report's tables and data figures |
+        | 11–12 | Examples for learners; limitations |
+
+        The five main models are scikit-learn models and run on the CPU. Only the neural
+        experiment in section 9 can use a GPU. The final 20% of each series (the test
+        block) is never scored. **This is not investment advice.**
+        """),
+        md("## 1. Setup"),
+        code(f"""
+        import importlib.util, os, subprocess, sys
+        from datetime import datetime
+        from importlib.metadata import version
+        from pathlib import Path
+
+        PINNED = {pinned_versions()!r}
+        INSTALL_PINNED = False   # True: install the exact versions behind the submitted results
+
+        MODULES = {{"numpy": "numpy", "pandas": "pandas", "scipy": "scipy", "scikit-learn": "sklearn",
+                   "matplotlib": "matplotlib", "PyYAML": "yaml", "pytest": "pytest"}}
+        wanted = [f"{{n}}=={{v}}" for n, v in PINNED.items() if n in MODULES] if INSTALL_PINNED else [
+            name for name, module in MODULES.items() if importlib.util.find_spec(module) is None]
+        if wanted:
+            print("Installing:", wanted)
+            subprocess.run([sys.executable, "-m", "pip", "install", "-q", *wanted], check=True)
+
+        print(f"{{'python':14s}}{{sys.version.split()[0]}}")
+        for name in MODULES:
+            note = "" if PINNED.get(name) in (None, version(name)) else f"   (submitted results used {{PINNED[name]}})"
+            print(f"{{name:14s}}{{version(name)}}{{note}}")
+        """),
+        code("""
+        # A new, empty workspace for this session. Nothing existing is overwritten.
+        if "WORKSPACE" not in globals():
+            WORKSPACE = Path(f"int4096_workspace_{datetime.now():%Y%m%d_%H%M%S}").resolve()
+        for folder in ("configs", "data/raw", "scripts", "tests", "src/int4096/data",
+                       "src/int4096/features", "src/int4096/models", "src/int4096/experiments",
+                       "src/int4096/evaluation"):
+            (WORKSPACE / folder).mkdir(parents=True, exist_ok=True)
+        os.chdir(WORKSPACE)
+        sys.path.insert(0, str(WORKSPACE / "src"))
+        os.environ["PYTHONPATH"] = str(WORKSPACE / "src")
+        os.environ["MPLBACKEND"] = "Agg"
+
+        def run(*args):
+            \"\"\"Run a project command in the workspace and show its output.\"\"\"
+            done = subprocess.run([sys.executable, *args], capture_output=True, text=True)
+            print((done.stdout + done.stderr).replace(str(WORKSPACE), "."))
+            if done.returncode != 0:
+                raise RuntimeError(f"command failed with exit code {done.returncode}: {args}")
+
+        print("workspace:", WORKSPACE.name)
+        """),
+        md("""
+        ## 2. Project code and data
+
+        Each `%%writefile` cell saves one file of the project, unchanged, into the
+        workspace. The cells can be collapsed; sections 3 onwards use them.
+        """),
+        data_cell(),
+    ]
+    for title, files in CODE_GROUPS:
+        cells.append(md(f"### 2 · {title}"))
+        cells += [file_cell(name) for name in files]
+
+    cells += [
+        md("""
+        ## 3. Load the snapshots and verify integrity
+
+        Each file's SHA-256 is compared with the value recorded when it was downloaded.
+        The two assets are **separate datasets**: AAPL follows exchange sessions, BTC
+        trades every day. They are never aligned row by row.
+        """),
+        code("""
+        import numpy as np
+        import pandas as pd
+        try:
+            from IPython.display import Image, display
+        except ImportError:                      # plain Python (used by the repository test)
+            display, Image = print, lambda filename: filename
+
+        import int4096
+        from int4096.config import load_protocol
+        from int4096.data.load import load_snapshot, read_manifest, resolve_snapshot_path
+        from int4096.data.snapshot import sha256_file
+        from int4096.data.validate import validate_frame
+
+        protocol = load_protocol()
+        print("protocol version:", protocol.version)
+        frames, rows = {}, []
+        for asset in ("AAPL", "BTC"):
+            frames[asset] = load_snapshot(asset)
+            manifest = read_manifest(asset)
+            actual = sha256_file(resolve_snapshot_path(asset))
+            assert actual == manifest["sha256"], f"{asset}: snapshot hash mismatch"
+            frame = frames[asset]
+            rows.append({"asset": asset, "provider": manifest["source"]["provider"], "rows": len(frame),
+                         "first": frame.index[0].date(), "last": frame.index[-1].date(),
+                         "quality": "PASS" if validate_frame(frame, asset=asset).passed else "ISSUES",
+                         "sha256 prefix": actual[:12]})
+        display(pd.DataFrame(rows))
+        """),
+        md("""
+        ## 4. Features and the chronological split
+
+        All ten features use only bars up to and including day `t`. The split is by
+        time (60% train, 20% validation, 20% sealed test) with one row dropped at each
+        boundary, because the label of day `t` is the close of day `t+1`.
+
+        The second cell appends absurd *future* prices and checks that no earlier
+        feature changes.
+        """),
+        code("""
+        from int4096.features.build import build_features, feature_dictionary
+        from int4096.experiments.run import prepare_dataset
+
+        display(pd.DataFrame(feature_dictionary()))
+        for asset in ("AAPL", "BTC"):
+            prepared = prepare_dataset(asset, protocol)
+            info = prepared["split"].describe(prepared["X"].index)
+            print(asset)
+            for part in ("train", "validation", "test"):
+                print(f"   {part:11s}{info[part + '_period']}   rows: {info[part + '_rows']}")
+        """),
+        code("""
+        frame = frames["AAPL"]
+        settings = dict(lookback=protocol.lookback, min_periods=protocol.min_periods, mode=protocol.label_mode)
+        X, _ = build_features(frame, **settings)
+
+        future = frame.iloc[[-1]].copy()
+        future.index = pd.DatetimeIndex([frame.index[-1] + pd.Timedelta(days=1)], name=frame.index.name)
+        for column in ("open", "high", "low", "close", "volume", "adj_close"):
+            future[column] = future[column].to_numpy() * 50.0
+        X_extended, _ = build_features(pd.concat([frame, future]), **settings)
+
+        difference = (X - X_extended.loc[X.index]).abs().max().max()
+        print(f"largest change in any historical feature: {difference:.3e}")
+        assert difference < 1e-12, "features depend on future data: this is a leak"
+        print("PASS: features cannot see the future.")
+        """),
+        md("""
+        ## 5. Tests
+
+        Unit and leakage tests, followed by a mutation check: six leakage bugs are
+        injected one at a time and the tests must catch every one.
+        """),
+        code('run("-m", "pytest", "tests", "-q", "--color=no", "-p", "no:cacheprovider")'),
+        code('run("scripts/mutation_check.py")'),
+        md("""
+        ## 6. All 20 experiments
+
+        Two assets × five models × two preprocessing variants (P0 unscaled, P2
+        standardised), with the settings used for the submitted results: seed 42 and a
+        budget of 10 random-search trials (at most 90 s) per experiment. Tuning uses
+        time-ordered cross-validation inside the training block only.
+        """),
+        code("""
+        import shutil
+        from int4096.experiments.run import run_cell
+        from int4096.paths import RUNS_ROOT
+
+        TRIALS, SECONDS = 10, 90
+        MODELS = ["linear_baseline", "ridge", "svr", "random_forest", "hist_gradient_boosting"]
+
+        shutil.rmtree(RUNS_ROOT, ignore_errors=True)   # only this workspace's own runs
+        for asset in ("AAPL", "BTC"):
+            for model_id in MODELS:
+                for variant in ("P0", "P2"):
+                    result = run_cell(asset, model_id, variant, protocol, max_trials=TRIALS,
+                                      max_seconds=SECONDS, human_owner="notebook")
+                    assert result.status == "SUCCESS", result.error
+                    print(f"{asset:5s}{model_id:24s}{variant}  MAE {result.metrics['validation_mae']:10.3f}"
+                          f"  skill {result.metrics['validation_skill_mae'] * 100:+.2f}%"
+                          f"  ({result.execution_seconds:.1f} s)")
+        """),
+        md("""
+        ## 7. Do the new results match the submitted ones?
+
+        The submitted values below were copied from the project's run records when this
+        notebook was built. Small differences can appear with other library versions or
+        hardware. In a check with older libraries (scikit-learn 1.6.1), only the four
+        gradient-boosting experiments differed, by less than 0.1% in MAE. Setting
+        `INSTALL_PINNED = True` in section 1 installs the original versions (restart
+        the session afterwards if the environment had already loaded these libraries).
+        """),
+        code(f"""
+        import json
+        PUBLISHED = json.loads(r'''{json.dumps(published_results())}''')
+
+        rows = []
+        for path in sorted(RUNS_ROOT.glob("*/*/metrics.json")):
+            blob = json.loads(path.read_text(encoding="utf-8"))
+            key = f"{{blob['asset']}}|{{blob['model_id']}}|{{blob['preprocess_variant']}}"
+            mae_new, skill_new = blob["metrics"]["validation_mae"], blob["metrics"]["validation_skill_mae"]
+            mae_old, skill_old = PUBLISHED["runs"][key]
+            same = f"{{mae_new:.3f}}" == f"{{mae_old:.3f}}" and f"{{skill_new * 100:.2f}}" == f"{{skill_old * 100:.2f}}"
+            rows.append({{"experiment": key.replace("|", " "), "MAE submitted": mae_old, "MAE now": mae_new,
+                         "skill % submitted": skill_old * 100, "skill % now": skill_new * 100,
+                         "match": same}})
+        check = pd.DataFrame(rows)
+        display(check.round(4))
+        assert len(check) == len(PUBLISHED["runs"])
+        if check["match"].all():
+            print(f"MATCH: all {{len(check)}} experiments agree with the submitted results at reported precision.")
+        else:
+            gap = (check["MAE now"] / check["MAE submitted"] - 1).abs().max()
+            print(f"DIFFERENCE: {{(~check['match']).sum()}} of {{len(check)}} experiments differ "
+                  f"(largest relative MAE change {{gap:.2e}}). Check the versions printed in section 1.")
+        """),
+        md("""
+        ## 8. How certain are these results?
+
+        Moving-block bootstrap (1,000 resamples of 10 consecutive days) of each
+        experiment's skill. An interval that contains zero means the data cannot
+        separate that model from "copy today's close". The intervals are indicative.
+        """),
+        code("""
+        from int4096.evaluation import figures
+        from int4096.evaluation.analysis import write_summary
+        from int4096.paths import FIGURES
+
+        analysis = json.loads(write_summary().read_text(encoding="utf-8"))
+        print("intervals containing zero:", analysis["summary"]["ci_includes_zero"], "of", analysis["summary"]["runs"])
+        for asset, values in analysis["return_autocorrelation"].items():
+            print(f"{asset}: lag-1 autocorrelation of daily returns {values['lag1_autocorrelation']:+.4f}")
+        forest = figures.plot_skill_intervals(analysis["skill_intervals"], block_length=10,
+                                              n_resamples=1000, figure_root=FIGURES)
+        display(Image(filename=str(forest)))
+        """),
+        md("""
+        ## 9. Experimental neural networks (MLP and LSTM)
+
+        An add-on outside the main comparison: predict whether the next close is higher
+        than today's. Each network is trained for at most 300 epochs and stops after 20
+        epochs without improvement on a hold-out taken from the end of the training
+        block. A GPU is used if one is present; a CPU also works but is slower.
+        Neural-network results can differ slightly between devices.
+        """),
+        code("""
+        RUN_NEURAL = True
+        if RUN_NEURAL and importlib.util.find_spec("torch") is not None:
+            run("scripts/supplementary_direction_test.py")
+            latest = sorted((WORKSPACE / "experiments/supplementary/direction_test").glob("*/results.json"))[-1]
+            neural = json.loads(latest.read_text(encoding="utf-8"))
+            submitted = PUBLISHED["neural"]
+            print("submitted results used:", submitted.get("device"))
+            display(pd.DataFrame([
+                {"asset": a, "network": k, "accuracy submitted": submitted.get(f"{a}|{k}"),
+                 "accuracy now": neural["results"][a][k]["accuracy_ensemble"],
+                 "majority rule": neural["results"][a][k]["majority_accuracy"],
+                 "95% interval vs majority": neural["results"][a][k]["diff_vs_majority_ci95"]}
+                for a in ("AAPL", "BTC") for k in ("mlp", "lstm")]))
+        else:
+            print("Neural experiment skipped (RUN_NEURAL is False or PyTorch is not installed).")
+        """),
+        md("""
+        ## 10. The report's tables and figures
+
+        Generated from the experiments run above, with the same code that builds the
+        report. Table and figure numbers follow the report. Figure 3 in the report is a
+        hand-drawn pipeline diagram, so it has no data to regenerate.
+        """),
+        code("""
+        run("scripts/build_latex_assets.py")
+        """),
+        code("""
+        results = []
+        for path in sorted(RUNS_ROOT.glob("*/*/metrics.json")):
+            blob = json.loads(path.read_text(encoding="utf-8"))
+            results.append({"asset": blob["asset"], "model": figures.model_label(blob["model_id"]),
+                            "variant": blob["preprocess_variant"],
+                            "MAE": blob["metrics"]["validation_mae"], "RMSE": blob["metrics"]["validation_rmse"],
+                            "R2": blob["metrics"]["validation_r2"],
+                            "skill %": blob["metrics"]["validation_skill_mae"] * 100})
+        results = pd.DataFrame(results)
+
+        print("Table 3. Preprocessing ablation: validation MAE, P0 (unscaled) against P2 (standardised)")
+        ablation = results.pivot_table(index=["asset", "model"], columns="variant", values="MAE")
+        ablation["change %"] = (ablation["P2"] / ablation["P0"] - 1) * 100
+        display(ablation.round(4))
+
+        print("Table 4. Validation performance, standardised inputs (P2). Dollar errors are not comparable across assets.")
+        table4 = results[results["variant"] == "P2"].set_index(["asset", "model"])[["MAE", "RMSE", "R2", "skill %"]].sort_index()
+        display(table4.round(4))
+        """),
+        code("""
+        report_figures = WORKSPACE / "deliverables/report/latex/figures"
+        for number, pattern in [(1, "fig01_*.png"), (2, "fig02_*.png"), (4, "fig06_*.png"),
+                                (5, "fig04_*.png"), (6, "fig03_*.png"), (7, "fig07_*.png")]:
+            path = sorted(report_figures.glob(pattern))[-1]
+            print(f"Figure {number}")
+            print(path.with_suffix(".caption.txt").read_text(encoding="utf-8").split("run_ids:")[0].strip())
+            display(Image(filename=str(path)))
+        """),
+        md("""
+        ## 11. Examples for learners
+
+        ### A. Why R² can look impressive without any skill
+
+        R² compares the error with the spread of prices around their average. Prices
+        wander far from their average, so even "copy today's close" scores a high R².
+        """),
+        code("""
+        from int4096.evaluation.baselines import naive_persistence
+        from int4096.evaluation.metrics import evaluate_predictions
+
+        for asset in ("AAPL", "BTC"):
+            prepared = prepare_dataset(asset, protocol)
+            X, y, split = prepared["X"], prepared["y"], prepared["split"]
+            dates = X.index[split.validation_start:split.validation_end]
+            today = prepared["frame"].loc[dates, protocol.label_field].to_numpy()
+            truth = today + y.loc[dates].to_numpy()
+            naive = naive_persistence(today)
+            scores = evaluate_predictions(truth, naive, naive, reference=today)
+            print(f"{asset}: copying today's close gives R2 = {scores['r2']:.4f}, skill = 0")
+        """),
+        md("""
+        ### B. Spot the leakage
+
+        One feature below is **deliberately leaky**. Find it before running the cell.
+        """),
+        code("""
+        close = frames["AAPL"]["close"]
+        leaky = pd.DataFrame({"ret_1": close.pct_change(1, fill_method=None),
+                              "tomorrow_ret": close.pct_change(1, fill_method=None).shift(-1)})
+        target = close.pct_change(1, fill_method=None).shift(-1)
+        for column in leaky:
+            print(f"{column:14s} correlation with the next-day return: {leaky[column].corr(target):+.3f}")
+        print("'tomorrow_ret' uses shift(-1): it is the answer itself and is unknown at prediction time.")
+        """),
+        md("""
+        ## 12. Limitations and responsible interpretation
+
+        1. **Not investment advice.** Forecast error says nothing about profit, risk or
+           trading costs.
+        2. **One-day horizon.** Copying today's close is a strong forecast here.
+        3. **Two assets, one period.** The conclusions may not hold elsewhere.
+        4. **BTC is one exchange's USDT price**, not a global USD index.
+        5. **Raw close prices** are used; dividends are ignored.
+        6. **No learner study** was run; the lesson is a designed resource.
+        7. **The test block is sealed.** All numbers here are validation numbers.
+
+        The last cell packs the tables, figures and run records into one zip file.
+        """),
+        code("""
+        bundle = WORKSPACE / "bundle"
+        for folder in ("experiments", "deliverables"):
+            shutil.copytree(WORKSPACE / folder, bundle / folder, dirs_exist_ok=True)
+        archive = shutil.make_archive(str(WORKSPACE / "int4096_outputs"), "zip", bundle)
+        shutil.rmtree(bundle)
+        print("outputs:", Path(archive).relative_to(WORKSPACE.parent))
+        print(int4096.DISCLAIMER)
+        """),
+    ]
+    return cells
+
+
+def check_coverage() -> None:
+    listed = [name for _, files in CODE_GROUPS for name in files]
+    actual = {p.relative_to(REPO_ROOT).as_posix() for p in (REPO_ROOT / "src" / "int4096").rglob("*.py")}
+    missing = sorted(actual - set(listed))
+    if missing or len(listed) != len(set(listed)):
+        raise SystemExit(f"notebook file list is incomplete or duplicated; missing: {missing}")
+
+
+def build_notebook():
+    check_coverage()
     notebook = nbf.v4.new_notebook()
-    notebook["cells"] = CELLS
+    notebook["cells"] = build_cells()
+    for index, cell in enumerate(notebook["cells"]):
+        cell["id"] = f"cell-{index:03d}"       # fixed ids keep rebuilds identical
     notebook["metadata"] = {
-        "kernelspec": {
-            "display_name": "Python 3",
-            "language": "python",
-            "name": "python3",
-        },
+        "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
         "language_info": {"name": "python", "version": "3.10"},
         "colab": {"provenance": [], "toc_visible": True},
     }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
     nbf.validate(notebook)
-    OUT.write_text(json.dumps(notebook, indent=1) + "\n", encoding="utf-8")
+    return notebook
+
+
+def build() -> Path:
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(build_notebook(), indent=1) + "\n", encoding="utf-8")
     return OUT
 
 
 if __name__ == "__main__":
     path = build()
     notebook = nbf.read(path, as_version=4)
-    print(f"wrote {path}")
-    print(f"cells: {len(notebook.cells)} ({sum(c.cell_type == 'code' for c in notebook.cells)} code)")
+    print(f"wrote {path.relative_to(REPO_ROOT)}")
+    print(f"cells: {len(notebook.cells)} ({sum(c.cell_type == 'code' for c in notebook.cells)} code), "
+          f"{path.stat().st_size / 1024:.0f} KB")

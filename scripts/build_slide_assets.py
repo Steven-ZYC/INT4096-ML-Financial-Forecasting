@@ -314,7 +314,7 @@ def build_data_macros(m: dict[str, str]) -> None:
         m[f"Quality{asset}"] = "PASS" if validate_frame(frame, asset).passed else "ISSUES"
 
         # Descriptive character of each market (full snapshot, no model involved).
-        returns = frame["close"].pct_change().dropna()
+        returns = frame["close"].pct_change(fill_method=None).dropna()
         m[f"RetSd{asset}"] = f"{returns.std() * 100:.2f}"
         gaps = frame.index.to_series().diff().dt.days.dropna()
         m[f"Gaps{asset}"] = f"{int((gaps > 2).sum()):,}".replace(",", "{,}")
@@ -520,12 +520,13 @@ def ensure_figures() -> int:
     if not (report_figs / "fig04_model_vs_naive.pdf").exists():
         figures.EXTRA_FORMATS = (".pdf",)
         protocol = load_protocol()
-        frames, splits = {}, {}
+        frames, splits, dates = {}, {}, {}
         for asset in ("AAPL", "BTC"):
             prepared = prepare_dataset(asset, protocol)
             frames[asset] = prepared["frame"]
             splits[asset] = prepared["split"]
-        figures.plot_coverage_and_splits(frames, splits, figure_root=report_figs)
+            dates[asset] = prepared["X"].index
+        figures.plot_coverage_and_splits(frames, splits, dates, figure_root=report_figs)
         registry = figures.load_registry()
         figures.plot_model_vs_naive(registry, figure_root=report_figs)
         figures.plot_ablation_delta(registry, figure_root=report_figs)
