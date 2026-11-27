@@ -2,7 +2,7 @@
 
 Compiled output: [`../INT4096_Final_Report.pdf`](../INT4096_Final_Report.pdf)
 (10 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **2,136 body + 102 headings = 2,238**.
+Word count: [`../word_count.txt`](../word_count.txt) — **2,149 body + 103 headings = 2,252**.
 
 ## Build
 
@@ -31,7 +31,7 @@ embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 SHA-256 of the committed PDF:
 
 ```
-032f285c91ba820c96ccb52ee6c5a252600deccd3e010dace20fd21d31507f88  INT4096_Final_Report.pdf
+3373110cb50c2ddc710d123dee58a02f75c456f1117e47cedaf4bc1c5123097e  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -65,9 +65,9 @@ oral guidance, not as a published rule, so the report states both.
 The team limits the narrative to 2,300 words.
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 2,136** — body prose across `main.tex` and every `\input` section.
-- **Words in headers: 102** — section and paragraph headings.
-- **Narrative total: 2,238.**
+- **Words in text: 2,149** — body prose across `main.tex` and every `\input` section.
+- **Words in headers: 103** — section and paragraph headings.
+- **Narrative total: 2,252.**
 - **Words outside text: 480** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.
@@ -76,7 +76,7 @@ Not counted as narrative: bibliography entries, table bodies, the title block,
 LaTeX markup and citation keys.
 
 This is a reproducible count, not a claim about the instructor's own tool. If
-their counter includes captions, the figure would be about 2,720 and the owner
+their counter includes captions, the figure would be about 2,730 and the owner
 should discuss it; `deliverables/report/word_count.txt` records the exact configuration used.
 
 ## Layout checks performed
