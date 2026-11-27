@@ -1,18 +1,16 @@
 \section{Model Selection and Baselines}
 \label{sec:models}
 
-The five families differ in mechanism: a linear
-baseline (ridge with a small penalty) as a learned floor, Ridge searched over a wide
-penalty range, RBF support vector regression as a kernel method, a random forest as
-a bagged ensemble, and histogram gradient boosting as a boosted ensemble. Gradient
-boosting also stops early, using a random 10\% of its training rows, so its
-iteration setting is an upper limit. Neural
-networks stay out of the main comparison because the handout discourages deep
-learning; an experimental test is reported separately (Section~\ref{sec:dl}).
+The five models are a linear baseline (ridge restricted to small penalties), Ridge
+searched over a wider penalty range, RBF support vector regression, a random
+forest, and histogram gradient boosting. Gradient boosting stops early using a
+random 10\% of its training rows, so its iteration setting is an upper limit.
+Neural networks stay outside the main comparison because the handout discourages
+deep learning; Section~\ref{sec:dl} reports a separate test.
 
-The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. For a near-random-walk series it is strong, free, and
-defines the zero of the skill scale \citep{makridakis2018m4,hyndman2021fpp3}.
+The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. It is free,
+strong for a near-random-walk series, and defines zero skill
+\citep{makridakis2018m4,hyndman2021fpp3}.
 
-One shared code path gives every family identical feature columns, and any
-scaler is refitted per fold inside its pipeline. Tests check column identity and
-seed determinism.
+All models share one code path and the same feature columns, and any scaler is
+refitted per fold. Tests check column identity and seed determinism.

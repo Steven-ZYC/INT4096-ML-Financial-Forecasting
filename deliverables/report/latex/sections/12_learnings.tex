@@ -1,17 +1,15 @@
 \section{Challenges and Team Learnings}
 \label{sec:learnings}
 
-The first difficulty was representational. Initial runs reported skill near
-$-1800\%$, which looked like a modelling failure and was not: every feature was
-scale free, so no model could recover a price level and all collapsed towards the
-training mean.
+The first challenge was target representation. Initial runs reported skill near
+$-1800\%$. The features contained no price level, so the models could not recover
+it and collapsed towards the training mean. After seeing this, we changed the
+training target to the price change and recorded the decision.
 
-The second was the boundary purge, which no inspection would have found; it took an
-auditor tracing a label to a specific test-set price. Relatedly, our first leakage
-tests passed while a one-bar forward shift was present: a green suite only means
-something once it has been shown able to fail.
+The second was the boundary purge, found when an auditor traced a label to a test
+price. Our first leakage tests had also passed with a one-bar forward shift
+present. A passing test suite means more once it has been shown able to fail.
 
-The third was fairness: one construction path, one budget and identical columns
-cost more effort than the models, and make the comparison meaningful. Each family also had one accountable
-owner, reviewed by an agent that had not written the code --- which is why two
-high-severity defects were found before submission.
+The third was fairness. Sharing one construction path, tuning budget and feature
+set took more effort than fitting the models, but it made the comparison
+meaningful.

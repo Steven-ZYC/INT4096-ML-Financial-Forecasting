@@ -1,14 +1,14 @@
 \section{Neural Networks (Experimental)}
 \label{sec:dl}
 
-As an add-on outside the frozen protocol, an MLP on today's ten features and an
-LSTM on the last 20 days of them predicted next-day direction, tuned on the end of
-the training block and averaged over \SupSeeds{} seeds (Table~\ref{tab:dl}; test
-block unused). The networks used Adam, batch size 64 and at most \SupMaxEpochs{}
-epochs, stopping after \SupPatience{} epochs without improvement on that hold-out.
-Neither beat the majority rule: on AAPL both trailed
-``always up'', all \SupNCi{} intervals include zero, and hold-out log-loss
-(\SupLossLo--\SupLossHi) is close to the coin-flip value $\ln 2 \approx 0.693$. More
-capacity found no signal the classical models missed.
+Outside the main protocol, an MLP on the ten features and an LSTM on their last 20
+days predicted next-day direction. We tuned them on the end of the training block
+and averaged over \SupSeeds{} seeds (Table~\ref{tab:dl}); the test block was not
+used. Training used Adam, batch size 64 and at most \SupMaxEpochs{} epochs,
+stopping after \SupPatience{} epochs without hold-out improvement. On AAPL both
+scored below ``always up''. On BTC both scored above ``always down'', but all
+\SupNCi{} intervals include zero. Hold-out log-loss (\SupLossLo--\SupLossHi) is
+close to the coin-flip value $\ln 2 \approx 0.693$. We found no clear evidence
+that these networks add predictive signal.
 
 \input{generated/dl_table}

@@ -38,7 +38,7 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\footnotesize INT4096 --- Learning ML Through Financial Forecasting}
+\fancyhead[L]{\footnotesize INT4096: Learning ML Through Financial Forecasting}
 \fancyhead[R]{\footnotesize\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
 
@@ -61,8 +61,8 @@ Time-Series Forecasting:\\[2pt]
 Apple and Bitcoin}
 \author{\GroupAuthors\\[2pt]
 \small INT4096 Artificial Intelligence and Machine Learning in Education\\
-\small The Education University of Hong Kong --- Semester 1, 2026--27}
-\date{29 October 2026}
+\small The Education University of Hong Kong, Semester 1, 2026--27}
+\date{28 November 2026}
 
 \begin{document}
 \maketitle
@@ -70,18 +70,15 @@ Apple and Bitcoin}
 
 \begin{abstract}
 \noindent
-Financial forecasting makes three ideas checkable: generalisation, leakage, and the
-difference between an impressive number and a real improvement. We compare five
-model families and a preprocessing ablation on next-session close prediction for
-Apple (AAPL) and Bitcoin (BTC) under one frozen, leakage-audited protocol. Across
-\NRunTotal{} runs no model beat a trivial persistence rule by more than
-\BestAAPLSkill\% (AAPL) or \BestBTCAllSkill\% (BTC), \NBelowAll{} were worse, and
-every bootstrap interval includes zero; an experimental MLP and LSTM fared no better. We report
-this negative result as the finding and derive a five-objective lesson from it, in
-which learners read a skill score, find leakage in code, and explain why
-standardisation changes a kernel method but leaves a random forest numerically
-untouched. No learner study was run, so the educational contribution is a designed
-resource, not evidence of learning gains.
+Financial forecasting makes generalisation, leakage and baseline comparison
+checkable. We compare five models and two preprocessing variants for next-session
+close prediction on Apple (AAPL) and Bitcoin (BTC) under a documented,
+leakage-audited protocol. Across \NRunTotal{} runs, no model beat naive persistence
+by more than \BestAAPLSkill\% (AAPL) or \BestBTCAllSkill\% (BTC), \NBelowAll{} runs
+were worse, and every bootstrap interval includes zero. Experimental neural
+networks showed no clear advantage. We turn this negative result into a
+five-objective lesson on reading skill scores, finding leakage and understanding
+scaling. Without a learner study, we make no claim of learning gains.
 \end{abstract}
 
 \vspace{0.2cm}
@@ -104,14 +101,12 @@ resource, not evidence of learning gains.
 
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
-\noindent The repository holds immutable snapshots with SHA-256 manifests, the frozen
-protocol, every run manifest, the tests and the notebook that regenerates the
-analysis (\texttt{scripts/reproduce.sh}). AI coding assistants (Pi with
+\noindent The repository holds hashed data snapshots, the protocol, run manifests,
+tests and the notebook. AI coding assistants (Pi with
 \texttt{pi-subagents}, and Claude Code) drafted code, tests and text under a
 protocol frozen before the experiments ran. Zhang Yancheng directed that work: he
 set the research direction, made the final decisions, and reviewed and verified
-every AI-assisted change. An independent
-audit found two high-severity defects, both fixed and re-tested. This work is
+every AI-assisted change. This work is
 educational, not investment advice.
 
 \bibliographystyle{plainnat}

@@ -1,59 +1,62 @@
 \section{Evaluation and Results}
 \label{sec:results}
 
-Table~\ref{tab:results} reports validation performance; all \NRunTotal{} runs
-completed successfully and none read the test block.
+Table~\ref{tab:results} reports validation performance. All \NRunTotal{} runs
+completed, and none read the test block.
 
 \input{generated/results_table}
 
 \paragraph{RQ1: nothing meaningfully beats persistence.}
-The best standardised result is \BestAAPLModel{} on AAPL at \BestAAPLSkill\%
-skill and \BestBTCModel{} on BTC at \BestBTCSkill\% (the best BTC run overall is the
-unscaled \BestBTCAllModel{}, \BestBTCAllSkill\%) --- a fraction of a percentage point
-above doing nothing. \NBelowPtwo{} of the ten standardised runs are worse than
-persistence (\NBelowAll{} of all \NRunTotal{}). A 95\% moving-block bootstrap of
-skill on identical dates includes zero for all \NCiIncludeZero{} runs.
+The best standardised results are \BestAAPLModel{} on AAPL (\BestAAPLSkill\% skill)
+and \BestBTCModel{} on BTC (\BestBTCSkill\%). The best BTC run overall is the
+unscaled \BestBTCAllModel{} (\BestBTCAllSkill\%). These gains are fractions of one
+per cent. \NBelowPtwo{} of the ten standardised runs are worse than persistence
+(\NBelowAll{} of all \NRunTotal{}). The 95\% moving-block bootstrap interval for
+skill includes zero in all \NCiIncludeZero{} runs.
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig04_model_vs_naive.pdf}
   \caption{Skill relative to naive persistence with standardised inputs (P2, as in
-  Table~\ref{tab:results}), per asset, on a \emph{shared} horizontal axis. Sharing matters: per-panel autoscaling would make BTC's
-  fraction of a percent look as large as AAPL's. Bars left of zero are worse than
-  repeating the current price.}
+  Table~\ref{tab:results}), on a \emph{shared} horizontal axis. Bars left of zero
+  are worse than repeating the current price.}
   \label{fig:skill}
 \end{figure}
 
-\paragraph{RQ2: capacity and regimes.}
-Figure~\ref{fig:assets} gives the mechanical explanation: BTC's volatility is
-higher and more variable, so a model with capacity fixed by an identical budget
-faces a harder target, and every BTC skill value is closer to zero. On AAPL, where
-capacity has more room to matter, the most flexible ensemble does worst --- the
-signature of fitting noise.
+\paragraph{RQ2: capacity and market conditions.}
+BTC is usually more volatile (Figure~\ref{fig:assets}), and each standardised BTC
+skill is closer to zero than its AAPL counterpart. Two assets cannot show that
+volatility causes this. On AAPL the random forest has the lowest skill. This may
+reflect fitted noise, but we did not measure the train--validation gap, so we
+cannot establish overfitting.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.78\linewidth]{figures/fig03_observed_vs_predicted_2026-10-29T145509Z_aapl_svr_P2_seed42_validation.pdf}
-  \caption{Observed next close against the fitted SVR and naive forecasts on the
-  AAPL validation block, with signed error below. The naive line tracks the
-  observed series closely, which is why absolute error is a poor way to judge a
-  model and skill is used instead.}
+  \caption{Observed next close, SVR forecast and naive forecast on the AAPL
+  validation block, with signed error below. Both forecasts track the price
+  closely, so we judge the model by skill.}
   \label{fig:forecast}
 \end{figure}
 
-\paragraph{Why they fail.}
-The explanation is statistical, not architectural: daily return autocorrelation is
-close to zero, so the features carry little information about the next session's
-direction and extra parameters fit noise. The forest adds a structural limit ---
-its predictions average leaf values, so it cannot extrapolate. With every interval spanning zero and the ranking
-changing between assets, no family is superior: the result is a tie.
+\paragraph{Interpretation.}
+A likely reason for the weak results is limited signal: the lag-1 autocorrelation
+of daily returns is close to zero for both assets. This checks only one linear
+dependence. Model rankings also change between assets, so we do not rank the
+models.
+
+\paragraph{Hypotheses.}
+The results are consistent with H1 and H3. H2 is unresolved: AAPL has lower
+normalised MAE, but persistence shows a similar gap, and skill favours neither
+asset consistently. H4 and H5 were not tested, because we recorded no training
+error and did not run P3.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.76\linewidth]{figures/fig07_feature_importance_aapl.pdf}
-  \caption{Learner-facing interpretability: permutation importance for the fitted
-  Ridge model on the AAPL validation block, measured as the increase in MAE when
-  one feature is shuffled \citep{fisher2019allmodels}. The model relies most on short-horizon returns and
-  trailing volatility, and the magnitudes are tiny --- consistent with the skill
-  table. This describes the fitted model, not a causal claim about markets.}
+  \caption{Permutation importance on the AAPL validation block: the increase in MAE
+  when one feature is shuffled \citep{fisher2019allmodels}. The model is a Ridge
+  fit with the default penalty, not the tuned run in Table~\ref{tab:results}.
+  \texttt{ret\_1} and \texttt{ret\_5} matter most, all effects are small, and
+  \texttt{vol\_chg} is slightly negative. This is not a causal claim about markets.}
   \label{fig:importance}
 \end{figure}

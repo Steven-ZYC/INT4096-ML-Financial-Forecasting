@@ -1,30 +1,31 @@
 \section{Features and Leakage Control}
 \label{sec:features}
 
-The ten features are trailing ratios: returns over 1, 5 and 20 sessions; gaps to
-5- and 20-session moving averages; realised volatility over 10 and 30 sessions;
-intra-bar range; a volume anomaly; and day of week. Each uses bars up to and
+The ten trailing features are returns over 1, 5 and 20 sessions (\texttt{ret\_1},
+\texttt{ret\_5}, \texttt{ret\_20}); gaps from the 5- and 20-session moving averages
+(\texttt{ma\_gap\_5}, \texttt{ma\_gap\_20}); the standard deviation of returns over
+10 and 30 sessions (\texttt{vol\_10}, \texttt{vol\_30}); the high--low range
+relative to the close (\texttt{range\_1}); volume relative to its 5-session mean
+(\texttt{vol\_chg}); and day of week (\texttt{dow}). Each uses bars up to and
 including $t$, and rolling statistics require a full window.
 
-Features are \emph{scale free} rather than price levels, which are non-stationary
-and would let a model look accurate by copying today's price. The
-reported quantity is error on the next close \emph{price}, while models are fitted
-on the price \emph{change} and reconstructed as
-$\hat{C}_{t+1} = C_t + \widehat{\Delta}_t$. The two are information-equivalent
-because $C_t$ is known at decision time.
+No feature is a price level. Levels are non-stationary and would let a model look
+accurate by copying today's price. We fit the price \emph{change} and reconstruct
+$\hat{C}_{t+1} = C_t + \widehat{\Delta}_t$, then report error on the next close
+\emph{price}. This is possible because $C_t$ is known at decision time.
 
 \paragraph{Boundary purge.}
 With $y_t = C_{t+1}$, the last training label is a validation price and the last
-validation label a sealed test price, so one row is dropped at each boundary. An
-independent audit showed that, without it, perturbing one test price moved the
-headline metric by 0.408 (Table~\ref{tab:splits}).
+validation label is a sealed test price. We therefore drop one row at each
+boundary (Table~\ref{tab:splits}). An independent audit showed that, without this
+purge, perturbing one test price moved the headline metric by 0.408.
 
 \input{generated/splits_table}
 
 \paragraph{Enforcement.}
-One test recomputes every feature from raw data with trailing formulas written
-separately in the test, so a forward peek mismatches; another appends absurd future
-prices and asserts earlier values are unchanged. Six canonical defects --- a
-one-bar forward shift, an obfuscated equivalent, a centred window, a backward
-fill, a whole-series statistic, and preprocessing fitted on train-plus-test ---
-are then injected one at a time, and each must be detected.
+One test recomputes every feature from raw data using separately written trailing
+formulas. Another appends absurd future prices and checks that earlier values do
+not change. We also inject six defects one at a time: a one-bar forward shift, an
+obfuscated equivalent, a centred window, a backward fill, a whole-series
+statistic, and preprocessing fitted on train-plus-test. The tests must detect each
+one.

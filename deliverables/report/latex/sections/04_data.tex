@@ -1,39 +1,38 @@
 \section{Dataset and Data Provenance}
 \label{sec:data}
 
-Both series are committed as immutable snapshots with a SHA-256 digest, provider, row count and true download
-timestamp. Each experiment recomputes the digest and aborts on mismatch.
+Both series are committed as immutable snapshots with a SHA-256 digest, provider,
+row count and download timestamp. Each experiment recomputes the digest and stops
+on a mismatch.
 
 \input{generated/dataset_table}
 
-The datasets are deliberately not aligned by row index. AAPL follows the exchange
-calendar, so weekends and holidays appear as gaps and about 251 bars accumulate
-per year; BTC has no gap beyond a single day because it trades continuously. Raw
-dollar errors are therefore not comparable, and cross-asset statements use only
-unitless measures.
+We do not align the datasets by row. AAPL follows the exchange calendar, with
+about 251 bars per year and gaps at weekends and holidays. BTC trades continuously
+and has no gap beyond one day. Raw price errors are not comparable, so cross-asset
+statements use unitless measures.
 
-We use the \emph{raw} close as the target. Adjusted prices embed dividend and
-split factors a provider revises afterwards, so a model trained on today's
-adjusted history would see values that did not exist at decision time. No split discontinuity falls in the window (the adjusted/raw ratio never jumps by
-more than 2\%); dividends are ignored. BTC is a single venue quoted in
-USDT, hence a venue-specific price rather than a global index.
+The target is the \emph{raw} close. Providers revise adjusted prices later for
+dividends and splits, so adjusted history contains values unavailable at decision
+time. No split discontinuity falls in the window (the adjusted/raw ratio never
+jumps by more than 2\%), and we ignore dividends. BTC is a single venue quoted in
+USDT, not a global price index.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig01_coverage_and_splits.pdf}
-  \caption{Price history per asset with the frozen 60/20/20 chronological split.
+  \caption{Price history per asset with the fixed 60/20/20 chronological split.
   Blue is training, green validation, red the sealed test block, which no run in
-  this report has read. The panels share no vertical scale and are never
-  combined into one series.}
+  this report has read. The unshaded start is the feature warm-up. The panels are
+  separate series with separate vertical scales.}
   \label{fig:coverage}
 \end{figure}
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig02_asset_characteristics.pdf}
-  \caption{Why the markets are different problems. Left: each series rebased to
-  100 at its own first observation, so no shared price axis is implied. Right:
-  trailing 30-session realised volatility, annualised. BTC's higher and more
-  variable volatility is why a fixed-capacity model faces a harder task.}
+  \caption{How the markets differ. Left: each series rebased to 100 at its first
+  observation. Right: trailing 30-session realised volatility, annualised. BTC is
+  usually the more volatile series.}
   \label{fig:assets}
 \end{figure}

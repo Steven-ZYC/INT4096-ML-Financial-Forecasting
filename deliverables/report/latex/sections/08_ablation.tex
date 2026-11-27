@@ -1,35 +1,30 @@
 \section{Preprocessing Ablation}
 \label{sec:ablation}
 
-RQ3 asks how much preprocessing matters. We vary one factor at a time, holding
-model, features, split and tuning budget fixed; the contrast is scaling, with P0
-unscaled and P2 standardised on training rows only.
+For RQ3 we vary scaling alone and hold model, features, split and tuning budget
+fixed. P0 is unscaled; P2 is standardised using training rows only.
 
 \input{generated/ablation_table}
 
-The measured pattern matches Section~\ref{sec:background}, exactly rather than
-approximately: for both tree ensembles the change in validation MAE is
-\emph{bit-identical} --- $0.000\%$ to printed precision --- on both assets. That is a strong internal control: had scaling moved the forests, the correct
-inference would be a bug, not a discovery.
+For both tree ensembles, predictions under P0 and P2 are identical on both assets,
+as Section~\ref{sec:background} predicts. This is a useful negative control: a
+change would point to a bug.
 
-Scaling-sensitive families move slightly and not uniformly helpfully:
-standardisation barely changes AAPL Ridge, worsens the AAPL linear baseline
-(Table~\ref{tab:ablation}) and rescues nothing --- every value stays within about
-one percentage point of the baseline. An ablation ending in no
-substantial effect is a legitimate finding, and a useful teaching one: it
-separates \emph{this transform changes the model} from \emph{this transform
-improves the forecast}.
+The other models move slightly, in both directions. Standardisation barely changes
+AAPL Ridge and worsens the AAPL linear baseline (Table~\ref{tab:ablation}). Every
+configuration stays within about one percentage point of persistence. For
+teaching, this separates \emph{a transform changes the model} from \emph{a
+transform improves the forecast}.
 
-One variant is reported as not run: with no missing values in either snapshot an
-imputation variant would duplicate the baseline cell, and we did not inject
-synthetic gaps to manufacture a contrast.
+P1, P3 and P4 were not run. With no missing values, P1 would duplicate P0. The
+reduced feature set (P3) and robust scaling with winsorisation (P4) were not
+executed, so feature choice remains untested.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/fig06_ablation_delta.pdf}
-  \caption{Relative change in validation MAE between unscaled (P0) and
-  standardised (P2) variants, holding model and asset fixed. Bars at exactly zero
-  are the tree ensembles, whose predictions are bit-identical under monotone
-  rescaling. Only matched cells are plotted.}
+  \caption{Relative change in validation MAE from unscaled (P0) to standardised
+  (P2) inputs, holding model and asset fixed. The tree ensembles are at exactly
+  zero.}
   \label{fig:ablation}
 \end{figure}

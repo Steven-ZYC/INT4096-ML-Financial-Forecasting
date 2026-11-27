@@ -1,8 +1,8 @@
 # LaTeX Report — Build and Provenance
 
-Compiled output: [`../final/INT4096_Final_Report.pdf`](../final/INT4096_Final_Report.pdf)
-(11 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **2,387 body + 103 headings = 2,490**.
+Compiled output: [`../INT4096_Final_Report.pdf`](../INT4096_Final_Report.pdf)
+(10 pages, A4).
+Word count: [`../word_count.txt`](../word_count.txt) — **2,136 body + 102 headings = 2,238**.
 
 ## Build
 
@@ -28,11 +28,10 @@ The build pins `SOURCE_DATE_EPOCH` to a fixed project constant
 same fixed metadata to matplotlib. Without this, every build differed: pdfTeX
 embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 
-Verified: two consecutive `--clean` builds, and a build from a **fresh clone of
-the remote**, all produce the identical file (and a clean working tree):
+SHA-256 of the committed PDF:
 
 ```
-e41e4a16079553f0e67def93cf1b1fbbfa6d307d688afe0ac34aaba10a1f92f9  INT4096_Final_Report.pdf
+032f285c91ba820c96ccb52ee6c5a252600deccd3e010dace20fd21d31507f88  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -63,12 +62,13 @@ references**. The instructor separately allowed approximately **500 more in
 face-to-face consultation**, reported by the project owner. That is recorded as
 oral guidance, not as a published rule, so the report states both.
 
+The team limits the narrative to 2,300 words.
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 2,387** — body prose across `main.tex` and every `\input` section.
-- **Words in headers: 103** — section and paragraph headings.
-- **Narrative total: 2,490.**
-- **Words outside text: 541** — figure captions and float content, excluded from
+- **Words in text: 2,136** — body prose across `main.tex` and every `\input` section.
+- **Words in headers: 102** — section and paragraph headings.
+- **Narrative total: 2,238.**
+- **Words outside text: 480** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.
 
@@ -76,12 +76,12 @@ Not counted as narrative: bibliography entries, table bodies, the title block,
 LaTeX markup and citation keys.
 
 This is a reproducible count, not a claim about the instructor's own tool. If
-their counter includes captions, the figure would be about 3,030 and the owner
+their counter includes captions, the figure would be about 2,720 and the owner
 should discuss it; `deliverables/report/word_count.txt` records the exact configuration used.
 
 ## Layout checks performed
 
-- A4, 11 pages.
+- A4, 10 pages.
 - Log: 0 overfull boxes, 0 warnings; 2 underfull boxes in the generated neural-network
   table (`generated/dl_table.tex`).
 - `pdftotext`: 0 unresolved `??` references; all 7 figures and 4 tables present;
