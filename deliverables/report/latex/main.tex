@@ -34,6 +34,8 @@
 %TC:macro \repodir [ignore,text]
 \newcommand{\repofile}[2]{\href{\repourl/blob/main/#1}{\textcolor{repolink}{#2}}}
 \newcommand{\repodir}[2]{\href{\repourl/tree/main/#1}{\textcolor{repolink}{#2}}}
+\newcommand{\demourl}{https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/}
+\usepackage{qrcode}  % loaded after hyperref, so each code is also clickable
 \usepackage{natbib}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds}
@@ -121,6 +123,8 @@ beat?} Without a learner study, we claim no learning gains.
 
 
 
+% One block, so the QR codes stay with the acknowledgements.
+\par\noindent\begin{minipage}{\linewidth}
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 \noindent Blue text links to files in our repository, which holds the data,
@@ -131,7 +135,21 @@ protocol, runs, tests and notebook:\newline\url{\repourl}
 documented protocol. Zhang Yancheng directed that work: he
 set the research direction, made the final decisions, and reviewed and verified
 every AI-assisted change. This work is
-educational, not investment advice.
+educational, not investment advice.\par\vspace{3mm}
+
+\begin{center}
+  \begin{minipage}[t]{0.40\linewidth}
+    \centering
+    \qrcode[height=2.8cm]{\repourl}\\[2mm]
+    \textbf{Project repository}
+  \end{minipage}
+  \begin{minipage}[t]{0.40\linewidth}
+    \centering
+    \qrcode[height=2.8cm]{\demourl}\\[2mm]
+    \textbf{Educational demo website}
+  \end{minipage}
+\end{center}
+\end{minipage}
 
 \bibliographystyle{plainnat}
 \bibliography{references}
