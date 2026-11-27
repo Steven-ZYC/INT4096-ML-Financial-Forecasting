@@ -80,11 +80,18 @@
   \hskip.5pt%
 }
 
+% One repository link per slide, shown in the footer strip so it never covers content.
+\newcommand{\repourl}{https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting}
+\newcommand{\currentrepolink}{}
+\newcommand{\repolink}[2]{\gdef\currentrepolink{%
+  \href{\repourl/#1/main/#2}{\color{accent}GitHub: \texttt{\detokenize{#2}}}}}
+
 \newcommand{\intfootline}{%
   \leavevmode%
   \hbox{%
     \begin{beamercolorbox}[wd=.65\paperwidth,ht=1.2ex,dp=0.2ex,leftskip=.3cm]{progress presenter}%
-      {\fontsize{5.6}{6.4}\selectfont\insertsectionhead}%
+      {\fontsize{5.6}{6.4}\selectfont\makebox[\dimexpr.65\paperwidth-.6cm\relax][s]{%
+        \insertsectionhead\hfill\currentrepolink}}%
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=.35\paperwidth,ht=1.2ex,dp=0.2ex,right,rightskip=.3cm]{progress presenter}%
       {\fontsize{5.6}{6.4}\selectfont\bfseries\currentspeaker\hspace{2mm}\insertframenumber\,/\,\inserttotalframenumber}%
@@ -97,6 +104,7 @@
     \progresssegment{4}{04}{Evaluation}%
     \progresssegment{5}{05}{Teaching Design}%
   }\vskip0pt%
+  \gdef\currentrepolink{}%
 }
 \setbeamertemplate{footline}{\intfootline}
 
@@ -185,6 +193,7 @@
 
 % 3 ---------------------------------------------------------------------------
 \begin{frame}{What We Used, and Exactly Where It Came From}
+  \repolink{tree}{data/raw}
   \speaker{Dong Yuankun}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.25}
@@ -237,6 +246,7 @@
 
 % 5 ---------------------------------------------------------------------------
 \begin{frame}{Selection Conditions: From Raw Bars to Modelling Rows}
+  \repolink{tree}{data/splits}
   \speaker{Dong Yuankun}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.47\textwidth}
@@ -282,6 +292,7 @@
 
 % 6 ---------------------------------------------------------------------------
 \begin{frame}{Problems in the Raw Data, and How We Handled Each}
+  \repolink{tree}{data/cards}
   \speaker{Zhang Yancheng}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.22}
@@ -301,6 +312,7 @@
 
 % 7 ---------------------------------------------------------------------------
 \begin{frame}{From One Day's Prices to Ten Features}
+  \repolink{blob}{src/int4096/features/build.py}
   \speaker{Zhang Yancheng}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.31\textwidth}
@@ -348,6 +360,7 @@
 
 % 8 ---------------------------------------------------------------------------
 \begin{frame}{Every Model Gets the Same Data: One Shared Pipeline}
+  \repolink{blob}{src/int4096/features/pipeline.py}
   \speaker{Zhang Yancheng}
   \centering
   \begin{tikzpicture}[font=\scriptsize,
@@ -399,6 +412,7 @@
 
 % 9 ---------------------------------------------------------------------------
 \begin{frame}{Chronological Split, and Proof That the Pipeline Cannot Peek}
+  \repolink{blob}{tests/test_temporal_integrity.py}
   \speaker{Zhang Yancheng}
   \centering
   \begin{tikzpicture}[font=\scriptsize,
@@ -435,6 +449,7 @@
 
 % 10 --------------------------------------------------------------------------
 \begin{frame}{Five Models Plus a Baseline: Why Each One Is There}
+  \repolink{tree}{src/int4096/models}
   \speaker{Zhang Yancheng}
   \centering\scriptsize
   \renewcommand{\arraystretch}{1.12}
@@ -458,6 +473,7 @@
 
 % 11 --------------------------------------------------------------------------
 \begin{frame}{Fine-Tuning: The Same Search and Budget for Every Model}
+  \repolink{blob}{src/int4096/experiments/tuning.py}
   \speaker{Zhang Yancheng}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.36\textwidth}
@@ -493,6 +509,7 @@
 
 % 12 --------------------------------------------------------------------------
 \begin{frame}{What We Explored Beyond Hyperparameters}
+  \repolink{blob}{docs/research/decision_log.md}
   \speaker{Zhang Yancheng}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{.45\textwidth}
@@ -527,6 +544,7 @@
 
 % 13 --------------------------------------------------------------------------
 \begin{frame}{Four Metrics, Each With a Job}
+  \repolink{blob}{src/int4096/evaluation/metrics.py}
   \speaker{Zhang Haoyu}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.18}
@@ -553,6 +571,7 @@
 
 % 14 --------------------------------------------------------------------------
 \begin{frame}{Results: All \NRunTotal{} Runs Land Within 1\% of the Baseline}
+  \repolink{blob}{docs/research/run_registry.md}
   \speaker{Zhang Haoyu}
   \centering
   \includegraphics[width=.92\textwidth,height=.60\textheight,keepaspectratio]{fig04_model_vs_naive.pdf}
@@ -566,6 +585,7 @@
 
 % 15 --------------------------------------------------------------------------
 \begin{frame}{How Certain? Every Interval Includes Zero}
+  \repolink{blob}{experiments/analysis/uncertainty_and_signal.json}
   \speaker{Zhang Haoyu}
   \centering
   \includegraphics[width=\textwidth,height=.56\textheight,keepaspectratio]{fig08_skill_intervals.pdf}
@@ -584,6 +604,7 @@
 
 % 16 --------------------------------------------------------------------------
 \begin{frame}{Teaching Design: The Pipeline Becomes a 60-Minute Lesson}
+  \repolink{tree}{deliverables/lesson}
   \speaker{Lau Pak Hei}
   \centering\scriptsize
   \renewcommand{\arraystretch}{1.25}
@@ -615,6 +636,7 @@
 
 % 17 --------------------------------------------------------------------------
 \begin{frame}{Try It Yourself: The Whole Pipeline, Interactive}
+  \repolink{tree}{deliverables/notebook}
   \speaker{Lau Pak Hei}
   \begin{columns}[c,onlytextwidth]
     \begin{column}{.60\textwidth}
@@ -642,6 +664,7 @@
 
 % 18 --------------------------------------------------------------------------
 \begin{frame}{Summary: What Each Stage Delivered}
+  \repolink{tree}{deliverables}
   \speaker{Lui Shing Lam}
   \centering\footnotesize
   \renewcommand{\arraystretch}{1.3}
@@ -672,6 +695,7 @@
 \setbeamertemplate{footline}{\intfootline}
 
 \begin{frame}{Backup 1: Full 20-Run Transparency Matrix}
+  \repolink{blob}{experiments/models/registry.jsonl}
   \centering
   {\scriptsize Validation skill (\%) for every model, asset and preprocessing
    variant.\par}
@@ -686,6 +710,7 @@
 \end{frame}
 
 \begin{frame}{Backup 2: Experimental Fairness and Manifest Audit}
+  \repolink{blob}{src/int4096/experiments/manifest.py}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
       \textbf{Identical for every lane}
@@ -719,6 +744,7 @@
 \end{frame}
 
 \begin{frame}{Backup 3: Why One Row Is Dropped at Each Boundary}
+  \repolink{blob}{docs/quality/leakage_audit.md}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
       \begin{block}{How the leak works}
@@ -754,6 +780,7 @@
 \end{frame}
 
 \begin{frame}{Backup 4: What Signals Did the Models Rely On?}
+  \repolink{blob}{scripts/build_latex_assets.py}
   \begin{columns}[T]
     \begin{column}{0.55\textwidth}
       \centering
@@ -792,6 +819,7 @@
 \end{frame}
 
 \begin{frame}{Backup 6: Supplementary Test --- Can Neural Networks Call the Direction?}
+  \repolink{blob}{scripts/supplementary_direction_test.py}
   \centering\scriptsize
   How often is ``will tomorrow close higher than today?'' answered correctly? Validation days only.
   \par\vspace{1mm}

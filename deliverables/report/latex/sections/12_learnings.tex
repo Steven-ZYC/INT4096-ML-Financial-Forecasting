@@ -4,7 +4,7 @@
 The first challenge was target representation. Initial runs reported skill near
 $-1800\%$. The features contained no price level, so the models could not recover
 it and collapsed towards the training mean. After seeing this, we changed the
-training target to the price change and recorded the decision.
+training target to the price change and \repofile{docs/research/decision_log.md}{recorded the decision}.
 
 The second was the boundary purge, found when an auditor traced a label to a test
 price. Our first leakage tests had also passed with a one-bar forward shift

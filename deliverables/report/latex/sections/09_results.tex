@@ -1,7 +1,7 @@
 \section{Evaluation and Results}
 \label{sec:results}
 
-Table~\ref{tab:results} reports validation performance. All \NRunTotal{} runs
+Table~\ref{tab:results} reports validation performance. All \repofile{docs/research/run_registry.md}{\NRunTotal{} runs}
 completed, and none read the test block.
 
 \input{generated/results_table}
@@ -11,7 +11,7 @@ The best standardised results are \BestAAPLModel{} on AAPL (\BestAAPLSkill\% ski
 and \BestBTCModel{} on BTC (\BestBTCSkill\%). The best BTC run overall is the
 unscaled \BestBTCAllModel{} (\BestBTCAllSkill\%). These gains are fractions of one
 per cent. \NBelowPtwo{} of the ten standardised runs are worse than persistence
-(\NBelowAll{} of all \NRunTotal{}). The 95\% moving-block bootstrap interval for
+(\NBelowAll{} of all \NRunTotal{}). The 95\% \repofile{experiments/analysis/uncertainty_and_signal.json}{moving-block bootstrap} interval for
 skill includes zero in all \NCiIncludeZero{} runs.
 \begin{figure}[t]
   \centering

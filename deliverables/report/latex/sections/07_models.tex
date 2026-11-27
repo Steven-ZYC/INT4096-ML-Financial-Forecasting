@@ -12,5 +12,5 @@ The mandatory baseline is naive persistence, $\hat{C}_{t+1} = C_t$. It is free,
 strong for a near-random-walk series, and defines zero skill
 \citep{makridakis2018m4,hyndman2021fpp3}.
 
-All models share one code path and the same feature columns, and any scaler is
+All models share \repodir{src/int4096/models}{one code path} and the same feature columns, and any scaler is
 refitted per fold. Tests check column identity and seed determinism.

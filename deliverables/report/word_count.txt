@@ -6,8 +6,8 @@ command:   texcount -inc -sum main.tex
 
 File: main.tex
 Encoding: ascii
-Sum count: 171
-Words in text: 150
+Sum count: 175
+Words in text: 154
 Words in headers: 21
 Words outside text (captions, etc.): 0
 Number of headers: 3
@@ -17,7 +17,7 @@ Number of math displayed: 0
 Subcounts:
   text+headers+captions (#headers/#floats/#inlines/#displayed)
   90+20+0 (2/0/0/0) Subsection
-  60+1+0 (1/0/0/0) Section: Acknowledgements
+  64+1+0 (1/0/0/0) Section: Acknowledgements
 
 Included file: ./generated/numbers.tex
 Encoding: ascii
@@ -241,8 +241,8 @@ Number of math displayed: 0
 
 Sum of files: main.tex
 File(s) total: main.tex
-Sum count: 2745
-Words in text: 2145
+Sum count: 2749
+Words in text: 2149
 Words in headers: 103
 Words outside text (captions, etc.): 480
 Number of headers: 32
@@ -252,7 +252,7 @@ Number of math displayed: 1
 Files: 21
 Subcounts:
   text+headers+captions (#headers/#floats/#inlines/#displayed)
-  150+21+0 (3/0/0/0) File: main.tex
+  154+21+0 (3/0/0/0) File: main.tex
   148+4+0 (1/0/0/0) Included file: ./sections/01_introduction.tex
   151+17+0 (5/0/4/0) Included file: ./sections/02_background.tex
   110+2+0 (1/0/0/0) Included file: ./sections/03_questions.tex

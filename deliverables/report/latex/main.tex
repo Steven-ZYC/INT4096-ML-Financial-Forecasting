@@ -20,7 +20,17 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
+\usepackage[hyphens]{url}  % let the long repository URL wrap
 \usepackage[hidelinks]{hyperref}
+
+% Links into the public repository. Blue text marks them as clickable.
+% The path argument is a URL, so the word count skips it and counts the label.
+\newcommand{\repourl}{https://github.com/Steven-ZYC/INT4096-ML-Financial-Forecasting}
+\definecolor{repolink}{HTML}{1F5F99}
+%TC:macro \repofile [ignore,text]
+%TC:macro \repodir [ignore,text]
+\newcommand{\repofile}[2]{\href{\repourl/blob/main/#1}{\textcolor{repolink}{#2}}}
+\newcommand{\repodir}[2]{\href{\repourl/tree/main/#1}{\textcolor{repolink}{#2}}}
 \usepackage{natbib}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds}
@@ -101,8 +111,10 @@ scaling. Without a learner study, we make no claim of learning gains.
 
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
-\noindent The repository holds hashed data snapshots, the protocol, run manifests,
-tests and the notebook. AI coding assistants (Pi with
+\noindent Blue text links to files in our repository, which holds the data,
+protocol, runs, tests and notebook:\newline\url{\repourl}
+
+\noindent AI coding assistants (Pi with
 \texttt{pi-subagents}, and Claude Code) drafted code, tests and text under a
 documented protocol. Zhang Yancheng directed that work: he
 set the research direction, made the final decisions, and reviewed and verified

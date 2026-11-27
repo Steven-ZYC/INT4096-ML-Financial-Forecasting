@@ -1,7 +1,7 @@
 \section{Features and Leakage Control}
 \label{sec:features}
 
-The ten trailing features are returns over 1, 5 and 20 sessions (\texttt{ret\_1},
+The \repofile{src/int4096/features/build.py}{ten trailing features} are returns over 1, 5 and 20 sessions (\texttt{ret\_1},
 \texttt{ret\_5}, \texttt{ret\_20}); gaps from the 5- and 20-session moving averages
 (\texttt{ma\_gap\_5}, \texttt{ma\_gap\_20}); the standard deviation of returns over
 10 and 30 sessions (\texttt{vol\_10}, \texttt{vol\_30}); the high--low range
@@ -17,15 +17,15 @@ $\hat{C}_{t+1} = C_t + \widehat{\Delta}_t$, then report error on the next close
 \paragraph{Boundary purge.}
 With $y_t = C_{t+1}$, the last training label is a validation price and the last
 validation label is a sealed test price. We therefore drop one row at each
-boundary (Table~\ref{tab:splits}). An independent audit showed that, without this
+boundary (Table~\ref{tab:splits}). An \repofile{docs/quality/leakage_audit.md}{independent audit} showed that, without this
 purge, perturbing one test price moved the headline metric by 0.408.
 
 \input{generated/splits_table}
 
 \paragraph{Enforcement.}
-One test recomputes every feature from raw data using separately written trailing
+\repofile{tests/test_temporal_integrity.py}{One test} recomputes every feature from raw data using separately written trailing
 formulas. Another appends absurd future prices and checks that earlier values do
-not change. We also inject six defects one at a time: a one-bar forward shift, an
+not change. We also \repofile{scripts/mutation_check.py}{inject six defects} one at a time: a one-bar forward shift, an
 obfuscated equivalent, a centred window, a backward fill, a whole-series
 statistic, and preprocessing fitted on train-plus-test. The tests must detect each
 one.

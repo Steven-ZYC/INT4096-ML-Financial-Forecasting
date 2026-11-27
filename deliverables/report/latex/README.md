@@ -2,7 +2,7 @@
 
 Compiled output: [`../INT4096_Final_Report.pdf`](../INT4096_Final_Report.pdf)
 (10 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **2,145 body + 103 headings = 2,248**.
+Word count: [`../word_count.txt`](../word_count.txt) — **2,149 body + 103 headings = 2,252**.
 
 ## Build
 
@@ -31,7 +31,7 @@ embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 SHA-256 of the committed PDF:
 
 ```
-f2b4f608e0fae1d6b7d42fc5f81e7f964eba11ec6d2f6abaa98bede3dd54d743  INT4096_Final_Report.pdf
+56ff6d32f52e2f4b6512fa03cab19a7c3e54d96e701b5b60bbf6a28a79e7b053  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -65,9 +65,9 @@ oral guidance, not as a published rule, so the report states both.
 The team limits the narrative to 2,300 words.
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 2,145** — body prose across `main.tex` and every `\input` section.
+- **Words in text: 2,149** — body prose across `main.tex` and every `\input` section.
 - **Words in headers: 103** — section and paragraph headings.
-- **Narrative total: 2,248.**
+- **Narrative total: 2,252.**
 - **Words outside text: 480** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.

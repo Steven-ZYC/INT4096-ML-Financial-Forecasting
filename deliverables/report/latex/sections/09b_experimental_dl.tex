@@ -2,7 +2,7 @@
 \label{sec:dl}
 
 Outside the main protocol, an MLP on the ten features and an LSTM on their last 20
-days predicted next-day direction. We tuned them on the end of the training block
+days \repofile{scripts/supplementary_direction_test.py}{predicted next-day direction}. We tuned them on the end of the training block
 and averaged over \SupSeeds{} seeds (Table~\ref{tab:dl}); the test block was not
 used. Training used Adam, batch size 64 and at most \SupMaxEpochs{} epochs,
 stopping after \SupPatience{} epochs without hold-out improvement. On AAPL both
