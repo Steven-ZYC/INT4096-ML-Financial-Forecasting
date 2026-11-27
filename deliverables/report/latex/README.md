@@ -2,7 +2,7 @@
 
 Compiled output: [`../INT4096_Final_Report.pdf`](../INT4096_Final_Report.pdf)
 (11 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **1,352 body + 74 headings = 1,426**.
+Word count: [`../word_count.txt`](../word_count.txt) — **1,391 body + 74 headings = 1,465**.
 
 ## Build
 
@@ -31,7 +31,7 @@ embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 SHA-256 of the committed PDF:
 
 ```
-1e4bb8cef73cc4a7443ee3c23a8d062fa2ca00fd183e5948790f6bbc7cf2bbb5  INT4096_Final_Report.pdf
+d357d016da508df544f5e32d4b10ec440614b1a15c5582f8f2af0c52813cfa25  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -63,12 +63,12 @@ references**. The instructor separately allowed approximately **500 more in
 face-to-face consultation**, reported by the project owner. That is recorded as
 oral guidance, not as a published rule, so the report states both.
 
-The team limits the report to 2,100 words, counting table text as well: **2,055**.
+The team limits the report to 2,100 words, counting table text as well: **2,094**.
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 1,352** — body prose across `main.tex` and every `\input` section.
+- **Words in text: 1,391** — body prose across `main.tex` and every `\input` section.
 - **Words in headers: 74** — section and paragraph headings.
-- **Narrative total: 1,426.**
+- **Narrative total: 1,465.**
 - **Words outside text: 489** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.
@@ -77,7 +77,7 @@ Not counted as narrative: bibliography entries, table bodies, the title block,
 LaTeX markup and citation keys.
 
 This is a reproducible count, not a claim about the instructor's own tool. If
-their counter includes captions, the figure would be about 2,540 with captions and table text and the owner
+their counter includes captions, the figure would be about 2,580 with captions and table text and the owner
 should discuss it; `deliverables/report/word_count.txt` records the exact configuration used.
 
 ## Layout checks performed

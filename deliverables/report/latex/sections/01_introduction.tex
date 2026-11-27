@@ -1,16 +1,20 @@
 \section{Introduction and Educational Motivation}
 \label{sec:intro}
 
-Introductory machine learning often uses problems where better models visibly win.
-Such examples can hide two questions that decide whether a model is useful:
-\textbf{\emph{what did it learn}, and \emph{against what baseline}?}
+\textbf{Can a clever model predict tomorrow's price better than doing nothing?}
+Short-horizon prices are close to a random walk \citep{fama1970efficient}, so the
+rule \textbf{\emph{tomorrow's price equals today's}} is hard to beat. Introductory
+examples where better models visibly win can hide two questions:
+\emph{what did the model learn}, and \emph{against what baseline}?
 
-Short-horizon prices are close to a random walk \citep{fama1970efficient}. A
-sophisticated model can therefore lose to the rule \textbf{\emph{tomorrow's price
-equals today's}}, and a learner who can explain why has understood more than a
-leaderboard shows.
+We answer in four steps:
+\begin{enumerate}
+  \item \textbf{Build a fair test} (Sections~\ref{sec:data}--\ref{sec:models}).
+  \item \textbf{Try to break it} for leaks (Section~\ref{sec:features}).
+  \item \textbf{Face the baseline} (Sections~\ref{sec:ablation}--\ref{sec:dl}).
+  \item \textbf{Teach the answer} (Section~\ref{sec:education}).
+\end{enumerate}
 
-We compare two markets, Apple (AAPL) and Bitcoin (BTC). Our \textbf{audience} is
-advanced secondary-school students, pre-university learners interested in AI, and
-university students without a machine-learning major. The intended outcomes are
-conceptual (Section~\ref{sec:education}).
+We compare Apple (AAPL) and Bitcoin (BTC). Our \textbf{audience} is advanced
+secondary-school students, pre-university learners and university students without
+a machine-learning major.

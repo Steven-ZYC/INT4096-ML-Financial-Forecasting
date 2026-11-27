@@ -1,6 +1,9 @@
 \section{Challenges and Team Learnings}
 \label{sec:learnings}
 
+\textbf{Our most useful moments came from catching our own mistakes.} An
+independent AI audit found two high-severity defects, both fixed and retested.
+
 \begin{itemize}
   \item \textbf{Target representation:} initial runs reported skill near $-1800\%$.
   Without a price level among the features, models collapsed towards the training
@@ -10,6 +13,6 @@
   a test price.
   \item \textbf{Testing the tests:} our first leakage tests passed with a one-bar
   forward shift present. A test suite must be shown able to fail.
-  \item \textbf{Fairness:} one construction path, budget and feature set took more
-  effort than fitting the models.
+  \item \textbf{Fairness:} building one shared pipeline took more effort than
+  fitting models.
 \end{itemize}

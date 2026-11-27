@@ -90,15 +90,16 @@ Apple and Bitcoin}
 
 \begin{abstract}
 \noindent
-Financial forecasting makes generalisation, leakage and baseline comparison
-checkable. We compare five models and two preprocessing variants for next-session
-close prediction on Apple (AAPL) and Bitcoin (BTC) under a documented,
-leakage-audited protocol. \textbf{Across \NRunTotal{} runs, no model beat naive
-persistence by more than \BestAAPLSkill\% (AAPL) or \BestBTCAllSkill\% (BTC)},
-\NBelowAll{} runs were worse, and \textbf{every bootstrap interval includes zero}.
-Experimental neural networks showed no clear advantage. We turn this negative
-result into a five-objective lesson. Without a learner study, we claim no learning
-gains.
+\textbf{A model with $R^2=\HookAAPLRsq$ sounds excellent. Copying today's price
+scores \HookAAPLPersistenceRsq.} Five models received the same inputs, dates and tuning budget to
+predict the next close of Apple (AAPL) and Bitcoin (BTC). Across \NRunTotal{} runs,
+\textbf{none beat that one-line rule by more than \BestAAPLSkill\% (AAPL) or
+\BestBTCAllSkill\% (BTC)}, \NBelowAll{} did worse, and \textbf{every bootstrap
+interval includes zero}. Experimental neural networks showed no clear advantage.
+\textbf{We can show how we know:} purged chronological splits, tests that catch all
+six injected defects, an unread test block and a one-file notebook. We turn the
+answer into a five-objective lesson built on one question: \textbf{what did you
+beat?} Without a learner study, we claim no learning gains.
 \end{abstract}
 
 \vspace{0.2cm}
