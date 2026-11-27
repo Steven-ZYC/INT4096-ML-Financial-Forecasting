@@ -205,10 +205,12 @@ def build_cells() -> list:
         sys.path.insert(0, str(WORKSPACE / "src"))
         os.environ["PYTHONPATH"] = str(WORKSPACE / "src")
         os.environ["MPLBACKEND"] = "Agg"
+        os.environ["PYTHONUTF8"] = "1"      # same text encoding on every system
 
         def run(*args):
             \"\"\"Run a project command in the workspace and show its output.\"\"\"
-            done = subprocess.run([sys.executable, *args], capture_output=True, text=True)
+            done = subprocess.run([sys.executable, *args], capture_output=True,
+                                  text=True, encoding="utf-8", errors="replace")
             print((done.stdout + done.stderr).replace(str(WORKSPACE), "."))
             if done.returncode != 0:
                 raise RuntimeError(f"command failed with exit code {done.returncode}: {args}")

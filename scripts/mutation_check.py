@@ -15,6 +15,7 @@ Exit code 0 means every injected defect was caught.
 from __future__ import annotations
 
 import hashlib
+import os
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -116,7 +117,10 @@ def run_leakage_tests() -> subprocess.CompletedProcess:
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
-        env={"PYTHONPATH": str(REPO_ROOT / "src"), "PATH": "/usr/bin:/bin"},
+        encoding="utf-8",
+        errors="replace",
+        # Inherit the environment: Windows cannot start Python from a bare one.
+        env={**os.environ, "PYTHONPATH": str(REPO_ROOT / "src")},
     )
 
 
