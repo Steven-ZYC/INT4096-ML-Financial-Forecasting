@@ -18,14 +18,14 @@ Speakers: Dong Yuankun slides 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13�
 ## Moodle submission
 
 Two uploads, built into [`../submission/`](../submission/) by
-`python scripts/package_submission.py --group-id <ID>`:
+`python scripts/package_submission.py` (group 06):
 
 | Upload | File name |
 |---|---|
-| Report | `INT4096 [Group ID] - Group Project Report.pdf` |
-| Deliverables | `INT4096 [Group ID] - Group Project Deliverables.zip` |
+| Report | `INT4096 06 - Group Project Report.pdf` |
+| Deliverables | `INT4096 06 - Group Project Deliverables.zip` |
 
-Replace `[Group ID]` with the group's ID. The zip contains:
+The zip contains:
 
 | In the zip | Contents |
 |---|---|

@@ -1,14 +1,14 @@
 """Build the two files uploaded to Moodle, with the required names.
 
-    python scripts/package_submission.py --group-id 5
+    python scripts/package_submission.py
 
 writes, into ``submission/``:
 
     INT4096 <Group ID> - Group Project Report.pdf
     INT4096 <Group ID> - Group Project Deliverables.zip
 
-Without ``--group-id`` the names keep the placeholder ``[Group ID]``. Run it
-again after changing the report, slides, notebook, data or lesson files.
+The group ID defaults to this group's, 06. Run the script again after changing
+the report, slides, notebook, data or lesson files.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = REPO_ROOT / "submission"
 REPORT = "deliverables/report/INT4096_Final_Report.pdf"
-PLACEHOLDER = "[Group ID]"
+GROUP_ID = "06"
 
 # (folder in the zip, repository file, one-line description)
 CONTENTS = [
@@ -79,7 +79,7 @@ def add(archive: zipfile.ZipFile, name: str, data: bytes) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--group-id", default=PLACEHOLDER, help="group ID used in the file names")
+    parser.add_argument("--group-id", default=GROUP_ID, help="group ID used in the file names")
     group = parser.parse_args(argv).group_id.strip()
     if not group or any(ch in group for ch in '/\\:*?"<>|'):
         raise SystemExit("the group ID must be non-empty and valid in a file name")
