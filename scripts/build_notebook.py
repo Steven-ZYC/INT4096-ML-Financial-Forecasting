@@ -132,6 +132,29 @@ def published_results() -> dict:
     return {"runs": runs, "neural": neural}
 
 
+def submitted_environment() -> str:
+    """Markdown table of the environments recorded with the submitted results."""
+    def recorded(pattern: str, key: str) -> str:
+        files = sorted((REPO_ROOT / "experiments").glob(pattern))
+        values = {json.loads(f.read_text(encoding="utf-8"))[key] for f in files}
+        return ", ".join(sorted(values))
+
+    runs = "models/*/*/environment.json"
+    neural = "supplementary/direction_test/*/results.json"
+    pins = pinned_versions()
+    libraries = ", ".join(
+        f"{name} {pins[name]}" for name in ("numpy", "pandas", "scipy", "scikit-learn", "matplotlib")
+    )
+    return "\n".join([
+        "| | 20 main experiments | Neural experiment (section 9) |",
+        "|---|---|---|",
+        f"| Python | {recorded(runs, 'python_version')} | {recorded(neural, 'python')} |",
+        f"| Platform | {recorded(runs, 'platform')} | |",
+        f"| Libraries | {libraries} (`requirements.txt`) | torch {recorded(neural, 'torch')} |",
+        f"| Device | CPU | {recorded(neural, 'device')} |",
+    ])
+
+
 def pinned_versions() -> dict:
     versions = {}
     for line in (REPO_ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines():
@@ -170,7 +193,9 @@ def build_cells() -> list:
         experiment in section 9 can use a GPU. The final 20% of each series (the test
         block) is never scored. **This is not investment advice.**
         """),
-        md("## 1. Setup"),
+        md("## 1. Setup\n\n### Environment behind the submitted results\n\n"
+           + submitted_environment()
+           + "\n\nThe next cells print the environment of **this** run."),
         code(f"""
         import importlib.util, os, subprocess, sys
         from datetime import datetime
@@ -192,6 +217,22 @@ def build_cells() -> list:
         for name in MODULES:
             note = "" if PINNED.get(name) in (None, version(name)) else f"   (submitted results used {{PINNED[name]}})"
             print(f"{{name:14s}}{{version(name)}}{{note}}")
+        """),
+        code("""
+        import platform
+
+        print("operating system:", platform.system(), platform.release(), platform.machine())
+        print("CPU threads     :", os.cpu_count())
+        if importlib.util.find_spec("torch") is None:
+            print("PyTorch         : not installed (section 9 will be skipped)")
+        else:
+            import torch
+            print("PyTorch         :", torch.__version__, "| CUDA build:", torch.version.cuda)
+            if torch.cuda.is_available():
+                gpu = torch.cuda.get_device_properties(0)
+                print(f"GPU             : {gpu.name}, {gpu.total_memory / 2**30:.1f} GiB")
+            else:
+                print("GPU             : none detected (section 9 runs on the CPU)")
         """),
         code("""
         # A new, empty workspace for this session. Nothing existing is overwritten.

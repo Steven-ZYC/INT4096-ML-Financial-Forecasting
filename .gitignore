@@ -64,3 +64,6 @@ deliverables/presentation/script/*.tex
 # Student IDs must never enter a commit (see docs/project/github_push.md).
 docs/project/.members.local
 *.local
+
+# Workspaces created by running the submission notebook
+int4096_workspace_*/
