@@ -14,3 +14,26 @@ Everything the group presents or submits, in one place.
 | `website/` | **`index.html`**: interactive step-by-step explainer of the whole pipeline (data, split, features, tuning, evaluation, experimental neural nets, verdict). Opens straight from disk and is published at https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/ by `.github/workflows/pages.yml`; `template.html` is the hand-written source | `python scripts/build_website.py` |
 
 Speakers: Dong Yuankun slides 1–5 · Zhang Yancheng 6–12 · Zhang Haoyu 13–15 · Lau Pak Hei 16–17 · Lui Shing Lam 18.
+
+## Moodle submission
+
+Two uploads, built into [`../submission/`](../submission/) by
+`python scripts/package_submission.py --group-id <ID>`:
+
+| Upload | File name |
+|---|---|
+| Report | `INT4096 [Group ID] - Group Project Report.pdf` |
+| Deliverables | `INT4096 [Group ID] - Group Project Deliverables.zip` |
+
+Replace `[Group ID]` with the group's ID. The zip contains:
+
+| In the zip | Contents |
+|---|---|
+| `README.md` | List of files and how to run the notebook |
+| `Presentation/` | `INT4096_Presentation.pdf` |
+| `Notebook/` | `INT4096_Final_Colab.ipynb` and its executed copy with saved outputs |
+| `Dataset/` | The two original data files (AAPL, BTC) and their manifests |
+| `Lesson/` | Lesson plan, formative tasks with answers, teacher notes |
+
+The report is not repeated inside the zip. Rebuild after any change to these files.
+

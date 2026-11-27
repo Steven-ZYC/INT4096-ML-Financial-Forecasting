@@ -18,6 +18,10 @@ judge an AI score.
 | Website | [interactive walkthrough](https://steven-zyc.github.io/INT4096-ML-Financial-Forecasting/) |
 | Original data | [data/raw](data/raw/) · [dataset cards](data/cards/) |
 
+**Moodle upload:** the report PDF and the deliverables zip are in
+[`submission/`](submission/); their contents are listed in
+[deliverables/README.md](deliverables/README.md#moodle-submission).
+
 ## Result
 
 Skill is `1 − MAE_model / MAE_naive`: zero means no better than copying today's close.
