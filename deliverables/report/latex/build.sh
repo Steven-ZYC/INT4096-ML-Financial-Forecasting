@@ -44,6 +44,7 @@ else
 fi
 # INT4096_SKIP_FIGURES=1 regenerates tables and numbers only (figures unchanged).
 ( cd "$ROOT" && PYTHONPATH=src "$PY" scripts/build_latex_assets.py ${INT4096_SKIP_FIGURES:+--no-figures} )
+( cd "$ROOT" && PYTHONPATH=src "$PY" scripts/build_report_tuning.py )
 
 echo
 echo "== 2/4 compile (latexmk -pdf, bibtex) =="

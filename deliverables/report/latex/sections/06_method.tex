@@ -1,16 +1,9 @@
 \section{Experimental Methodology}
 \label{sec:method}
 
-\begin{itemize}
-  \item \textbf{Split:} chronological 60/20/20 per asset, one row purged at each
-  boundary (Table~\ref{tab:splits}). All models see the same dates.
-  \item \textbf{Tuning:} random search with expanding-window cross-validation
-  \textbf{inside the training block only}: five folds, a one-row gap, minimum
-  initial fraction 0.30.
-  \item \textbf{Equal budget:} \TrialsUsed{} trials and at most \SecondsUsed{}~s per
-  cell (caps: \TrialsMax{} and \SecondsMax{}~s). Every attempt is
-  \repodir{experiments/models}{logged}.
-\end{itemize}
+\textbf{Split:} chronological 60/20/20 per asset, one row purged at each boundary
+(Table~\ref{tab:splits}). All models see the same dates.
+Section~\ref{sec:tuning} describes tuning.
 
 \begin{figure}[t]
   \centering

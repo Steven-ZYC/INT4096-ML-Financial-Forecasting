@@ -1,0 +1,34 @@
+\section{Hyperparameter Tuning}
+\label{sec:tuning}
+
+\textbf{Every model gets the same search, and tuning never sees validation or test
+data} (\repofile{src/int4096/experiments/tuning.py}{tuning code}).
+
+\begin{itemize}
+  \item \textbf{Search:} random search, \TrialsUsed{} trials and at most
+  \SecondsUsed{}~s per run (protocol caps: \TrialsMax{} and \SecondsMax{}~s), seed
+  42. Repeated draws count as trials.
+  \item \textbf{Score:} mean error on the price change across expanding-window
+  cross-validation \textbf{inside the training block}: five folds, a one-row gap,
+  minimum initial fraction 0.30.
+  \item \textbf{Final fit:} the best setting is refitted on the whole training
+  block, then scored once on validation. Every attempt is
+  \repodir{experiments/models}{logged}.
+  \item \textbf{Early stopping:} gradient boosting uses a random 10\% of its
+  training rows, so its iteration setting is an upper limit.
+\end{itemize}
+
+\input{generated/tuning_table}
+
+\paragraph{What tuning showed.}
+\begin{itemize}
+  \item \textbf{Coverage differs:} both linear grids were tried in full; the other
+  three were only sampled.
+  \item \textbf{Grid edge:} Ridge chose the \textbf{largest penalty} on both assets,
+  so a wider grid is a sensible next step.
+  \item \textbf{Simpler settings often won}, such as strong penalties, large forest
+  leaves and a low boosting rate. This is consistent with weak signal but does not
+  prove it.
+  \item \textbf{Scaling and choice:} without scaling (P0), only BTC SVR selected a
+  different setting.
+\end{itemize}

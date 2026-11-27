@@ -1,8 +1,8 @@
 # LaTeX Report — Build and Provenance
 
 Compiled output: [`../INT4096_Final_Report.pdf`](../INT4096_Final_Report.pdf)
-(11 pages, A4).
-Word count: [`../word_count.txt`](../word_count.txt) — **1,391 body + 74 headings = 1,465**.
+(12 pages, A4).
+Word count: [`../word_count.txt`](../word_count.txt) — **1,529 body + 79 headings = 1,608**.
 
 ## Build
 
@@ -31,7 +31,7 @@ embeds its own timestamp and matplotlib stamps `CreationDate` into each figure.
 SHA-256 of the committed PDF:
 
 ```
-d357d016da508df544f5e32d4b10ec440614b1a15c5582f8f2af0c52813cfa25  INT4096_Final_Report.pdf
+f6dd111cb9298e12529acf6c8026090c54c38d9eee3f36e5f6b679c6c2ecbcd9  INT4096_Final_Report.pdf
 ```
 
 The epoch must not be derived from `HEAD`: committing the rebuilt PDF would move
@@ -49,6 +49,7 @@ following are regenerated from `experiments/models/`:
 | `generated/dataset_table.tex` | snapshot manifests + validation report |
 | `generated/splits_table.tex` | `prepare_dataset()` on the frozen protocol |
 | `generated/numbers.tex` | measured values used in prose, as LaTeX macros |
+| `generated/tuning_table.tex` | search grids and each run's trial log, from `scripts/build_report_tuning.py` |
 | `../../presentation/slides/generated/numbers.tex` | data facts and the worked feature example, from `scripts/build_slide_assets.py` |
 | `figures/*.pdf` | matplotlib, vector output, one `.caption.txt` per figure with run IDs |
 
@@ -66,9 +67,9 @@ oral guidance, not as a published rule, so the report states both.
 The team limits the main text (body and headings; tables and captions excluded) to 2,100 words.
 `texcount -inc -sum main.tex` is the measurement:
 
-- **Words in text: 1,391** — body prose across `main.tex` and every `\input` section.
-- **Words in headers: 74** — section and paragraph headings.
-- **Narrative total: 1,465.**
+- **Words in text: 1,529** — body prose across `main.tex` and every `\input` section.
+- **Words in headers: 79** — section and paragraph headings.
+- **Narrative total: 1,608.**
 - **Words outside text: 489** — figure captions and float content, excluded from
   the narrative figure, consistent with the specification's exclusion of figures
   and tables. Captions are still counted and reported here so nothing is hidden.
@@ -82,7 +83,7 @@ should discuss it; `deliverables/report/word_count.txt` records the exact config
 
 ## Layout checks performed
 
-- A4, 11 pages.
+- A4, 12 pages.
 - Log: 0 overfull boxes, 0 warnings; 2 underfull boxes in the generated neural-network
   table (`generated/dl_table.tex`).
 - `pdftotext`: 0 unresolved `??` references; all 7 figures and 4 tables present;
